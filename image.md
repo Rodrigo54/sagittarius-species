@@ -1,4 +1,4 @@
-## Opções para salvar imagens dds
+# Opções para salvar imagens dds
 
 | compressed                      |     |
 | ------------------------------- | --- |
