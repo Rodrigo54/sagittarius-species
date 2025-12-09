@@ -12,12 +12,12 @@ const PARSER = await Jomini.initialize();
 const PASTA_INICIAL = join(__DIRNAME, '../assets/name_lists');
 const PASTA_DESTINO_LIST_NAME = join(
   __DIRNAME,
-  '../mod/galaxar-species/common/name_lists'
+  '../mod/sagittarius-species/common/name_lists'
 );
 
 const PASTA_DESTINO_L10N = join(
   __DIRNAME,
-  '../mod/galaxar-species/localisation'
+  '../mod/sagittarius-species/localisation'
 );
 
 const getData = (data: any) => {

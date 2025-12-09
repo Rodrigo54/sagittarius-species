@@ -29,7 +29,7 @@ function ListarArquivosRecursivamente {
 }
 
 # Especifica o caminho da pasta e o arquivo de saída
-$pastaInicial = "D:\dev\stellaris-mods\galaxar-species\assets\astral"
+$pastaInicial = "D:\dev\stellaris-mods\sagittarius-species\assets\astral"
 $arquivoDeSaida = "lista_de_arquivos.txt"
 
 Remove-Item -Path $arquivoDeSaida -Force
