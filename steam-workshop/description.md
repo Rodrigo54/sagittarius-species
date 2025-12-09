@@ -1,6 +1,6 @@
 🌌🚀💫 Greetings, cosmic explorers!
 
-Galaxar Species is your dream mod for Stellaris, and here's why: we avid lovers of the game understand the importance of diverse AI portrayals. We want to give you more options to dive into the intergalactic RPG and epic fantasy that is Stellaris. And guess what? We're just getting started!
+Sagittarius Species is your dream mod for Stellaris, and here's why: we avid lovers of the game understand the importance of diverse AI portrayals. We want to give you more options to dive into the intergalactic RPG and epic fantasy that is Stellaris. And guess what? We're just getting started!
 
 We currently have 15 unique species ready for you to discover and incorporate into your narrative:
 
@@ -20,11 +20,11 @@ We currently have 15 unique species ready for you to discover and incorporate in
 - [b]Mercenaries:[/b] In search of intergalactic contracts and challenges.
 - [b]Star Knight:[/b] Protectors of outer space, ready for action.
 
-But here's the icing on the cake: we want to hear your suggestions and criticisms. Together we can shape this mod into something truly epic. Get ready for the adventure of a lifetime and dive head first into the diverse universe of Galaxar Species. Here we go! 🚀✨
+But here's the icing on the cake: we want to hear your suggestions and criticisms. Together we can shape this mod into something truly epic. Get ready for the adventure of a lifetime and dive head first into the diverse universe of Sagittarius Species. Here we go! 🚀✨
 
-[url=https://github.com/Rodrigo54/galaxar-species][img]https://raw.githubusercontent.com/Rodrigo54/galaxar-species/develop/steam-workshop/pictures/github_banner.png[/img][/url]
+[url=https://github.com/Rodrigo54/sagittarius-species][img]https://raw.githubusercontent.com/Rodrigo54/sagittarius-species/develop/steam-workshop/pictures/github_banner.png[/img][/url]
 
-[img]https://raw.githubusercontent.com/Rodrigo54/galaxar-species/develop/steam-workshop/pictures/brasil_banner.png[/img]
+[img]https://raw.githubusercontent.com/Rodrigo54/sagittarius-species/develop/steam-workshop/pictures/brasil_banner.png[/img]
 
 Thanks for reading the description, downloading & playing with my mods!
 
