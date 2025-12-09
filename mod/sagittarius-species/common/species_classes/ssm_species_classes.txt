@@ -1,0 +1,82 @@
+ssm_sagittarius = {
+	archetype = BIOLOGICAL
+	randomized = yes
+	possible = {
+		authority = {
+			NOT = {
+				value = auth_machine_intelligence
+				text = SPECIES_CLASS_MUST_NOT_USE_MACHINE_INTELLIGENCE
+			}
+		}
+	}
+	playable = {
+		has_global_flag = game_started
+	}
+	portraits = {
+		"ssm_default"
+		"ssm_elves"
+		"ssm_high_elves"
+		"ssm_green_elves"
+		"ssm_mermaids"
+		"ssm_astral"
+		"ssm_necron"
+		"ssm_gamba"
+		"ssm_octopus"
+		"ssm_hastur"
+		"ssm_green_order"
+		"ssm_avians"
+		"ssm_vargrosianos"
+		"ssm_new_order"
+		"ssm_cyborg"
+		"ssm_mercenary"
+		"ssm_knight"
+	}
+	graphical_culture = humanoid_01
+	move_pop_sound_effect = "moving_pop_confirmation"
+}
+
+ssm_presapient = {
+	archetype = PRESAPIENT
+	playable = {
+		always = no
+	}
+	randomized = no
+	portrait_modding = yes
+	portraits = {
+		"ssm_default"
+		"ssm_elves"
+		"ssm_high_elves"
+		"ssm_marmeid"
+		"ssm_astral"
+		"ssm_necron"
+		"ssm_gamba"
+		"ssm_octopus"
+		"ssm_hastur"
+		"ssm_green_order"
+		"ssm_avians"
+		"ssm_vargrosianos"
+		"ssm_green_elves"
+	}
+	graphical_culture = humanoid_01
+	move_pop_sound_effect = "moving_pop_confirmation"
+}
+
+ssm_robot = {
+	archetype = ROBOT
+	randomized = yes
+	playable = {
+		has_global_flag = game_started
+	}
+	gender = no
+	is_robotic = yes
+	use_climate_preference = no
+	portrait_modding = yes
+	portraits = {
+		"ssm_green_order"
+		"ssm_new_order"
+		"ssm_cyborg"
+		"ssm_timbot"
+	}
+	graphical_culture = humanoid_01
+	move_pop_sound_effect = "moving_pop_confirmation"
+}

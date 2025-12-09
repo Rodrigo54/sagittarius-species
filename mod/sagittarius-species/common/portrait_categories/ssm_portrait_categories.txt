@@ -1,0 +1,84 @@
+sagittarius = {
+	name = ssm_sagittarius
+	sets = {
+		ssm_humanoids
+		ssm_mammalians
+		ssm_molluscoids
+		ssm_aquatics
+		ssm_avians
+		ssm_cybernetics
+		ssm_robot
+	}
+}
+
+humanoids = {
+	name = HUM
+	sets = {
+		ssm_humanoids
+		ssm_cybernetics
+	}
+}
+
+machines = {
+	name = MACHINE
+	sets = {
+		ssm_machine
+	}
+}
+
+mammalians = {
+	name = MAM
+	sets = {
+		ssm_mammalians
+	}
+}
+
+avians = {
+	name = AVI
+	sets = {
+		ssm_avians
+	}
+}
+
+molluscoids = {
+	name = MOL
+	sets = {
+		ssm_molluscoids
+	}
+}
+
+necroids = {
+	name = NECROID
+	sets = {
+		ssm_necroids
+	}
+}
+
+plantoids = {
+	name = PLANT
+	sets = {
+		ssm_plantoids
+	}
+}
+
+aquatics = {
+	name = AQUATIC
+	sets = {
+		ssm_aquatics
+	}
+}
+
+cybernetics = {
+	name = CYBERNETIC
+	sets = {
+		ssm_cybernetics
+		ssm_robot
+	}
+}
+
+synthetics = {
+	name = SYNTH
+	sets = {
+		ssm_robot
+	}
+}

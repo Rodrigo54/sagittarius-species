@@ -1,0 +1,180 @@
+portraits = {
+	ssm_avians_01 = {
+		entity = "sl_humanoid_01_entity"
+		clothes_selector = "no_texture"
+		attachment_selector = "no_texture"
+		greeting_sound = "human_male_greetings_01"
+		custom_attachment_label = "HAIR_STYLE"
+		character_textures = {
+			"gfx/models/portraits/ssm_avians/001.dds"
+			"gfx/models/portraits/ssm_avians/002.dds"
+			"gfx/models/portraits/ssm_avians/003.dds"
+			"gfx/models/portraits/ssm_avians/004.dds"
+			"gfx/models/portraits/ssm_avians/005.dds"
+			"gfx/models/portraits/ssm_avians/006.dds"
+			"gfx/models/portraits/ssm_avians/007.dds"
+			"gfx/models/portraits/ssm_avians/008.dds"
+			"gfx/models/portraits/ssm_avians/009.dds"
+			"gfx/models/portraits/ssm_avians/010.dds"
+			"gfx/models/portraits/ssm_avians/011.dds"
+			"gfx/models/portraits/ssm_avians/012.dds"
+			"gfx/models/portraits/ssm_avians/013.dds"
+			"gfx/models/portraits/ssm_avians/014.dds"
+			"gfx/models/portraits/ssm_avians/015.dds"
+			"gfx/models/portraits/ssm_avians/016.dds"
+			"gfx/models/portraits/ssm_avians/017.dds"
+			"gfx/models/portraits/ssm_avians/018.dds"
+			"gfx/models/portraits/ssm_avians/019.dds"
+			"gfx/models/portraits/ssm_avians/020.dds"
+			"gfx/models/portraits/ssm_avians/021.dds"
+			"gfx/models/portraits/ssm_avians/022.dds"
+			"gfx/models/portraits/ssm_avians/023.dds"
+			"gfx/models/portraits/ssm_avians/024.dds"
+			"gfx/models/portraits/ssm_avians/025.dds"
+			"gfx/models/portraits/ssm_avians/026.dds"
+			"gfx/models/portraits/ssm_avians/027.dds"
+			"gfx/models/portraits/ssm_avians/028.dds"
+			"gfx/models/portraits/ssm_avians/029.dds"
+			"gfx/models/portraits/ssm_avians/030.dds"
+			"gfx/models/portraits/ssm_avians/031.dds"
+			"gfx/models/portraits/ssm_avians/032.dds"
+			"gfx/models/portraits/ssm_avians/033.dds"
+			"gfx/models/portraits/ssm_avians/034.dds"
+			"gfx/models/portraits/ssm_avians/035.dds"
+			"gfx/models/portraits/ssm_avians/036.dds"
+			"gfx/models/portraits/ssm_avians/037.dds"
+			"gfx/models/portraits/ssm_avians/038.dds"
+			"gfx/models/portraits/ssm_avians/039.dds"
+			"gfx/models/portraits/ssm_avians/040.dds"
+			"gfx/models/portraits/ssm_avians/041.dds"
+			"gfx/models/portraits/ssm_avians/042.dds"
+			"gfx/models/portraits/ssm_avians/043.dds"
+			"gfx/models/portraits/ssm_avians/044.dds"
+			"gfx/models/portraits/ssm_avians/045.dds"
+			"gfx/models/portraits/ssm_avians/046.dds"
+			"gfx/models/portraits/ssm_avians/047.dds"
+			"gfx/models/portraits/ssm_avians/048.dds"
+			"gfx/models/portraits/ssm_avians/049.dds"
+			"gfx/models/portraits/ssm_avians/050.dds"
+		}
+	}
+}
+
+portrait_groups = {
+	ssm_avians = {
+		default = ssm_avians_01
+		game_setup = {
+			add = {
+				trigger = {
+					ruler = {
+						OR = {
+							gender = female
+							gender = indeterminable
+						}
+					}
+				}
+				portraits = {
+					ssm_avians_01
+				}
+			}
+			add = {
+				trigger = {
+					ruler = {
+						OR = {
+							gender = male
+							gender = indeterminable
+						}
+					}
+				}
+				portraits = {
+					ssm_avians_01
+				}
+			}
+		}
+		species = {
+			# generic portrait for a species
+			add = {
+				portraits = {
+					ssm_avians_01
+				}
+			}
+		}
+		pop_group = {
+			#for a specific pop
+			add = {
+				trigger = {
+					NOR = {
+						species = {
+							species_gender = male
+						}
+					}
+				}
+				portraits = {
+					ssm_avians_01
+				}
+			}
+			add = {
+				trigger = {
+					NOR = {
+						species = {
+							species_gender = female
+						}
+					}
+				}
+				portraits = {
+					ssm_avians_01
+				}
+			}
+		}
+		leader = {
+			# scientists, generals, admirals, governor
+			add = {
+				trigger = {
+					OR = {
+						gender = female
+						gender = indeterminable
+					}
+				}
+				portraits = {
+					ssm_avians_01
+				}
+			}
+			add = {
+				trigger = {
+					OR = {
+						gender = male
+						gender = indeterminable
+					}
+				}
+				portraits = {
+					ssm_avians_01
+				}
+			}
+		}
+		ruler = {
+			# portraits used for rulers
+			add = {
+				trigger = {
+					OR = {
+						gender = female
+						gender = indeterminable
+					}
+				}
+				portraits = {
+					ssm_avians_01
+				}
+			}
+			add = {
+				trigger = {
+					OR = {
+						gender = male
+						gender = indeterminable
+					}
+				}
+				portraits = {
+					ssm_avians_01
+				}
+			}
+		}
+	}
+}

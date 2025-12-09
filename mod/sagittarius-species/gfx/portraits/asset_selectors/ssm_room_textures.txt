@@ -1,0 +1,412 @@
+room_selector = {
+    # Script may point to textures in 'gfx\portraits\city_sets\' that end with "_room.dds" while ignoring the file ending, e.g.: "room = machine_room" will find 'machine_room(.dds)'.
+
+    default = "default_room"
+
+    game_setup = {
+
+        ## mods rooms
+        "001_room" = { always = yes }
+        "002_room" = { always = yes }
+        "003_room" = { always = yes }
+        "004_room" = { always = yes }
+        "005_room" = { always = yes }
+        "006_room" = { always = yes }
+        "007_room" = { always = yes }
+        "008_room" = { always = yes }
+        "009_room" = { always = yes }
+        "010_room" = { always = yes }
+        "011_room" = { always = yes }
+        "012_room" = { always = yes }
+        "013_room" = { always = yes }
+        "014_room" = { always = yes }
+        "015_room" = { always = yes }
+        "016_room" = { always = yes }
+        "017_room" = { always = yes }
+        "018_room" = { always = yes }
+        "019_room" = { always = yes }
+        "020_room" = { always = yes }
+        "021_room" = { always = yes }
+        "022_room" = { always = yes }
+        "023_room" = { always = yes }
+        "024_room" = { always = yes }
+        "025_room" = { always = yes }
+        "026_room" = { always = yes }
+        "027_room" = { always = yes }
+        "028_room" = { always = yes }
+        "029_room" = { always = yes }
+        "030_room" = { always = yes }
+        "031_room" = { always = yes }
+        "032_room" = { always = yes }
+        "033_room" = { always = yes }
+        "034_room" = { always = yes }
+        "035_room" = { always = yes }
+        "036_room" = { always = yes }
+        "037_room" = { always = yes }
+        "038_room" = { always = yes }
+        "039_room" = { always = yes }
+        "040_room" = { always = yes }
+        "041_room" = { always = yes }
+        "042_room" = { always = yes }
+        "043_room" = { always = yes }
+        "044_room" = { always = yes }
+        "045_room" = { always = yes }
+        "046_room" = { always = yes }
+        "047_room" = { always = yes }
+        "048_room" = { always = yes }
+        "049_room" = { always = yes }
+        "050_room" = { always = yes }
+        "051_room" = { always = yes }
+        "052_room" = { always = yes }
+        "053_room" = { always = yes }
+        "054_room" = { always = yes }
+        "055_room" = { always = yes }
+        "056_room" = { always = yes }
+        "057_room" = { always = yes }
+        "058_room" = { always = yes }
+        "059_room" = { always = yes }
+        "060_room" = { always = yes }
+        "061_room" = { always = yes }
+        "062_room" = { always = yes }
+        "063_room" = { always = yes }
+        "064_room" = { always = yes }
+        "065_room" = { always = yes }
+        "066_room" = { always = yes }
+        "067_room" = { always = yes }
+        "068_room" = { always = yes }
+        "069_room" = { always = yes }
+        "070_room" = { always = yes }
+        "071_room" = { always = yes }
+        "072_room" = { always = yes }
+        "073_room" = { always = yes }
+        "074_room" = { always = yes }
+        "075_room" = { always = yes }
+        "076_room" = { always = yes }
+        "077_room" = { always = yes }
+        "078_room" = { always = yes }
+        "079_room" = { always = yes }
+        "080_room" = { always = yes }
+        "081_room" = { always = yes }
+        "082_room" = { always = yes }
+        "083_room" = { always = yes }
+        "084_room" = { always = yes }
+        "085_room" = { always = yes }
+        "086_room" = { always = yes }
+        "087_room" = { always = yes }
+        "088_room" = { always = yes }
+        "089_room" = { always = yes }
+        "090_room" = { always = yes }
+        "091_room" = { always = yes }
+        "092_room" = { always = yes }
+        "093_room" = { always = yes }
+        "094_room" = { always = yes }
+        "095_room" = { always = yes }
+        "096_room" = { always = yes }
+        "097_room" = { always = yes }
+        "098_room" = { always = yes }
+        "099_room" = { always = yes }
+        "100_room" = { always = yes }
+
+        ## game rooms
+        "default_room"								              = { always = yes }
+        "personality_hegemonic_imperialists_room" 	= { always = yes }
+        "personality_federation_builders_room" 		  = { always = yes }
+        "personality_democratic_crusaders_room" 	  = { always = yes }
+        "personality_evangelizing_zealots_room" 	  = { always = yes }
+        "personality_migrating_flock_room" 			    = { always = yes }
+        "personality_spiritual_seekers_room" 		    = { always = yes }
+        "personality_decadent_hierarchy_room" 		  = { always = yes }
+        "personality_slaving_despots_room" 			    = { always = yes }
+        "personality_erudite_explorers_room" 		    = { always = yes }
+        "personality_fanatic_purifier_room" 		    = { always = yes }
+        "personality_metalheads_room" 				      = { always = yes }
+        "personality_harmonious_hierarchy_room" 	  = { always = yes }
+        "personality_peaceful_traders_room" 		    = { always = yes }
+        "personality_xenophobic_isolationists_room" = { always = yes }
+        "personality_ruthless_capitalists_room" 	  = { always = yes }
+        "personality_honorbound_warriors_room" 		  = { always = yes }
+        "personality_fanatic_befrienders_room" 		  = { always = yes }
+        "personality_hive_mind_room" 				        = { always = yes }
+        "runic_room"								                = { always = yes }
+        "scrappy_room"								              = { always = yes }
+        "crystalline_room"							            = { always = yes }
+        "organic_room"								              = { always = yes }
+        "gilded_room"								                = { always = yes }
+        "machine_room"								              = { always = yes }
+        "lithoid_room"								              = { always = yes }
+        "necroids_room"								              = { always = yes }
+        "aquatics_room"								              = { always = yes }
+        "toxoids_room"								              = { always = yes }
+        "ethic_ai_room"								              = { always = yes }
+        "cybernetics_room"							            = { always = yes }
+        "synthetics_room"							              = { always = yes }
+    }
+
+    ruler = {
+        "default_room" = {
+            always = no
+        }
+
+        "personality_fallen_empire_machine_room" = {
+            exists = owner
+            owner = { is_fallen_empire_machine = yes }
+        }
+        "personality_fallen_empire_blue_room" = {
+            exists = owner
+            owner = {
+                OR = {
+                    has_ai_personality = fallen_empire_xenophile
+                    has_ai_personality = awakened_fallen_empire_xenophile
+                }
+            }
+        }
+        "personality_fallen_empire_cyan_room" = {
+            exists = owner
+            owner = {
+                OR = {
+                    has_ai_personality = fallen_empire_materialist
+                    has_ai_personality = awakened_fallen_empire_materialist
+                }
+            }
+        }
+        "personality_fallen_empire_red_room" = {
+            exists = owner
+            owner = {
+                OR = {
+                    has_ai_personality = fallen_empire_xenophobe
+                    has_ai_personality = awakened_fallen_empire_xenophobe
+                }
+            }
+        }
+        "personality_fallen_empire_teal_room" = {
+            exists = owner
+            owner = {
+                OR = {
+                    has_ai_personality = fallen_empire_spiritualist
+                    has_ai_personality = awakened_fallen_empire_spiritualist
+                }
+            }
+        }
+        "crisis_room" = {
+            exists = owner
+            owner = { has_crisis_level = crisis_level_5 }
+        }
+        "cosmogenesis_room" = {
+            exists = owner
+            owner = {
+                has_country_flag = cosmogenesis_world_built
+                any_owned_planet = {
+                    is_planet_class = pc_cosmogenesis_world
+                }
+            }
+        }
+        "galactic_emperor_room" = {
+            exists = owner
+            owner = { is_galactic_emperor = yes }
+        }
+        "galactic_custodian_room" = {
+            exists = owner
+            owner = { is_galactic_custodian = yes }
+        }
+        "specialist_bulwark_room" = {
+            exists = owner
+            owner = { is_specialist_subject_type = { TYPE = bulwark } }
+        }
+        "specialist_prospectorium_room" = {
+            exists = owner
+            owner = { is_specialist_subject_type = { TYPE = prospectorium } }
+        }
+        "specialist_scholarium_room" = {
+            exists = owner
+            owner = { is_specialist_subject_type = { TYPE = scholarium } }
+        }
+        "paragon_azaryn_room" = {
+            always = no
+        }
+        "paragon_skrand_room" = {
+            always = no
+        }
+        "paragon_keides_room" = {
+            always = no
+        }
+        "synth_queen_room" = {
+            always = no
+        }
+        "scrappy_room" = {
+            exists = owner
+            owner = { has_country_flag = ratling_country }
+        }
+        "gilded_room" = {
+            exists = owner
+            owner = { has_origin = origin_imperial_vassal_overlord }
+        }
+        "solarpunk_room" = {
+            exists = owner
+            owner = { has_country_flag = solarpunk_country }
+        }
+        "slaver_room" = {
+            exists = owner
+            owner = { has_origin = origin_slavers }
+        }
+        "organic_room" = {
+            exists = owner
+            owner = { has_ai_personality = devouring_swarm }
+        }
+        "lithoid_room" = {
+            exists = owner
+            owner = {
+                NOT = { is_country_type = primitive }
+                is_fallen_empire = no
+                lithoids_portrait = yes
+            }
+        }
+        "necroids_room" = {
+            exists = owner
+            owner = {
+                NOT = { is_country_type = primitive }
+                is_fallen_empire = no
+                necroids_portrait = yes
+            }
+        }
+        "aquatics_room" = {
+            exists = owner
+            owner = {
+                NOT = { is_country_type = primitive }
+                is_fallen_empire = no
+                aquatics_portrait = yes
+            }
+        }
+        "toxoids_room" = {
+            exists = owner
+            owner = {
+                NOT = { is_country_type = primitive }
+                is_fallen_empire = no
+                toxoids_portrait = yes
+            }
+        }
+        "cybernetics_room" = {
+            exists = owner
+            owner = {
+                NOT = { is_country_type = primitive }
+                is_fallen_empire = no
+                cybernetic_portrait = yes
+            }
+        }
+        "synthetics_room" = {
+            exists = owner
+            owner = {
+                NOT = { is_country_type = primitive }
+                is_fallen_empire = no
+                synthetic_portrait = yes
+            }
+        }
+        "ethic_ai_room" = {
+            exists = owner
+            owner = { has_ai_personality = exterminators }
+        }
+        "personality_hive_mind_room" = {
+            exists = owner
+            owner = { has_ai_personality = hive_mind }
+        }
+        "machine_room" = {
+            exists = owner
+            owner = { has_authority = auth_machine_intelligence }
+        }
+        "personality_hegemonic_imperialists_room" = {
+            exists = owner
+            owner = { has_ai_personality = hegemonic_imperialists }
+        }
+        "personality_federation_builders_room" = {
+            exists = owner
+            owner = { has_ai_personality = federation_builders }
+        }
+        "personality_democratic_crusaders_room" = {
+            exists = owner
+            owner = { has_ai_personality = democratic_crusaders }
+        }
+        "personality_evangelizing_zealots_room" = {
+            exists = owner
+            owner = { has_ai_personality = evangelising_zealots }
+        }
+        "personality_migrating_flock_room" = {
+            exists = owner
+            owner = { has_ai_personality = migrating_flock }
+        }
+        "personality_spiritual_seekers_room" = {
+            exists = owner
+            owner = { has_ai_personality = spiritual_seekers }
+        }
+        "personality_decadent_hierarchy_room" = {
+            exists = owner
+            owner = { has_ai_personality = decadent_hierarchy }
+        }
+        "personality_slaving_despots_room" = {
+            exists = owner
+            owner = { has_ai_personality = slaving_despots }
+        }
+        "personality_erudite_explorers_room" = {
+            exists = owner
+            owner = { has_ai_personality = erudite_explorers }
+        }
+        "personality_fanatic_purifier_room" = {
+            exists = owner
+            owner = { has_ai_personality = fanatic_purifiers }
+        }
+        "personality_metalheads_room" = {
+            exists = owner
+            owner = { has_ai_personality = metalhead }
+        }
+        "personality_harmonious_hierarchy_room" = {
+            exists = owner
+            owner = { has_ai_personality = harmonious_hierarchy }
+        }
+        "personality_peaceful_traders_room" = {
+            exists = owner
+            owner = { has_ai_personality = peaceful_traders }
+        }
+        "personality_xenophobic_isolationists_room" = {
+            exists = owner
+            owner = { has_ai_personality = xenophobic_isolationists }
+        }
+        "personality_ruthless_capitalists_room" = {
+            exists = owner
+            owner = { has_ai_personality = ruthless_capitalists }
+        }
+        "personality_honorbound_warriors_room" = {
+            exists = owner
+            owner = { has_ai_personality = honorbound_warriors }
+        }
+        "personality_fanatic_befrienders_room" = {
+            exists = owner
+            owner = { has_ai_personality = fanatic_befrienders }
+        }
+        "pre_ftl_ancient_room" = {
+            exists = owner
+            owner = {
+                is_country_type = primitive
+                pre_ftl_ancient_era = yes
+            }
+        }
+        "pre_ftl_medieval_room" = {
+            exists = owner
+            owner = {
+                is_country_type = primitive
+                pre_ftl_medieval_era = yes
+            }
+        }
+        "pre_ftl_victorian_room" = {
+            exists = owner
+            owner = {
+                is_country_type = primitive
+                pre_ftl_victorian_era = yes
+            }
+        }
+        "pre_ftl_modern_room" = {
+            exists = owner
+            owner = {
+                is_country_type = primitive
+                pre_ftl_modern_era = yes
+            }
+        }
+    }
+}

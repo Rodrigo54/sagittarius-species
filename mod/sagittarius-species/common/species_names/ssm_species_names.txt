@@ -1,0 +1,182 @@
+HUM = {
+	# Altmer names
+	Nirn = {
+		name = "Altmer"
+		plural = "Altmers"
+		home_planet = "Nirn"
+		home_system = "Mundus"
+		name_list = "ssm_altmer"
+	}
+	Aelodian = {
+		name = "Aelodian"
+		plural = "Aelodians"
+		home_planet = "Althor"
+		home_system = "Zoroth"
+		name_list = "ssm_altmer"
+	}
+	Arcturian = {
+		name = "Arcturian"
+		plural = "Arcturians"
+		home_planet = "Arctus Prime"
+		home_system = "Orianth"
+		name_list = "ssm_altmer"
+	}
+	Caelian = {
+		name = "Caelian"
+		plural = "Caelians"
+		home_planet = "Caelum"
+		home_system = "Sagittarius"
+		name_list = "ssm_altmer"
+	}
+	Cryonian = {
+		name = "Cryonian"
+		plural = "Cryonians"
+		home_planet = "Chronos"
+		home_system = "Nebulos"
+		name_list = "ssm_altmer"
+	}
+	Kalendrian = {
+		name = "Kalendrian"
+		plural = "Kalendrians"
+		home_planet = "Janus"
+		home_system = "Celestia"
+		name_list = "ssm_altmer"
+	}
+	Lunarian = {
+		name = "Lunarian"
+		plural = "Lunarians"
+		home_planet = "Lumina"
+		home_system = "Arcturos"
+		name_list = "ssm_altmer"
+	}
+	Pallasian = {
+		name = "Pallasian"
+		plural = "Pallasians"
+		home_planet = "Mithras"
+		home_system = "Lumina"
+		name_list = "ssm_altmer"
+	}
+	Pyronian = {
+		name = "Pyronian"
+		plural = "Pyronians"
+		home_planet = "Terra"
+		home_system = "Sagitta"
+		name_list = "ssm_altmer"
+	}
+	# Brazilian names
+	Brazilian = {
+		name = "Brazilian"
+		plural = "Brazilians"
+		home_planet = "Brazil"
+		home_system = "Cygnus"
+		name_list = "ssm_brazil"
+	}
+	Drakorian = {
+		name = "Drakorian"
+		plural = "Drakorians"
+		home_planet = "Draxion"
+		home_system = "Celestria"
+		name_list = "ssm_brazil"
+	}
+	Exodite = {
+		name = "Exodite"
+		plural = "Exodites"
+		home_planet = "Elyndria"
+		home_system = "Eterna"
+		name_list = "ssm_brazil"
+	}
+	Icaran = {
+		name = "Icaran"
+		plural = "Icarans"
+		home_planet = "Haldar"
+		home_system = "Novarion"
+		name_list = "ssm_brazil"
+	}
+	Saurian = {
+		name = "Saurian"
+		plural = "Saurians"
+		home_planet = "Onyxia"
+		home_system = "Hyperion"
+		name_list = "ssm_brazil"
+	}
+	Skrull = {
+		name = "Skrull"
+		plural = "Skrulls"
+		home_planet = "Nibiru"
+		home_system = "Galactron"
+		name_list = "ssm_brazil"
+	}
+	Telaxian = {
+		name = "Telaxian"
+		plural = "Telaxians"
+		home_planet = "Solara"
+		home_system = "Eridanis"
+		name_list = "ssm_brazil"
+	}
+	Viltrumite = {
+		name = "Viltrumite"
+		plural = "Viltrumites"
+		home_planet = "Synthia"
+		home_system = "Rigel"
+		name_list = "ssm_brazil"
+	}
+	Voth = {
+		name = "Voth"
+		plural = "Voths"
+		home_planet = "Terra"
+		home_system = "Denebola"
+		name_list = "ssm_brazil"
+	}
+	Yridian = {
+		name = "Yridian"
+		plural = "Yridians"
+		home_planet = "Umbra"
+		home_system = "Cygnus"
+		name_list = "ssm_brazil"
+	}
+	Zoran = {
+		name = "Zoran"
+		plural = "Zorans"
+		home_planet = "Xenon"
+		home_system = "Aquila"
+		name_list = "ssm_brazil"
+	}
+	Dulcian = {
+		name = "Dulcian"
+		plural = "Dulcians"
+		home_planet = "Delphoria"
+		home_system = "Proxima"
+		name_list = "ssm_brazil"
+	}
+	Idiran = {
+		name = "Idiran"
+		plural = "Idirans"
+		home_planet = "Malvora"
+		home_system = "Libra"
+		name_list = "ssm_brazil"
+	}
+}
+
+MACHINE = {
+	Cybrax = {
+		name = "Cybrax"
+		plural = "Cybrax"
+		home_planet = "Cybrax Core"
+		home_system = "Cybrax Nexus"
+		name_list = "ssm_brazil"
+	}
+	Omnix = {
+		name = "Omnix"
+		plural = "Omnix"
+		home_planet = "Omnimax"
+		home_system = "Omnimix"
+		name_list = "ssm_brazil"
+	}
+	Machinix = {
+		name = "Machinix"
+		plural = "Machinix"
+		home_planet = "Machimax"
+		home_system = "Machimax Nexus"
+		name_list = "ssm_brazil"
+	}
+}

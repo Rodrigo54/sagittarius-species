@@ -1,0 +1,143 @@
+portraits = {
+	ssm_cyborg_01 = {
+		entity = "sl_humanoid_01_entity"
+		clothes_selector = "no_texture"
+		attachment_selector = "no_texture"
+		greeting_sound = "human_male_greetings_01"
+		custom_attachment_label = "HAIR_STYLE"
+		character_textures = {
+			"gfx/models/portraits/ssm_cyborg/001.dds"
+			"gfx/models/portraits/ssm_cyborg/002.dds"
+			"gfx/models/portraits/ssm_cyborg/003.dds"
+			"gfx/models/portraits/ssm_cyborg/004.dds"
+			"gfx/models/portraits/ssm_cyborg/005.dds"
+			"gfx/models/portraits/ssm_cyborg/006.dds"
+			"gfx/models/portraits/ssm_cyborg/007.dds"
+			"gfx/models/portraits/ssm_cyborg/008.dds"
+			"gfx/models/portraits/ssm_cyborg/009.dds"
+			"gfx/models/portraits/ssm_cyborg/010.dds"
+			"gfx/models/portraits/ssm_cyborg/011.dds"
+			"gfx/models/portraits/ssm_cyborg/012.dds"
+			"gfx/models/portraits/ssm_cyborg/013.dds"
+		}
+	}
+}
+
+portrait_groups = {
+	ssm_cyborg = {
+		default = ssm_cyborg_01
+		game_setup = {
+			add = {
+				trigger = {
+					ruler = {
+						OR = {
+							gender = female
+							gender = indeterminable
+						}
+					}
+				}
+				portraits = {
+					ssm_cyborg_01
+				}
+			}
+			add = {
+				trigger = {
+					ruler = {
+						OR = {
+							gender = male
+							gender = indeterminable
+						}
+					}
+				}
+				portraits = {
+					ssm_cyborg_01
+				}
+			}
+		}
+		species = {
+			# generic portrait for a species
+			add = {
+				portraits = {
+					ssm_cyborg_01
+				}
+			}
+		}
+		pop_group = {
+			#for a specific pop
+			add = {
+				trigger = {
+					NOR = {
+						species = {
+							species_gender = male
+						}
+					}
+				}
+				portraits = {
+					ssm_cyborg_01
+				}
+			}
+			add = {
+				trigger = {
+					NOR = {
+						species = {
+							species_gender = female
+						}
+					}
+				}
+				portraits = {
+					ssm_cyborg_01
+				}
+			}
+		}
+		leader = {
+			# scientists, generals, admirals, governor
+			add = {
+				trigger = {
+					OR = {
+						gender = female
+						gender = indeterminable
+					}
+				}
+				portraits = {
+					ssm_cyborg_01
+				}
+			}
+			add = {
+				trigger = {
+					OR = {
+						gender = male
+						gender = indeterminable
+					}
+				}
+				portraits = {
+					ssm_cyborg_01
+				}
+			}
+		}
+		ruler = {
+			# portraits used for rulers
+			add = {
+				trigger = {
+					OR = {
+						gender = female
+						gender = indeterminable
+					}
+				}
+				portraits = {
+					ssm_cyborg_01
+				}
+			}
+			add = {
+				trigger = {
+					OR = {
+						gender = male
+						gender = indeterminable
+					}
+				}
+				portraits = {
+					ssm_cyborg_01
+				}
+			}
+		}
+	}
+}

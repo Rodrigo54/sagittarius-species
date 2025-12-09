@@ -1,0 +1,214 @@
+ssm_brazil={
+  category="Humanoid"
+  randomized=yes
+  ship_names={
+    generic={
+      "Poti" "Gurupi" "Antares" "Rio Branco" "Paraguassú" "Araçatuba" "Amazonas" "Maracanã" "Cruzeiro do Sul"
+    }
+    corvette={
+      "Poti" "Gurupi" "Tupi" "Tamoio" "Araguari" "Araguia" "Araçatuba" "Piratini" "Piratininga" "Pirajá" "Grajaú" "Guaporé" "Guarujá" "Guarapari" "Guarapuava" "Guaratinguetá" "Bacuri" "Bacabal" "Bacaxá" "Macaé" "Macaíba" "Macaúba" "Maracanã" "Mangaratiba" "Mangabeira" "Xingu" "Xavante" "Xanxerê" "Xanxá"
+    }
+    destroyer={
+      "Duque de Caxias" "Duque de Bragança" "Duque de Saldanha" "Duque de Terceira" "Duque de Palmela" "Duque de Loulé" "Duque de Cadaval" "Duque de Viseu" "Duque de Aveiro" "Duque de Beja" "Duque de Coimbra" "Duque de Guimarães" "Duque de Vila Real" "Duque de Vila Nova" "Duque de Vila Flor"
+    }
+    cruiser={
+      "São Pedro" "Santa Maria" "São Raimundo" "São Sebastião" "São Francisco" "São João" "São José" "São Luís" "São Miguel" "São Paulo" "São Tomé" "São Vicente" "São Benedito" "São Bento" "São Bernardo" "São Caetano" "São Carlos" "São Cristóvão" "São Domingos" "São Gabriel" "São Gonçalo"
+    }
+    battleship={
+      "Kayapó" "Kokama" "Kuikuro" "Tupinambá" "Tupiniquim" "Guajajaras"
+    }
+    juggernaut={
+      "Orgulho Nacional" "Independência" "Grande Ogun"
+    }
+    constructor={
+      "São Paulo" "Rio de Janeiro" "Brasília" "Salvador" "Fortaleza" "Belo Horizonte" "Manaus" "Curitiba" "Recife" "Porto Alegre" "Belém" "Goiânia" "São Luís" "Maceió" "Campinas" "Teresina" "Aracaju" "Natal" "Alagoas" "Amapá" "Amazonas" "Cuiabá"
+    }
+    science={
+      "Osvaldo Cruz" "Carlos Chagas" "Emílio Ribas" "Paulo Niemeyer" "Santos Dumont"
+    }
+    colonizer={
+      "São Paulo" "Rio de Janeiro" "Brasília" "Salvador" "Fortaleza" "Belo Horizonte" "Manaus" "Curitiba" "Recife" "Porto Alegre" "Belém" "Goiânia" "São Luís" "Maceió" "Campinas" "Teresina" "Aracaju" "Natal" "Alagoas" "Amapá" "Amazonas" "Cuiabá"
+    }
+    sponsored_colonizer={
+      "Pedro Álvares Cabral" "Vasco da Gama" "Fernão de Magalhães" "Bartolomeu Dias"
+    }
+    transport={
+      "Tamandaré" "Barroso" "Riachuelo" "Bahia" "Niterói" "Cabral" "Caxias"
+    }
+    research_station={
+      "Santa Maria" "Pedro Álvares Cabral" "Vasco da Gama" "Fernão de Magalhães" "Bartolomeu Dias"
+    }
+    military_station_small={
+      "D. João II" "D. Pedro II" "Isabel" "Leopoldina"
+    }
+    military_station_medium={
+      "D. João II" "D. Pedro II" "Isabel" "Leopoldina"
+    }
+    military_station_large={
+      "D. João II" "D. Pedro II" "Isabel" "Leopoldina"
+    }
+    ion_cannon={
+      "Apurinã" "Tupinambá" "Tupiniquim" "Tupinambá"
+    }
+  }
+  ship_class_names={
+    generic={
+      "Embraer" "Santos Dumont"
+    }
+    constructor={
+      "Embraer" "Santos Dumont"
+    }
+    coloniser={
+      "Embraer" "Santos Dumont"
+    }
+    sponsored_coloniser={
+      "Embraer" "Santos Dumont"
+    }
+    transport={
+      "Embraer" "Santos Dumont"
+    }
+    ion_cannon={
+      "Apurinã" "Tupinambá" "Tupiniquim" "Tupinambá"
+    }
+  }
+  fleet_names={
+    random_names={
+      "Frota Carioca" "Frota Fluminense" "Frota Paulista" "Frota Mineira" "Frota Gaúcha" "Frota Catarinense" "Frota Baiana" "Frota Pernambucana" "Frota Paraibana" "Frota Potiguar" "Frota Cearense" "Frota Maranhense" "Frota Paraense" "Frota Amazonense" "Frota Roraimense" "Frota Amapaense" "Frota Tocantinense" "Frota Goiana" "Frota Brasiliense" "Frota Mato-grossense" "Frota Sul-mato-grossense" "Frota Capixaba" "Frota Sergipana" "Frota Alagoana" "Frota Piauiense" "Frota Rondoniense" "Frota Acreana" "Frota Pantaneira" "Frota Sertaneja" "Frota Serrana" "Frota Litorânea" "Frota Amazônica" "Frota Cangaço" "Frota Sertão" "Tropa de Elite Poti" "Tropa de Elite Gurupi" "Tropa de Elite Tupi" "Tropa de Elite Tamoio" "Tropa de Elite Araguari" "Tropa de Elite Araguia" "Tropa de Elite Araçatuba" "Tropa de Elite Piratini" "Tropa de Elite Carioca" "Polícia Federal" "Polícia Militar" "Polícia Civil" "Polícia Rodoviária"
+    }
+  }
+  army_names={
+    generic={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_GENERIC_SEQUENTIAL_NAME
+    }
+    machine_defense={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_MACHINE_DEFENSE_SEQUENTIAL_NAME
+    }
+    machine_assault_1={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_MACHINE_ASSAULT_1_SEQUENTIAL_NAME
+    }
+    machine_assault_2={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_MACHINE_ASSAULT_1_SEQUENTIAL_NAME
+    }
+    machine_assault_3={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_MACHINE_ASSAULT_1_SEQUENTIAL_NAME
+    }
+    defense_army={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_DEFENSE_ARMY_SEQUENTIAL_NAME
+    }
+    assault_army={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_MACHINE_ASSAULT_1_SEQUENTIAL_NAME
+    }
+    occupation_army={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_OCCUPATION_ARMY_SEQUENTIAL_NAME
+    }
+    slave_army={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_SLAVE_ARMY_SEQUENTIAL_NAME
+    }
+    clone_army={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_CLONE_ARMY_SEQUENTIAL_NAME
+    }
+    undead_army={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_UNDEAD_ARMY_SEQUENTIAL_NAME
+    }
+    robotic_defense_army={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_ROBOTIC_DEFENSE_ARMY_SEQUENTIAL_NAME
+    }
+    robotic_army={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_ROBOTIC_ARMY_SEQUENTIAL_NAME
+    }
+    robotic_occupation_army={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_ROBOTIC_OCCUPATION_ARMY_SEQUENTIAL_NAME
+    }
+    android_defense_army={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_ANDROID_DEFENSE_ARMY_SEQUENTIAL_NAME
+    }
+    android_army={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_ANDROID_ARMY_SEQUENTIAL_NAME
+    }
+    psionic_army={
+      random_names={
+        "Exército Psíquico Nacional" "Exército Psíquico de Caxias" "Forças Psíquicas de Caxias" "Forças Psíquicas Nacionais" "Guarda Psíquica Nacional" "Guarda Psíquica de Caxias" "Tropa Psíquica Nacional" "Tropa Psíquica de Caxias" "Tropa de Elite Psíquica Nacional" "Tropa de Elite Psíquica de Caxias"
+      }
+    }
+    xenomorph_army={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_XENOMORPH_ARMY_SEQUENTIAL_NAME
+    }
+    gene_warrior_army={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_GENE_WARRIOR_ARMY_SEQUENTIAL_NAME
+    }
+    primitive_army={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_PRIMITIVE_ARMY_SEQUENTIAL_NAME
+    }
+    industrial_army={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_INDUSTRIAL_ARMY_SEQUENTIAL_NAME
+    }
+    postatomic_army={
+      sequential_name=ssm_BRAZIL_ARMY_NAMES_POSTATOMIC_ARMY_SEQUENTIAL_NAME
+    }
+  }
+  planet_names={
+    generic={
+      names={
+        "Rio de Janeiro" "São Paulo" "Porto Alegre" "Curitiba" "Recife" "Manaus" "Belém" "Goiânia" "Cuiabá" "Campo Grande" "Teresina" "Natal" "João Pessoa" "Aracaju" "Maceió" "Salvador" "Vitória" "Belo Horizonte" "Fortaleza" "São Luís" "Palmas" "Boa Vista" "Macapá" "Rio Branco" "Porto Velho" "Florianópolis" "Porto Alegre" "Brasília" "Niterói" "Duque de Caxias" "Nova Iguaçu" "São Gonçalo" "São João de Meriti" "Campos dos Goytacazes" "Petrópolis"
+      }
+    }
+    pc_desert={
+      names={
+        "Teresina" "Natal" "João Pessoa"
+      }
+    }
+    pc_tropical={
+      names={
+        "Manaus" "Rio Branco" "Porto Velho" "Macapá"
+      }
+    }
+    pc_gaia={
+      names={
+        "Barreirinhas" "Lençóis Maranhenses" "Chapada Diamantina" "Chapada dos Veadeiros" "Serra da Capivara" "Serra da Canastra" "Serra do Cipó" "Serra do Espinhaço" "Serra do Mar" "Serra do Roncador" "Serra do Tabuleiro" "Raposa Serra do Sol" "Oiapoque"
+      }
+    }
+    pc_ocean={
+      names={
+        "Natal" "Alagoas" "Recife" "Maceió" "Aracaju" "Salvador"
+      }
+    }
+    pc_arctic={
+      names={
+        "Curitiba" "Porto Alegre" "Florianópolis" "Foz do Iguaçu"
+      }
+    }
+    pc_nuked={
+      names={
+        "Cemitério" "Cinza" "Cripta" "Entulho" "Gueto" "Lápide" "Ruína"
+      }
+    }
+    pc_alpine={
+      names={
+        "Borda Dura" "Alto Alegre" "Surucucu"
+      }
+    }
+  }
+  character_names={
+    default={
+      weight=7
+      first_names_male={
+        "Abel" "Abílio" "Abraão" "Adalberto" "Adão" "Adelmar" "Ademir" "Adriano" "Afonso" "Agostinho" "Alberto" "Albino" "Alcides" "Alexandre" "Alfredo" "Aloísio" "Álvaro" "Amancio" "Amando" "Ambrósio" "Américo" "André" "Ângelo" "Anselmo" "Antelmo" "António" "Armando" "Arsenio" "Artur" "Atíla" "Augusto" "Aurélio" "Bartolomeu" "Benedito" "Benjamim" "Bento" "Bernardo" "Bonifacio" "Breno" "Brian" "Bruno" "Caetano" "Caio" "Camilo" "Cândido" "Carlos" "Carmo" "Cassiano" "Cassio" "Cauã" "Cauê" "Carlinhos" "Casimiro" "Cecilio" "Celestino" "Celio" "Celso" "César" "Cezar" "Chico" "Cícero" "Ciro" "Cláudio" "Cleber" "Cleiton" "Cornélio" "Cristiano" "Cristóvão" "Daniel" "Danilo" "Dante" "Davi" "David" "Demétrio" "Denis" "Diego" "Dimas" "Diniz" "Diogo" "Dionísio" "Domingos" "Duda" "Dudu" "Edgar" "Edmundo" "Eduardo" "Elias" "Eliezer" "Emanuel" "Emilio" "Enéas" "Enzo" "Erasmo" "Érico" "Ernesto" "Estevão" "Eugênio" "Evaristo" "Ezequiel" "Fabiano" "Fábio" "Fabricio" "Felipe" "Félix" "Fernando" "Filipe" "Flávio" "Florencio" "Francisco" "Frederico" "Gabriel" "Gaspar" "Geraldo" "Gil" "Gilberto" "Gláucio" "Godofredo" "Guilherme" "Gustavo" "Hélio" "Haroldo" "Heitor" "Henrique" "Herbert" "Heriberto" "Hermínio" "Hipólito" "Horácio" "Hugo" "Iago" "Ian" "Igor" "Inácio" "Isaac" "Ismael" "Ivan" "Jacinto" "Jacó" "Jaime" "Jeremias" "Jerônimo" "João" "Joaquim" "Joel" "Jônatas" "Jorge" "José" "Josué" "Julio" "Kevin" "Kleber" "Laércio" "Lauro" "Leandro" "Leonardo" "Leonel" "Leopoldo" "Lourenço" "Lucas" "Luciano" "Lúcio" "Luís" "Manuel" "Marcelo" "Márcio" "Marcos" "Mariano" "Mário" "Mateus" "Matias" "Maurício" "Mauro" "Maximiliano" "Michael" "Miguel" "Miguelito" "Moisés" "Narciso" "Natanael" "Nelson" "Nicolau" "Nicolas" "Noé" "Norberto" "Octávio" "Odilon" "Olavo" "Oscar" "Osvaldo" "Otávio" "Paulino" "Paulo" "Pedro" "Plínio" "Quirino" "Rafael" "Raimundo" "Ramiro" "Raul" "Reinaldo" "Renato" "Ricardo" "Roberto" "Rodolfo" "Rodrigo" "Rogério" "Rolando" "Ronaldo" "Roque" "Rubens" "Ruy" "Salomão" "Samuel" "Sandro" "Santiago" "Sebastião" "Sérgio" "Severino" "Silvio" "Simão" "Sílvio" "Sócrates" "Tadeu" "Telmo" "Téo" "Teobaldo" "Teodoro" "Tiago" "Timoteo" "Tomás" "Túlio" "Ulisses" "Valentin" "Valério" "Valter" "Vicente" "Victor" "Vinícius" "Virgílio" "Vítor" "Wilson" "Xande" "Xandinho" "Xavier" "Zé" "Zeca" "Zeferino" "Zezé"
+      }
+      regnal_first_names_male={
+        "Afonso" "Carlos" "Fernando" "Jaime" "João" "Luís" "Miguel" "Pedro" "Teodósio"
+      }
+      first_names_female={
+        "Adelaide" "Adriana" "Albertina" "Alda" "Alexandra" "Alice" "Alícia" "Aline" "Amanda" "Amélia" "Ana" "Ana Paula" "Ana Maria" "Ana Clara" "Ana Luiza" "Ana Beatriz" "Ana Júlia" "Anabela" "Andréia" "Ângela" "Angélica" "Anita" "Antônia" "Ariana" "Augusta" "Aurora" "Bárbara" "Beatriz" "Benedita" "Bia" "Bianca" "Brígida" "Bruna" "Caetana" "Camila" "Cândida" "Carina" "Carla" "Carminha" "Carmo" "Carolina" "Cassandra" "Catarina" "Cátia" "Cecília" "Célia" "Chica" "Cíntia" "Clara" "Clarissa" "Cláudia" "Clementina" "Clotilde" "Constância" "Cristiana" "Cristina" "Daniela" "Débora" "Diana" "Domitila" "Dores" "Dolores" "Dorotéia" "Duda" "Eduarda" "Efigênia" "Eleanora" "Eliana" "Elisa" "Elisabete" "Elvira" "Emília" "Érica" "Esmeralda" "Estefânia" "Ester" "Eugênia" "Eulália" "Eva" "Évelin" "Fábia" "Fabiana" "Fátima" "Felícia" "Fernanda" "Filipa" "Filomena" "Flávia" "Florinda" "Fortunata" "Francisca" "Frederica" "Gabriela" "Gertrudes" "Gilda" "Gisela" "Gláucia" "Gloria" "Graça" "Graciana" "Helena" "Hermínia" "Hortência" "Iara" "Ilda" "Inês" "Iolanda" "Irene" "Irina" "Isabela" "Isaura" "Isidora" "Isis" "Izabel" "Jacinta" "Jaqueline" "Jessica" "Joana" "Jordana" "Josefa" "Josefina" "Jovita" "Judite" "Júlia" "Juliana" "Julie" "Jurema" "Joelma" "Lara" "Larissa" "Laura" "Leandra" "Lena" "Leonora" "Leopoldina" "Letícia" "Lia" "Liana" "Lídia" "Lílian" "Lívia" "Lorena" "Luana" "Lúcia" "Lucília" "Lucinda" "Luiza" "Luna" "Lurdes" "Luzia" "Lygia" "Madalena" "Mafalda" "Magda" "Maia" "Maiara" "Manoela" "Márcia" "Margarida" "Maria" "Mariana" "Marina" "Marisa" "Maristela" "Marta" "Matilde" "Melissa" "Micaela" "Mônica" "Naiara" "Narcisa" "Natália" "Neves" "Nicole" "Noêmia" "Núbia" "Ofélia" "Olga" "Olívia" "Otávia" "Paloma" "Patrícia" "Paula" "Paulina" "Priscila" "Rafaela" "Raissa" "Raquel" "Rebeca" "Regina" "Renata" "Rita" "Rosa" "Rosália" "Rosana" "Rosário" "Rosinha" "Rute" "Sabrina" "Safira" "Sandra" "Sara" "Serafina" "Severina" "Sílvia" "Sofia" "Sol" "Sonia" "Soraia" "Suzana" "Taís" "Talita" "Tânia" "Telma" "Teodora" "Tereza" "Terezinha" "Thaís" "Úrsula" "Valentina" "Valéria" "Valquíria" "Vanda" "Vanessa" "Vera" "Verônica" "Victória" "Violeta" "Virginia" "Vitória" "Yasmin" "Zita"
+      }
+      regnal_first_names_female={
+        "Eleanora" "Francisca" "Isabel" "Leopoldina" "Maria" "Vitória" "Teodora" "Teresa"
+      }
+      second_names={
+        "Abreu" "Afonso" "Agostinho" "Aguiar" "Albuquerque" "de Albuquerque" "Alcantara" "Almeida" "Alvarenga" "Alvares" "Alves" "Alves de Oliveira" "Alves da Silva" "Alves de Souza" "Alves de Azevedo" "Alves Gomes" "Alves Pereira" "Alves de Lima" "Alves de Castro" "Alves de Carvalho" "Alves Mesquita" "Alves Bittecourt" "Amaral" "Amorim" "Andrade" "Antunes" "Araújo" "de Araújo" "Arruda" "Avila" "Azevedo" "Azevedo de Oliveira" "Azevedo da Silva" "Azevedo de Souza" "de Azevedo" "Bandeira" "Barbosa" "Barcelar" "Barros" "de Barros" "Barreto" "Bastos" "Batista" "Belo" "Bento" "Bettencourt" "Bragança" "Bragança de Almeida" "Bragança de Oliveira" "Bragança da Silva" "Bragança de Souza" "de Bragança" "Borges" "Botelho" "Braga" "Brandão" "Brasil" "Brito" "Cabral" "Cabral de Melo" "Cabral da Silva" "Caetano" "Camargo" "Câmara" "da Câmara" "Campos" "Candido" "Cardoso" "Carneiro" "Carreira" "Carvalho" "de Carvalho" "Castelo" "Castro" "Cavalcante" "Cerqueira" "Chaves" "Coelho" "Coimbra" "Constancio" "Corado" "Cordeiro" "Correia" "Costas" "da Costa" "Coutinho" "Cruz" "da Cruz" "Cunha" "da Cunha" "Custódio" "Dantas" "Diniz" "Domingues" "Duarte" "Dias" "Dutra" "Eanes" "Espindola" "Estácio" "Esteves" "Fagundes" "Farias" "Fernandes" "Ferreira" "Figueiredo" "Fonseca" "Fontes" "Freire" "Freitas" "Freitas de Oliveira" "Freitas da Silva" "de Freitas" "Furtado" "Garcia" "Gama" "Góes" "Gomes" "Gonçalves" "Gouveia" "Guedes" "Guerra" "Guimarães" "de Guimarães" "Gularte" "Gusmão" "Henriques" "Hernandes" "Haddad" "Honório" "Herculano" "Ines" "Ibanez" "Jeronimo" "João" "Joaquim" "Judice" "Junior" "Julio" "de Julio" "Justino" "Lacerda" "de Lacerda" "Lapa" "Leitão" "Leite" "Lias" "Lima" "de Lima" "Lemos" "dos Lemos" "Linhares" "dos Linhares" "Lombarde" "Lopes" "Lourenço" "Luiz" "Macedo" "Machado" "Maciel" "Magalhães" "de Magalhães" "Maia" "Marcelo" "Marques" "Martins" "Mascarenhas" "Mateus" "Matos" "Mauricio" "Medeiros" "Mello" "de Mello" "Mendez" "Mendonça" "Menezes" "Mesquita" "Mesquita de Oliveira" "Mesquita da Silva" "Miguez" "Miranda" "Monserrate" "Monteiro" "Montenegro" "Morais" "Moreira" "Morgado" "Motta" "Moura" "Muniz" "Narciso" "Nascimento" "do Nascimento" "Natal" "Nazário" "Neto" "Neves" "Nicolau" "Nobrega" "de Nobrega" "Nogueira" "Noronha" "de Noronha" "Nunes" "Oliveira" "Oliveira da Costa" "Oliveira da Silva" "Oliveira de Souza" "de Oliveira" "Osorio" "Pacheco" "Paes" "Paiva" "Palma" "Parente" "Parreira" "Pascoal" "Passos" "de Paula" "Peixoto" "Pereira" "Pereira de Almeida" "Pereira de Carvalho" "Pereira de Lima" "Pereira de Oliveira" "Pereira Alves" "Pereira da Silva" "Peres" "Peru de Oliveira" "Peru de Paula" "Pessoa" "Pimenta" "Pimentel" "Pinheiro" "Pinto" "Pinto da Costa" "Pinto de Paula" "Pinto de Almeida" "Pinto de Carvalho" "Pinto de Lima" "Pinto de Oliveira" "Pinto Alves" "Pinto da Silva" "Pires" "Pontes" "Portela" "Porto" "Prata" "Prior" "Quadros" "Queiroz" "Quinelato" "Rabelo" "Ramalho" "Ramires" "Ramos" "Rangel" "Rapoza" "Reginaldo" "Rego" "Reis" "Reposa" "Rezendes" "Ribeiro" "Rocha" "Rodrigues" "de Rodrigues" "Roque" "Sá Pinto" "Sá Ribeiro" "Sá Silva" "Sá Santos" "Sá Rodrigues" "Sá Pereira" "Sá de Oliveira" "de Sá" "Saade" "Sabina" "Saldanha" "Sales" "Salgado" "Sampaio" "Sanches" "Santos" "Santos Neto" "Santos Junior" "Santos Filho" "dos Santos" "Saraiva" "Seixas" "Sena" "Sequeira" "Serra" "Silva" "Silva e Souza" "Silva Neto" "Silva Pinto" "Silva Santos" "Silva Junior" "Silva da Costa" "Silva de Oliveira" "Silva de Vasconcelos" "da Silva" "Silvestre" "Simas" "Simões" "Simões Lopes" "Simões Neto" "Simões Pires" "Siqueira" "Soares" "Sousa" "Sousa da Silva" "Sousa Neto" "Sousa Pinto" "Sousa Santos" "de Sousa" "Souto" "Spinola" "Tavares" "Teixeira" "Telles" "Tomás" "Tomás Junior" "Tomás Neto" "Tomás de Aquino" "Torres" "Trindade" "Valente" "Valadares" "Vargas" "Vasconcelos" "de Vaz" "de Vaz Cardoso" "Vaz de Almeida" "Vaz de Carvalho" "Vaz de Lima" "Vaz de Oliveira" "Vaz de Souza" "Vaz da Silva" "dos Veadeiros" "Veloso" "Venâncio" "Verissimo" "Viana" "Vidal" "Viegas" "Vieira" "Vila" "Villela" "Xavier" "Xavier da Silva" "Xavier de Oliveira" "Xavier de Souza" "Xavier de Vasconcelos" "Xavier dos Santos" "Xavier Junior" "Xavier Neto" "Zacarias" "Zacarias Junior" "Zacarias Neto" "Zanetti"
+      }
+      regnal_second_names={
+        "de Braganza" "de Caxias" "Albuquerque" "Drummond" "Ferreira"
+      }
+    }
+  }
+}

@@ -1,0 +1,83 @@
+ssm_humanoids = {
+	species_class = HUM
+	portraits = {
+		"ssm_default"
+		"ssm_elves"
+		"ssm_high_elves"
+		"ssm_astral"
+		"ssm_necron"
+		"ssm_vargrosianos"
+		"ssm_knight"
+		"ssm_green_elves"
+	}
+}
+
+ssm_mammalians = {
+	species_class = MAM
+	portraits = {
+		"ssm_gamba"
+	}
+}
+
+ssm_molluscoids = {
+	species_class = MOL
+	portraits = {
+		"ssm_octopus"
+		"ssm_hastur"
+	}
+}
+
+ssm_necroids = {
+	species_class = NECROID
+	portraits = {
+		"ssm_necron"
+	}
+}
+
+ssm_aquatics = {
+	species_class = AQUATIC
+	portraits = {
+		"ssm_mermaids"
+	}
+}
+
+ssm_plantoids = {
+	species_class = PLANT
+	portraits = {
+		"ssm_green_elves"
+	}
+}
+
+ssm_avians = {
+	species_class = AVI
+	portraits = {
+		"ssm_avians"
+	}
+}
+
+ssm_cybernetics = {
+	species_class = HUM
+	portraits = {
+		"ssm_mercenary"
+	}
+}
+
+ssm_robot = {
+	species_class = ROBOT
+	portraits = {
+		"ssm_green_order"
+		"ssm_new_order"
+		"ssm_cyborg"
+		"ssm_timbot"
+	}
+}
+
+ssm_machine = {
+	species_class = MACHINE
+	portraits = {
+		"ssm_green_order"
+		"ssm_new_order"
+		"ssm_cyborg"
+		"ssm_timbot"
+	}
+}

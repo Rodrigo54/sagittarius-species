@@ -1,0 +1,190 @@
+portraits = {
+	ssm_elves_scientist_male = {
+		entity = "sl_humanoid_01_entity"
+		clothes_selector = "no_texture"
+		attachment_selector = "no_texture"
+		greeting_sound = "human_male_greetings_01"
+		custom_attachment_label = "HAIR_STYLE"
+		character_textures = {
+			"gfx/models/portraits/ssm_elves/male/001.dds"
+			"gfx/models/portraits/ssm_elves/male/002.dds"
+			"gfx/models/portraits/ssm_elves/male/003.dds"
+			"gfx/models/portraits/ssm_elves/male/004.dds"
+			"gfx/models/portraits/ssm_elves/male/005.dds"
+			"gfx/models/portraits/ssm_elves/male/006.dds"
+			"gfx/models/portraits/ssm_elves/male/007.dds"
+			"gfx/models/portraits/ssm_elves/male/008.dds"
+			"gfx/models/portraits/ssm_elves/male/009.dds"
+			"gfx/models/portraits/ssm_elves/male/010.dds"
+			"gfx/models/portraits/ssm_elves/male/011.dds"
+			"gfx/models/portraits/ssm_elves/male/012.dds"
+			"gfx/models/portraits/ssm_elves/male/013.dds"
+			"gfx/models/portraits/ssm_elves/male/014.dds"
+			"gfx/models/portraits/ssm_elves/male/015.dds"
+			"gfx/models/portraits/ssm_elves/male/016.dds"
+			"gfx/models/portraits/ssm_elves/male/017.dds"
+			"gfx/models/portraits/ssm_elves/male/018.dds"
+			"gfx/models/portraits/ssm_elves/male/019.dds"
+			"gfx/models/portraits/ssm_elves/male/020.dds"
+			"gfx/models/portraits/ssm_elves/male/021.dds"
+			"gfx/models/portraits/ssm_elves/male/022.dds"
+			"gfx/models/portraits/ssm_elves/male/023.dds"
+			"gfx/models/portraits/ssm_elves/male/024.dds"
+			"gfx/models/portraits/ssm_elves/male/025.dds"
+		}
+	}
+
+	ssm_elves_scientist_female = {
+		entity = "sl_humanoid_01_entity"
+		clothes_selector = "no_texture"
+		attachment_selector = "no_texture"
+		greeting_sound = "human_female_greetings_01"
+		custom_attachment_label = "HAIR_STYLE"
+		character_textures = {
+			"gfx/models/portraits/ssm_elves/female/001.dds"
+			"gfx/models/portraits/ssm_elves/female/002.dds"
+			"gfx/models/portraits/ssm_elves/female/003.dds"
+			"gfx/models/portraits/ssm_elves/female/004.dds"
+			"gfx/models/portraits/ssm_elves/female/005.dds"
+			"gfx/models/portraits/ssm_elves/female/006.dds"
+			"gfx/models/portraits/ssm_elves/female/007.dds"
+			"gfx/models/portraits/ssm_elves/female/008.dds"
+			"gfx/models/portraits/ssm_elves/female/009.dds"
+			"gfx/models/portraits/ssm_elves/female/010.dds"
+			"gfx/models/portraits/ssm_elves/female/011.dds"
+			"gfx/models/portraits/ssm_elves/female/012.dds"
+			"gfx/models/portraits/ssm_elves/female/013.dds"
+			"gfx/models/portraits/ssm_elves/female/014.dds"
+			"gfx/models/portraits/ssm_elves/female/015.dds"
+			"gfx/models/portraits/ssm_elves/female/016.dds"
+			"gfx/models/portraits/ssm_elves/female/017.dds"
+			"gfx/models/portraits/ssm_elves/female/018.dds"
+			"gfx/models/portraits/ssm_elves/female/019.dds"
+			"gfx/models/portraits/ssm_elves/female/020.dds"
+			"gfx/models/portraits/ssm_elves/female/021.dds"
+			"gfx/models/portraits/ssm_elves/female/022.dds"
+			"gfx/models/portraits/ssm_elves/female/023.dds"
+			"gfx/models/portraits/ssm_elves/female/024.dds"
+			"gfx/models/portraits/ssm_elves/female/025.dds"
+		}
+	}
+}
+
+portrait_groups = {
+	ssm_elves = {
+		default = ssm_elves_scientist_female
+		game_setup = {
+			add = {
+				trigger = {
+					ruler = {
+            OR = {
+              gender = female
+              gender = indeterminable
+            }
+					}
+				}
+				portraits = {
+					ssm_elves_scientist_female
+				}
+			}
+			add = {
+				trigger = {
+					ruler = {
+            OR = {
+              gender = male
+              gender = indeterminable
+            }
+					}
+				}
+				portraits = {
+					ssm_elves_scientist_male
+				}
+			}
+		}
+		species = {
+			# generic portrait for a species
+			add = {
+				portraits = {
+					ssm_elves_scientist_male
+				}
+			}
+		}
+		pop_group = {
+			#for a specific pop
+			add = {
+				trigger = {
+					NOR = {
+						species = {
+							species_gender = male
+						}
+					}
+				}
+				portraits = {
+					ssm_elves_scientist_female
+				}
+			}
+			add = {
+				trigger = {
+					NOR = {
+						species = {
+							species_gender = female
+						}
+					}
+				}
+				portraits = {
+					ssm_elves_scientist_male
+				}
+			}
+		}
+		leader = {
+			# scientists, generals, admirals, governor
+			add = {
+				trigger = {
+          OR = {
+            gender = female
+            gender = indeterminable
+          }
+				}
+				portraits = {
+					ssm_elves_scientist_female
+				}
+			}
+			add = {
+				trigger = {
+          OR = {
+            gender = male
+            gender = indeterminable
+          }
+				}
+				portraits = {
+					ssm_elves_scientist_male
+				}
+			}
+		}
+		ruler = {
+			# portraits used for rulers
+			add = {
+				trigger = {
+          OR = {
+            gender = female
+            gender = indeterminable
+          }
+				}
+				portraits = {
+					ssm_elves_scientist_female
+				}
+			}
+			add = {
+				trigger = {
+          OR = {
+            gender = male
+            gender = indeterminable
+          }
+				}
+				portraits = {
+					ssm_elves_scientist_male
+				}
+			}
+		}
+	}
+}
