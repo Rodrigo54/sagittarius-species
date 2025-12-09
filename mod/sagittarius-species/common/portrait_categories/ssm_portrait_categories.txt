@@ -7,7 +7,7 @@ sagittarius = {
 		ssm_aquatics
 		ssm_avians
 		ssm_cybernetics
-		ssm_robot
+		ssm_machine
 	}
 }
 
@@ -16,13 +16,6 @@ humanoids = {
 	sets = {
 		ssm_humanoids
 		ssm_cybernetics
-	}
-}
-
-machines = {
-	name = MACHINE
-	sets = {
-		ssm_machine
 	}
 }
 
@@ -72,13 +65,20 @@ cybernetics = {
 	name = CYBERNETIC
 	sets = {
 		ssm_cybernetics
-		ssm_robot
+		ssm_machine
 	}
 }
 
 synthetics = {
 	name = SYNTH
 	sets = {
-		ssm_robot
+		ssm_machine
+	}
+}
+
+machines = {
+	name = MACHINE
+	sets = {
+		ssm_machine
 	}
 }
