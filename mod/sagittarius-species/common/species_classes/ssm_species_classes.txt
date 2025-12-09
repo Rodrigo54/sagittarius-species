@@ -9,8 +9,8 @@ ssm_sagittarius = {
 			}
 		}
 	}
-	playable = {
-		has_global_flag = game_started
+  	playable = {
+		always = no
 	}
 	portraits = {
 		"ssm_default"
@@ -64,8 +64,8 @@ ssm_presapient = {
 ssm_robot = {
 	archetype = ROBOT
 	randomized = yes
-	playable = {
-		has_global_flag = game_started
+  	playable = {
+		always = no
 	}
 	gender = no
 	is_robotic = yes
