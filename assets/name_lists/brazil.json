@@ -1,7 +1,7 @@
 {
-  "name": "Galaxar - Brasil",
+  "name": "Sagittarius - Brasil",
   "desc": "§YLeaders:§! Marcos Silvas, Amor Paiva\n§YShips:§! Fuzileiro, Soyo\n§YFleets:§! Strike Team Falcata, Ribauldequin Extraorbital Corps\n§YColonies:§! Estepenseiro, Hélder",
-  "gsm_brazil": {
+  "ssm_brazil": {
     "category": "Humanoid",
     "randomized": true,
     "ship_names": {

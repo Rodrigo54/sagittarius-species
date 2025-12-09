@@ -1,7 +1,7 @@
 {
-  "name": "Galaxar - Altmer",
+  "name": "Sagittarius - Altmer",
   "desc": "§YLeaders:§! Elurmeril , Antur Ravenwatch\n§YShips:§! Sunantorwen, Suriwene\n§YFleets:§! Justiciar Squadron, Justiciar Star Order\n§YColonies:§! Tanzelwil, Eton Nir",
-  "gsm_altmer": {
+  "ssm_altmer": {
     "category": "Humanoid",
     "randomized": true,
     "ship_names": {
