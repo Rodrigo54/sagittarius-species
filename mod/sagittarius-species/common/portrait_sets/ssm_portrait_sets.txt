@@ -62,6 +62,13 @@ ssm_cybernetics = {
 	}
 }
 
+ssm_psionic = {
+	species_class = HUM
+  portraits = {
+    "ssm_astral"
+  }
+}
+
 ssm_machine = {
 	species_class = MACHINE
 	portraits = {
