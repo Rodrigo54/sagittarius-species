@@ -24,6 +24,7 @@
       "testmod/**"
     ],
     "cwtools.rules_version": "latest",
-    "cwtools.localisation.languages": ["Braz_Por", "English"]
+    "cwtools.localisation.languages": ["Braz_Por", "English"],
+    "cwtools.errors.ignore": ["CW100"]
   }
 }

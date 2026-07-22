@@ -9,7 +9,8 @@
     "overwrite": "pwsh scripts/overwrite.ps1",
     "converter": "bun run portrait && bun run rooms",
     "portrait": "bun scripts/processPortraits.ts",
-    "rooms": "bun scripts/processRooms.ts"
+    "rooms": "bun scripts/processRooms.ts",
+    "names": "bun scripts/generate-names/index.ts"
   },
   "author": "",
   "license": "ISC",
