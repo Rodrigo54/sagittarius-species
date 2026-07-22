@@ -1,54 +1,53 @@
 ssm_brazil={
   category="Humanoid"
-  randomized=yes
   ship_names={
     generic={
-      "Poti" "Gurupi" "Antares" "Rio Branco" "Paraguassú" "Araçatuba" "Amazonas" "Maracanã" "Cruzeiro do Sul"
+      "Tupinambá" "Riachuelo" "Tamandaré" "Anunciada" "Oscar Niemeyer" "Oswaldo Cruz" "Guararapes" "Barroso" "Vitória"
     }
     corvette={
-      "Poti" "Gurupi" "Tupi" "Tamoio" "Araguari" "Araguia" "Araçatuba" "Piratini" "Piratininga" "Pirajá" "Grajaú" "Guaporé" "Guarujá" "Guarapari" "Guarapuava" "Guaratinguetá" "Bacuri" "Bacabal" "Bacaxá" "Macaé" "Macaíba" "Macaúba" "Maracanã" "Mangaratiba" "Mangabeira" "Xingu" "Xavante" "Xanxerê" "Xanxá"
+      "Tupinambá" "Tupiniquim" "Guarani" "Tremembé" "Pataxó" "Xavante" "Kaingang" "Terena" "Guajajara" "Kayapó" "Yanomami" "Ticuna" "Munduruku" "Fulniô" "Xerente" "Karajá" "Bororo" "Kadiwéu" "Krahô" "Apinajé" "Guató" "Waurá" "Kalapalo" "Yawalapiti" "Rikbaktsa" "Panará" "Suruí" "Zoró" "Cinta-Larga"
     }
     destroyer={
-      "Duque de Caxias" "Duque de Bragança" "Duque de Saldanha" "Duque de Terceira" "Duque de Palmela" "Duque de Loulé" "Duque de Cadaval" "Duque de Viseu" "Duque de Aveiro" "Duque de Beja" "Duque de Coimbra" "Duque de Guimarães" "Duque de Vila Real" "Duque de Vila Nova" "Duque de Vila Flor"
+      "Nambikwara" "Tapirapé" "Assurini" "Parakanã" "Katukina" "Marubo" "Kaxinawá" "Ashaninka" "Yaminawá" "Baniwa" "Wapixana" "Ingarikó" "Macuxi" "Wai-Wai" "Tiriyó"
     }
     cruiser={
-      "São Pedro" "Santa Maria" "São Raimundo" "São Sebastião" "São Francisco" "São João" "São José" "São Luís" "São Miguel" "São Paulo" "São Tomé" "São Vicente" "São Benedito" "São Bento" "São Bernardo" "São Caetano" "São Carlos" "São Cristóvão" "São Domingos" "São Gabriel" "São Gonçalo"
+      "Riachuelo" "Guararapes" "Tuiuti" "Humaitá" "Curupaiti" "Laguna" "Dourados" "Itororó" "Avaí" "Jenipapo" "Cabo Frio" "Ipiranga" "Passo da Pátria" "Angostura" "Lomas Valentinas" "Campo Grande" "Estero Bellaco" "Boqueirão" "Piquissiri" "Salvador" "Monte Castelo"
     }
     battleship={
-      "Kayapó" "Kokama" "Kuikuro" "Tupinambá" "Tupiniquim" "Guajajaras"
+      "Riachuelo" "Guararapes" "Humaitá" "Ipiranga" "Tuiuti" "Avaí"
     }
     juggernaut={
-      "Orgulho Nacional" "Independência" "Grande Ogun"
+      "Tamandaré" "Barroso" "Greenhalgh"
     }
     constructor={
-      "São Paulo" "Rio de Janeiro" "Brasília" "Salvador" "Fortaleza" "Belo Horizonte" "Manaus" "Curitiba" "Recife" "Porto Alegre" "Belém" "Goiânia" "São Luís" "Maceió" "Campinas" "Teresina" "Aracaju" "Natal" "Alagoas" "Amapá" "Amazonas" "Cuiabá"
+      "Oscar Niemeyer" "Lúcio Costa" "Roberto Burle Marx" "Paulo Mendes da Rocha" "Vilanova Artigas" "Lina Bo Bardi" "Ruy Ohtake" "Rino Levi" "Affonso Eduardo Reidy" "André Rebouças" "Flávio de Carvalho" "Sérgio Bernardes" "Oswaldo Bratke" "Carlos Leão" "Jorge Machado Moreira" "Attílio Corrêa Lima" "Severiano Mário Porto" "Acácio Gil Borsoi" "Joaquim Guedes" "Eduardo Kneese de Mello" "Icaro de Castro Mello" "Marcos Acayaba"
     }
     science={
-      "Osvaldo Cruz" "Carlos Chagas" "Emílio Ribas" "Paulo Niemeyer" "Santos Dumont"
+      "Oswaldo Cruz" "Carlos Chagas" "Vital Brazil" "Bertha Lutz" "César Lattes"
     }
     colonizer={
-      "São Paulo" "Rio de Janeiro" "Brasília" "Salvador" "Fortaleza" "Belo Horizonte" "Manaus" "Curitiba" "Recife" "Porto Alegre" "Belém" "Goiânia" "São Luís" "Maceió" "Campinas" "Teresina" "Aracaju" "Natal" "Alagoas" "Amapá" "Amazonas" "Cuiabá"
+      "Anunciada" "Vitória" "Berrio" "São Gabriel" "São Rafael" "Santa Catarina do Monte Sinai" "São Miguel" "Santo André" "São Pedro" "Nossa Senhora da Ajuda" "Nossa Senhora da Conceição" "Espírito Santo" "Santa Cruz" "São Cristóvão" "Flor de la Mar" "Concepción" "Santo Amaro" "El-Rei" "São João" "Bertioga" "Santa Bárbara" "Nossa Senhora do Rosário"
     }
     sponsored_colonizer={
-      "Pedro Álvares Cabral" "Vasco da Gama" "Fernão de Magalhães" "Bartolomeu Dias"
+      "São Gabriel" "Anunciada" "Vitória" "Santa Cruz"
     }
     transport={
-      "Tamandaré" "Barroso" "Riachuelo" "Bahia" "Niterói" "Cabral" "Caxias"
+      "Krenak" "Maxakali" "Pankararu" "Potiguara" "Botocudo" "Carijó" "Jamamadi"
     }
     research_station={
-      "Santa Maria" "Pedro Álvares Cabral" "Vasco da Gama" "Fernão de Magalhães" "Bartolomeu Dias"
+      "Mário Schenberg" "Johanna Döbereiner" "Adolpho Lutz" "Miguel Ozório de Almeida" "Manuel de Abreu"
     }
     military_station_small={
-      "D. João II" "D. Pedro II" "Isabel" "Leopoldina"
+      "Rademaker" "Alexandrino de Alencar" "Cochrane" "Wandenkolk"
     }
     military_station_medium={
-      "D. João II" "D. Pedro II" "Isabel" "Leopoldina"
+      "Rademaker" "Alexandrino de Alencar" "Cochrane" "Wandenkolk"
     }
     military_station_large={
-      "D. João II" "D. Pedro II" "Isabel" "Leopoldina"
+      "Rademaker" "Alexandrino de Alencar" "Cochrane" "Wandenkolk"
     }
     ion_cannon={
-      "Apurinã" "Tupinambá" "Tupiniquim" "Tupinambá"
+      "Laguna" "Dourados" "Curupaiti" "Jenipapo"
     }
   }
   ship_class_names={
@@ -58,10 +57,10 @@ ssm_brazil={
     constructor={
       "Embraer" "Santos Dumont"
     }
-    coloniser={
+    colonizer={
       "Embraer" "Santos Dumont"
     }
-    sponsored_coloniser={
+    sponsored_colonizer={
       "Embraer" "Santos Dumont"
     }
     transport={
@@ -78,52 +77,46 @@ ssm_brazil={
   }
   army_names={
     generic={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_GENERIC_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_GENERIC_SEQUENTIAL_NAME
     }
     machine_defense={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_MACHINE_DEFENSE_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_MACHINE_DEFENSE_SEQUENTIAL_NAME
     }
     machine_assault_1={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_MACHINE_ASSAULT_1_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_MACHINE_ASSAULT_1_SEQUENTIAL_NAME
     }
     machine_assault_2={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_MACHINE_ASSAULT_1_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_MACHINE_ASSAULT_1_SEQUENTIAL_NAME
     }
     machine_assault_3={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_MACHINE_ASSAULT_1_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_MACHINE_ASSAULT_1_SEQUENTIAL_NAME
     }
     defense_army={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_DEFENSE_ARMY_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_DEFENSE_ARMY_SEQUENTIAL_NAME
     }
     assault_army={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_MACHINE_ASSAULT_1_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_MACHINE_ASSAULT_1_SEQUENTIAL_NAME
     }
     occupation_army={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_OCCUPATION_ARMY_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_OCCUPATION_ARMY_SEQUENTIAL_NAME
     }
     slave_army={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_SLAVE_ARMY_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_SLAVE_ARMY_SEQUENTIAL_NAME
     }
     clone_army={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_CLONE_ARMY_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_CLONE_ARMY_SEQUENTIAL_NAME
     }
     undead_army={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_UNDEAD_ARMY_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_UNDEAD_ARMY_SEQUENTIAL_NAME
     }
     robotic_defense_army={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_ROBOTIC_DEFENSE_ARMY_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_ROBOTIC_DEFENSE_ARMY_SEQUENTIAL_NAME
     }
     robotic_army={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_ROBOTIC_ARMY_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_ROBOTIC_ARMY_SEQUENTIAL_NAME
     }
     robotic_occupation_army={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_ROBOTIC_OCCUPATION_ARMY_SEQUENTIAL_NAME
-    }
-    android_defense_army={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_ANDROID_DEFENSE_ARMY_SEQUENTIAL_NAME
-    }
-    android_army={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_ANDROID_ARMY_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_ROBOTIC_OCCUPATION_ARMY_SEQUENTIAL_NAME
     }
     psionic_army={
       random_names={
@@ -131,65 +124,65 @@ ssm_brazil={
       }
     }
     xenomorph_army={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_XENOMORPH_ARMY_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_XENOMORPH_ARMY_SEQUENTIAL_NAME
     }
     gene_warrior_army={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_GENE_WARRIOR_ARMY_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_GENE_WARRIOR_ARMY_SEQUENTIAL_NAME
     }
     primitive_army={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_PRIMITIVE_ARMY_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_PRIMITIVE_ARMY_SEQUENTIAL_NAME
     }
     industrial_army={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_INDUSTRIAL_ARMY_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_INDUSTRIAL_ARMY_SEQUENTIAL_NAME
     }
     postatomic_army={
-      sequential_name=ssm_BRAZIL_ARMY_NAMES_POSTATOMIC_ARMY_SEQUENTIAL_NAME
+      sequential_name=SSM_BRAZIL_ARMY_NAMES_POSTATOMIC_ARMY_SEQUENTIAL_NAME
     }
   }
   planet_names={
     generic={
       names={
-        "Rio de Janeiro" "São Paulo" "Porto Alegre" "Curitiba" "Recife" "Manaus" "Belém" "Goiânia" "Cuiabá" "Campo Grande" "Teresina" "Natal" "João Pessoa" "Aracaju" "Maceió" "Salvador" "Vitória" "Belo Horizonte" "Fortaleza" "São Luís" "Palmas" "Boa Vista" "Macapá" "Rio Branco" "Porto Velho" "Florianópolis" "Porto Alegre" "Brasília" "Niterói" "Duque de Caxias" "Nova Iguaçu" "São Gonçalo" "São João de Meriti" "Campos dos Goytacazes" "Petrópolis"
+        "Constelação da Onça-Pintada" "Arara-Azul Celeste" "Constelação do Tucano" "Capivara Celeste" "Constelação do Mico-Leão-Dourado" "Jaguatirica Celeste" "Constelação do Tamanduá-Bandeira" "Boto-Cor-de-Rosa Celeste" "Constelação da Harpia" "Ariranha Celeste" "Constelação do Tatu-Canastra" "Veado-Campeiro Celeste" "Constelação do Lobo-Guará" "Quati Celeste" "Constelação da Preguiça" "Sagui Celeste" "Constelação do Uirapuru" "Papagaio Celeste" "Constelação da Sucuri" "Cágado Celeste" "Constelação do Mutum" "Anta Celeste" "Constelação do Bicho-Preguiça" "Beija-Flor Celeste" "Constelação do Gavião-Real" "Ema Celeste" "Constelação do Peixe-Boi" "Tuiuiú Celeste" "Constelação da Jaguatirica" "Macaco-Prego Celeste" "Constelação do Bugio" "Tatu-Bola Celeste" "Constelação do Muriqui" "Onça-Parda Celeste" "Constelação do Curupira"
       }
     }
     pc_desert={
       names={
-        "Teresina" "Natal" "João Pessoa"
+        "Constelação do Tatu-Bola" "Veado-Catingueiro Celeste" "Constelação do Gato-do-Mato" "Mocó Celeste" "Constelação da Seriema"
       }
     }
     pc_tropical={
       names={
-        "Manaus" "Rio Branco" "Porto Velho" "Macapá"
+        "Constelação da Arara" "Mico-Leão-Dourado Celeste" "Constelação da Onça-Pintada" "Papagaio Celeste"
       }
     }
     pc_gaia={
       names={
-        "Barreirinhas" "Lençóis Maranhenses" "Chapada Diamantina" "Chapada dos Veadeiros" "Serra da Capivara" "Serra da Canastra" "Serra do Cipó" "Serra do Espinhaço" "Serra do Mar" "Serra do Roncador" "Serra do Tabuleiro" "Raposa Serra do Sol" "Oiapoque"
+        "Constelação do Mico-Leão-Dourado" "Arara-Azul Celeste" "Constelação da Harpia" "Onça-Pintada Celeste" "Constelação do Boto-Cor-de-Rosa" "Uirapuru Celeste" "Constelação do Beija-Flor" "Tucano Celeste" "Constelação da Jaguatirica" "Sagui Celeste" "Constelação do Gavião-Real" "Tuiuiú Celeste" "Constelação do Muriqui"
       }
     }
     pc_ocean={
       names={
-        "Natal" "Alagoas" "Recife" "Maceió" "Aracaju" "Salvador"
+        "Constelação do Boto-Cor-de-Rosa" "Peixe-Boi Celeste" "Constelação da Tartaruga-de-Couro" "Tainha Celeste" "Constelação da Baleia-Jubarte" "Arraia Celeste"
       }
     }
     pc_arctic={
       names={
-        "Curitiba" "Porto Alegre" "Florianópolis" "Foz do Iguaçu"
+        "Constelação do Pinguim-de-Magalhães" "Lobo-Marinho Celeste" "Constelação do Elefante-Marinho" "Albatroz Celeste"
       }
     }
     pc_nuked={
       names={
-        "Cemitério" "Cinza" "Cripta" "Entulho" "Gueto" "Lápide" "Ruína"
+        "Constelação do Tigre-Dente-de-Sabre" "Preguiça-Gigante Celeste" "Constelação do Tatu-Gigante" "Mutum-do-Nordeste Celeste" "Constelação da Arara-Azul-Pequena" "Toxodonte Celeste" "Constelação do Notiomastodonte"
       }
     }
     pc_alpine={
       names={
-        "Borda Dura" "Alto Alegre" "Surucucu"
+        "Constelação do Graxaim-do-Campo" "Veado-Campeiro Celeste" "Constelação do Gato-do-Mato-Pequeno"
       }
     }
   }
   character_names={
-    default={
+    main={
       weight=7
       first_names_male={
         "Abel" "Abílio" "Abraão" "Adalberto" "Adão" "Adelmar" "Ademir" "Adriano" "Afonso" "Agostinho" "Alberto" "Albino" "Alcides" "Alexandre" "Alfredo" "Aloísio" "Álvaro" "Amancio" "Amando" "Ambrósio" "Américo" "André" "Ângelo" "Anselmo" "Antelmo" "António" "Armando" "Arsenio" "Artur" "Atíla" "Augusto" "Aurélio" "Bartolomeu" "Benedito" "Benjamim" "Bento" "Bernardo" "Bonifacio" "Breno" "Brian" "Bruno" "Caetano" "Caio" "Camilo" "Cândido" "Carlos" "Carmo" "Cassiano" "Cassio" "Cauã" "Cauê" "Carlinhos" "Casimiro" "Cecilio" "Celestino" "Celio" "Celso" "César" "Cezar" "Chico" "Cícero" "Ciro" "Cláudio" "Cleber" "Cleiton" "Cornélio" "Cristiano" "Cristóvão" "Daniel" "Danilo" "Dante" "Davi" "David" "Demétrio" "Denis" "Diego" "Dimas" "Diniz" "Diogo" "Dionísio" "Domingos" "Duda" "Dudu" "Edgar" "Edmundo" "Eduardo" "Elias" "Eliezer" "Emanuel" "Emilio" "Enéas" "Enzo" "Erasmo" "Érico" "Ernesto" "Estevão" "Eugênio" "Evaristo" "Ezequiel" "Fabiano" "Fábio" "Fabricio" "Felipe" "Félix" "Fernando" "Filipe" "Flávio" "Florencio" "Francisco" "Frederico" "Gabriel" "Gaspar" "Geraldo" "Gil" "Gilberto" "Gláucio" "Godofredo" "Guilherme" "Gustavo" "Hélio" "Haroldo" "Heitor" "Henrique" "Herbert" "Heriberto" "Hermínio" "Hipólito" "Horácio" "Hugo" "Iago" "Ian" "Igor" "Inácio" "Isaac" "Ismael" "Ivan" "Jacinto" "Jacó" "Jaime" "Jeremias" "Jerônimo" "João" "Joaquim" "Joel" "Jônatas" "Jorge" "José" "Josué" "Julio" "Kevin" "Kleber" "Laércio" "Lauro" "Leandro" "Leonardo" "Leonel" "Leopoldo" "Lourenço" "Lucas" "Luciano" "Lúcio" "Luís" "Manuel" "Marcelo" "Márcio" "Marcos" "Mariano" "Mário" "Mateus" "Matias" "Maurício" "Mauro" "Maximiliano" "Michael" "Miguel" "Miguelito" "Moisés" "Narciso" "Natanael" "Nelson" "Nicolau" "Nicolas" "Noé" "Norberto" "Octávio" "Odilon" "Olavo" "Oscar" "Osvaldo" "Otávio" "Paulino" "Paulo" "Pedro" "Plínio" "Quirino" "Rafael" "Raimundo" "Ramiro" "Raul" "Reinaldo" "Renato" "Ricardo" "Roberto" "Rodolfo" "Rodrigo" "Rogério" "Rolando" "Ronaldo" "Roque" "Rubens" "Ruy" "Salomão" "Samuel" "Sandro" "Santiago" "Sebastião" "Sérgio" "Severino" "Silvio" "Simão" "Sílvio" "Sócrates" "Tadeu" "Telmo" "Téo" "Teobaldo" "Teodoro" "Tiago" "Timoteo" "Tomás" "Túlio" "Ulisses" "Valentin" "Valério" "Valter" "Vicente" "Victor" "Vinícius" "Virgílio" "Vítor" "Wilson" "Xande" "Xandinho" "Xavier" "Zé" "Zeca" "Zeferino" "Zezé"
