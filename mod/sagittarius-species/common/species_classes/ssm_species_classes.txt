@@ -46,7 +46,7 @@ ssm_presapient = {
 		"ssm_default"
 		"ssm_elves"
 		"ssm_high_elves"
-		"ssm_marmeid"
+		"ssm_mermaids"
 		"ssm_astral"
 		"ssm_necron"
 		"ssm_gamba"
@@ -68,7 +68,6 @@ ssm_robot = {
 		always = no
 	}
 	gender = no
-	is_robotic = yes
 	use_climate_preference = no
 	portrait_modding = yes
 	portraits = {
