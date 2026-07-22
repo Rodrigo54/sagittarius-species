@@ -1,0 +1,662 @@
+{
+  "name": "Sagittarius - Chromatica",
+  "desc": "§YLeaders:§! Andre Xtravaganza, Aurora LaBeija\n§YShips:§! Lady Gaga, Beyoncé\n§YFleets:§! Frota do Orgulho, Guarda Pretoriana Lavanda\n§YColonies:§! Chanel, Versace",
+  "ssm_chromatica": {
+    "category": "Humanoid",
+    "ship_names": {
+      "generic": [
+        "Lady Gaga",
+        "Madonna",
+        "Beyoncé",
+        "Charli XCX",
+        "Britney Spears",
+        "Rihanna",
+        "RuPaul",
+        "Katy Perry",
+        "Alexander McQueen",
+        "Versace",
+        "Stonewall Inn",
+        "Christopher Street",
+        "Alan Turing",
+        "Chromatica",
+        "Vogue",
+        "Sia",
+        "Dua Lipa",
+        "Kylie Minogue"
+      ],
+      "corvette": [
+        "Kesha",
+        "Miley Cyrus",
+        "Shakira",
+        "Jennifer Lopez",
+        "Charli XCX",
+        "Troye Sivan",
+        "Sam Smith",
+        "Kim Petras",
+        "Chappell Roan",
+        "Renée Rapp",
+        "Adele",
+        "Camila Cabello",
+        "Megan Thee Stallion",
+        "Carly Rae Jepsen",
+        "Selena Gomez",
+        "P!nk",
+        "Anitta",
+        "Sabrina Carpenter",
+        "Olivia Rodrigo",
+        "Icona Pop"
+      ],
+      "destroyer": [
+        "RuPaul",
+        "Ariana Grande",
+        "Dua Lipa",
+        "Doja Cat",
+        "Christina Aguilera",
+        "Cardi B",
+        "Sia"
+      ],
+      "cruiser": [
+        "Rihanna",
+        "Britney Spears",
+        "Kylie Minogue",
+        "Katy Perry",
+        "RuPaul",
+        "Ariana Grande",
+        "Dua Lipa",
+        "Doja Cat"
+      ],
+      "battleship": [
+        "Rihanna",
+        "Britney Spears",
+        "Kylie Minogue",
+        "Katy Perry"
+      ],
+      "titan": [
+        "Lady Gaga",
+        "Madonna",
+        "Beyoncé"
+      ],
+      "juggernaut": [
+        "Lady Gaga",
+        "Madonna",
+        "Beyoncé",
+        "Britney Spears"
+      ],
+      "constructor": [
+        "Alexander McQueen",
+        "Thierry Mugler",
+        "Jean Paul Gaultier",
+        "Gianni Versace",
+        "Vivienne Westwood",
+        "Tom Ford",
+        "Yves Saint Laurent",
+        "Christian Siriano",
+        "Marc Jacobs",
+        "Rick Owens",
+        "Riccardo Tisci",
+        "Halston"
+      ],
+      "science": [
+        "Alan Turing",
+        "Sally Ride",
+        "Ben Barres",
+        "Sara Josephine Baker",
+        "Magnus Hirschfeld",
+        "Lynn Conway",
+        "Frank Kameny"
+      ],
+      "colonizer": [
+        "Stonewall Inn",
+        "Christopher Street",
+        "Castro District",
+        "Greenwich Village",
+        "Fire Island",
+        "Provincetown",
+        "Chueca",
+        "Le Marais",
+        "West Hollywood",
+        "Oxford Street",
+        "Canal Street",
+        "Chelsea",
+        "SoHo",
+        "Vauxhall",
+        "Schöneberg",
+        "Church-Wellesley",
+        "Boystown",
+        "Le Village"
+      ],
+      "sponsored_colonizer": [
+        "Stonewall Inn",
+        "Christopher Street",
+        "Castro District",
+        "Fire Island"
+      ],
+      "transport": [
+        "RuPaul",
+        "Ariana Grande",
+        "Dua Lipa",
+        "Doja Cat",
+        "Christina Aguilera",
+        "Cardi B",
+        "Sia"
+      ],
+      "research_station": [
+        "Alan Turing",
+        "Sally Ride",
+        "Magnus Hirschfeld",
+        "Lynn Conway"
+      ],
+      "military_station_small": [
+        "Kesha",
+        "Miley Cyrus",
+        "Shakira",
+        "Jennifer Lopez",
+        "Troye Sivan",
+        "Sam Smith",
+        "Kim Petras",
+        "Chappell Roan"
+      ],
+      "military_station_medium": [
+        "Kesha",
+        "Miley Cyrus",
+        "Shakira",
+        "Jennifer Lopez",
+        "Troye Sivan",
+        "Sam Smith",
+        "Kim Petras",
+        "Chappell Roan"
+      ],
+      "military_station_large": [
+        "RuPaul",
+        "Ariana Grande",
+        "Dua Lipa",
+        "Doja Cat",
+        "Christina Aguilera",
+        "Cardi B",
+        "Sia"
+      ],
+      "ion_cannon": [
+        "Rihanna",
+        "Britney Spears",
+        "Kylie Minogue",
+        "Katy Perry"
+      ]
+    },
+    "ship_class_names": {
+      "generic": [
+        "Chromatica",
+        "Vogue",
+        "Lavanda",
+        "Glitter"
+      ]
+    },
+    "fleet_names": {
+      "random_names": [
+        "Esquadrão Arco-íris",
+        "Corpo Expedicionário Chromatica",
+        "Guarda Pretoriana Lavanda",
+        "Frota do Orgulho",
+        "Ordem de Chromatica",
+        "Falange Vogue",
+        "Tropa de Elite Ballroom",
+        "Frota Lantejoula",
+        "Esquadrão Glitter",
+        "Frota Arco-íris",
+        "Guarda de Honra Lavanda",
+        "Corpo de Elite Vogue",
+        "Legião Chromatica",
+        "Frota da Diva",
+        "Esquadrilha Camp",
+        "Tropa de Elite Drag",
+        "Frota Holográfica",
+        "Guarda Real Chromatica",
+        "Esquadrão Purpurina",
+        "Frota Neon",
+        "Corpo Expedicionário Lavanda",
+        "Ordem do Brilho"
+      ]
+    },
+    "army_names": {
+      "generic": {
+        "sequential_name": "l10n|$ORD$ Guarda Pretoriana Lavanda"
+      },
+      "machine_defense": {
+        "sequential_name": "l10n|$ORD$ Guarda Mecanizada Chromatica"
+      },
+      "machine_assault_1": {
+        "sequential_name": "l10n|$ORD$ Falange Sintética Vogue"
+      },
+      "machine_assault_2": {
+        "sequential_name": "l10n|$ORD$ Falange Sintética Vogue"
+      },
+      "machine_assault_3": {
+        "sequential_name": "l10n|$ORD$ Falange Sintética Vogue"
+      },
+      "defense_army": {
+        "sequential_name": "l10n|$ORD$ Guarda Pretoriana Lavanda"
+      },
+      "assault_army": {
+        "sequential_name": "l10n|$ORD$ Falange Chromatica"
+      },
+      "occupation_army": {
+        "sequential_name": "l10n|$ORD$ Tribunal da Autenticidade"
+      },
+      "slave_army": {
+        "sequential_name": "l10n|$ORD$ Batalhão dos Renegados"
+      },
+      "clone_army": {
+        "sequential_name": "l10n|$ORD$ Legião de Clones Vogue"
+      },
+      "undead_army": {
+        "sequential_name": "l10n|$ORD$ Legião Espectral de Stonewall"
+      },
+      "robotic_defense_army": {
+        "sequential_name": "l10n|$ORD$ Drones da Guarda Lavanda"
+      },
+      "robotic_army": {
+        "sequential_name": "l10n|$ORD$ Autômatos Vogue"
+      },
+      "robotic_occupation_army": {
+        "sequential_name": "l10n|$ORD$ Autômatos do Tribunal da Autenticidade"
+      },
+      "psionic_army": {
+        "sequential_name": "l10n|$ORD$ Ordem Mística de Chromatica"
+      },
+      "xenomorph_army": {
+        "sequential_name": "l10n|$ORD$ Divisão de Xenomorfos Cromáticos"
+      },
+      "gene_warrior_army": {
+        "sequential_name": "l10n|$ORD$ Guerreiros Genéticos Vogue"
+      },
+      "primitive_army": {
+        "sequential_name": "l10n|Guarda Primitiva $O$"
+      },
+      "industrial_army": {
+        "sequential_name": "l10n|Guarda Industrial Vogue $O$"
+      },
+      "postatomic_army": {
+        "sequential_name": "l10n|Guarda Pós-Chromática $O$"
+      }
+    },
+    "planet_names": {
+      "generic": {
+        "names": [
+          "Chanel",
+          "Versace",
+          "Gucci",
+          "Madonna",
+          "Cher",
+          "Prada",
+          "Dior",
+          "Beyoncé",
+          "Lady Gaga",
+          "Fendi",
+          "Givenchy",
+          "Dolce & Gabbana"
+        ]
+      },
+      "pc_desert": {
+        "names": [
+          "Dolce & Gabbana",
+          "Cher",
+          "Shakira",
+          "Jennifer Lopez"
+        ]
+      },
+      "pc_tropical": {
+        "names": [
+          "Versace",
+          "Gucci",
+          "Shakira",
+          "Anitta",
+          "Jennifer Lopez"
+        ]
+      },
+      "pc_gaia": {
+        "names": [
+          "Valentino",
+          "Saint Laurent",
+          "Diana Ross",
+          "Donna Summer",
+          "Gloria Gaynor"
+        ]
+      },
+      "pc_ocean": {
+        "names": [
+          "Alexander McQueen",
+          "Mugler",
+          "Celine Dion",
+          "Whitney Houston"
+        ]
+      },
+      "pc_arctic": {
+        "names": [
+          "Balenciaga",
+          "Prada",
+          "Rihanna",
+          "Kylie Minogue"
+        ]
+      },
+      "pc_nuked": {
+        "names": [
+          "Vivienne Westwood",
+          "Moschino",
+          "Grace Jones",
+          "Tina Turner"
+        ]
+      },
+      "pc_alpine": {
+        "names": [
+          "Chanel",
+          "Barbra Streisand",
+          "Celine Dion"
+        ]
+      }
+    },
+    "character_names": {
+      "main": {
+        "weight": 100,
+        "first_names_male": [
+          "Andre",
+          "Adrian",
+          "Alessandro",
+          "Antoine",
+          "Ash",
+          "Axel",
+          "Beau",
+          "Blaine",
+          "Brady",
+          "Bruno",
+          "Cassius",
+          "Chase",
+          "Christian",
+          "Cole",
+          "Damien",
+          "Dante",
+          "Dario",
+          "Dash",
+          "Diego",
+          "Dominic",
+          "Donatello",
+          "Dorian",
+          "Dylan",
+          "Elio",
+          "Elliot",
+          "Emilio",
+          "Enzo",
+          "Ezra",
+          "Fabio",
+          "Felix",
+          "Gabriel",
+          "Giovanni",
+          "Hugo",
+          "Ivan",
+          "Jacques",
+          "Jax",
+          "Jaxon",
+          "Jean",
+          "Julian",
+          "Kai",
+          "Knox",
+          "Leandro",
+          "Leo",
+          "Leonel",
+          "Lorenzo",
+          "Luca",
+          "Lucas",
+          "Ludovic",
+          "Marcelo",
+          "Marco",
+          "Marcus",
+          "Mateo",
+          "Matteo",
+          "Maurice",
+          "Maxence",
+          "Miguel",
+          "Nico",
+          "Nikolai",
+          "Noe",
+          "Oliver",
+          "Onyx",
+          "Orion",
+          "Oscar",
+          "Pablo",
+          "Pierre",
+          "Phoenix",
+          "Prince",
+          "Rafael",
+          "Rene",
+          "Rio",
+          "Roman",
+          "Rome",
+          "Rocco",
+          "Sasha",
+          "Sebastian",
+          "Sergio",
+          "Sterling",
+          "Storm",
+          "Theo",
+          "Thiago",
+          "Tristan",
+          "Victor",
+          "Wolf",
+          "Xavier",
+          "Zane",
+          "Zayn"
+        ],
+        "first_names_female": [
+          "Adriana",
+          "Aria",
+          "Aurora",
+          "Bianca",
+          "Blaire",
+          "Bridget",
+          "Camille",
+          "Carmen",
+          "Celeste",
+          "Chiara",
+          "Coco",
+          "Crystal",
+          "Daniela",
+          "Delphine",
+          "Desiree",
+          "Diamond",
+          "Elena",
+          "Eliza",
+          "Esmeralda",
+          "Fabiola",
+          "Farrah",
+          "Fiora",
+          "Francesca",
+          "Gabriella",
+          "Genevieve",
+          "Giselle",
+          "Gloria",
+          "Grace",
+          "Harlow",
+          "Ines",
+          "Isabela",
+          "Ivy",
+          "Jade",
+          "Jasmine",
+          "Josephine",
+          "Juliana",
+          "Juno",
+          "Kiara",
+          "Lana",
+          "Lara",
+          "Lorena",
+          "Luna",
+          "Marisol",
+          "Marisa",
+          "Mia",
+          "Milagros",
+          "Mimi",
+          "Monique",
+          "Nadia",
+          "Naomi",
+          "Nova",
+          "Odette",
+          "Olympia",
+          "Paloma",
+          "Paris",
+          "Pilar",
+          "Priscilla",
+          "Rainn",
+          "Renata",
+          "Rosalia",
+          "Rosaline",
+          "Roxanne",
+          "Sabrina",
+          "Savannah",
+          "Selena",
+          "Serena",
+          "Simone",
+          "Sofia",
+          "Solange",
+          "Star",
+          "Sunny",
+          "Talia",
+          "Valentina",
+          "Venus",
+          "Veronique",
+          "Viola",
+          "Violeta",
+          "Xiomara",
+          "Yolanda",
+          "Zara"
+        ],
+        "second_names": [
+          "Xtravaganza",
+          "LaBeija",
+          "Ninja",
+          "Chanel",
+          "Mizrahi",
+          "Milan",
+          "Balenciaga",
+          "Prada",
+          "Saint Laurent",
+          "Aviance",
+          "Corey",
+          "Pendavis",
+          "Revlon",
+          "Escada",
+          "Amazon",
+          "Gucci",
+          "Ebony",
+          "Dupree",
+          "Blahnik",
+          "Karan",
+          "Balmain",
+          "Valentino",
+          "Versailles",
+          "DeLuxe",
+          "Monroe",
+          "Sinclair",
+          "LaRue",
+          "Fontaine",
+          "Beaumont",
+          "Devine",
+          "Galore",
+          "Extravagance",
+          "St. Claire",
+          "Delacroix",
+          "Diamond",
+          "Voguel",
+          "Glitters",
+          "Sequin",
+          "Lamé",
+          "Chiffon",
+          "Satin",
+          "Rhinestone",
+          "Couture",
+          "Runway",
+          "Platinum",
+          "Cristal",
+          "Opulence",
+          "Diva",
+          "Legend",
+          "Eleganza",
+          "Category",
+          "Vogue"
+        ]
+      }
+    }
+  },
+  "species_names": [
+    {
+      "key": "LittleMonster",
+      "name": "Little Monster",
+      "plural": "Little Monsters",
+      "home_planet": "Chromatica",
+      "home_system": "Artpop",
+      "portrait": "ssm_default"
+    },
+    {
+      "key": "Madonnian",
+      "name": "Madonnian",
+      "plural": "Madonnians",
+      "home_planet": "Vogue",
+      "home_system": "Confessions",
+      "portrait": "ssm_default"
+    },
+    {
+      "key": "Hive",
+      "name": "Hive",
+      "plural": "Hive",
+      "home_planet": "Renaissance",
+      "home_system": "Lemonade",
+      "portrait": "ssm_default"
+    },
+    {
+      "key": "Brat",
+      "name": "Brat",
+      "plural": "Brats",
+      "home_planet": "Crash",
+      "home_system": "Brat",
+      "portrait": "ssm_default"
+    },
+    {
+      "key": "Toxic",
+      "name": "Toxic",
+      "plural": "Toxics",
+      "home_planet": "Blackout",
+      "home_system": "Circus",
+      "portrait": "ssm_default"
+    }
+  ],
+  "_meta": {
+    "ship_names": {
+      "generic": { "theme": "mistura de todas as convenções abaixo", "target_count": 18 },
+      "corvette": { "theme": "divas pop 2000+ tier C (maior volume)", "target_count": 20 },
+      "destroyer": { "theme": "divas pop 2000+ tier B", "target_count": 7 },
+      "cruiser": { "theme": "divas pop 2000+ tier A/B", "target_count": 8 },
+      "battleship": { "theme": "divas pop 2000+ tier A", "target_count": 4 },
+      "titan": { "theme": "maiores ícones pop 2000+ (Gaga, Madonna, Beyoncé)", "target_count": 3 },
+      "juggernaut": { "theme": "maiores ícones pop 2000+ + Britney Spears", "target_count": 4 },
+      "constructor": { "theme": "estilistas/designers icônicos", "target_count": 12 },
+      "science": { "theme": "cientistas LGBT+", "target_count": 7 },
+      "research_station": { "theme": "cientistas LGBT+ (subset)", "target_count": 4 },
+      "colonizer": { "theme": "bairros-santuário LGBT+", "target_count": 18 },
+      "sponsored_colonizer": { "theme": "bairros-santuário LGBT+ (subset)", "target_count": 4 },
+      "transport": { "theme": "divas pop 2000+ tier B", "target_count": 7 },
+      "military_station_small": { "theme": "divas pop 2000+ tier C (subset)", "target_count": 8 },
+      "military_station_medium": { "theme": "divas pop 2000+ tier C (subset)", "target_count": 8 },
+      "military_station_large": { "theme": "divas pop 2000+ tier B", "target_count": 7 },
+      "ion_cannon": { "theme": "divas pop 2000+ tier A", "target_count": 4 }
+    },
+    "fleet_names": { "theme": "unidades militares com adjetivo temático camp/queer", "target_count": 22 },
+    "army_names": { "theme": "tom satírico-autoritário + marcos históricos LGBT+", "target_count": 18 },
+    "planet_names": {
+      "generic": { "theme": "marcas de moda + divas pop, mix geral", "target_count": 12 },
+      "pc_desert": { "theme": "marcas/divas latinas dramáticas", "target_count": 4 },
+      "pc_tropical": { "theme": "marcas vibrantes + divas latinas", "target_count": 5 },
+      "pc_gaia": { "theme": "luxo clássico + divas disco", "target_count": 5 },
+      "pc_ocean": { "theme": "marcas fluidas + divas de balada", "target_count": 4 },
+      "pc_arctic": { "theme": "marcas minimalistas + divas frias", "target_count": 4 },
+      "pc_nuked": { "theme": "moda punk/vanguarda + divas provocadoras", "target_count": 4 },
+      "pc_alpine": { "theme": "luxo clássico + divas atemporais", "target_count": 3 }
+    },
+    "character_names": { "theme": "primeiro nome glamouroso + sobrenome de casa de ballroom (combinatório)", "target_count": 80 }
+  }
+}

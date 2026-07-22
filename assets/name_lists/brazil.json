@@ -1,205 +1,233 @@
 {
   "name": "Sagittarius - Brasil",
-  "desc": "§YLeaders:§! Marcos Silvas, Amor Paiva\n§YShips:§! Fuzileiro, Soyo\n§YFleets:§! Strike Team Falcata, Ribauldequin Extraorbital Corps\n§YColonies:§! Estepenseiro, Hélder",
+  "desc": "§YLeaders:§! Marcos Silvas, Amor Paiva\n§YShips:§! Tamandaré, Riachuelo\n§YFleets:§! Strike Team Falcata, Ribauldequin Extraorbital Corps\n§YColonies:§! Constelação da Onça-Pintada, Arara-Azul Celeste",
   "ssm_brazil": {
     "category": "Humanoid",
-    "randomized": true,
     "ship_names": {
       "generic": [
-        "Poti",
-        "Gurupi",
-        "Antares",
-        "Rio Branco",
-        "Paraguassú",
-        "Araçatuba",
-        "Amazonas",
-        "Maracanã",
-        "Cruzeiro do Sul"
+        "Tupinambá",
+        "Riachuelo",
+        "Tamandaré",
+        "Anunciada",
+        "Oscar Niemeyer",
+        "Oswaldo Cruz",
+        "Guararapes",
+        "Barroso",
+        "Vitória"
       ],
       "corvette": [
-        "Poti",
-        "Gurupi",
-        "Tupi",
-        "Tamoio",
-        "Araguari",
-        "Araguia",
-        "Araçatuba",
-        "Piratini",
-        "Piratininga",
-        "Pirajá",
-        "Grajaú",
-        "Guaporé",
-        "Guarujá",
-        "Guarapari",
-        "Guarapuava",
-        "Guaratinguetá",
-        "Bacuri",
-        "Bacabal",
-        "Bacaxá",
-        "Macaé",
-        "Macaíba",
-        "Macaúba",
-        "Maracanã",
-        "Mangaratiba",
-        "Mangabeira",
-        "Xingu",
-        "Xavante",
-        "Xanxerê",
-        "Xanxá"
-      ],
-      "destroyer": [
-        "Duque de Caxias",
-        "Duque de Bragança",
-        "Duque de Saldanha",
-        "Duque de Terceira",
-        "Duque de Palmela",
-        "Duque de Loulé",
-        "Duque de Cadaval",
-        "Duque de Viseu",
-        "Duque de Aveiro",
-        "Duque de Beja",
-        "Duque de Coimbra",
-        "Duque de Guimarães",
-        "Duque de Vila Real",
-        "Duque de Vila Nova",
-        "Duque de Vila Flor"
-      ],
-      "cruiser": [
-        "São Pedro",
-        "Santa Maria",
-        "São Raimundo",
-        "São Sebastião",
-        "São Francisco",
-        "São João",
-        "São José",
-        "São Luís",
-        "São Miguel",
-        "São Paulo",
-        "São Tomé",
-        "São Vicente",
-        "São Benedito",
-        "São Bento",
-        "São Bernardo",
-        "São Caetano",
-        "São Carlos",
-        "São Cristóvão",
-        "São Domingos",
-        "São Gabriel",
-        "São Gonçalo"
-      ],
-      "battleship": [
-        "Kayapó",
-        "Kokama",
-        "Kuikuro",
         "Tupinambá",
         "Tupiniquim",
-        "Guajajaras"
+        "Guarani",
+        "Tremembé",
+        "Pataxó",
+        "Xavante",
+        "Kaingang",
+        "Terena",
+        "Guajajara",
+        "Kayapó",
+        "Yanomami",
+        "Ticuna",
+        "Munduruku",
+        "Fulniô",
+        "Xerente",
+        "Karajá",
+        "Bororo",
+        "Kadiwéu",
+        "Krahô",
+        "Apinajé",
+        "Guató",
+        "Waurá",
+        "Kalapalo",
+        "Yawalapiti",
+        "Rikbaktsa",
+        "Panará",
+        "Suruí",
+        "Zoró",
+        "Cinta-Larga"
       ],
-      "juggernaut": ["Orgulho Nacional", "Independência", "Grande Ogun"],
-      "constructor": [
-        "São Paulo",
-        "Rio de Janeiro",
-        "Brasília",
+      "destroyer": [
+        "Nambikwara",
+        "Tapirapé",
+        "Assurini",
+        "Parakanã",
+        "Katukina",
+        "Marubo",
+        "Kaxinawá",
+        "Ashaninka",
+        "Yaminawá",
+        "Baniwa",
+        "Wapixana",
+        "Ingarikó",
+        "Macuxi",
+        "Wai-Wai",
+        "Tiriyó"
+      ],
+      "cruiser": [
+        "Riachuelo",
+        "Guararapes",
+        "Tuiuti",
+        "Humaitá",
+        "Curupaiti",
+        "Laguna",
+        "Dourados",
+        "Itororó",
+        "Avaí",
+        "Jenipapo",
+        "Cabo Frio",
+        "Ipiranga",
+        "Passo da Pátria",
+        "Angostura",
+        "Lomas Valentinas",
+        "Campo Grande",
+        "Estero Bellaco",
+        "Boqueirão",
+        "Piquissiri",
         "Salvador",
-        "Fortaleza",
-        "Belo Horizonte",
-        "Manaus",
-        "Curitiba",
-        "Recife",
-        "Porto Alegre",
-        "Belém",
-        "Goiânia",
-        "São Luís",
-        "Maceió",
-        "Campinas",
-        "Teresina",
-        "Aracaju",
-        "Natal",
-        "Alagoas",
-        "Amapá",
-        "Amazonas",
-        "Cuiabá"
+        "Monte Castelo"
+      ],
+      "battleship": [
+        "Riachuelo",
+        "Guararapes",
+        "Humaitá",
+        "Ipiranga",
+        "Tuiuti",
+        "Avaí"
+      ],
+      "juggernaut": [
+        "Tamandaré",
+        "Barroso",
+        "Greenhalgh"
+      ],
+      "constructor": [
+        "Oscar Niemeyer",
+        "Lúcio Costa",
+        "Roberto Burle Marx",
+        "Paulo Mendes da Rocha",
+        "Vilanova Artigas",
+        "Lina Bo Bardi",
+        "Ruy Ohtake",
+        "Rino Levi",
+        "Affonso Eduardo Reidy",
+        "André Rebouças",
+        "Flávio de Carvalho",
+        "Sérgio Bernardes",
+        "Oswaldo Bratke",
+        "Carlos Leão",
+        "Jorge Machado Moreira",
+        "Attílio Corrêa Lima",
+        "Severiano Mário Porto",
+        "Acácio Gil Borsoi",
+        "Joaquim Guedes",
+        "Eduardo Kneese de Mello",
+        "Icaro de Castro Mello",
+        "Marcos Acayaba"
       ],
       "science": [
-        "Osvaldo Cruz",
+        "Oswaldo Cruz",
         "Carlos Chagas",
-        "Emílio Ribas",
-        "Paulo Niemeyer",
+        "Vital Brazil",
+        "Bertha Lutz",
+        "César Lattes"
+      ],
+      "colonizer": [
+        "Anunciada",
+        "Vitória",
+        "Berrio",
+        "São Gabriel",
+        "São Rafael",
+        "Santa Catarina do Monte Sinai",
+        "São Miguel",
+        "Santo André",
+        "São Pedro",
+        "Nossa Senhora da Ajuda",
+        "Nossa Senhora da Conceição",
+        "Espírito Santo",
+        "Santa Cruz",
+        "São Cristóvão",
+        "Flor de la Mar",
+        "Concepción",
+        "Santo Amaro",
+        "El-Rei",
+        "São João",
+        "Bertioga",
+        "Santa Bárbara",
+        "Nossa Senhora do Rosário"
+      ],
+      "sponsored_colonizer": [
+        "São Gabriel",
+        "Anunciada",
+        "Vitória",
+        "Santa Cruz"
+      ],
+      "transport": [
+        "Krenak",
+        "Maxakali",
+        "Pankararu",
+        "Potiguara",
+        "Botocudo",
+        "Carijó",
+        "Jamamadi"
+      ],
+      "research_station": [
+        "Mário Schenberg",
+        "Johanna Döbereiner",
+        "Adolpho Lutz",
+        "Miguel Ozório de Almeida",
+        "Manuel de Abreu"
+      ],
+      "military_station_small": [
+        "Rademaker",
+        "Alexandrino de Alencar",
+        "Cochrane",
+        "Wandenkolk"
+      ],
+      "military_station_medium": [
+        "Rademaker",
+        "Alexandrino de Alencar",
+        "Cochrane",
+        "Wandenkolk"
+      ],
+      "military_station_large": [
+        "Rademaker",
+        "Alexandrino de Alencar",
+        "Cochrane",
+        "Wandenkolk"
+      ],
+      "ion_cannon": [
+        "Laguna",
+        "Dourados",
+        "Curupaiti",
+        "Jenipapo"
+      ]
+    },
+    "ship_class_names": {
+      "generic": [
+        "Embraer",
+        "Santos Dumont"
+      ],
+      "constructor": [
+        "Embraer",
         "Santos Dumont"
       ],
       "colonizer": [
-        "São Paulo",
-        "Rio de Janeiro",
-        "Brasília",
-        "Salvador",
-        "Fortaleza",
-        "Belo Horizonte",
-        "Manaus",
-        "Curitiba",
-        "Recife",
-        "Porto Alegre",
-        "Belém",
-        "Goiânia",
-        "São Luís",
-        "Maceió",
-        "Campinas",
-        "Teresina",
-        "Aracaju",
-        "Natal",
-        "Alagoas",
-        "Amapá",
-        "Amazonas",
-        "Cuiabá"
+        "Embraer",
+        "Santos Dumont"
       ],
       "sponsored_colonizer": [
-        "Pedro Álvares Cabral",
-        "Vasco da Gama",
-        "Fernão de Magalhães",
-        "Bartolomeu Dias"
+        "Embraer",
+        "Santos Dumont"
       ],
       "transport": [
-        "Tamandaré",
-        "Barroso",
-        "Riachuelo",
-        "Bahia",
-        "Niterói",
-        "Cabral",
-        "Caxias"
+        "Embraer",
+        "Santos Dumont"
       ],
-      "research_station": [
-        "Santa Maria",
-        "Pedro Álvares Cabral",
-        "Vasco da Gama",
-        "Fernão de Magalhães",
-        "Bartolomeu Dias"
-      ],
-      "military_station_small": [
-        "D. João II",
-        "D. Pedro II",
-        "Isabel",
-        "Leopoldina"
-      ],
-      "military_station_medium": [
-        "D. João II",
-        "D. Pedro II",
-        "Isabel",
-        "Leopoldina"
-      ],
-      "military_station_large": [
-        "D. João II",
-        "D. Pedro II",
-        "Isabel",
-        "Leopoldina"
-      ],
-      "ion_cannon": ["Apurinã", "Tupinambá", "Tupiniquim", "Tupinambá"]
-    },
-    "ship_class_names": {
-      "generic": ["Embraer", "Santos Dumont"],
-      "constructor": ["Embraer", "Santos Dumont"],
-      "coloniser": ["Embraer", "Santos Dumont"],
-      "sponsored_coloniser": ["Embraer", "Santos Dumont"],
-      "transport": ["Embraer", "Santos Dumont"],
-      "ion_cannon": ["Apurinã", "Tupinambá", "Tupiniquim", "Tupinambá"]
+      "ion_cannon": [
+        "Apurinã",
+        "Tupinambá",
+        "Tupiniquim",
+        "Tupinambá"
+      ]
     },
     "fleet_names": {
       "random_names": [
@@ -295,12 +323,6 @@
       "robotic_occupation_army": {
         "sequential_name": "l10n|$ORD$ Forças de Ocupação Mecanizadas"
       },
-      "android_defense_army": {
-        "sequential_name": "l10n|$ORD$ Guarda Nacional de Androides"
-      },
-      "android_army": {
-        "sequential_name": "l10n|$ORD$ Forças Expedicionárias de Androides"
-      },
       "psionic_army": {
         "random_names": [
           "Exército Psíquico Nacional",
@@ -334,89 +356,116 @@
     "planet_names": {
       "generic": {
         "names": [
-          "Rio de Janeiro",
-          "São Paulo",
-          "Porto Alegre",
-          "Curitiba",
-          "Recife",
-          "Manaus",
-          "Belém",
-          "Goiânia",
-          "Cuiabá",
-          "Campo Grande",
-          "Teresina",
-          "Natal",
-          "João Pessoa",
-          "Aracaju",
-          "Maceió",
-          "Salvador",
-          "Vitória",
-          "Belo Horizonte",
-          "Fortaleza",
-          "São Luís",
-          "Palmas",
-          "Boa Vista",
-          "Macapá",
-          "Rio Branco",
-          "Porto Velho",
-          "Florianópolis",
-          "Porto Alegre",
-          "Brasília",
-          "Niterói",
-          "Duque de Caxias",
-          "Nova Iguaçu",
-          "São Gonçalo",
-          "São João de Meriti",
-          "Campos dos Goytacazes",
-          "Petrópolis"
+          "Constelação da Onça-Pintada",
+          "Arara-Azul Celeste",
+          "Constelação do Tucano",
+          "Capivara Celeste",
+          "Constelação do Mico-Leão-Dourado",
+          "Jaguatirica Celeste",
+          "Constelação do Tamanduá-Bandeira",
+          "Boto-Cor-de-Rosa Celeste",
+          "Constelação da Harpia",
+          "Ariranha Celeste",
+          "Constelação do Tatu-Canastra",
+          "Veado-Campeiro Celeste",
+          "Constelação do Lobo-Guará",
+          "Quati Celeste",
+          "Constelação da Preguiça",
+          "Sagui Celeste",
+          "Constelação do Uirapuru",
+          "Papagaio Celeste",
+          "Constelação da Sucuri",
+          "Cágado Celeste",
+          "Constelação do Mutum",
+          "Anta Celeste",
+          "Constelação do Bicho-Preguiça",
+          "Beija-Flor Celeste",
+          "Constelação do Gavião-Real",
+          "Ema Celeste",
+          "Constelação do Peixe-Boi",
+          "Tuiuiú Celeste",
+          "Constelação da Jaguatirica",
+          "Macaco-Prego Celeste",
+          "Constelação do Bugio",
+          "Tatu-Bola Celeste",
+          "Constelação do Muriqui",
+          "Onça-Parda Celeste",
+          "Constelação do Curupira"
         ]
       },
       "pc_desert": {
-        "names": ["Teresina", "Natal", "João Pessoa"]
+        "names": [
+          "Constelação do Tatu-Bola",
+          "Veado-Catingueiro Celeste",
+          "Constelação do Gato-do-Mato",
+          "Mocó Celeste",
+          "Constelação da Seriema"
+        ]
       },
       "pc_tropical": {
-        "names": ["Manaus", "Rio Branco", "Porto Velho", "Macapá"]
+        "names": [
+          "Constelação da Arara",
+          "Mico-Leão-Dourado Celeste",
+          "Constelação da Onça-Pintada",
+          "Papagaio Celeste"
+        ]
       },
       "pc_gaia": {
         "names": [
-          "Barreirinhas",
-          "Lençóis Maranhenses",
-          "Chapada Diamantina",
-          "Chapada dos Veadeiros",
-          "Serra da Capivara",
-          "Serra da Canastra",
-          "Serra do Cipó",
-          "Serra do Espinhaço",
-          "Serra do Mar",
-          "Serra do Roncador",
-          "Serra do Tabuleiro",
-          "Raposa Serra do Sol",
-          "Oiapoque"
+          "Constelação do Mico-Leão-Dourado",
+          "Arara-Azul Celeste",
+          "Constelação da Harpia",
+          "Onça-Pintada Celeste",
+          "Constelação do Boto-Cor-de-Rosa",
+          "Uirapuru Celeste",
+          "Constelação do Beija-Flor",
+          "Tucano Celeste",
+          "Constelação da Jaguatirica",
+          "Sagui Celeste",
+          "Constelação do Gavião-Real",
+          "Tuiuiú Celeste",
+          "Constelação do Muriqui"
         ]
       },
       "pc_ocean": {
-        "names": ["Natal", "Alagoas", "Recife", "Maceió", "Aracaju", "Salvador"]
+        "names": [
+          "Constelação do Boto-Cor-de-Rosa",
+          "Peixe-Boi Celeste",
+          "Constelação da Tartaruga-de-Couro",
+          "Tainha Celeste",
+          "Constelação da Baleia-Jubarte",
+          "Arraia Celeste"
+        ]
       },
       "pc_arctic": {
-        "names": ["Curitiba", "Porto Alegre", "Florianópolis", "Foz do Iguaçu"]
+        "names": [
+          "Constelação do Pinguim-de-Magalhães",
+          "Lobo-Marinho Celeste",
+          "Constelação do Elefante-Marinho",
+          "Albatroz Celeste"
+        ]
       },
       "pc_nuked": {
         "names": [
-          "Cemitério",
-          "Cinza",
-          "Cripta",
-          "Entulho",
-          "Gueto",
-          "Lápide",
-          "Ruína"
+          "Constelação do Tigre-Dente-de-Sabre",
+          "Preguiça-Gigante Celeste",
+          "Constelação do Tatu-Gigante",
+          "Mutum-do-Nordeste Celeste",
+          "Constelação da Arara-Azul-Pequena",
+          "Toxodonte Celeste",
+          "Constelação do Notiomastodonte"
         ]
       },
       "pc_alpine": {
-        "names": ["Borda Dura", "Alto Alegre", "Surucucu"]
+        "names": [
+          "Constelação do Graxaim-do-Campo",
+          "Veado-Campeiro Celeste",
+          "Constelação do Gato-do-Mato-Pequeno"
+        ]
       }
     },
     "character_names": {
-      "default": {
+      "main": {
         "weight": 7,
         "first_names_male": [
           "Abel",
@@ -1296,5 +1345,135 @@
         ]
       }
     }
-  }
+  },
+  "species_names": [
+    {
+      "key": "Brazilian",
+      "name": "Brazilian",
+      "plural": "Brazilians",
+      "home_planet": "Brazil",
+      "home_system": "Cygnus",
+      "portrait": "ssm_default"
+    },
+    {
+      "key": "Drakorian",
+      "name": "Drakorian",
+      "plural": "Drakorians",
+      "home_planet": "Draxion",
+      "home_system": "Celestria",
+      "portrait": "ssm_knight"
+    },
+    {
+      "key": "Exodite",
+      "name": "Exodite",
+      "plural": "Exodites",
+      "home_planet": "Elyndria",
+      "home_system": "Eterna",
+      "portrait": "ssm_astral"
+    },
+    {
+      "key": "Icaran",
+      "name": "Icaran",
+      "plural": "Icarans",
+      "home_planet": "Haldar",
+      "home_system": "Novarion",
+      "portrait": "ssm_vargrosianos"
+    },
+    {
+      "key": "Saurian",
+      "name": "Saurian",
+      "plural": "Saurians",
+      "home_planet": "Onyxia",
+      "home_system": "Hyperion",
+      "portrait": "ssm_mercenary"
+    },
+    {
+      "key": "Skrull",
+      "name": "Skrull",
+      "plural": "Skrulls",
+      "home_planet": "Nibiru",
+      "home_system": "Galactron",
+      "portrait": "ssm_elves"
+    },
+    {
+      "key": "Telaxian",
+      "name": "Telaxian",
+      "plural": "Telaxians",
+      "home_planet": "Solara",
+      "home_system": "Eridanis",
+      "portrait": "ssm_high_elves"
+    },
+    {
+      "key": "Viltrumite",
+      "name": "Viltrumite",
+      "plural": "Viltrumites",
+      "home_planet": "Synthia",
+      "home_system": "Rigel",
+      "portrait": "ssm_default"
+    },
+    {
+      "key": "Voth",
+      "name": "Voth",
+      "plural": "Voths",
+      "home_planet": "Terra",
+      "home_system": "Denebola",
+      "portrait": "ssm_knight"
+    },
+    {
+      "key": "Yridian",
+      "name": "Yridian",
+      "plural": "Yridians",
+      "home_planet": "Umbra",
+      "home_system": "Cygnus",
+      "portrait": "ssm_astral"
+    },
+    {
+      "key": "Zoran",
+      "name": "Zoran",
+      "plural": "Zorans",
+      "home_planet": "Xenon",
+      "home_system": "Aquila",
+      "portrait": "ssm_vargrosianos"
+    },
+    {
+      "key": "Dulcian",
+      "name": "Dulcian",
+      "plural": "Dulcians",
+      "home_planet": "Delphoria",
+      "home_system": "Proxima",
+      "portrait": "ssm_mercenary"
+    },
+    {
+      "key": "Idiran",
+      "name": "Idiran",
+      "plural": "Idirans",
+      "home_planet": "Malvora",
+      "home_system": "Libra",
+      "portrait": "ssm_elves"
+    },
+    {
+      "key": "Cybrax",
+      "name": "Cybrax",
+      "plural": "Cybrax",
+      "home_planet": "Cybrax Core",
+      "home_system": "Cybrax Nexus",
+      "portrait": "ssm_cyborg"
+    },
+    {
+      "key": "Omnix",
+      "name": "Omnix",
+      "plural": "Omnix",
+      "home_planet": "Omnimax",
+      "home_system": "Omnimix",
+      "portrait": "ssm_new_order"
+    },
+    {
+      "key": "Machinix",
+      "name": "Machinix",
+      "plural": "Machinix",
+      "home_planet": "Machimax",
+      "home_system": "Machimax Nexus",
+      "portrait": "ssm_green_order"
+    }
+  ]
 }

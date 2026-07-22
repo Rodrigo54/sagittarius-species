@@ -3,7 +3,6 @@
   "desc": "§YLeaders:§! Elurmeril , Antur Ravenwatch\n§YShips:§! Sunantorwen, Suriwene\n§YFleets:§! Justiciar Squadron, Justiciar Star Order\n§YColonies:§! Tanzelwil, Eton Nir",
   "ssm_altmer": {
     "category": "Humanoid",
-    "randomized": true,
     "ship_names": {
       "generic": [
         "Altmer",
@@ -1240,12 +1239,6 @@
       "robotic_occupation_army": {
         "sequential_name": "l10n|$ORD$ Automaton Peacekeepers"
       },
-      "android_defense_army": {
-        "sequential_name": "l10n|$ORD$ Atronach Guardians"
-      },
-      "android_army": {
-        "sequential_name": "l10n|$ORD$ Atronach Warriors"
-      },
       "psionic_army": {
         "sequential_name": "l10n|$ORD$ Justiciars"
       },
@@ -1345,7 +1338,7 @@
       }
     },
     "character_names": {
-      "default": {
+      "main": {
         "weight": 100,
         "first_names_male": [
           "Aenthannir",
@@ -3255,5 +3248,79 @@
         ]
       }
     }
-  }
+  },
+  "species_names": [
+    {
+      "key": "Nirn",
+      "name": "Altmer",
+      "plural": "Altmers",
+      "home_planet": "Nirn",
+      "home_system": "Mundus",
+      "portrait": "ssm_high_elves"
+    },
+    {
+      "key": "Aelodian",
+      "name": "Aelodian",
+      "plural": "Aelodians",
+      "home_planet": "Althor",
+      "home_system": "Zoroth",
+      "portrait": "ssm_elves"
+    },
+    {
+      "key": "Arcturian",
+      "name": "Arcturian",
+      "plural": "Arcturians",
+      "home_planet": "Arctus Prime",
+      "home_system": "Orianth",
+      "portrait": "ssm_astral"
+    },
+    {
+      "key": "Caelian",
+      "name": "Caelian",
+      "plural": "Caelians",
+      "home_planet": "Caelum",
+      "home_system": "Sagittarius",
+      "portrait": "ssm_knight"
+    },
+    {
+      "key": "Cryonian",
+      "name": "Cryonian",
+      "plural": "Cryonians",
+      "home_planet": "Chronos",
+      "home_system": "Nebulos",
+      "portrait": "ssm_vargrosianos"
+    },
+    {
+      "key": "Kalendrian",
+      "name": "Kalendrian",
+      "plural": "Kalendrians",
+      "home_planet": "Janus",
+      "home_system": "Celestia",
+      "portrait": "ssm_default"
+    },
+    {
+      "key": "Lunarian",
+      "name": "Lunarian",
+      "plural": "Lunarians",
+      "home_planet": "Lumina",
+      "home_system": "Arcturos",
+      "portrait": "ssm_high_elves"
+    },
+    {
+      "key": "Pallasian",
+      "name": "Pallasian",
+      "plural": "Pallasians",
+      "home_planet": "Mithras",
+      "home_system": "Lumina",
+      "portrait": "ssm_mercenary"
+    },
+    {
+      "key": "Pyronian",
+      "name": "Pyronian",
+      "plural": "Pyronians",
+      "home_planet": "Terra",
+      "home_system": "Sagitta",
+      "portrait": "ssm_elves"
+    }
+  ]
 }
