@@ -133,6 +133,11 @@ para `mod/`.
 - Arquivos `.txt`/`.gfx`/`.gui`/`.mod`/`.yml` são script Clausewitz/Jomini, não texto genérico — o
   `.vscode/settings.json` mapeia todos para o modo de linguagem `paradox` (extensão cwtools do VS Code), para
   destaque de sintaxe e lint.
+- Para que a extensão cwtools **valide de verdade** o conteúdo dentro de `mod/sagittarius-species/`, abra o
+  workspace **`sagittarius-species.code-workspace`** (na raiz do repo) em vez da pasta crua — a extensão exige que
+  a pasta aberta no VS Code seja a raiz do mod, e aqui ela fica numa subpasta. Veja `cwtools.md` para o porquê
+  completo da configuração (workspace multi-root, `.cwtools/` gerado automaticamente dentro da pasta do mod,
+  configurações de `cwtools.*` no bloco `settings` do `.code-workspace`).
 - `.cwtools/` é um conjunto de definições de regras **vendorizado**, consumido pela extensão/linter cwtools —
   trate como material de referência somente leitura, não algo para editar manualmente ao implementar features.
 - `.editorconfig`: arquivos `.yml` são `utf-8-bom`, largura máxima de 80 colunas; `.txt`/`.gfx`/`.mod`/`.json`
