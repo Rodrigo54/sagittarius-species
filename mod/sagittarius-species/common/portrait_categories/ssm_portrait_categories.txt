@@ -82,3 +82,10 @@ machines = {
 		ssm_machine
 	}
 }
+
+psionics = {
+	name = PSIONIC
+	sets = {
+		ssm_psionic
+  }
+}
