@@ -1,0 +1,5 @@
+{
+  "name": "elves",
+  "gendered": true,
+  "counts": { "male": 25, "female": 25 }
+}

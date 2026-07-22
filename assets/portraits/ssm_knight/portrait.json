@@ -1,0 +1,5 @@
+{
+  "name": "knight",
+  "gendered": true,
+  "counts": { "male": 21, "female": 19 }
+}
