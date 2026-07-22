@@ -12,9 +12,8 @@ import { fileURLToPath } from 'node:url';
 
 const __DIRNAME = dirname(fileURLToPath(import.meta.url));
 
-// Caminho local da instalação do Stellaris (mesmo espírito do caminho fixo do
-// nvtt_export.exe em converter.ts). Ajuste se sua instalação Steam estiver em
-// outra unidade/pasta.
+// Caminho local da instalação do Stellaris. Ajuste se sua instalação Steam
+// estiver em outra unidade/pasta.
 const STELLARIS_PATH = 'D:/SteamLibrary/steamapps/common/Stellaris';
 
 const DESTINO = join(__DIRNAME, 'vanilla-keys.json');

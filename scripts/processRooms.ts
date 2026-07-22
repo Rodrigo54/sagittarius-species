@@ -1,24 +1,17 @@
 import { join } from 'node:path';
-import {
-  PASTA_DESTINO,
-  PASTA_INICIAL,
-  batchFile,
-  converter,
-  createFolders,
-} from './converter';
-import { clear, listar } from './utils';
+import { PASTA_ASSETS, PASTA_MOD, converter } from './converter';
+import { listar } from './utils';
 
 export const processRooms = async () => {
-  const inputFolder = join(PASTA_INICIAL, 'city_sets');
-  const outputFolder = join(PASTA_DESTINO, 'city_sets');
-  const { arquivos, pastas } = await listar(inputFolder);
-  await batchFile(arquivos, {
+  const pastaOrigem = join(PASTA_ASSETS, 'city_sets');
+  const pastaDestino = join(PASTA_MOD, 'gfx/portraits/city_sets');
+  const { arquivos } = await listar(pastaOrigem);
+  await converter(arquivos, {
     format: 'bc1',
-    quality: 'production',
     noMips: true,
-    zcmp: 15,
+    pastaOrigem,
+    pastaDestino,
   });
-  await converter();
 };
 
 const main = async () => {
