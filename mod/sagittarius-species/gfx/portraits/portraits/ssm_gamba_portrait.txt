@@ -23,7 +23,6 @@ portraits = {
       "gfx/models/portraits/ssm_gamba/male/015.dds"
     }
   }
-
   ssm_gamba_female_01 = {
     entity = "sl_humanoid_01_entity"
     clothes_selector = "no_texture"

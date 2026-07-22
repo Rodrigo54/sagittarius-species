@@ -18,6 +18,7 @@ portraits = {
       "gfx/models/portraits/ssm_new_order/010.dds"
       "gfx/models/portraits/ssm_new_order/011.dds"
       "gfx/models/portraits/ssm_new_order/012.dds"
+      "gfx/models/portraits/ssm_new_order/013.dds"
     }
   }
 }
