@@ -68,7 +68,7 @@ portrait_groups = {
         }
       }
     }
-    pop_group = {
+    pop = {
       #for a specific pop
       add = {
         trigger = {
