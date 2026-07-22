@@ -51,7 +51,7 @@ const baixarArquivo = async (url: string, destino: string) => {
   if (!resposta.ok) {
     throw new Error(`Falha ao baixar ${url}: ${resposta.status} ${resposta.statusText}`);
   }
-  await writeFile(destino, Buffer.from(await resposta.arrayBuffer()));
+  await writeFile(destino, new Uint8Array(await resposta.arrayBuffer()));
 };
 
 const encontrarArquivo = async (pasta: string, nomeArquivo: string): Promise<string | null> => {

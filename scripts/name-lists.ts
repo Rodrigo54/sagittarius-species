@@ -163,11 +163,10 @@ const createTranslation = async (objectData: any, metaData: any) => {
     `  name_list_${fileName}_desc: ${JSON.stringify(desc)}\n` +
     TokensNames.map(([token, value]) => `  ${token}: "${value}"`).join('\n');
 
-  const blob = Buffer.from('\uFEFF' + content, 'utf8');
-
   await writeFile(
     join(PASTA_DESTINO_L10N, l10n, 'name_lists', `${fileName}_l_${l10n}.yml`),
-    blob
+    '\uFEFF' + content,
+    'utf8'
   );
 
   return TokensNames;

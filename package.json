@@ -17,7 +17,9 @@
     "7zip-bin": "^5.2.0",
     "@types/bun": "^1.0.12",
     "@types/lodash": "^4.17.0",
-    "node-7z": "^3.0.0"
+    "@types/node-7z": "^2.1.11",
+    "node-7z": "^3.0.0",
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "jomini": "^0.9.1",
