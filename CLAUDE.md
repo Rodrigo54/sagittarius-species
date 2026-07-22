@@ -6,8 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Converse e raciocine em português do Brasil neste repositório. Pense em português do Brasil (inclusive em texto
 visível de raciocínio) e responda ao usuário em português do Brasil, mesmo que comandos, nomes de arquivos,
-identificadores do mod (`ssm_`, `gsm_`) ou trechos de código permaneçam em inglês, já que é a língua do Stellaris
-e do Clausewitz script.
+identificadores do mod (`ssm_`) ou trechos de código permaneçam em inglês, já que é a língua do Stellaris e do
+Clausewitz script.
 
 ## O que é este projeto
 
@@ -29,8 +29,8 @@ O runtime é o **Bun** (veja `bun.lockb`) — rode os scripts com `bun scripts/x
 ```bash
 bun run setup       # bun scripts/download-bin.ts — baixa os binários auxiliares em bin/ (veja seção abaixo)
 bun run converter   # roda a conversão de portraits + rooms (processPortraits.ts && processRooms.ts)
-bun run portrait     # bun scripts/processPortraits.ts — converte assets/portraits/**/*.png -> DDS
-bun run rooms         # bun scripts/processRooms.ts — converte assets/city_sets/**/*.png -> DDS
+bun run portrait     # bun scripts/processPortraits.ts — sincroniza assets/portraits/ com mod/ (DDS + .txt), direto no mod/
+bun run rooms         # bun scripts/processRooms.ts — converte assets/city_sets/**/*.png -> DDS, direto no mod/
 bun run names          # bun scripts/generate-names/index.ts — gera name_lists + species_names (veja seção abaixo)
 bun run copy           # pwsh scripts/copy.ps1 — copia o mod para a pasta local de mods do Stellaris
 bun run overwrite       # pwsh scripts/overwrite.ps1 — apaga e recopia o mod na pasta local de mods do Stellaris
@@ -51,9 +51,8 @@ bun run overwrite       # pwsh scripts/overwrite.ps1 — apaga e recopia o mod n
 (está no `.gitignore`) — rode `bun run setup` (`scripts/download-bin.ts`) pra baixá-las:
 
 - **`bin/texconv/texconv.exe`** — [texconv](https://github.com/microsoft/DirectXTex) (Microsoft DirectXTex, MIT,
-  código aberto). Candidato a substituir o `nvtt_export.exe` no pipeline de conversão de texturas (veja seção
-  abaixo) — a migração de `converter.ts`/`nvdds.ps1` ainda não foi feita, então por enquanto o `texconv` fica
-  disponível em `bin/` sem estar ligado a nenhum script do pipeline.
+  código aberto). É o motor de conversão de texturas do pipeline (veja seção abaixo) — substituiu o
+  `nvtt_export.exe`, que não é mais usado em lugar nenhum do repositório.
 - **`bin/imagemagick/magick.exe`** (+ DLLs e arquivos de suporte) — [ImageMagick](https://imagemagick.org)
   portátil, pra manipulação de imagem via linha de comando (resize, crop, conversão de formato, composição) sem
   depender do Photoshop. Não está ligado a nenhum script ainda; uso manual/ad-hoc por enquanto.
@@ -69,23 +68,56 @@ Detalhes de `scripts/download-bin.ts`:
 - O ImageMagick só é distribuído como `.7z` (sem `.zip` portátil oficial) — a extração usa `7zip-bin` + `node-7z`
   (devDependencies), que empacotam um `7za` portátil, sem exigir 7-Zip instalado no sistema.
 
-## Pipeline de conversão de texturas (requer Windows + NVIDIA Texture Tools)
+## Pipeline de conversão de texturas (requer Windows, já que o texconv é baseado em DirectX)
 
-`scripts/converter.ts` chama um **caminho local fixo (hardcoded)**:
-`C:/Program Files/NVIDIA Corporation/NVIDIA Texture Tools/nvtt_export.exe`. Ele precisa estar instalado para que
-`bun run portrait` / `bun run rooms` funcionem. O fluxo:
+`scripts/converter.ts` usa o `texconv` (`bin/texconv/texconv.exe`, baixado por `bun run setup` — veja seção
+acima) para converter PNG em DDS, e escreve **direto dentro de `mod/sagittarius-species/gfx/...`** — não existe
+mais pasta `output/` intermediária nem passo manual de mover/renomear arquivos. `converter.ts` é só o utilitário
+de baixo nível compartilhado: agrupa os arquivos recebidos pela pasta de destino (trocando a raiz `pastaOrigem`
+por `pastaDestino`, preservando a subestrutura de pastas), cria cada pasta de destino que ainda não existir, e
+roda o `texconv` uma vez por pasta (só aceita um único diretório de saída `-o` por invocação). `noMips: true`
+vira `-m 1`; a saída é sempre forçada para `-ft dds -y` (overwrite). Se uma pasta falhar na conversão, o processo
+para imediatamente (fail-fast).
 
-1. `scripts/utils.ts#listar` percorre `assets/portraits` ou `assets/city_sets` recursivamente atrás de arquivos
-   `.png`.
-2. `scripts/converter.ts#batchFile` escreve uma linha por arquivo em `batch.nvdds` (no gitignore) com o formato de
-   destino e o caminho `--output` dentro de `output/`, espelhando a estrutura de pastas de `assets/`.
-   - Portraits usam `bc3` (veja `processPortraits.ts`); texturas de rooms/city-sets usam `bc1` (veja
-     `processRooms.ts`).
-3. `converter()` chama `nvtt_export.exe --batch-file=batch.nvdds`, gerando os `.dds` dentro de `output/`.
-4. **A movimentação de `output/` para `mod/sagittarius-species/gfx/...` é manual, não é automatizada por script** —
-   incluindo renomear as pastas do prefixo `gsm_` usado em `assets/portraits/gsm_*` para o prefixo `ssm_` usado em
-   `mod/sagittarius-species/gfx/models/portraits/ssm_*`. Não assuma que rodar os scripts de conversão sozinho já
-   atualiza o mod publicado.
+Os dois pipelines que usam esse utilitário têm responsabilidades bem separadas:
+
+- **`bun run rooms`** (`processRooms.ts`) é simples: só chama `converter()` com formato `bc1` → `BC1_UNORM`,
+  escrevendo em `mod/sagittarius-species/gfx/portraits/city_sets/`. Não apaga nada, não gera nenhum `.txt` —
+  `gfx/portraits/asset_selectors/ssm_room_textures.txt` continua **mantido manualmente** (a maior parte desse
+  arquivo é lógica de trigger de gameplay sem relação nenhuma com os arquivos de `assets/city_sets/`, então não
+  faz sentido gerá-lo automaticamente).
+- **`bun run portrait`** (`processPortraits.ts`, que só delega para `scripts/generate-portraits/`) usa formato
+  `bc3` → `BC3_UNORM` e faz bem mais que converter imagem — veja a seção seguinte.
+
+Só as variantes lineares/UNORM são usadas (nunca as sRGB), porque o Stellaris não suporta essas últimas
+(ver `image.md`).
+
+### Pipeline de portraits: `assets/portraits/` → `mod/` sempre em sincronia
+
+`scripts/generate-portraits/` (chamado por `processPortraits.ts`) mantém tanto as texturas quanto o
+`ssm_<espécie>_portrait.txt` de cada espécie sempre espelhando exatamente o que existe em
+`assets/portraits/ssm_<espécie>/`, toda vez que `bun run portrait` roda:
+
+1. Cada pasta `assets/portraits/ssm_<espécie>/` tem um **`portrait.json` obrigatório**:
+   `{ "name": "<espécie sem prefixo>", "gendered": boolean, "counts": { "male"?, "female"?, "flat"? } }`. Espécies
+   `gendered: true` têm subpastas `male/`/`female/`; `gendered: false` são "flat" (PNGs `NNN.png` direto na raiz
+   da pasta da espécie, ex.: `ssm_cyborg`, `ssm_new_order`). O arquivo é a fonte de verdade declarada — não é
+   inferido a partir da contagem real de arquivos.
+2. **Validação antes de qualquer escrita ou remoção** (mesmo padrão de `scripts/generate-names/`): confere que
+   `name` bate com o nome da pasta, que a contagem declarada em `counts` bate exatamente com os PNGs encontrados,
+   e que os arquivos são `001.png`..`NNN.png` sequenciais e zero-padded a 3 dígitos, sem buracos. Qualquer
+   divergência é erro — nada é escrito nem apagado se houver um erro em qualquer espécie.
+3. Só depois de validado tudo: para cada espécie, qualquer `.dds` já existente em
+   `mod/sagittarius-species/gfx/models/portraits/ssm_<espécie>/` que não corresponda a um PNG de origem é
+   **apagado** (limpeza total, sem exceção — histórico: essa decisão já removeu deliberadamente texturas órfãs
+   sem PNG de origem que estavam publicadas, como `ssm_cyborg/013.dds`). Depois disso, os PNGs são convertidos via
+   `converter.ts`, e o `ssm_<espécie>_portrait.txt` inteiro é regenerado a partir do zero.
+4. O template do `.txt` gerado é 100% derivado da forma da pasta (`gendered` vs. flat) e da contagem de arquivos —
+   `entity`, `clothes_selector`, `attachment_selector` e `custom_attachment_label` são sempre os mesmos valores
+   constantes em toda espécie hoje; `greeting_sound` varia só por gênero (`human_male_greetings_01` /
+   `human_female_greetings_01`, sempre macho pras espécies flat); cada espécie tem sempre um único grupo de
+   retrato por gênero (sufixo `_01`); o bloco `portrait_groups` segue o boilerplate padrão (`game_setup`,
+   `species`, `pop`, `leader`, `ruler`) idêntico ao que já existia manualmente.
 
 ## Pipeline de listas de nomes / localização / species_names
 
@@ -120,9 +152,9 @@ pasta (não um arquivo único) porque passou de ~300 linhas: `types.ts` (tipos c
   `generic`), `army_names` (exceto `generic`/`general`) e `planet_names` (exceto `generic`) precisam usar chaves
   que existam em `scripts/vanilla-keys.json` — um snapshot congelado de `army`/`ship_size`/`planet_class` extraído
   da instalação local do Stellaris via `bun scripts/extract-vanilla-keys.ts` (rode de novo manualmente só quando o
-  jogo receber patch relevante; o caminho da instalação está hardcoded no topo do script, mesmo padrão do
-  `nvtt_export.exe` em `converter.ts`). Essa validação existe porque chaves inventadas (`android_defense_army`,
-  `sponsored_coloniser`) não davam erro nenhum até o cwtools rodar — agora travam a geração.
+  jogo receber patch relevante; o caminho da instalação está hardcoded no topo do script). Essa validação existe
+  porque chaves inventadas (`android_defense_army`, `sponsored_coloniser`) não davam erro nenhum até o cwtools
+  rodar — agora travam a geração.
 - `scripts/txt-to-json.ts` faz o caminho inverso (Clausewitz `.txt` -> JSON), para inspeção pontual de arquivos em
   `testmod/`; não faz parte do pipeline regular.
 
@@ -156,15 +188,19 @@ modificar uma espécie, geralmente é preciso mexer em todos estes, dentro de `m
 3. **`common/portrait_sets/ssm_portrait_sets.txt`** — mapeia uma `species_class` (`HUM`, `MAM`, `MOL`, `AVI`,
    `MACHINE`, ...) para as entradas de retrato individuais (ex.: `ssm_elves`, `ssm_cyborg`) que estão dentro dela.
 4. **`gfx/portraits/portraits/ssm_<species>_portrait.txt`** (um arquivo por espécie) — define as entidades de
-   retrato macho/fêmea, referenciando texturas em `gfx/models/portraits/ssm_<species>/<gender>/NNN.dds`, além das
-   regras de `portrait_groups` que definem qual retrato aparece em qual gênero/contexto.
-5. **`gfx/models/portraits/ssm_<species>/{male,female}/NNN.dds`** — as texturas convertidas de fato (veja o
-   pipeline acima).
+   retrato (macho/fêmea, ou uma única entidade "flat" pras espécies sem separação de gênero), referenciando
+   texturas em `gfx/models/portraits/ssm_<species>/...`, além das regras de `portrait_groups` que definem qual
+   retrato aparece em qual gênero/contexto. **Gerado automaticamente** por `scripts/generate-portraits/` a partir
+   do `portrait.json` e dos PNGs de `assets/portraits/ssm_<species>/` — não edite esse `.txt` manualmente, edite o
+   `portrait.json` e/ou os PNGs de origem e rode `bun run portrait` de novo.
+5. **`gfx/models/portraits/ssm_<species>/{male,female}/NNN.dds`** (espécies `gendered: true`) ou
+   **`gfx/models/portraits/ssm_<species>/NNN.dds`** (espécies "flat", `gendered: false`) — as texturas convertidas
+   de fato (veja o pipeline acima).
 
-Todos os identificadores dentro do mod usam o **prefixo `ssm_`** (Sagittarius Species Mod) para evitar colisão com
-outros mods do Stellaris. As pastas de arte-fonte em `assets/portraits/` usam, em vez disso, o **prefixo `gsm_`**
-— essa nomenclatura não é unificada automaticamente; a renomeação acontece no passo manual de cópia de `output/`
-para `mod/`.
+Todos os identificadores dentro do mod, **incluindo as pastas de arte-fonte em `assets/portraits/`**, usam o
+prefixo `ssm_` (Sagittarius Species Mod) para evitar colisão com outros mods do Stellaris — o prefixo antigo
+`gsm_` foi descontinuado e todas as pastas de espécie já foram renomeadas para `ssm_`, eliminando a troca manual
+de prefixo que existia antes entre arte-fonte e mod publicado.
 
 ## Ferramental de script Paradox
 
