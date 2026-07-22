@@ -27,6 +27,7 @@ que existem são:
 O runtime é o **Bun** (veja `bun.lockb`) — rode os scripts com `bun scripts/xxx.ts`, não `node`/`npm`.
 
 ```bash
+bun run setup       # bun scripts/download-bin.ts — baixa os binários auxiliares em bin/ (veja seção abaixo)
 bun run converter   # roda a conversão de portraits + rooms (processPortraits.ts && processRooms.ts)
 bun run portrait     # bun scripts/processPortraits.ts — converte assets/portraits/**/*.png -> DDS
 bun run rooms         # bun scripts/processRooms.ts — converte assets/city_sets/**/*.png -> DDS
@@ -42,6 +43,30 @@ bun run overwrite       # pwsh scripts/overwrite.ps1 — apaga e recopia o mod n
   diretamente com `bun scripts/name-lists.ts`.
 - Não existe suíte de testes automatizada. Validar uma mudança significa abrir o mod no Stellaris (via
   `copy`/`overwrite`) ou validar os arquivos de script com a extensão cwtools do VS Code (veja abaixo).
+
+## Binários auxiliares (`bin/`)
+
+`bin/` guarda ferramentas de linha de comando de terceiros usadas pelo projeto. A pasta **não é versionada**
+(está no `.gitignore`) — rode `bun run setup` (`scripts/download-bin.ts`) pra baixá-las:
+
+- **`bin/texconv/texconv.exe`** — [texconv](https://github.com/microsoft/DirectXTex) (Microsoft DirectXTex, MIT,
+  código aberto). Candidato a substituir o `nvtt_export.exe` no pipeline de conversão de texturas (veja seção
+  abaixo) — a migração de `converter.ts`/`nvdds.ps1` ainda não foi feita, então por enquanto o `texconv` fica
+  disponível em `bin/` sem estar ligado a nenhum script do pipeline.
+- **`bin/imagemagick/magick.exe`** (+ DLLs e arquivos de suporte) — [ImageMagick](https://imagemagick.org)
+  portátil, pra manipulação de imagem via linha de comando (resize, crop, conversão de formato, composição) sem
+  depender do Photoshop. Não está ligado a nenhum script ainda; uso manual/ad-hoc por enquanto.
+
+Detalhes de `scripts/download-bin.ts`:
+
+- As versões de cada ferramenta ficam **fixadas manualmente** no array `FERRAMENTAS` do próprio script (não busca
+  "latest" automaticamente) — pra manter o pipeline reprodutível. Pra atualizar uma ferramenta, mude a `versao` e
+  a `url` dessa entrada.
+- O layout é **uma subpasta por ferramenta** dentro de `bin/`.
+- É **idempotente**: cada subpasta tem um arquivo `.version` gravado após a instalação; rodar `bun run setup` de
+  novo só baixa o que estiver faltando ou com a versão pinada diferente da instalada.
+- O ImageMagick só é distribuído como `.7z` (sem `.zip` portátil oficial) — a extração usa `7zip-bin` + `node-7z`
+  (devDependencies), que empacotam um `7za` portátil, sem exigir 7-Zip instalado no sistema.
 
 ## Pipeline de conversão de texturas (requer Windows + NVIDIA Texture Tools)
 

@@ -4,6 +4,7 @@
   "description": "Mod para o jogo Stellaris, da Paradox Interactive.",
   "type": "module",
   "scripts": {
+    "setup": "bun scripts/download-bin.ts",
     "copy": "pwsh scripts/copy.ps1",
     "overwrite": "pwsh scripts/overwrite.ps1",
     "converter": "bun run portrait && bun run rooms",
@@ -13,8 +14,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "7zip-bin": "^5.2.0",
     "@types/bun": "^1.0.12",
-    "@types/lodash": "^4.17.0"
+    "@types/lodash": "^4.17.0",
+    "node-7z": "^3.0.0"
   },
   "dependencies": {
     "jomini": "^0.9.1",

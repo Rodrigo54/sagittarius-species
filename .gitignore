@@ -2,5 +2,6 @@
 node_modules
 testmod
 output
+bin
 batch.nvdds
 lista_de_arquivos.txt
