@@ -7,8 +7,7 @@ repositório — não é a documentação genérica da ferramenta (essa vive na
 ## O problema: a raiz do mod não é a raiz do repo
 
 A extensão [`tboby.cwtools-vscode`](https://marketplace.visualstudio.com/items?itemName=tboby.cwtools-vscode)
-exige que a pasta aberta no VS Code **seja, ela mesma, a raiz do mod** — o lugar onde fica `descriptor.mod`. É lá
-que ela procura/gera a pasta `.cwtools/` com as regras de validação (veja
+exige que a pasta aberta no VS Code **seja, ela mesma, a raiz do mod** — o lugar onde fica `descriptor.mod` (veja
 ["Multiple mods - workspace"](https://github.com/cwtools/cwtools-vscode#multiple-mods---workspace) no README da
 extensão).
 
@@ -29,8 +28,21 @@ Isso segue o padrão de ["multi-root workspace"](https://code.visualstudio.com/d
 do próprio VS Code, que é a forma oficialmente recomendada pela extensão de lidar com mais de uma raiz de mod (ou,
 como aqui, uma raiz de mod que não coincide com a raiz do repositório).
 
-Não é preciso mover a pasta `.cwtools/` manualmente: com `cwtools.rules_version` em `"latest"`, a extensão baixa
-e recria esse cache sozinha assim que `mod/sagittarius-species/` carrega como pasta-raiz pela primeira vez.
+### Onde o cache de regras/dados vanilla realmente fica
+
+Ao contrário do que a documentação genérica sugere para regras customizadas manuais, o cache **automático** usado
+por `cwtools.rules_version = "latest"`/`"stable"` não fica dentro do workspace — ele fica dentro da própria
+instalação da extensão: `~/.vscode/extensions/tboby.cwtools-vscode-<versão>/.cwtools/<jogo>/`, incluindo um
+arquivo binário grande (`stl.cwb` para Stellaris, várias centenas de MB) com os dados vanilla já processados. Uma
+pasta `.cwtools/` dentro do workspace só é usada se você mesmo criar uma, manualmente, para sobrepor regras
+específicas (o caso "custom .cwt files" da wiki) — não é algo que precise existir aqui.
+
+Na primeira vez que `mod/sagittarius-species/` carrega como pasta-raiz do workspace (ou depois de atualizar a
+instalação do Stellaris), a extensão sobe um processo separado — visível no Gerenciador de Tarefas como
+**"CWTools Server"** — que processa toda a instalação vanilla apontada por `cwtools.cache.stellaris` e monta esse
+cache. Para o Stellaris isso é pesado (chegou a ficar ~30 minutos rodando, ~3,8 GB de RAM, na primeira vez que
+testamos): é esperado, não é travamento. Os logs desse processo aparecem no painel **Output** do VS Code, no canal
+**"Paradox Language Services"** (não "CWTools" — esse é só o nome de exibição da extensão na Marketplace).
 
 ## Por que as configurações do cwtools ficam no `.code-workspace`, não num `.vscode/settings.json`
 
@@ -64,7 +76,9 @@ colaborador que abrir esse arquivo já herda a configuração certa, sem precisa
 
 Os scripts `scripts/copy.ps1`, `scripts/overwrite.ps1` e os equivalentes bash
 (`scripts/copy-latest-to-local-mod.sh`, `scripts/overwrite-local-mod-with-latest.sh`) excluem explicitamente
-`.cwtools/` da cópia para `Documents\Paradox Interactive\Stellaris\mod\`. Sem essa exclusão, o cache de regras do
-cwtools (que agora vive dentro de `mod/sagittarius-species/`) seria copiado junto — desperdiçando tempo/espaço, e
-com risco de ir parar no Steam Workshop na hora de publicar (a ferramenta de upload do próprio Stellaris lê essa
-mesma pasta local).
+`.cwtools/` da cópia para `Documents\Paradox Interactive\Stellaris\mod\`. Isso é uma precaução, não uma correção
+de um problema atual: o cache automático de regras **não** vive dentro de `mod/sagittarius-species/` (veja a seção
+acima), então normalmente não há nada ali para excluir. A exclusão só importa se alguém, no futuro, criar uma
+pasta `.cwtools/` manual dentro da pasta do mod para sobrepor regras (uso legítimo documentado pela extensão) — aí
+sim, sem essa exclusão, ela iria parar na pasta de mods locais e, por consequência, arriscar ir para o Steam
+Workshop na hora de publicar.
