@@ -8,6 +8,7 @@ portraits = {
     character_textures = {
       "gfx/models/portraits/ssm_test_rig/001.dds"
       "gfx/models/portraits/ssm_test_rig/002.dds"
+      "gfx/models/portraits/ssm_test_rig/003.dds"
     }
   }
 }
