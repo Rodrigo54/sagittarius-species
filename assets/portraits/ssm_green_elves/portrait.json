@@ -1,5 +1,9 @@
 {
   "name": "green_elves",
   "gendered": true,
-  "counts": { "male": 10, "female": 10 }
+  "rig": "ssm_shared",
+  "counts": {
+    "male": 10,
+    "female": 10
+  }
 }

@@ -1,0 +1,159 @@
+portraits = {
+  ssm_old_green_elves_male_01 = {
+    entity = "sl_humanoid_01_entity"
+    clothes_selector = "no_texture"
+    attachment_selector = "no_texture"
+    greeting_sound = "human_male_greetings_01"
+    custom_attachment_label = "HAIR_STYLE"
+    character_textures = {
+      "gfx/models/portraits/ssm_old_green_elves/male/001.dds"
+      "gfx/models/portraits/ssm_old_green_elves/male/002.dds"
+      "gfx/models/portraits/ssm_old_green_elves/male/003.dds"
+      "gfx/models/portraits/ssm_old_green_elves/male/004.dds"
+      "gfx/models/portraits/ssm_old_green_elves/male/005.dds"
+      "gfx/models/portraits/ssm_old_green_elves/male/006.dds"
+      "gfx/models/portraits/ssm_old_green_elves/male/007.dds"
+      "gfx/models/portraits/ssm_old_green_elves/male/008.dds"
+      "gfx/models/portraits/ssm_old_green_elves/male/009.dds"
+      "gfx/models/portraits/ssm_old_green_elves/male/010.dds"
+    }
+  }
+  ssm_old_green_elves_female_01 = {
+    entity = "sl_humanoid_01_entity"
+    clothes_selector = "no_texture"
+    attachment_selector = "no_texture"
+    greeting_sound = "human_female_greetings_01"
+    custom_attachment_label = "HAIR_STYLE"
+    character_textures = {
+      "gfx/models/portraits/ssm_old_green_elves/female/001.dds"
+      "gfx/models/portraits/ssm_old_green_elves/female/002.dds"
+      "gfx/models/portraits/ssm_old_green_elves/female/003.dds"
+      "gfx/models/portraits/ssm_old_green_elves/female/004.dds"
+      "gfx/models/portraits/ssm_old_green_elves/female/005.dds"
+      "gfx/models/portraits/ssm_old_green_elves/female/006.dds"
+      "gfx/models/portraits/ssm_old_green_elves/female/007.dds"
+      "gfx/models/portraits/ssm_old_green_elves/female/008.dds"
+      "gfx/models/portraits/ssm_old_green_elves/female/009.dds"
+      "gfx/models/portraits/ssm_old_green_elves/female/010.dds"
+    }
+  }
+}
+
+portrait_groups = {
+  ssm_old_green_elves = {
+    default = ssm_old_green_elves_male_01
+    game_setup = {
+      add = {
+        trigger = {
+          ruler = {
+            OR = {
+              gender = female
+              gender = indeterminable
+            }
+          }
+        }
+        portraits = {
+          ssm_old_green_elves_female_01
+        }
+      }
+      add = {
+        trigger = {
+          ruler = {
+            OR = {
+              gender = male
+              gender = indeterminable
+            }
+          }
+        }
+        portraits = {
+          ssm_old_green_elves_male_01
+        }
+      }
+    }
+    species = {
+      # generic portrait for a species
+      add = {
+        portraits = {
+          ssm_old_green_elves_male_01
+        }
+      }
+    }
+    pop = {
+      #for a specific pop
+      add = {
+        trigger = {
+          NOR = {
+            species = {
+              species_gender = male
+            }
+          }
+        }
+        portraits = {
+          ssm_old_green_elves_female_01
+        }
+      }
+      add = {
+        trigger = {
+          NOR = {
+            species = {
+              species_gender = female
+            }
+          }
+        }
+        portraits = {
+          ssm_old_green_elves_male_01
+        }
+      }
+    }
+    leader = {
+      # scientists, generals, admirals, governor
+      add = {
+        trigger = {
+          OR = {
+            gender = female
+            gender = indeterminable
+          }
+        }
+        portraits = {
+          ssm_old_green_elves_female_01
+        }
+      }
+      add = {
+        trigger = {
+          OR = {
+            gender = male
+            gender = indeterminable
+          }
+        }
+        portraits = {
+          ssm_old_green_elves_male_01
+        }
+      }
+    }
+    ruler = {
+      # portraits used for rulers
+      add = {
+        trigger = {
+          OR = {
+            gender = female
+            gender = indeterminable
+          }
+        }
+        portraits = {
+          ssm_old_green_elves_female_01
+        }
+      }
+      add = {
+        trigger = {
+          OR = {
+            gender = male
+            gender = indeterminable
+          }
+        }
+        portraits = {
+          ssm_old_green_elves_male_01
+        }
+      }
+    }
+  }
+}

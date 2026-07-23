@@ -1,0 +1,9 @@
+{
+  "name": "old_green_elves",
+  "gendered": true,
+  "rig": "sl_shared",
+  "counts": {
+    "male": 10,
+    "female": 10
+  }
+}
