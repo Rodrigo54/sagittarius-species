@@ -8,8 +8,8 @@
     "copy": "pwsh scripts/copy.ps1",
     "overwrite": "pwsh scripts/overwrite.ps1",
     "converter": "bun run portrait && bun run rooms",
-    "portrait": "bun scripts/processPortraits.ts",
-    "rooms": "bun scripts/processRooms.ts",
+    "portrait": "bun scripts/generate-portraits/index.ts",
+    "rooms": "bun scripts/generate-rooms/index.ts",
     "names": "bun scripts/generate-names/index.ts"
   },
   "author": "",
