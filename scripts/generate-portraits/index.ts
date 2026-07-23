@@ -10,7 +10,7 @@ const PASTA_PORTRAITS_ASSETS = join(PASTA_ASSETS, 'portraits');
 const PASTA_PORTRAITS_MOD = join(PASTA_MOD, 'gfx/models/portraits');
 const PASTA_PORTRAIT_TXT = join(PASTA_MOD, 'gfx/portraits/portraits');
 
-export async function gerarPortraits() {
+async function main() {
   const slugs = await listarPastasEspecies(PASTA_PORTRAITS_ASSETS);
   const especies = await Promise.all(
     slugs.map((slug) => carregarEspecie(PASTA_PORTRAITS_ASSETS, slug))
@@ -51,3 +51,5 @@ export async function gerarPortraits() {
 
   console.log(`Gerado: ${especies.length} espécie(s) de portrait.`);
 }
+
+main();
