@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls \"D:/SteamLibrary/steamapps/common/Stellaris/gfx/portraits/portraits/\" 2>/dev/null | head -10)",
+      "Read(//d/SteamLibrary/steamapps/common/Stellaris/gfx/portraits/portraits/**)",
+      "Bash(grep -n \"pop_group\\\\|pop = {\" \"D:/SteamLibrary/steamapps/common/Stellaris/gfx/portraits/portraits/07_portraits_human.txt\" | head -20)",
+      "Bash(ls \"D:/SteamLibrary/steamapps/common/Stellaris/common/portrait_categories/\" 2>/dev/null | head -5 *)",
+      "Read(//d/SteamLibrary/steamapps/common/Stellaris/common/portrait_categories/**)",
+      "Read(//d/SteamLibrary/steamapps/common/Stellaris/common/portrait_sets/**)"
+    ]
+  }
+}
