@@ -227,6 +227,10 @@ prefixo `ssm_` (Sagittarius Species Mod) para evitar colisão com outros mods do
 `gsm_` foi descontinuado e todas as pastas de espécie já foram renomeadas para `ssm_`, eliminando a troca manual
 de prefixo que existia antes entre arte-fonte e mod publicado.
 
+Para a mecânica vanilla por trás dessa cadeia (os 6 escopos de `portrait_groups`, por que o rig animado de todas as
+espécies vem de um mod terceiro hoje extinto, cumprimentos/insultos por `species_class`, `greeting_sound`, etc.),
+veja `portraits.md`.
+
 ## Ferramental de script Paradox
 
 - Arquivos `.txt`/`.gfx`/`.gui`/`.mod`/`.yml` são script Clausewitz/Jomini, não texto genérico — o
