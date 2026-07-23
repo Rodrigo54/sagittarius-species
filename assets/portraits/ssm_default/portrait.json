@@ -1,5 +1,9 @@
 {
   "name": "default",
   "gendered": true,
-  "counts": { "male": 25, "female": 25 }
+  "rig": "ssm_shared",
+  "counts": {
+    "male": 25,
+    "female": 25
+  }
 }
