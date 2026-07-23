@@ -1,5 +1,9 @@
 {
   "name": "necron",
   "gendered": true,
-  "counts": { "male": 27, "female": 16 }
+  "rig": "ssm_shared",
+  "counts": {
+    "male": 27,
+    "female": 16
+  }
 }
