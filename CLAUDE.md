@@ -28,9 +28,9 @@ O runtime é o **Bun** (veja `bun.lockb`) — rode os scripts com `bun scripts/x
 
 ```bash
 bun run setup       # bun scripts/download-bin.ts — baixa os binários auxiliares em bin/ (veja seção abaixo)
-bun run converter   # roda a conversão de portraits + rooms (processPortraits.ts && processRooms.ts)
-bun run portrait     # bun scripts/processPortraits.ts — sincroniza assets/portraits/ com mod/ (DDS + .txt), direto no mod/
-bun run rooms         # bun scripts/processRooms.ts — converte assets/city_sets/**/*.png -> DDS, direto no mod/
+bun run converter   # roda a conversão de portraits + rooms (bun run portrait && bun run rooms)
+bun run portrait     # bun scripts/generate-portraits/index.ts — sincroniza assets/portraits/ com mod/ (DDS + .txt), direto no mod/
+bun run rooms         # bun scripts/generate-rooms/index.ts — sincroniza assets/city_sets/ com mod/ (DDS + .txt), direto no mod/
 bun run names          # bun scripts/generate-names/index.ts — gera name_lists + species_names (veja seção abaixo)
 bun run copy           # pwsh scripts/copy.ps1 — copia o mod para a pasta local de mods do Stellaris
 bun run overwrite       # pwsh scripts/overwrite.ps1 — apaga e recopia o mod na pasta local de mods do Stellaris
@@ -44,6 +44,19 @@ bun run overwrite       # pwsh scripts/overwrite.ps1 — apaga e recopia o mod n
   `bun scripts/txt-to-json.ts`.
 - Não existe suíte de testes automatizada. Validar uma mudança significa abrir o mod no Stellaris (via
   `copy`/`overwrite`) ou validar os arquivos de script com a extensão cwtools do VS Code (veja abaixo).
+
+### Padrão: pipelines geradores vivem em `scripts/generate-<algo>/`, sem wrapper
+
+Todo pipeline que gera/sincroniza conteúdo em `mod/` (portraits, rooms, name_lists) segue a mesma estrutura,
+independente do tamanho: o código mora em `scripts/generate-<algo>/` (uma pasta, dividida em arquivos por
+responsabilidade quando cresce — veja `generate-names/` e `generate-portraits/` como referência; um pipeline
+pequeno, como `generate-rooms/`, ainda ganha a pasta inteira mesmo cabendo em poucos arquivos curtos, por
+consistência), e o `index.ts` dessa pasta **é** o ponto de entrada executável: define um `async function main()`
+com toda a orquestração (listar → validar tudo antes de escrever/apagar qualquer coisa → limpar órfãos →
+converter/gerar → escrever) e chama `main()` na última linha do arquivo. **Não existe wrapper `processX.ts`** em
+`scripts/` só para chamar a pasta — isso já foi tentado (`processPortraits.ts`, `processRooms.ts`) e removido por
+ser indireção sem propósito. O `package.json` aponta direto pro entry point: `"portrait": "bun
+scripts/generate-portraits/index.ts"`. Ao criar um pipeline novo, siga esse mesmo formato desde o início.
 
 ## Binários auxiliares (`bin/`)
 
@@ -79,24 +92,36 @@ roda o `texconv` uma vez por pasta (só aceita um único diretório de saída `-
 vira `-m 1`; a saída é sempre forçada para `-ft dds -y` (overwrite). Se uma pasta falhar na conversão, o processo
 para imediatamente (fail-fast).
 
-Os dois pipelines que usam esse utilitário têm responsabilidades bem separadas:
+Os dois pipelines que usam esse utilitário seguem o mesmo formato (validar → limpar órfãos → converter → escrever
+`.txt`), com formato de textura e forma de pasta diferentes — veja `generate-rooms/` e `generate-portraits/`
+abaixo. `bun run rooms` usa `bc1` → `BC1_UNORM`; `bun run portrait` usa `bc3` → `BC3_UNORM`. Só as variantes
+lineares/UNORM são usadas (nunca as sRGB), porque o Stellaris não suporta essas últimas (ver `image.md`).
 
-- **`bun run rooms`** (`processRooms.ts`) é simples: só chama `converter()` com formato `bc1` → `BC1_UNORM`,
-  escrevendo em `mod/sagittarius-species/gfx/portraits/city_sets/`. Não apaga nada, não gera nenhum `.txt` —
-  `gfx/portraits/asset_selectors/ssm_room_textures.txt` continua **mantido manualmente** (a maior parte desse
-  arquivo é lógica de trigger de gameplay sem relação nenhuma com os arquivos de `assets/city_sets/`, então não
-  faz sentido gerá-lo automaticamente).
-- **`bun run portrait`** (`processPortraits.ts`, que só delega para `scripts/generate-portraits/`) usa formato
-  `bc3` → `BC3_UNORM` e faz bem mais que converter imagem — veja a seção seguinte.
+### Pipeline de rooms: `assets/city_sets/` → `mod/` sempre em sincronia
 
-Só as variantes lineares/UNORM são usadas (nunca as sRGB), porque o Stellaris não suporta essas últimas
-(ver `image.md`).
+`scripts/generate-rooms/` (comando `bun run rooms`) mantém tanto as texturas quanto o `ssm_room_textures.txt`
+sempre espelhando exatamente o que existe em `assets/city_sets/`, toda vez que roda:
+
+1. Os PNGs de `assets/city_sets/` precisam ser `001_room.png`..`NNN_room.png`, sequenciais e zero-padded a 3
+   dígitos, sem buracos — qualquer divergência é erro e trava a geração sem escrever nem apagar nada (mesmo
+   padrão de `generate-portraits/`).
+2. Só depois de validado: qualquer `.dds` já existente em `mod/sagittarius-species/gfx/portraits/city_sets/` que
+   não corresponda a um PNG de origem é **apagado** (limpeza total, sem exceção — mesma política de
+   `generate-portraits/`). Depois disso, os PNGs são convertidos via `converter.ts`, e
+   `gfx/portraits/asset_selectors/ssm_room_textures.txt` é regenerado do zero.
+3. O `.txt` gerado contém **só as entradas do mod** (`room_selector.game_setup` com `"NNN_room" = { always = yes
+   }` pra cada PNG) — nenhum `ruler` e nenhuma entrada vanilla duplicada. O `room_selector` é mesclado por chave
+   entre arquivos diferentes dentro de `gfx/portraits/asset_selectors/` (é assim que mods de rooms coexistem com
+   o `room_textures.txt` vanilla sem precisar redefini-lo), então duplicar conteúdo vanilla aqui seria só um
+   risco de manutenção (uma cópia congelada que pode ficar desatualizada e sobrescrever silenciosamente lógica
+   que a Paradox atualizar depois) sem nenhum benefício — os quartos vanilla (`personality_*_room`, `ruler`,
+   etc.) continuam funcionando normalmente via o próprio arquivo do jogo.
 
 ### Pipeline de portraits: `assets/portraits/` → `mod/` sempre em sincronia
 
-`scripts/generate-portraits/` (chamado por `processPortraits.ts`) mantém tanto as texturas quanto o
+`scripts/generate-portraits/` (comando `bun run portrait`) mantém tanto as texturas quanto o
 `ssm_<espécie>_portrait.txt` de cada espécie sempre espelhando exatamente o que existe em
-`assets/portraits/ssm_<espécie>/`, toda vez que `bun run portrait` roda:
+`assets/portraits/ssm_<espécie>/`, toda vez que roda:
 
 1. Cada pasta `assets/portraits/ssm_<espécie>/` tem um **`portrait.json` obrigatório**:
    `{ "name": "<espécie sem prefixo>", "gendered": boolean, "counts": { "male"?, "female"?, "flat"? } }`. Espécies
