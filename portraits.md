@@ -83,19 +83,22 @@ dos dois do jeito descrito lá — usa uma terceira técnica, mais comum em mods
 modelar/riggar do zero: **reaproveitar o mesh e as animações de um mod já existente**, e criar só a textura nova
 (`character_textures`) que é pintada em cima dele.
 
-Concretamente: todo `entity` de todo `ssm_<espécie>_portrait.txt` deste mod aponta para `sl_humanoid_01_entity` ou
-`sl_spider_01_entity`, definidas em `gfx/models/portraits/sl_shared/_humanoid_portrait_entities.asset` (mesh em
-`_humanoid_portrait_meshes.gfx`, referenciando `humanoid_01_portrait.mesh`). O prefixo `sl_` vem do **Stellar
-Legion Mod**, um mod hoje **extinto** de quem esse rig foi originalmente herdado — ele não existe mais no Steam
-Workshop, mas o mesh/animação continuam vivos dentro de `sl_shared/`, versionados como parte deste mod. **Não
-existe mais o mod original pra consultar/atualizar essas animações** — `sl_shared/` é a única fonte que resta.
+Concretamente: todo `entity` de todo `ssm_<espécie>_portrait.txt` deste mod aponta para uma entity definida dentro
+de `gfx/models/portraits/sl_shared/` ou `gfx/models/portraits/ssm_shared/` (mesh em `_humanoid_portrait_meshes.gfx`,
+referenciando `humanoid_01_portrait.mesh`). O prefixo `sl_` vem do **Stellar Legion Mod**, um mod hoje **extinto**
+de quem esse rig foi originalmente herdado — ele não existe mais no Steam Workshop, mas o mesh/animação continuam
+vivos dentro de `sl_shared/`, versionados como parte deste mod. **Não existe mais o mod original pra
+consultar/atualizar essas animações** — `sl_shared/` é a única fonte que resta. `ssm_shared/` é um fork próprio
+deste mod, derivado de `sl_shared/` com a UV corrigida (canvas de `character_textures` diferente, 840×1024 em vez
+de 825×1650) — veja a seção "`sl_shared` vs. `ssm_shared`" do `CLAUDE.md` pro porquê e como cada espécie escolhe
+um dos dois via `portrait.json`. Nenhuma espécie publicada usa `ssm_shared` hoje.
 
 Como consequência prática:
 
 - **Adicionar uma espécie nova nunca envolve Maya, rigging ou animação nova.** O único trabalho de arte é pintar
-  a textura de cima do template `assets/portraits/portrait.psd`, respeitando o enquadramento que o mesh
-  `sl_humanoid_01_entity`/`sl_spider_01_entity` espera — depois disso é só rodar `bun run portrait` (veja
-  `CLAUDE.md`).
+  a textura de cima do template `assets/portraits/portrait.psd` (pensado pro enquadramento do `sl_shared`, o rig
+  legado — ainda não existe um template equivalente pro `ssm_shared`), respeitando o enquadramento que o mesh do
+  rig escolhido espera — depois disso é só rodar `bun run portrait` (veja `CLAUDE.md`).
 - O outro mod **Some Cool Species**
   ([Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3013229124)) usa a mesma técnica de
   reaproveitar um rig existente — útil como segunda referência caso `sl_shared/` precise de ajuste e a wiki não

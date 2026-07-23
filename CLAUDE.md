@@ -30,6 +30,7 @@ O runtime é o **Bun** (veja `bun.lockb`) — rode os scripts com `bun scripts/x
 bun run setup       # bun scripts/download-bin.ts — baixa os binários auxiliares em bin/ (veja seção abaixo)
 bun run converter   # roda a conversão de portraits + rooms (bun run portrait && bun run rooms)
 bun run portrait     # bun scripts/generate-portraits/index.ts — sincroniza assets/portraits/ com mod/ (DDS + .txt), direto no mod/
+bun run shared-rig   # bun scripts/generate-shared-rig/index.ts — deriva gfx/.../ssm_shared/ a partir de sl_shared/ (veja seção "sl_shared vs. ssm_shared")
 bun run rooms         # bun scripts/generate-rooms/index.ts — sincroniza assets/city_sets/ com mod/ (DDS + .txt), direto no mod/
 bun run names          # bun scripts/generate-names/index.ts — gera name_lists + species_names (veja seção abaixo)
 bun run copy           # pwsh scripts/copy.ps1 — copia o mod para a pasta local de mods do Stellaris
@@ -42,8 +43,11 @@ bun run overwrite       # pwsh scripts/overwrite.ps1 — apaga e recopia o mod n
   uso fora do Windows.
 - `scripts/txt-to-json.ts` é um utilitário avulso (sem entrada no package.json), rodado diretamente com
   `bun scripts/txt-to-json.ts`.
-- Não existe suíte de testes automatizada. Validar uma mudança significa abrir o mod no Stellaris (via
-  `copy`/`overwrite`) ou validar os arquivos de script com a extensão cwtools do VS Code (veja abaixo).
+- Não existe suíte de testes automatizada de correção *in-game* — validar uma mudança de conteúdo/script Clausewitz
+  significa abrir o mod no Stellaris (via `copy`/`overwrite`) ou validar os arquivos com a extensão cwtools do VS
+  Code (veja abaixo). Lógica determinística e crítica (ex.: o patch binário do `.mesh` em
+  `scripts/generate-shared-rig/mesh-uv.ts`) tem teste Bun (`*.test.ts`, rodável com `bun test`) — não é uma suíte
+  cobrindo o repositório inteiro, só os pontos onde um bug é caro/silencioso o bastante pra valer o teste.
 
 ### Padrão: pipelines geradores vivem em `scripts/generate-<algo>/`, sem wrapper
 
@@ -124,25 +128,87 @@ sempre espelhando exatamente o que existe em `assets/city_sets/`, toda vez que r
 `assets/portraits/ssm_<espécie>/`, toda vez que roda:
 
 1. Cada pasta `assets/portraits/ssm_<espécie>/` tem um **`portrait.json` obrigatório**:
-   `{ "name": "<espécie sem prefixo>", "gendered": boolean, "counts": { "male"?, "female"?, "flat"? } }`. Espécies
-   `gendered: true` têm subpastas `male/`/`female/`; `gendered: false` são "flat" (PNGs `NNN.png` direto na raiz
-   da pasta da espécie, ex.: `ssm_cyborg`, `ssm_new_order`). O arquivo é a fonte de verdade declarada — não é
-   inferido a partir da contagem real de arquivos.
+   `{ "name": "<espécie sem prefixo>", "gendered": boolean, "rig"?: "sl_shared" | "ssm_shared", "counts": { "male"?,
+   "female"?, "flat"? } }`. Espécies `gendered: true` têm subpastas `male/`/`female/`; `gendered: false` são "flat"
+   (PNGs `NNN.png` direto na raiz da pasta da espécie, ex.: `ssm_cyborg`, `ssm_new_order`). O arquivo é a fonte de
+   verdade declarada — não é inferido a partir da contagem real de arquivos. `rig` é opcional e omitido em toda
+   espécie publicada hoje (omitido = `"sl_shared"`, o comportamento atual) — veja a seção "`sl_shared` vs.
+   `ssm_shared`" logo abaixo pra quando (e por que) declarar `"ssm_shared"` numa espécie nova.
 2. **Validação antes de qualquer escrita ou remoção** (mesmo padrão de `scripts/generate-names/`): confere que
    `name` bate com o nome da pasta, que a contagem declarada em `counts` bate exatamente com os PNGs encontrados,
-   e que os arquivos são `001.png`..`NNN.png` sequenciais e zero-padded a 3 dígitos, sem buracos. Qualquer
-   divergência é erro — nada é escrito nem apagado se houver um erro em qualquer espécie.
+   que os arquivos são `001.png`..`NNN.png` sequenciais e zero-padded a 3 dígitos, sem buracos, e que todo PNG tem
+   exatamente a resolução esperada pelo `rig` declarado (825×1650 pro `sl_shared` legado, 980×976 pro
+   `ssm_shared`). Qualquer divergência é erro — nada é escrito nem apagado se houver um erro em qualquer espécie.
 3. Só depois de validado tudo: para cada espécie, qualquer `.dds` já existente em
    `mod/sagittarius-species/gfx/models/portraits/ssm_<espécie>/` que não corresponda a um PNG de origem é
    **apagado** (limpeza total, sem exceção — histórico: essa decisão já removeu deliberadamente texturas órfãs
    sem PNG de origem que estavam publicadas, como `ssm_cyborg/013.dds`). Depois disso, os PNGs são convertidos via
    `converter.ts`, e o `ssm_<espécie>_portrait.txt` inteiro é regenerado a partir do zero.
 4. O template do `.txt` gerado é 100% derivado da forma da pasta (`gendered` vs. flat) e da contagem de arquivos —
-   `entity`, `clothes_selector`, `attachment_selector` e `custom_attachment_label` são sempre os mesmos valores
-   constantes em toda espécie hoje; `greeting_sound` varia só por gênero (`human_male_greetings_01` /
-   `human_female_greetings_01`, sempre macho pras espécies flat); cada espécie tem sempre um único grupo de
-   retrato por gênero (sufixo `_01`); o bloco `portrait_groups` segue o boilerplate padrão (`game_setup`,
-   `species`, `pop`, `leader`, `ruler`) idêntico ao que já existia manualmente.
+   `clothes_selector`, `attachment_selector` e `custom_attachment_label` são sempre os mesmos valores constantes em
+   toda espécie hoje; `entity` é `sl_humanoid_01_entity` ou `ssm_humanoid_01_entity` conforme o `rig` do
+   `portrait.json` (`RIGS` em `scripts/generate-portraits/types.ts`); `greeting_sound` varia só por gênero
+   (`human_male_greetings_01` / `human_female_greetings_01`, sempre macho pras espécies flat); cada espécie tem
+   sempre um único grupo de retrato por gênero (sufixo `_01`); o bloco `portrait_groups` segue o boilerplate padrão
+   (`game_setup`, `species`, `pop`, `leader`, `ruler`) idêntico ao que já existia manualmente.
+
+### `sl_shared` vs. `ssm_shared`: o rig compartilhado de retrato animado
+
+Todo `entity` de todo `ssm_<espécie>_portrait.txt` aponta pra um rig (mesh + animações) compartilhado por várias
+espécies ao mesmo tempo, dentro de `gfx/models/portraits/<rig>/` — veja "A técnica usada aqui" em `portraits.md`
+pro histórico completo. Hoje existem dois:
+
+- **`sl_shared/`** — o rig original, herdado do extinto Stellar Legion Mod. **Usado por todas as 15+ espécies
+  publicadas** e nunca modificado: sua UV desperdiça boa parte do canvas de `character_textures` (cada um dos 6
+  planos do mesh lê só metade vertical da textura, e a arte em si ainda usa só uma fração dessa metade — ver
+  `future-plans.md`), mas mudar isso quebraria a arte de toda espécie já publicada, então fica como está.
+- **`ssm_shared/`** — fork isolado do `sl_shared`, com as mesmas animações e o mesmo esqueleto, mas com o mesh
+  reduzido a **um único plano** (`pPlaneShape4` — os outros 5 são removidos do binário) e a UV desse plano
+  remapeada pra usar o canvas inteiro (sem a divisão frente/trás). Os 6 planos do `sl_shared` original são dois
+  conjuntos completos corpo/cabelo/roupa do sistema vanilla de camadas de retrato, empilhados em profundidade
+  (relevo 2.5D) — funciona com arte pequena e central, mas com arte preenchendo o canvas as camadas viram um
+  "fantasma"/gêmeo atrás do personagem (ver `ssm-shared-historico-da-sessao.md`). O plano mantido é o
+  `pPlaneShape4` porque cada camada difere em skinning, shader e geometria, e os outros candidatos falharam
+  in-game: o `pPlaneShape2` era a "camada do braço direito" (83% do peso de skinning na cadeia do braço — a
+  gesticulação dos `.anim` esticava arte cheia em até 29% de strain, a "distorção"); o `pPlaneShape6`, o mais
+  rígido, é camada de *cabelo* e fica fundo e curvado (a borda inferior curlada aparecia no quadro como um "papel
+  curvado" transparente na cintura). O plano 4 é camada de **corpo** (shader `PdxMeshPortrait`, renderiza arte
+  comum), praticamente sem curvatura (0.12 unidades), quase na origem, com strain baixo (10.1% máx / 0.3%
+  mediana — 8x melhor que o plano 2). Canvas de `character_textures` nesse rig: **980×976** — proporção ~1.004:1,
+  escolhida pra bater com o bounding box real do plano mantido (18.90 de largura × 18.86 de altura em unidades do
+  mesh; a UV é
+  uma projeção planar quase linear da posição X/altura do vértice, confirmado por correlação >0.97), na mesma
+  densidade de pixel que a textura vanilla equivalente
+  (`human_female_body_01.dds`, 420×512 — ~2x essa resolução). Cogitamos usar a proporção vanilla direto (840×1024),
+  mas o mesh deste mod (herdado do Stellar Legion Mod) não tem a mesma proporção do mesh vanilla — bater a
+  proporção vanilla teria esticado a arte verticalmente (~28%) em vez de só aumentar a densidade de pixel; editar a
+  geometria do mesh pra forçar a proporção 840×1024 foi descartado por mexer em escala não uniforme sobre uma malha
+  com esqueleto de ~40 ossos, arriscando cisalhamento nas animações sem uma forma barata de validar visualmente.
+  **Nenhuma espécie publicada usa esse rig hoje** — é o ponto de partida pra espécies novas (`"rig": "ssm_shared"`
+  no `portrait.json`, veja acima).
+
+`ssm_shared/` é **derivado**, não editado à mão: `scripts/generate-shared-rig/` (comando `bun run shared-rig`) lê
+`sl_shared/humanoid_01_portrait.mesh` e aplica três transformações em sequência: `removerPlanosOcultos` excisa os
+subtrees dos 5 planos não mantidos do binário (cada plano é autocontido — mesh + esqueleto próprio, sem referência
+cruzada — e o formato é um fluxo de tokens sem tabela de offsets, então remover intervalos contíguos de bytes é
+uma operação fechada; a remoção estrutural foi escolhida no lugar de triângulos degenerados porque faces
+degeneradas crasham o importador do Blender, e validação visual via Blender importa); `corrigirShaderDoMesh`
+garante o shader de corpo (`PdxMeshPortrait`) no material do plano mantido — no-op pro `pPlaneShape4`, que já é
+camada de corpo, mas fica de guarda porque os shaders de cabelo/roupa (`PdxMeshPortraitHair`/`Clothes`) esperam
+máscara de tintura/seleção e não renderizam arte comum: com um deles o retrato aparece in-game como um quadro
+vazio, só canal alfa, apesar de renderizar normal no Blender, que ignora o shader; por fim `corrigirUvDoMesh`
+reescala o array `u0` (UV) do plano restante (`(V−0.5)×2` — o `pPlaneShape4` lia a metade de cima do canvas, a
+sempre-vazia na arte legada; nenhuma
+posição de vértice, osso ou animação muda). O resultado vai pra `ssm_shared/`, junto com os `.asset`/`.gfx`
+renomeados pro namespace `ssm_` (`ssm_humanoid_01_entity`, `ssm_humanoid_01_mesh`,
+`ssm_humanoid_01_{happy,happy_2,sad,sad_2}_animation`) e cópia dos `.anim` (que não mudam — as animações
+continuam valendo pro plano mantido). Rodar `bun run shared-rig` de novo é seguro e idempotente: sempre regenera
+`ssm_shared/` do zero a partir de `sl_shared/`, nunca edita `sl_shared/` em si. A lógica de patch binário do
+`.mesh` (`scripts/generate-shared-rig/mesh-uv.ts`) tem teste Bun (`mesh-uv.test.ts`) que confere, contra o
+arquivo real, que a excisão é exatamente a emenda dos segmentos preservados (byte a byte, por derivação
+independente) e que só o payload de `u0` do plano mantido muda no remapeamento.
+`sl_spider_01_entity` (variante do `sl_shared` com escala maior, não usada por nenhuma espécie hoje) não tem
+equivalente no `ssm_shared` — só é criado se/quando alguma espécie precisar dele.
 
 ## Pipeline de listas de nomes / localização / species_names
 

@@ -1,16 +1,17 @@
-import type { SpeciesInfo } from './types';
+import { RIGS, RIG_PADRAO, type SpeciesInfo } from './types';
 
 const pad = (n: number) => String(n).padStart(3, '0');
 
 function blocoPortraitEntry(
   groupId: string,
   greetingSound: string,
-  texturas: string[]
+  texturas: string[],
+  entity: string
 ): string {
   const lista = texturas.map((t) => `      "${t}"`).join('\n');
   return [
     `  ${groupId} = {`,
-    `    entity = "sl_humanoid_01_entity"`,
+    `    entity = "${entity}"`,
     `    clothes_selector = "no_texture"`,
     `    attachment_selector = "no_texture"`,
     `    greeting_sound = "${greetingSound}"`,
@@ -98,6 +99,8 @@ function blocoPortraitGroups(
 }
 
 export function gerarConteudoTxt(slug: string, info: SpeciesInfo): string {
+  const entity = RIGS[info.config.rig ?? RIG_PADRAO].entity;
+
   if (info.config.gendered) {
     const grupoMale = `${slug}_male_01`;
     const grupoFemale = `${slug}_female_01`;
@@ -111,8 +114,8 @@ export function gerarConteudoTxt(slug: string, info: SpeciesInfo): string {
 
     const portraits = [
       `portraits = {`,
-      blocoPortraitEntry(grupoMale, 'human_male_greetings_01', texturasMale),
-      blocoPortraitEntry(grupoFemale, 'human_female_greetings_01', texturasFemale),
+      blocoPortraitEntry(grupoMale, 'human_male_greetings_01', texturasMale, entity),
+      blocoPortraitEntry(grupoFemale, 'human_female_greetings_01', texturasFemale, entity),
       `}`,
     ].join('\n');
 
@@ -128,7 +131,7 @@ export function gerarConteudoTxt(slug: string, info: SpeciesInfo): string {
 
   const portraits = [
     `portraits = {`,
-    blocoPortraitEntry(grupo, 'human_male_greetings_01', texturas),
+    blocoPortraitEntry(grupo, 'human_male_greetings_01', texturas, entity),
     `}`,
   ].join('\n');
 

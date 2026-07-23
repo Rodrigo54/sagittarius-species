@@ -18,7 +18,8 @@ async function main() {
 
   // Valida tudo antes de mexer em qualquer arquivo — erro trava a geração sem
   // deixar o mod num estado parcialmente limpo/atualizado.
-  const erros = especies.flatMap((info) => validarEspecie(info));
+  const errosPorEspecie = await Promise.all(especies.map((info) => validarEspecie(info)));
+  const erros = errosPorEspecie.flat();
   if (erros.length > 0) {
     console.error(
       `${erros.length} erro(s) de validação encontrado(s) — nada foi escrito ou apagado:`

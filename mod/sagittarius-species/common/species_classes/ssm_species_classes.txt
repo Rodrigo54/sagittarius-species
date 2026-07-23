@@ -30,6 +30,7 @@ ssm_sagittarius = {
 		"ssm_cyborg"
 		"ssm_mercenary"
 		"ssm_knight"
+		"ssm_test_rig"
 	}
 	graphical_culture = humanoid_01
 	move_pop_sound_effect = "moving_pop_confirmation"

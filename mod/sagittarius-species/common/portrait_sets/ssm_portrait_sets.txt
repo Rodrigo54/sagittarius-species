@@ -9,6 +9,7 @@ ssm_humanoids = {
 		"ssm_vargrosianos"
 		"ssm_knight"
 		"ssm_green_elves"
+		"ssm_test_rig"
 	}
 }
 
