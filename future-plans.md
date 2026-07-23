@@ -77,7 +77,11 @@ temporariamente, os bugs das tentativas de correção — ver `ssm-shared-histor
 placeholder xadrez com marcadores de canto coloridos (flagra flip/rotação/distorção de longe); `002.png` é arte
 real pintada pelo Rodrigo (usada pra testar em condição realista, não só num xadrez sintético).
 Registrada em `ssm_species_classes.txt` (`ssm_sagittarius`) e `ssm_portrait_sets.txt` (`ssm_humanoids`). Não é uma
-espécie real do mod — remover antes de publicar uma release.
+espécie real do mod — remover antes de publicar uma release. O mesmo vale pras cópias de comparação
+`ssm_old_<espécie>` criadas por `scripts/migrate-portraits/` (ver `CLAUDE.md`): acumulam durante a migração de rig
+pra comparação in-game e são varridas todas de uma vez na preparação de release (assets + registros nos dois `.txt`
++ pasta de DDS e `ssm_old_<espécie>_portrait.txt` no `mod/` — o pipeline **não** limpa pastas de espécie órfãs no
+`mod/`, a varredura é manual).
 
 ## BlenderMCP — configurado, com ressalvas de compatibilidade
 

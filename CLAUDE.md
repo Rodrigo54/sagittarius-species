@@ -43,6 +43,15 @@ bun run overwrite       # pwsh scripts/overwrite.ps1 — apaga e recopia o mod n
   uso fora do Windows.
 - `scripts/txt-to-json.ts` é um utilitário avulso (sem entrada no package.json), rodado diretamente com
   `bun scripts/txt-to-json.ts`.
+- `scripts/migrate-portraits/index.ts` (também sem entrada no package.json) migra **uma** espécie por invocação do
+  rig `sl_shared` pro `ssm_shared`: `bun scripts/migrate-portraits/index.ts ssm_<espécie>`. Reenquadra os PNGs de
+  `assets/portraits/ssm_<espécie>/` in place (trim → largura 600 → topo do guia, ver constantes em `reframe.ts`,
+  derivadas da camada `guia-de-enquadramento` do `assets/portraits/ssm_shared_reference.psd`), preserva o original
+  como `ssm_old_<espécie>` (registrado automaticamente em `ssm_species_classes.txt`/`ssm_portrait_sets.txt` pra
+  comparação lado a lado in-game — remover na preparação de release, junto com `ssm_test_rig`), e chama o
+  `generate-portraits` pras duas espécies ao final. Re-rodar numa espécie já migrada é **erro** (o `ssm_old_*`
+  existente é o sinal); pra refazer, restaure o estado pré-migração pelo git e rode de novo. Usa o ImageMagick de
+  `bin/` (exige `bun run setup`).
 - Não existe suíte de testes automatizada de correção *in-game* — validar uma mudança de conteúdo/script Clausewitz
   significa abrir o mod no Stellaris (via `copy`/`overwrite`) ou validar os arquivos com a extensão cwtools do VS
   Code (veja abaixo). Lógica determinística e crítica (ex.: o patch binário do `.mesh` em
@@ -72,7 +81,8 @@ scripts/generate-portraits/index.ts"`. Ao criar um pipeline novo, siga esse mesm
   `nvtt_export.exe`, que não é mais usado em lugar nenhum do repositório.
 - **`bin/imagemagick/magick.exe`** (+ DLLs e arquivos de suporte) — [ImageMagick](https://imagemagick.org)
   portátil, pra manipulação de imagem via linha de comando (resize, crop, conversão de formato, composição) sem
-  depender do Photoshop. Não está ligado a nenhum script ainda; uso manual/ad-hoc por enquanto.
+  depender do Photoshop. É o motor de imagem de `scripts/migrate-portraits/` (trim/resize/composição do
+  reenquadramento de rig — veja a seção "Comandos"); também serve pra uso manual/ad-hoc.
 
 Detalhes de `scripts/download-bin.ts`:
 
@@ -184,8 +194,10 @@ pro histórico completo. Hoje existem dois:
   proporção vanilla teria esticado a arte verticalmente (~28%) em vez de só aumentar a densidade de pixel; editar a
   geometria do mesh pra forçar a proporção 840×1024 foi descartado por mexer em escala não uniforme sobre uma malha
   com esqueleto de ~40 ossos, arriscando cisalhamento nas animações sem uma forma barata de validar visualmente.
-  **Nenhuma espécie publicada usa esse rig hoje** — é o ponto de partida pra espécies novas (`"rig": "ssm_shared"`
-  no `portrait.json`, veja acima).
+  É o ponto de partida pra espécies novas (`"rig": "ssm_shared"` no `portrait.json`, veja acima), e as espécies
+  existentes estão sendo migradas pra ele uma a uma via `scripts/migrate-portraits/` (ver "Comandos") — cada
+  migração deixa uma cópia `ssm_old_<espécie>` no rig legado pra comparação in-game, removida na preparação de
+  release.
 
 `ssm_shared/` é **derivado**, não editado à mão: `scripts/generate-shared-rig/` (comando `bun run shared-rig`) lê
 `sl_shared/humanoid_01_portrait.mesh` e aplica três transformações em sequência: `removerPlanosOcultos` excisa os

@@ -46,7 +46,7 @@ async function lerDimensoesPng(caminho: string): Promise<{ largura: number; altu
 }
 
 /** Confere que todo PNG bate com o canvas esperado pelo rig compartilhado da
- * espécie (825×1650 pro `sl_shared` legado, 840×1024 pro `ssm_shared`) —
+ * espécie (825×1650 pro `sl_shared` legado, 980×976 pro `ssm_shared`) —
  * sem isso, uma espécie nova pintada com o template errado só seria
  * descoberta olhando o retrato deformado in-game. */
 async function validarDimensoes(
