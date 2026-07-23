@@ -1,5 +1,9 @@
 {
   "name": "gamba",
   "gendered": true,
-  "counts": { "male": 15, "female": 15 }
+  "rig": "ssm_shared",
+  "counts": {
+    "male": 15,
+    "female": 15
+  }
 }

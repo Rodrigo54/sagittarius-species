@@ -1,0 +1,9 @@
+{
+  "name": "old_gamba",
+  "gendered": true,
+  "rig": "sl_shared",
+  "counts": {
+    "male": 15,
+    "female": 15
+  }
+}
