@@ -11,7 +11,20 @@ const PASTA_PORTRAITS_MOD = join(PASTA_MOD, 'gfx/models/portraits');
 const PASTA_PORTRAIT_TXT = join(PASTA_MOD, 'gfx/portraits/portraits');
 
 async function main() {
-  const slugs = await listarPastasEspecies(PASTA_PORTRAITS_ASSETS);
+  const todosSlugs = await listarPastasEspecies(PASTA_PORTRAITS_ASSETS);
+
+  // Filtro opcional por linha de comando (ex.: `bun run portrait ssm_test_rig`)
+  // pra iterar rápido numa espécie só — validação, limpeza de órfãos,
+  // conversão e regeneração do .txt ficam restritas a ela; as outras espécies
+  // não são tocadas.
+  const filtro = process.argv[2];
+  if (filtro !== undefined && !todosSlugs.includes(filtro)) {
+    console.error(`Espécie "${filtro}" não encontrada em assets/portraits/. Disponíveis:`);
+    for (const slug of todosSlugs) console.error(` - ${slug}`);
+    process.exit(1);
+  }
+  const slugs = filtro !== undefined ? [filtro] : todosSlugs;
+
   const especies = await Promise.all(
     slugs.map((slug) => carregarEspecie(PASTA_PORTRAITS_ASSETS, slug))
   );
@@ -50,7 +63,11 @@ async function main() {
     await writeFile(join(PASTA_PORTRAIT_TXT, `${info.slug}_portrait.txt`), conteudoTxt);
   }
 
-  console.log(`Gerado: ${especies.length} espécie(s) de portrait.`);
+  console.log(
+    filtro !== undefined
+      ? `Gerado: só ${filtro} (filtro de linha de comando).`
+      : `Gerado: ${especies.length} espécie(s) de portrait.`
+  );
 }
 
 main();

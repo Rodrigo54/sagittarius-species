@@ -29,7 +29,7 @@ O runtime é o **Bun** (veja `bun.lockb`) — rode os scripts com `bun scripts/x
 ```bash
 bun run setup       # bun scripts/download-bin.ts — baixa os binários auxiliares em bin/ (veja seção abaixo)
 bun run converter   # roda a conversão de portraits + rooms (bun run portrait && bun run rooms)
-bun run portrait     # bun scripts/generate-portraits/index.ts — sincroniza assets/portraits/ com mod/ (DDS + .txt), direto no mod/
+bun run portrait     # bun scripts/generate-portraits/index.ts — sincroniza assets/portraits/ com mod/ (DDS + .txt), direto no mod/; aceita um slug opcional (ex.: `bun run portrait ssm_test_rig`) pra processar uma espécie só
 bun run shared-rig   # bun scripts/generate-shared-rig/index.ts — deriva gfx/.../ssm_shared/ a partir de sl_shared/ (veja seção "sl_shared vs. ssm_shared")
 bun run rooms         # bun scripts/generate-rooms/index.ts — sincroniza assets/city_sets/ com mod/ (DDS + .txt), direto no mod/
 bun run names          # bun scripts/generate-names/index.ts — gera name_lists + species_names (veja seção abaixo)
