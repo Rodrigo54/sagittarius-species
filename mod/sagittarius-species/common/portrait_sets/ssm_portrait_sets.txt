@@ -3,6 +3,7 @@ ssm_humanoids = {
 	portraits = {
 		"ssm_default"
 		"ssm_elves"
+		"ssm_old_elves"
 		"ssm_high_elves"
 		"ssm_astral"
 		"ssm_necron"
