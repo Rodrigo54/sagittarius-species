@@ -1,7 +1,7 @@
 {
-  "name": "cyborg",
+  "name": "old_cyborg",
   "gendered": false,
-  "rig": "ssm_shared",
+  "rig": "sl_shared",
   "counts": {
     "flat": 12
   }

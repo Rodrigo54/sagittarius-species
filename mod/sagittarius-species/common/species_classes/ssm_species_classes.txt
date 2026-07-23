@@ -31,6 +31,7 @@ ssm_sagittarius = {
 		"ssm_vargrosianos"
 		"ssm_new_order"
 		"ssm_cyborg"
+		"ssm_old_cyborg"
 		"ssm_mercenary"
 		"ssm_knight"
 		"ssm_test_rig"
@@ -81,6 +82,7 @@ ssm_robot = {
 		"ssm_green_order"
 		"ssm_new_order"
 		"ssm_cyborg"
+		"ssm_old_cyborg"
 		"ssm_timbot"
 	}
 	graphical_culture = humanoid_01

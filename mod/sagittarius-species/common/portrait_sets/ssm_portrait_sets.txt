@@ -80,6 +80,7 @@ ssm_machine = {
 		"ssm_green_order"
 		"ssm_new_order"
 		"ssm_cyborg"
+		"ssm_old_cyborg"
 		"ssm_timbot"
 	}
 }

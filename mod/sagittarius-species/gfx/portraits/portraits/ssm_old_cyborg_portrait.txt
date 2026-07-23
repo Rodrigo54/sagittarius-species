@@ -1,30 +1,30 @@
 portraits = {
-  ssm_cyborg_01 = {
-    entity = "ssm_humanoid_01_entity"
+  ssm_old_cyborg_01 = {
+    entity = "sl_humanoid_01_entity"
     clothes_selector = "no_texture"
     attachment_selector = "no_texture"
     greeting_sound = "human_male_greetings_01"
     custom_attachment_label = "HAIR_STYLE"
     character_textures = {
-      "gfx/models/portraits/ssm_cyborg/001.dds"
-      "gfx/models/portraits/ssm_cyborg/002.dds"
-      "gfx/models/portraits/ssm_cyborg/003.dds"
-      "gfx/models/portraits/ssm_cyborg/004.dds"
-      "gfx/models/portraits/ssm_cyborg/005.dds"
-      "gfx/models/portraits/ssm_cyborg/006.dds"
-      "gfx/models/portraits/ssm_cyborg/007.dds"
-      "gfx/models/portraits/ssm_cyborg/008.dds"
-      "gfx/models/portraits/ssm_cyborg/009.dds"
-      "gfx/models/portraits/ssm_cyborg/010.dds"
-      "gfx/models/portraits/ssm_cyborg/011.dds"
-      "gfx/models/portraits/ssm_cyborg/012.dds"
+      "gfx/models/portraits/ssm_old_cyborg/001.dds"
+      "gfx/models/portraits/ssm_old_cyborg/002.dds"
+      "gfx/models/portraits/ssm_old_cyborg/003.dds"
+      "gfx/models/portraits/ssm_old_cyborg/004.dds"
+      "gfx/models/portraits/ssm_old_cyborg/005.dds"
+      "gfx/models/portraits/ssm_old_cyborg/006.dds"
+      "gfx/models/portraits/ssm_old_cyborg/007.dds"
+      "gfx/models/portraits/ssm_old_cyborg/008.dds"
+      "gfx/models/portraits/ssm_old_cyborg/009.dds"
+      "gfx/models/portraits/ssm_old_cyborg/010.dds"
+      "gfx/models/portraits/ssm_old_cyborg/011.dds"
+      "gfx/models/portraits/ssm_old_cyborg/012.dds"
     }
   }
 }
 
 portrait_groups = {
-  ssm_cyborg = {
-    default = ssm_cyborg_01
+  ssm_old_cyborg = {
+    default = ssm_old_cyborg_01
     game_setup = {
       add = {
         trigger = {
@@ -36,7 +36,7 @@ portrait_groups = {
           }
         }
         portraits = {
-          ssm_cyborg_01
+          ssm_old_cyborg_01
         }
       }
       add = {
@@ -49,7 +49,7 @@ portrait_groups = {
           }
         }
         portraits = {
-          ssm_cyborg_01
+          ssm_old_cyborg_01
         }
       }
     }
@@ -57,7 +57,7 @@ portrait_groups = {
       # generic portrait for a species
       add = {
         portraits = {
-          ssm_cyborg_01
+          ssm_old_cyborg_01
         }
       }
     }
@@ -72,7 +72,7 @@ portrait_groups = {
           }
         }
         portraits = {
-          ssm_cyborg_01
+          ssm_old_cyborg_01
         }
       }
       add = {
@@ -84,7 +84,7 @@ portrait_groups = {
           }
         }
         portraits = {
-          ssm_cyborg_01
+          ssm_old_cyborg_01
         }
       }
     }
@@ -98,7 +98,7 @@ portrait_groups = {
           }
         }
         portraits = {
-          ssm_cyborg_01
+          ssm_old_cyborg_01
         }
       }
       add = {
@@ -109,7 +109,7 @@ portrait_groups = {
           }
         }
         portraits = {
-          ssm_cyborg_01
+          ssm_old_cyborg_01
         }
       }
     }
@@ -123,7 +123,7 @@ portrait_groups = {
           }
         }
         portraits = {
-          ssm_cyborg_01
+          ssm_old_cyborg_01
         }
       }
       add = {
@@ -134,7 +134,7 @@ portrait_groups = {
           }
         }
         portraits = {
-          ssm_cyborg_01
+          ssm_old_cyborg_01
         }
       }
     }
