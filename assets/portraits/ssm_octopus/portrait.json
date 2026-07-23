@@ -1,5 +1,8 @@
 {
   "name": "octopus",
   "gendered": false,
-  "counts": { "flat": 21 }
+  "rig": "ssm_shared",
+  "counts": {
+    "flat": 21
+  }
 }
