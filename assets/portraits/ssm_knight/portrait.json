@@ -1,5 +1,9 @@
 {
   "name": "knight",
   "gendered": true,
-  "counts": { "male": 21, "female": 19 }
+  "rig": "ssm_shared",
+  "counts": {
+    "male": 21,
+    "female": 19
+  }
 }
