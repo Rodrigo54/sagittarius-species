@@ -1,7 +1,7 @@
 {
-  "name": "hastur",
+  "name": "old_hastur",
   "gendered": false,
-  "rig": "ssm_shared",
+  "rig": "sl_shared",
   "counts": {
     "flat": 8
   }

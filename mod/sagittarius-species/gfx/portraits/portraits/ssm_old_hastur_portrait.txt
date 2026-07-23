@@ -1,26 +1,26 @@
 portraits = {
-  ssm_hastur_01 = {
-    entity = "ssm_humanoid_01_entity"
+  ssm_old_hastur_01 = {
+    entity = "sl_humanoid_01_entity"
     clothes_selector = "no_texture"
     attachment_selector = "no_texture"
     greeting_sound = "human_male_greetings_01"
     custom_attachment_label = "HAIR_STYLE"
     character_textures = {
-      "gfx/models/portraits/ssm_hastur/001.dds"
-      "gfx/models/portraits/ssm_hastur/002.dds"
-      "gfx/models/portraits/ssm_hastur/003.dds"
-      "gfx/models/portraits/ssm_hastur/004.dds"
-      "gfx/models/portraits/ssm_hastur/005.dds"
-      "gfx/models/portraits/ssm_hastur/006.dds"
-      "gfx/models/portraits/ssm_hastur/007.dds"
-      "gfx/models/portraits/ssm_hastur/008.dds"
+      "gfx/models/portraits/ssm_old_hastur/001.dds"
+      "gfx/models/portraits/ssm_old_hastur/002.dds"
+      "gfx/models/portraits/ssm_old_hastur/003.dds"
+      "gfx/models/portraits/ssm_old_hastur/004.dds"
+      "gfx/models/portraits/ssm_old_hastur/005.dds"
+      "gfx/models/portraits/ssm_old_hastur/006.dds"
+      "gfx/models/portraits/ssm_old_hastur/007.dds"
+      "gfx/models/portraits/ssm_old_hastur/008.dds"
     }
   }
 }
 
 portrait_groups = {
-  ssm_hastur = {
-    default = ssm_hastur_01
+  ssm_old_hastur = {
+    default = ssm_old_hastur_01
     game_setup = {
       add = {
         trigger = {
@@ -32,7 +32,7 @@ portrait_groups = {
           }
         }
         portraits = {
-          ssm_hastur_01
+          ssm_old_hastur_01
         }
       }
       add = {
@@ -45,7 +45,7 @@ portrait_groups = {
           }
         }
         portraits = {
-          ssm_hastur_01
+          ssm_old_hastur_01
         }
       }
     }
@@ -53,7 +53,7 @@ portrait_groups = {
       # generic portrait for a species
       add = {
         portraits = {
-          ssm_hastur_01
+          ssm_old_hastur_01
         }
       }
     }
@@ -68,7 +68,7 @@ portrait_groups = {
           }
         }
         portraits = {
-          ssm_hastur_01
+          ssm_old_hastur_01
         }
       }
       add = {
@@ -80,7 +80,7 @@ portrait_groups = {
           }
         }
         portraits = {
-          ssm_hastur_01
+          ssm_old_hastur_01
         }
       }
     }
@@ -94,7 +94,7 @@ portrait_groups = {
           }
         }
         portraits = {
-          ssm_hastur_01
+          ssm_old_hastur_01
         }
       }
       add = {
@@ -105,7 +105,7 @@ portrait_groups = {
           }
         }
         portraits = {
-          ssm_hastur_01
+          ssm_old_hastur_01
         }
       }
     }
@@ -119,7 +119,7 @@ portrait_groups = {
           }
         }
         portraits = {
-          ssm_hastur_01
+          ssm_old_hastur_01
         }
       }
       add = {
@@ -130,7 +130,7 @@ portrait_groups = {
           }
         }
         portraits = {
-          ssm_hastur_01
+          ssm_old_hastur_01
         }
       }
     }
