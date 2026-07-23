@@ -17,14 +17,33 @@ export const GUIA = { largura: 600, altura: 642, x: 259, y: 339 } as const;
  * ../generate-portraits/types.ts). */
 export const CANVAS = { largura: 980, altura: 976 } as const;
 
+/** `largura` (padrão): escala pra largura do guia (600), topo no topo do
+ * guia — regra padrão pra composições "busto alto e estreito" (a maioria).
+ * `altura`: escala pra altura mínima (garante que a base sempre toque a
+ * borda do canvas), permitindo que a largura resultante ultrapasse o guia
+ * (nunca o canvas) — override pra composições atipicamente largas (ombros
+ * largos, capuz), onde preencher a largura do guia deixaria a arte curta
+ * demais pra alcançar a base. Escolha por espécie via `--altura` na CLI. */
+export type Modo = 'largura' | 'altura';
+
 export interface MedidaTrim {
   arquivo: string;
   /** Bounding box do conteúdo (sem a transparência em volta). */
   largura: number;
   altura: number;
-  /** Altura resultante após escalar o trim pra largura do guia. */
-  alturaEscalada: number;
 }
+
+export interface Geometria {
+  /** Dimensões exatas (já arredondadas) da arte após o resize. */
+  largura: number;
+  altura: number;
+  /** Posição do canto superior-esquerdo no canvas 980×976. */
+  x: number;
+  y: number;
+}
+
+const ALTURA_MINIMA = CANVAS.altura - GUIA.y;
+const CENTRO_X_GUIA = GUIA.x + GUIA.largura / 2;
 
 /** Mede o bounding box de conteúdo (`%@` = trim box) de cada PNG numa única
  * invocação do ImageMagick, sem escrever nada. */
@@ -44,29 +63,43 @@ export async function medirTrims(arquivos: string[]): Promise<MedidaTrim[]> {
     if (!match) {
       throw new Error(`trim box ilegível para "${arquivos[i]}": "${linha}"`);
     }
-    const largura = Number(match[1]);
-    const altura = Number(match[2]);
-    return {
-      arquivo: arquivos[i],
-      largura,
-      altura,
-      alturaEscalada: Math.round((GUIA.largura * altura) / largura),
-    };
+    return { arquivo: arquivos[i], largura: Number(match[1]), altura: Number(match[2]) };
   });
 }
 
-/** Erros da regra de enquadramento: a arte escalada pra largura do guia
- * precisa alcançar a borda inferior do canvas (busto cortado pelo quadro,
- * nunca flutuando sobre transparência). Arte que não alcança é composição
- * atípica — trava a migração em vez de ser acomodada silenciosamente. */
-export function validarEnquadramento(medidas: MedidaTrim[], slug: string): string[] {
-  const alturaMinima = CANVAS.altura - GUIA.y;
+/** Única fonte de verdade da matemática de encaixe — usada tanto pela
+ * validação quanto pela composição real, pra nunca divergir entre as duas. */
+export function calcularGeometria(medida: MedidaTrim, modo: Modo): Geometria {
+  if (modo === 'largura') {
+    const altura = Math.round((GUIA.largura * medida.altura) / medida.largura);
+    return { largura: GUIA.largura, altura, x: GUIA.x, y: GUIA.y };
+  }
+
+  const largura = Math.round((ALTURA_MINIMA * medida.largura) / medida.altura);
+  return { largura, altura: ALTURA_MINIMA, x: Math.round(CENTRO_X_GUIA - largura / 2), y: GUIA.y };
+}
+
+/** Erros da regra de enquadramento. Modo `largura`: a arte escalada pra
+ * largura do guia precisa alcançar a borda inferior do canvas (busto cortado
+ * pelo quadro, nunca flutuando). Modo `altura`: a arte escalada pra altura
+ * mínima não pode ultrapassar o canvas nas laterais. Em ambos os modos,
+ * violação é composição atípica demais — trava a migração em vez de ser
+ * acomodada silenciosamente. */
+export function validarEnquadramento(medidas: MedidaTrim[], modo: Modo, slug: string): string[] {
   const erros: string[] = [];
 
   for (const medida of medidas) {
-    if (medida.alturaEscalada < alturaMinima) {
+    const geometria = calcularGeometria(medida, modo);
+
+    if (modo === 'largura' && geometria.altura < ALTURA_MINIMA) {
       erros.push(
-        `${slug}: "${basename(medida.arquivo)}" tem conteúdo ${medida.largura}x${medida.altura} — escalado pra largura ${GUIA.largura} resulta em altura ${medida.alturaEscalada}, abaixo do mínimo ${alturaMinima} pra alcançar a borda inferior do canvas (busto flutuaria). Arte atípica: ajuste manualmente antes de migrar.`
+        `${slug}: "${basename(medida.arquivo)}" tem conteúdo ${medida.largura}x${medida.altura} — escalado pra largura ${GUIA.largura} resulta em altura ${geometria.altura}, abaixo do mínimo ${ALTURA_MINIMA} pra alcançar a borda inferior do canvas (busto flutuaria). Arte atípica: rode de novo com --altura, ou ajuste manualmente.`
+      );
+    }
+
+    if (modo === 'altura' && (geometria.x < 0 || geometria.x + geometria.largura > CANVAS.largura)) {
+      erros.push(
+        `${slug}: "${basename(medida.arquivo)}" tem conteúdo ${medida.largura}x${medida.altura} — escalado pra altura ${ALTURA_MINIMA} resulta em largura ${geometria.largura}, que ultrapassa o canvas (${CANVAS.largura}) mesmo centralizado. Arte atípica demais mesmo em modo altura: ajuste manualmente antes de migrar.`
       );
     }
   }
@@ -74,18 +107,22 @@ export function validarEnquadramento(medidas: MedidaTrim[], slug: string): strin
   return erros;
 }
 
-/** Reenquadra um PNG in place: trim → escala pra largura do guia → composição
- * num canvas transparente do `ssm_shared`, topo no topo do guia, centrado na
- * horizontal; a sobra desce e o que passa da borda inferior é cortado. */
-export async function reenquadrarPng(arquivo: string) {
+/** Reenquadra um PNG in place: trim → resize exato (dimensões já calculadas
+ * por `calcularGeometria`) → composição num canvas transparente do
+ * `ssm_shared`, na posição calculada. */
+export async function reenquadrarPng(medida: MedidaTrim, modo: Modo) {
+  const geometria = calcularGeometria(medida, modo);
+
   // Array interpolado: o Bun Shell escapa cada item como argumento literal —
   // essencial pros parênteses do ImageMagick, que o parser do $ não aceita
-  // soltos no template.
+  // soltos no template. Resize com "!" força as dimensões exatas já
+  // calculadas (mesmos números da validação), em vez de deixar o ImageMagick
+  // re-derivar a proporção e arredondar por conta própria.
   const args = [
     '-size', `${CANVAS.largura}x${CANVAS.altura}`, 'xc:none',
-    '(', arquivo, '-trim', '+repage', '-resize', `${GUIA.largura}x`, ')',
-    '-geometry', `+${GUIA.x}+${GUIA.y}`, '-composite',
-    `PNG32:${arquivo}`,
+    '(', medida.arquivo, '-trim', '+repage', '-resize', `${geometria.largura}x${geometria.altura}!`, ')',
+    '-geometry', `+${geometria.x}+${geometria.y}`, '-composite',
+    `PNG32:${medida.arquivo}`,
   ];
   await $`${MAGICK} ${args}`.quiet();
 }

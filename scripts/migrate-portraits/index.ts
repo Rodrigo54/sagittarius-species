@@ -7,7 +7,7 @@ import { PASTA_ASSETS, PASTA_MOD } from '../converter';
 import { carregarEspecie } from '../generate-portraits/discovery';
 import type { PortraitConfig, SpeciesInfo } from '../generate-portraits/types';
 import { validarEspecie } from '../generate-portraits/validation';
-import { MAGICK, medirTrims, reenquadrarPng, validarEnquadramento } from './reframe';
+import { MAGICK, type Modo, medirTrims, reenquadrarPng, validarEnquadramento } from './reframe';
 import { inserirAposOcorrencias } from './register';
 
 const __DIRNAME = dirname(fileURLToPath(import.meta.url));
@@ -76,11 +76,18 @@ async function registrarEspecieOld(slug: string, slugOld: string) {
 async function main() {
   const slug = process.argv[2];
   if (slug === undefined) {
-    console.error('Uso: bun scripts/migrate-portraits/index.ts ssm_<especie>');
+    console.error('Uso: bun scripts/migrate-portraits/index.ts ssm_<especie> [--altura]');
     console.error('Migra uma espécie do rig sl_shared (825x1650) pro ssm_shared (980x976),');
     console.error('preservando o original como ssm_old_<especie> pra comparação in-game.');
+    console.error('');
+    console.error('--altura: override pra composições atipicamente largas (ombros largos,');
+    console.error('capuz) — escala pela altura mínima em vez da largura do guia, garantindo');
+    console.error('que a base sempre toque a borda do canvas mesmo que a largura resultante');
+    console.error('ultrapasse o guia (nunca o canvas). Padrão: escala pela largura do guia.');
     process.exit(1);
   }
+
+  const modo: Modo = process.argv.includes('--altura') ? 'altura' : 'largura';
 
   if (slug.startsWith('ssm_old_')) {
     console.error(`"${slug}" é uma cópia de comparação — migre a espécie original.`);
@@ -117,11 +124,16 @@ async function main() {
     erros.push(...(await validarEspecie(info)));
   }
 
+  // Mede o trim de cada PNG uma única vez (sem escrever nada) — reaproveitado
+  // pela validação e, se tudo passar, pela composição real, pra nunca
+  // recalcular a geometria duas vezes com resultados divergentes. Só roda
+  // depois da validação estrutural passar (senão mediria arquivo inconsistente
+  // com o portrait.json, produzindo erro confuso em vez do real).
+  const medidas =
+    erros.length === 0 ? await medirTrims(arquivosDaEspecie(info)) : [];
+
   if (erros.length === 0) {
-    // Regra de enquadramento: mede o trim de cada PNG (sem escrever nada) e
-    // trava se alguma arte não alcançaria a borda inferior do canvas.
-    const medidas = await medirTrims(arquivosDaEspecie(info));
-    erros.push(...validarEnquadramento(medidas, slug));
+    erros.push(...validarEnquadramento(medidas, modo, slug));
   }
 
   if (erros.length > 0) {
@@ -132,14 +144,14 @@ async function main() {
     process.exit(1);
   }
 
-  const arquivos = arquivosDaEspecie(info);
-
   console.log(`Preservando original em assets/portraits/${slugOld}/ ...`);
   await preservarOriginal(info, slugOld);
 
-  console.log(`Reenquadrando ${arquivos.length} PNG(s) de ${slug} in place ...`);
-  for (const arquivo of arquivos) {
-    await reenquadrarPng(arquivo);
+  console.log(
+    `Reenquadrando ${medidas.length} PNG(s) de ${slug} in place (modo: ${modo}) ...`
+  );
+  for (const medida of medidas) {
+    await reenquadrarPng(medida, modo);
   }
 
   const configNovo: PortraitConfig = {
