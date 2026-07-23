@@ -32,6 +32,12 @@ Pra criar uma animação nova (tipo um loop sutil de respiração) sem depender 
 O papel de um LLM aqui é escrever o script Python (`bpy`) que gera os keyframes de forma determinística — não
 executar o Blender nem validar visualmente o resultado.
 
+> **Atualização (2026-07-23)**: existe agora um guia completo e atualizado que vai além deste esboço —
+> `ssm-shared-animacao-do-zero.md` na raiz do repo cobre construir um **rig inteiro do zero** (mesh plano
+> autoral, esqueleto enxuto com ossos por região, skinning localizado e clipes `.anim` paramétricos), com o
+> contrato fixo do jogo (câmera/shader/registro), o fluxo de export/validação via `io_pdx_mesh` + scanner
+> binário, e as armadilhas já conhecidas. O esboço acima fica como registro; o guia é a fonte atual.
+
 ## Corrigir o desperdício de UV do `sl_humanoid_01_entity` — feito
 
 Implementado: veja a seção "`sl_shared` vs. `ssm_shared`" do `CLAUDE.md`. Resumo do que foi decidido, contra o que

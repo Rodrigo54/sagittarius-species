@@ -209,6 +209,10 @@ arquivo real, que a excisão é exatamente a emenda dos segmentos preservados (b
 independente) e que só o payload de `u0` do plano mantido muda no remapeamento.
 `sl_spider_01_entity` (variante do `sl_shared` com escala maior, não usada por nenhuma espécie hoje) não tem
 equivalente no `ssm_shared` — só é criado se/quando alguma espécie precisar dele.
+Referência aprofundada: `ssm-shared-referencia-tecnica.md` (formato binário pdxasset, anatomia dos 6 planos —
+shader/UV/geometria/skinning de cada um —, ferramental Blender e lições de método) e
+`ssm-shared-animacao-do-zero.md` (guia pra construir um rig de retrato inteiro do zero — mesh, esqueleto,
+skinning e animação autorais).
 
 ## Pipeline de listas de nomes / localização / species_names
 
