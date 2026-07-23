@@ -1,6 +1,6 @@
 portraits = {
   ssm_timbot_01 = {
-    entity = "sl_humanoid_01_entity"
+    entity = "ssm_humanoid_01_entity"
     clothes_selector = "no_texture"
     attachment_selector = "no_texture"
     greeting_sound = "human_male_greetings_01"

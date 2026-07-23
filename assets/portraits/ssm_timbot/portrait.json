@@ -1,5 +1,8 @@
 {
   "name": "timbot",
   "gendered": false,
-  "counts": { "flat": 25 }
+  "rig": "ssm_shared",
+  "counts": {
+    "flat": 25
+  }
 }
