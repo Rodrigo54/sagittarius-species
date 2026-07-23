@@ -27,6 +27,7 @@ ssm_sagittarius = {
 		"ssm_hastur"
 		"ssm_green_order"
 		"ssm_avians"
+		"ssm_old_avians"
 		"ssm_vargrosianos"
 		"ssm_new_order"
 		"ssm_cyborg"
@@ -59,6 +60,7 @@ ssm_presapient = {
 		"ssm_hastur"
 		"ssm_green_order"
 		"ssm_avians"
+		"ssm_old_avians"
 		"ssm_vargrosianos"
 		"ssm_green_elves"
 	}

@@ -55,6 +55,7 @@ ssm_avians = {
 	species_class = AVI
 	portraits = {
 		"ssm_avians"
+		"ssm_old_avians"
 	}
 }
 

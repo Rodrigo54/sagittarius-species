@@ -1,0 +1,8 @@
+{
+  "name": "old_avians",
+  "gendered": false,
+  "rig": "sl_shared",
+  "counts": {
+    "flat": 50
+  }
+}
