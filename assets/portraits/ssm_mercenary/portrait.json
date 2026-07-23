@@ -1,5 +1,8 @@
 {
   "name": "mercenary",
   "gendered": false,
-  "counts": { "flat": 19 }
+  "rig": "ssm_shared",
+  "counts": {
+    "flat": 19
+  }
 }
