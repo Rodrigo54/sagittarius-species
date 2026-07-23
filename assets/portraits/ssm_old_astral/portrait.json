@@ -1,0 +1,9 @@
+{
+  "name": "old_astral",
+  "gendered": true,
+  "rig": "sl_shared",
+  "counts": {
+    "male": 26,
+    "female": 19
+  }
+}

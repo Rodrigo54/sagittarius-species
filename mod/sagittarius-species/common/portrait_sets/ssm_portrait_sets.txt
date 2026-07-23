@@ -6,6 +6,7 @@ ssm_humanoids = {
 		"ssm_old_elves"
 		"ssm_high_elves"
 		"ssm_astral"
+		"ssm_old_astral"
 		"ssm_necron"
 		"ssm_vargrosianos"
 		"ssm_knight"
@@ -68,6 +69,7 @@ ssm_psionic = {
 	species_class = HUM
   portraits = {
     "ssm_astral"
+    "ssm_old_astral"
   }
 }
 
