@@ -1,9 +1,0 @@
-{
-  "name": "old_knight",
-  "gendered": true,
-  "rig": "sl_shared",
-  "counts": {
-    "male": 21,
-    "female": 19
-  }
-}
