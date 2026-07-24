@@ -1,6 +1,6 @@
 portraits = {
   ssm_astral_male_01 = {
-    entity = "ssm_humanoid_01_entity"
+    entity = "sl_humanoid_01_entity"
     clothes_selector = "no_texture"
     attachment_selector = "no_texture"
     greeting_sound = "human_male_greetings_01"
@@ -35,7 +35,7 @@ portraits = {
     }
   }
   ssm_astral_female_01 = {
-    entity = "ssm_humanoid_01_entity"
+    entity = "sl_humanoid_01_entity"
     clothes_selector = "no_texture"
     attachment_selector = "no_texture"
     greeting_sound = "human_female_greetings_01"

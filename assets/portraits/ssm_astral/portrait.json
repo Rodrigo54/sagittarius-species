@@ -1,7 +1,7 @@
 {
   "name": "astral",
   "gendered": true,
-  "rig": "ssm_shared",
+  "rig": "sl_shared",
   "counts": {
     "male": 26,
     "female": 19

@@ -1,9 +1,0 @@
-{
-  "name": "old_necron",
-  "gendered": true,
-  "rig": "sl_shared",
-  "counts": {
-    "male": 27,
-    "female": 16
-  }
-}

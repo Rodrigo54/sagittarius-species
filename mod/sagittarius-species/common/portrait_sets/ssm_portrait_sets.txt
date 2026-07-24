@@ -2,22 +2,13 @@ ssm_humanoids = {
 	species_class = HUM
 	portraits = {
 		"ssm_default"
-		"ssm_old_default"
 		"ssm_elves"
-		"ssm_old_elves"
 		"ssm_high_elves"
-		"ssm_old_high_elves"
 		"ssm_astral"
-		"ssm_old_astral"
 		"ssm_necron"
-		"ssm_old_necron"
 		"ssm_vargrosianos"
-		"ssm_old_vargrosianos"
 		"ssm_knight"
-		"ssm_old_knight"
 		"ssm_green_elves"
-		"ssm_old_green_elves"
-		"ssm_test_rig"
 	}
 }
 
@@ -25,7 +16,6 @@ ssm_mammalians = {
 	species_class = MAM
 	portraits = {
 		"ssm_gamba"
-		"ssm_old_gamba"
 	}
 }
 
@@ -33,9 +23,7 @@ ssm_molluscoids = {
 	species_class = MOL
 	portraits = {
 		"ssm_octopus"
-		"ssm_old_octopus"
 		"ssm_hastur"
-		"ssm_old_hastur"
 	}
 }
 
@@ -43,7 +31,6 @@ ssm_necroids = {
 	species_class = NECROID
 	portraits = {
 		"ssm_necron"
-		"ssm_old_necron"
 	}
 }
 
@@ -51,7 +38,6 @@ ssm_aquatics = {
 	species_class = AQUATIC
 	portraits = {
 		"ssm_mermaids"
-		"ssm_old_mermaids"
 	}
 }
 
@@ -59,7 +45,6 @@ ssm_plantoids = {
 	species_class = PLANT
 	portraits = {
 		"ssm_green_elves"
-		"ssm_old_green_elves"
 	}
 }
 
@@ -67,7 +52,6 @@ ssm_avians = {
 	species_class = AVI
 	portraits = {
 		"ssm_avians"
-		"ssm_old_avians"
 	}
 }
 
@@ -75,7 +59,6 @@ ssm_cybernetics = {
 	species_class = HUM
 	portraits = {
 		"ssm_mercenary"
-		"ssm_old_mercenary"
 	}
 }
 
@@ -83,7 +66,6 @@ ssm_psionic = {
 	species_class = HUM
   portraits = {
     "ssm_astral"
-    "ssm_old_astral"
   }
 }
 
@@ -91,12 +73,8 @@ ssm_machine = {
 	species_class = MACHINE
 	portraits = {
 		"ssm_green_order"
-		"ssm_old_green_order"
 		"ssm_new_order"
-		"ssm_old_new_order"
 		"ssm_cyborg"
-		"ssm_old_cyborg"
 		"ssm_timbot"
-		"ssm_old_timbot"
 	}
 }

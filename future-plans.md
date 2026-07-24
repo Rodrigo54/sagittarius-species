@@ -83,6 +83,30 @@ pra comparação in-game e são varridas todas de uma vez na preparação de rel
 + pasta de DDS e `ssm_old_<espécie>_portrait.txt` no `mod/` — o pipeline **não** limpa pastas de espécie órfãs no
 `mod/`, a varredura é manual).
 
+## Migração de rig (`scripts/migrate-portraits/`) — pendências de qualidade visual encontradas em teste in-game — revertido
+
+Rodrigo testou todas as espécies migradas (ver `CLAUDE.md`) in-game e reportou dois problemas de enquadramento
+que a validação automática do script não captura, porque são julgamento visual, não uma regra matemática de
+encaixe:
+
+- **`ssm_mermaids`**: ficou perto demais — a cauda de peixe (o traço mais característico da espécie) sai do
+  quadro. A validação atual só garante que a arte alcance a borda inferior do canvas (modo `largura`) ou não
+  estoure as laterais (modo `--altura`); nenhuma das duas regras avalia se um elemento importante da composição
+  ficou de fora por a arte ter sido escalada grande demais.
+- **`ssm_astral`** (migrada em modo `--altura`): as variantes ficaram desalinhadas entre si — personagens magros e
+  largos compartilham a mesma espécie, e como o modo `--altura` escala cada variante individualmente pela altura
+  mínima (trim+fit é por imagem, ver `CLAUDE.md`), variantes de proporção diferente resultam em escalas
+  (e portanto tamanhos de cabeça/corpo) visivelmente diferentes lado a lado — quebra a consistência visual dentro
+  da espécie, mais perceptível em `--altura` porque a largura resultante (não fixada) varia mais entre variantes
+  do que a altura resultante varia no modo `largura` padrão.
+
+**Decisão (preparação da release 1.8.0)**: em vez de ajustar o enquadramento, as duas espécies foram revertidas
+pro rig `sl_shared` — a cópia `ssm_old_<espécie>` (visual pré-migração) voltou a ser `ssm_mermaids`/`ssm_astral`
+oficial, com `"rig": "sl_shared"` explícito no `portrait.json`, e a versão migrada pro `ssm_shared` foi
+descartada. As outras 16 espécies migradas seguem no `ssm_shared` normalmente. Se algum dia vier uma correção de
+enquadramento pra essas duas (folga extra pra cauda/asas, normalização de escala entre variantes no modo
+`--altura`), a migração precisa ser refeita do zero via `scripts/migrate-portraits/`.
+
 ## BlenderMCP — configurado, com ressalvas de compatibilidade
 
 [`ahujasid/blender-mcp`](https://github.com/ahujasid/blender-mcp) está configurado nesta máquina (`claude mcp
