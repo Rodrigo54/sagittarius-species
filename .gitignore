@@ -4,3 +4,4 @@ testmod
 output
 bin
 lista_de_arquivos.txt
+*.af~lock~
