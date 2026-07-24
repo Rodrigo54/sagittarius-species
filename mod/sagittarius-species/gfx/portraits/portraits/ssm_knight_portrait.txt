@@ -1,6 +1,6 @@
 portraits = {
   ssm_knight_male_01 = {
-    entity = "sl_humanoid_01_entity"
+    entity = "ssm_humanoid_01_entity"
     clothes_selector = "no_texture"
     attachment_selector = "no_texture"
     greeting_sound = "human_male_greetings_01"
@@ -29,9 +29,8 @@ portraits = {
       "gfx/models/portraits/ssm_knight/male/021.dds"
     }
   }
-
   ssm_knight_female_01 = {
-    entity = "sl_humanoid_01_entity"
+    entity = "ssm_humanoid_01_entity"
     clothes_selector = "no_texture"
     attachment_selector = "no_texture"
     greeting_sound = "human_female_greetings_01"
@@ -62,7 +61,7 @@ portraits = {
 
 portrait_groups = {
   ssm_knight = {
-    default = ssm_knight_female_01
+    default = ssm_knight_male_01
     game_setup = {
       add = {
         trigger = {
@@ -99,7 +98,7 @@ portrait_groups = {
         }
       }
     }
-    pop_group = {
+    pop = {
       #for a specific pop
       add = {
         trigger = {

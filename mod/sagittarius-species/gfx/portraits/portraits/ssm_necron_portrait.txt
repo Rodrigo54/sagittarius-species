@@ -1,6 +1,6 @@
 portraits = {
   ssm_necron_male_01 = {
-    entity = "sl_humanoid_01_entity"
+    entity = "ssm_humanoid_01_entity"
     clothes_selector = "no_texture"
     attachment_selector = "no_texture"
     greeting_sound = "human_male_greetings_01"
@@ -35,9 +35,8 @@ portraits = {
       "gfx/models/portraits/ssm_necron/male/027.dds"
     }
   }
-
   ssm_necron_female_01 = {
-    entity = "sl_humanoid_01_entity"
+    entity = "ssm_humanoid_01_entity"
     clothes_selector = "no_texture"
     attachment_selector = "no_texture"
     greeting_sound = "human_female_greetings_01"
@@ -102,7 +101,7 @@ portrait_groups = {
         }
       }
     }
-    pop_group = {
+    pop = {
       #for a specific pop
       add = {
         trigger = {

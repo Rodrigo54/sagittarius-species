@@ -2,5 +2,6 @@
 node_modules
 testmod
 output
-batch.nvdds
+bin
 lista_de_arquivos.txt
+*.af~lock~

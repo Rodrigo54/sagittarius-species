@@ -1,0 +1,9 @@
+{
+  "name": "vargrosianos",
+  "gendered": true,
+  "rig": "ssm_shared",
+  "counts": {
+    "male": 25,
+    "female": 16
+  }
+}

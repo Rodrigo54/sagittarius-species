@@ -1,0 +1,184 @@
+ssm_chromatica={
+  category="Humanoid"
+  ship_names={
+    generic={
+      "Lady Gaga" "Madonna" "Beyoncé" "Charli XCX" "Britney Spears" "Rihanna" "RuPaul" "Katy Perry" "Alexander McQueen" "Versace" "Stonewall Inn" "Christopher Street" "Alan Turing" "Chromatica" "Vogue" "Sia" "Dua Lipa" "Kylie Minogue"
+    }
+    corvette={
+      "Kesha" "Miley Cyrus" "Shakira" "Jennifer Lopez" "Charli XCX" "Troye Sivan" "Sam Smith" "Kim Petras" "Chappell Roan" "Renée Rapp" "Adele" "Camila Cabello" "Megan Thee Stallion" "Carly Rae Jepsen" "Selena Gomez" "P!nk" "Anitta" "Sabrina Carpenter" "Olivia Rodrigo" "Icona Pop"
+    }
+    destroyer={
+      "RuPaul" "Ariana Grande" "Dua Lipa" "Doja Cat" "Christina Aguilera" "Cardi B" "Sia"
+    }
+    cruiser={
+      "Rihanna" "Britney Spears" "Kylie Minogue" "Katy Perry" "RuPaul" "Ariana Grande" "Dua Lipa" "Doja Cat"
+    }
+    battleship={
+      "Rihanna" "Britney Spears" "Kylie Minogue" "Katy Perry"
+    }
+    titan={
+      "Lady Gaga" "Madonna" "Beyoncé"
+    }
+    juggernaut={
+      "Lady Gaga" "Madonna" "Beyoncé" "Britney Spears"
+    }
+    constructor={
+      "Alexander McQueen" "Thierry Mugler" "Jean Paul Gaultier" "Gianni Versace" "Vivienne Westwood" "Tom Ford" "Yves Saint Laurent" "Christian Siriano" "Marc Jacobs" "Rick Owens" "Riccardo Tisci" "Halston"
+    }
+    science={
+      "Alan Turing" "Sally Ride" "Ben Barres" "Sara Josephine Baker" "Magnus Hirschfeld" "Lynn Conway" "Frank Kameny"
+    }
+    colonizer={
+      "Stonewall Inn" "Christopher Street" "Castro District" "Greenwich Village" "Fire Island" "Provincetown" "Chueca" "Le Marais" "West Hollywood" "Oxford Street" "Canal Street" "Chelsea" "SoHo" "Vauxhall" "Schöneberg" "Church-Wellesley" "Boystown" "Le Village"
+    }
+    sponsored_colonizer={
+      "Stonewall Inn" "Christopher Street" "Castro District" "Fire Island"
+    }
+    transport={
+      "RuPaul" "Ariana Grande" "Dua Lipa" "Doja Cat" "Christina Aguilera" "Cardi B" "Sia"
+    }
+    research_station={
+      "Alan Turing" "Sally Ride" "Magnus Hirschfeld" "Lynn Conway"
+    }
+    military_station_small={
+      "Kesha" "Miley Cyrus" "Shakira" "Jennifer Lopez" "Troye Sivan" "Sam Smith" "Kim Petras" "Chappell Roan"
+    }
+    military_station_medium={
+      "Kesha" "Miley Cyrus" "Shakira" "Jennifer Lopez" "Troye Sivan" "Sam Smith" "Kim Petras" "Chappell Roan"
+    }
+    military_station_large={
+      "RuPaul" "Ariana Grande" "Dua Lipa" "Doja Cat" "Christina Aguilera" "Cardi B" "Sia"
+    }
+    ion_cannon={
+      "Rihanna" "Britney Spears" "Kylie Minogue" "Katy Perry"
+    }
+  }
+  ship_class_names={
+    generic={
+      "Chromatica" "Vogue" "Lavanda" "Glitter"
+    }
+  }
+  fleet_names={
+    random_names={
+      "Esquadrão Arco-íris" "Corpo Expedicionário Chromatica" "Guarda Pretoriana Lavanda" "Frota do Orgulho" "Ordem de Chromatica" "Falange Vogue" "Tropa de Elite Ballroom" "Frota Lantejoula" "Esquadrão Glitter" "Frota Arco-íris" "Guarda de Honra Lavanda" "Corpo de Elite Vogue" "Legião Chromatica" "Frota da Diva" "Esquadrilha Camp" "Tropa de Elite Drag" "Frota Holográfica" "Guarda Real Chromatica" "Esquadrão Purpurina" "Frota Neon" "Corpo Expedicionário Lavanda" "Ordem do Brilho"
+    }
+  }
+  army_names={
+    generic={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_GENERIC_SEQUENTIAL_NAME
+    }
+    machine_defense={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_MACHINE_DEFENSE_SEQUENTIAL_NAME
+    }
+    machine_assault_1={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_MACHINE_ASSAULT_1_SEQUENTIAL_NAME
+    }
+    machine_assault_2={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_MACHINE_ASSAULT_1_SEQUENTIAL_NAME
+    }
+    machine_assault_3={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_MACHINE_ASSAULT_1_SEQUENTIAL_NAME
+    }
+    defense_army={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_GENERIC_SEQUENTIAL_NAME
+    }
+    assault_army={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_ASSAULT_ARMY_SEQUENTIAL_NAME
+    }
+    occupation_army={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_OCCUPATION_ARMY_SEQUENTIAL_NAME
+    }
+    slave_army={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_SLAVE_ARMY_SEQUENTIAL_NAME
+    }
+    clone_army={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_CLONE_ARMY_SEQUENTIAL_NAME
+    }
+    undead_army={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_UNDEAD_ARMY_SEQUENTIAL_NAME
+    }
+    robotic_defense_army={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_ROBOTIC_DEFENSE_ARMY_SEQUENTIAL_NAME
+    }
+    robotic_army={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_ROBOTIC_ARMY_SEQUENTIAL_NAME
+    }
+    robotic_occupation_army={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_ROBOTIC_OCCUPATION_ARMY_SEQUENTIAL_NAME
+    }
+    psionic_army={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_PSIONIC_ARMY_SEQUENTIAL_NAME
+    }
+    xenomorph_army={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_XENOMORPH_ARMY_SEQUENTIAL_NAME
+    }
+    gene_warrior_army={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_GENE_WARRIOR_ARMY_SEQUENTIAL_NAME
+    }
+    primitive_army={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_PRIMITIVE_ARMY_SEQUENTIAL_NAME
+    }
+    industrial_army={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_INDUSTRIAL_ARMY_SEQUENTIAL_NAME
+    }
+    postatomic_army={
+      sequential_name=SSM_CHROMATICA_ARMY_NAMES_POSTATOMIC_ARMY_SEQUENTIAL_NAME
+    }
+  }
+  planet_names={
+    generic={
+      names={
+        "Chanel" "Versace" "Gucci" "Madonna" "Cher" "Prada" "Dior" "Beyoncé" "Lady Gaga" "Fendi" "Givenchy" "Dolce & Gabbana"
+      }
+    }
+    pc_desert={
+      names={
+        "Dolce & Gabbana" "Cher" "Shakira" "Jennifer Lopez"
+      }
+    }
+    pc_tropical={
+      names={
+        "Versace" "Gucci" "Shakira" "Anitta" "Jennifer Lopez"
+      }
+    }
+    pc_gaia={
+      names={
+        "Valentino" "Saint Laurent" "Diana Ross" "Donna Summer" "Gloria Gaynor"
+      }
+    }
+    pc_ocean={
+      names={
+        "Alexander McQueen" "Mugler" "Celine Dion" "Whitney Houston"
+      }
+    }
+    pc_arctic={
+      names={
+        "Balenciaga" "Prada" "Rihanna" "Kylie Minogue"
+      }
+    }
+    pc_nuked={
+      names={
+        "Vivienne Westwood" "Moschino" "Grace Jones" "Tina Turner"
+      }
+    }
+    pc_alpine={
+      names={
+        "Chanel" "Barbra Streisand" "Celine Dion"
+      }
+    }
+  }
+  character_names={
+    main={
+      weight=100
+      first_names_male={
+        "Andre" "Adrian" "Alessandro" "Antoine" "Ash" "Axel" "Beau" "Blaine" "Brady" "Bruno" "Cassius" "Chase" "Christian" "Cole" "Damien" "Dante" "Dario" "Dash" "Diego" "Dominic" "Donatello" "Dorian" "Dylan" "Elio" "Elliot" "Emilio" "Enzo" "Ezra" "Fabio" "Felix" "Gabriel" "Giovanni" "Hugo" "Ivan" "Jacques" "Jax" "Jaxon" "Jean" "Julian" "Kai" "Knox" "Leandro" "Leo" "Leonel" "Lorenzo" "Luca" "Lucas" "Ludovic" "Marcelo" "Marco" "Marcus" "Mateo" "Matteo" "Maurice" "Maxence" "Miguel" "Nico" "Nikolai" "Noe" "Oliver" "Onyx" "Orion" "Oscar" "Pablo" "Pierre" "Phoenix" "Prince" "Rafael" "Rene" "Rio" "Roman" "Rome" "Rocco" "Sasha" "Sebastian" "Sergio" "Sterling" "Storm" "Theo" "Thiago" "Tristan" "Victor" "Wolf" "Xavier" "Zane" "Zayn"
+      }
+      first_names_female={
+        "Adriana" "Aria" "Aurora" "Bianca" "Blaire" "Bridget" "Camille" "Carmen" "Celeste" "Chiara" "Coco" "Crystal" "Daniela" "Delphine" "Desiree" "Diamond" "Elena" "Eliza" "Esmeralda" "Fabiola" "Farrah" "Fiora" "Francesca" "Gabriella" "Genevieve" "Giselle" "Gloria" "Grace" "Harlow" "Ines" "Isabela" "Ivy" "Jade" "Jasmine" "Josephine" "Juliana" "Juno" "Kiara" "Lana" "Lara" "Lorena" "Luna" "Marisol" "Marisa" "Mia" "Milagros" "Mimi" "Monique" "Nadia" "Naomi" "Nova" "Odette" "Olympia" "Paloma" "Paris" "Pilar" "Priscilla" "Rainn" "Renata" "Rosalia" "Rosaline" "Roxanne" "Sabrina" "Savannah" "Selena" "Serena" "Simone" "Sofia" "Solange" "Star" "Sunny" "Talia" "Valentina" "Venus" "Veronique" "Viola" "Violeta" "Xiomara" "Yolanda" "Zara"
+      }
+      second_names={
+        "Xtravaganza" "LaBeija" "Ninja" "Chanel" "Mizrahi" "Milan" "Balenciaga" "Prada" "Saint Laurent" "Aviance" "Corey" "Pendavis" "Revlon" "Escada" "Amazon" "Gucci" "Ebony" "Dupree" "Blahnik" "Karan" "Balmain" "Valentino" "Versailles" "DeLuxe" "Monroe" "Sinclair" "LaRue" "Fontaine" "Beaumont" "Devine" "Galore" "Extravagance" "St. Claire" "Delacroix" "Diamond" "Voguel" "Glitters" "Sequin" "Lamé" "Chiffon" "Satin" "Rhinestone" "Couture" "Runway" "Platinum" "Cristal" "Opulence" "Diva" "Legend" "Eleganza" "Category" "Vogue"
+      }
+    }
+  }
+}

@@ -6,34 +6,79 @@
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/Rodrigo54/sagittarius-species?style=plastic)
 ![Steam File Size](https://img.shields.io/steam/size/3054793206?style=plastic)
 
-🌌🚀💫 Greetings, cosmic explorers!
+Sagittarius Species is a Stellaris mod that adds AI-assisted portrait art for **18 species**, each plugged into
+the game's `species_classes` / `portrait_categories` / `portrait_sets` data chain (see `CLAUDE.md` for the full
+model). Most species share one of two animated rigs (`sl_shared` or `ssm_shared`) rather than shipping unique
+meshes — see `portraits.md` and the "`sl_shared` vs. `ssm_shared`" section of `CLAUDE.md` for why.
 
-Sagittarius Species is your dream mod for Stellaris, and here's why: we avid lovers of the game understand the importance of diverse AI portrayals. We want to give you more options to dive into the intergalactic RPG and epic fantasy that is Stellaris. And guess what? We're just getting started!
+This repository is a content/asset pipeline, not an application: `mod/sagittarius-species/` is the Clausewitz-script
+mod itself (published to the Steam Workshop), and `scripts/` (Bun/TypeScript) converts source art in `assets/`
+into the textures and `.txt`/`.yml` files inside `mod/`.
 
-We currently have 15 unique species ready for you to discover and incorporate into your narrative:
+## Species
 
-- Sagittarius Humans (more realism): The basis of the experience, but with a twist.
-- Space Elves: Elegant, wise and ready to explore the farthest reaches of space.
-- Atlantis Space: A mysterious civilization, as old as the depths of the ocean.
-- Astral Humans: Connected to the stars, they have a look at the universe that is truly inspiring.
-- Necromancers: Masters of the forbidden arts, they uncover dark secrets amid the stars.
-- Furries: Fur, tails and lots of charisma in space!
-- Mollusk: Intriguing creatures from the intergalactic depths.
-- Lovecraftian Mollusk: A cosmic twist on Lovecraft's terrors.
-- Order of the Green Knights: Protectors of nature and the secrets of the stars.
-- Shaw's Birds: Wings that cut through the cosmos, ready for new heights.
-- New Vargrosians: Heirs of a rich culture and ancient traditions.
-- Order of Red Soldiers: Star Wars and unparalleled bravery.
-- Cyborgs: Part machine, part human, totally captivating.
-- Mercenaries: In search of intergalactic contracts and challenges.
-- Star Knight: Protectors of outer space, ready for action.
+| Species | Portrait slug | Species class |
+| --- | --- | --- |
+| Humans (augmented realism) | `ssm_default` | HUM |
+| Space Elves | `ssm_elves` | HUM |
+| High Elves | `ssm_high_elves` | HUM |
+| Green Elves | `ssm_green_elves` | PLANT |
+| Atlantis Space (Mermaids) | `ssm_mermaids` | AQUATIC |
+| Astral Humans | `ssm_astral` | HUM |
+| Necromancers | `ssm_necron` | NECROID |
+| Furries | `ssm_gamba` | MAM |
+| Mollusk | `ssm_octopus` | MOL |
+| Lovecraftian Mollusk | `ssm_hastur` | MOL |
+| Order of the Green Knights | `ssm_green_order` | MACHINE |
+| Shaw's Birds | `ssm_avians` | AVI |
+| New Vargrosians | `ssm_vargrosianos` | HUM |
+| Order of Red Soldiers | `ssm_new_order` | MACHINE |
+| Cyborgs | `ssm_cyborg` | MACHINE |
+| Timbot | `ssm_timbot` | MACHINE |
+| Mercenaries | `ssm_mercenary` | HUM |
+| Star Knight | `ssm_knight` | HUM |
 
-But here's the icing on the cake: we want to hear your suggestions and criticisms. Together we can shape this mod into something truly epic. Get ready for the adventure of a lifetime and dive head first into the diverse universe of Sagittarius Species. Here we go! 🚀✨
+`ssm_mermaids` and `ssm_astral` currently use the legacy `sl_shared` rig — a migration to `ssm_shared` was
+attempted and reverted after in-game testing found framing issues (see `future-plans.md`). Every other species
+above uses `ssm_shared`.
 
-![github.com](https://raw.githubusercontent.com/Rodrigo54/sagittarius-species/develop/steam-workshop/pictures/github_banner.png)
+## Recommended tools
+
+The pipeline needs these to run end to end; everything after the runtime/OS pair is either auto-downloaded or
+optional depending on what you're touching:
+
+- **[Bun](https://bun.sh)** — runtime for every script in `scripts/` (`bun scripts/xxx.ts` or `bun run <task>`).
+- **PowerShell** — required for `bun run copy`/`bun run overwrite` (Windows-only; bash equivalents exist for the
+  rest of the pipeline).
+- **[texconv](https://github.com/microsoft/DirectXTex)** (`bin/texconv/`) — PNG→DDS conversion engine.
+  Auto-downloaded by `bun run setup`.
+- **[ImageMagick](https://imagemagick.org)** (`bin/imagemagick/`) — image manipulation (trim/resize/composite)
+  used by `scripts/migrate-portraits/`. Auto-downloaded by `bun run setup`.
+- **Blender + [io_pdx_mesh](https://github.com/ross-g/io_pdx_mesh)** — optional, only needed to edit the shared
+  animated rig itself (mesh/skeleton/animations, `.mesh`/`.anim` files). Not required for the normal portrait
+  pipeline.
+- **VS Code + [cwtools](https://marketplace.visualstudio.com/items?itemName=tboby.cwtools-vscode)** — Clausewitz
+  script validation/lint. Open `sagittarius-species.code-workspace`, not the raw folder — see `cwtools.md`.
+- **Affinity Designer/Photo or Photoshop** — editing the source `.psd` reference/art layers in `assets/`.
+- **[StabilityMatrix](https://github.com/LykosAI/StabilityMatrix)** (ComfyUI) — AI-assisted portrait art
+  generation for new species.
+
+## Key commands
+
+```bash
+bun run setup       # download bin/ tools (texconv, ImageMagick)
+bun run portrait     # sync assets/portraits/ -> mod/ (textures + .txt)
+bun run rooms         # sync assets/city_sets/ -> mod/ (textures + .txt)
+bun run names          # generate name_lists + localisation + species_names
+bun run shared-rig    # derive gfx/.../ssm_shared/ from sl_shared/
+bun run copy           # copy the mod into the local Stellaris mods folder (Windows/PowerShell only)
+```
+
+See `CLAUDE.md` for the full command reference, the asset→mod pipeline details, and the data model connecting
+species, portraits, and rigs.
+
+## Links
+
+[![github.com](https://raw.githubusercontent.com/Rodrigo54/sagittarius-species/develop/steam-workshop/pictures/github_banner.png)](https://github.com/Rodrigo54/sagittarius-species)
 
 ![img](https://raw.githubusercontent.com/Rodrigo54/sagittarius-species/develop/steam-workshop/pictures/brasil_banner.png)
-
-Thanks for reading the description, downloading & playing with my mods!
-
-Don't forget to leave a comment, smash that like button, subscribe and hit the bell icon!!!

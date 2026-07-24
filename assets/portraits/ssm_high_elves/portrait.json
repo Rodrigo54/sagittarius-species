@@ -1,0 +1,9 @@
+{
+  "name": "high_elves",
+  "gendered": true,
+  "rig": "ssm_shared",
+  "counts": {
+    "male": 25,
+    "female": 25
+  }
+}

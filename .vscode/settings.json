@@ -1,4 +1,6 @@
 {
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
   "files.associations": {
     "*.yml": "paradox",
     "*.mod": "paradox",
@@ -26,15 +28,6 @@
       "source.fixAll": "explicit"
     }
   },
-  "cwtools.errors.ignorefiles": [
-    "README.txt",
-    "credits.txt",
-    "credits_l_simp_chinese.txt",
-    "reference.txt",
-    "startup_info.txt",
-    "LICENSE.txt"
-  ],
-  "cwtools.ignore_patterns": ["node_modules/**/*.txt"],
   "cSpell.ignorePaths": [
     "package-lock.json",
     "node_modules",

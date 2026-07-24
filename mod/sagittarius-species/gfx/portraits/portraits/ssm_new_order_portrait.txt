@@ -1,6 +1,6 @@
 portraits = {
   ssm_new_order_01 = {
-    entity = "sl_humanoid_01_entity"
+    entity = "ssm_humanoid_01_entity"
     clothes_selector = "no_texture"
     attachment_selector = "no_texture"
     greeting_sound = "human_male_greetings_01"
@@ -18,6 +18,7 @@ portraits = {
       "gfx/models/portraits/ssm_new_order/010.dds"
       "gfx/models/portraits/ssm_new_order/011.dds"
       "gfx/models/portraits/ssm_new_order/012.dds"
+      "gfx/models/portraits/ssm_new_order/013.dds"
     }
   }
 }
@@ -61,7 +62,7 @@ portrait_groups = {
         }
       }
     }
-    pop_group = {
+    pop = {
       #for a specific pop
       add = {
         trigger = {

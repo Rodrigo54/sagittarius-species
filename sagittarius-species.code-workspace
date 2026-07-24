@@ -1,0 +1,30 @@
+{
+  "folders": [
+    {
+      "name": "sagittarius-species (repo)",
+      "path": "."
+    },
+    {
+      "name": "mod (cwtools)",
+      "path": "mod/sagittarius-species"
+    }
+  ],
+  "settings": {
+    "cwtools.errors.ignorefiles": [
+      "README.txt",
+      "credits.txt",
+      "credits_l_simp_chinese.txt",
+      "reference.txt",
+      "startup_info.txt",
+      "LICENSE.txt"
+    ],
+    "cwtools.ignore_patterns": [
+      "node_modules/**/*.txt",
+      "**/99_README**.txt",
+      "testmod/**"
+    ],
+    "cwtools.rules_version": "latest",
+    "cwtools.localisation.languages": ["Braz_Por", "English"],
+    "cwtools.errors.ignore": ["CW100"]
+  }
+}

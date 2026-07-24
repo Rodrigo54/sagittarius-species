@@ -1,0 +1,8 @@
+{
+  "name": "cyborg",
+  "gendered": false,
+  "rig": "ssm_shared",
+  "counts": {
+    "flat": 12
+  }
+}
