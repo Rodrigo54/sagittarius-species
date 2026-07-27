@@ -51,14 +51,34 @@ export const RIGS: Record<RigId, RigInfo> = {
   },
   ssm_shared: {
     entity: 'ssm_humanoid_01_entity',
-    canvas: { largura: 980, altura: 976 },
-    /** Reproduz exatamente o guia em pixels que o `migrate-portraits` aplicava
-     * sobre este canvas (largura 600, topo 339, centro 559) — **inclusive** o
-     * descentramento horizontal de 69 px que a medição in-game revelou (o
-     * centro do canvas é 490, não 559). Corrigi-lo é a etapa seguinte; o guia
-     * fica idêntico até lá, para que a mudança de forma do pipeline seja
-     * verificável isoladamente, sem se misturar com mudança de valor. */
-    guia: { largura: 600 / 980, topo: 339 / 976, centroX: 559 / 980 },
+    /** O canvas cobre o plano **já recortado** por `recortarPlanoAcima`
+     * (`scripts/generate-shared-rig/mesh-uv.ts`), que remove do topo a faixa
+     * que a câmera de retrato nunca captura — 195 dos 976 px do canvas
+     * anterior.
+     *
+     * A altura preserva a densidade de antes (nenhum pixel a mais ou a menos
+     * por unidade de mesh): `976 − 195 = 781`. O valor usado é 780 porque o
+     * BC3 comprime em blocos de 4×4 e exige dimensões múltiplas de 4; o 0,13%
+     * de diferença fica bem abaixo do ruído da própria medição, que é 0,4%
+     * (`k_x` 2,034 contra `k_y` 2,042 em `measure-framing/ancora.json`).
+     *
+     * Preservar a proporção é obrigatório, não estético: a projeção do canvas
+     * no mesh é isotrópica, então esticar um eixo esticaria a arte.
+     *
+     * Este é o ponto onde a densidade sobe quando houver arte em resolução
+     * maior — multiplicar ambas as dimensões pelo mesmo fator, e mais nada. */
+    canvas: { largura: 980, altura: 780 },
+    /** - `largura`: 600 px do canvas de 980, a mesma fração de antes — a arte
+     *   não muda de tamanho relativo.
+     * - `topo`: onde ficava `y_canvas 339` no canvas anterior, reexpresso no
+     *   espaço recortado: `(339 − 195) / 781`. Mantém a arte exatamente na
+     *   mesma posição física do mesh, que é o que faz o enquadramento in-game
+     *   não mudar apesar de todo o resto ter mudado.
+     * - `centroX`: **0,5**, o centro do canvas. Aqui está a correção que
+     *   originou este trabalho: a arte estava centrada em 559 num canvas cujo
+     *   centro é 490, porque o guia antigo fora calibrado contra o esqueleto
+     *   do rig herdado em vez do plano que o jogo enquadra. */
+    guia: { largura: 600 / 980, topo: (339 - 195) / 781, centroX: 0.5 },
   },
 };
 
