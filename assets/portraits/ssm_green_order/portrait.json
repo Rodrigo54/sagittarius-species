@@ -2,6 +2,7 @@
   "name": "green_order",
   "gendered": false,
   "rig": "ssm_shared",
+  "modo": "altura",
   "counts": {
     "flat": 15
   }

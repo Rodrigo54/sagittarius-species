@@ -2,6 +2,7 @@
   "name": "cyborg",
   "gendered": false,
   "rig": "ssm_shared",
+  "modo": "altura",
   "counts": {
     "flat": 12
   }

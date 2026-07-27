@@ -2,6 +2,7 @@
   "name": "knight",
   "gendered": true,
   "rig": "ssm_shared",
+  "modo": "altura",
   "counts": {
     "male": 21,
     "female": 19
