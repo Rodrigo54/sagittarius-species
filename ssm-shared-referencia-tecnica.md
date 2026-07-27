@@ -89,6 +89,12 @@ piores rasgos localizados.
   praticamente plano (nenhuma borda curva pra entrar no quadro), quase na origem (renderiza no tamanho
   comprovado in-game) e strain baixo. O `pPlaneShape2` distorcia (skinning de braço); o `pPlaneShape6` era
   cabelo (quadro vazio) e fundo/curvado (corte curvo transparente na cintura).
+- **Topologia do plano**: grade regular **11×11** (121 vértices, 200 triângulos, 4 influências de osso por
+  vértice). As linhas de vértice caem em `y_canvas` 2, 97, 195, 293, 390, 488, 586, 684, 782, 879, 976 — o eixo
+  de altura é `p[1]` (0,666..19,522) e V cresce para baixo. No `ssm_shared` as duas primeiras linhas são
+  removidas (ver 2.5), deixando **9×11**: 99 vértices e 160 triângulos. Que a linha 195 caia 4 px acima do
+  limite medido de 199 é sorte com consequência prática — torna o recorte uma remoção pura, sem reposicionar
+  vértice nem interpolar UV.
 
 ### 2.2 Shaders de retrato
 
@@ -107,12 +113,81 @@ piores rasgos localizados.
   ajuste linear (x,z)→(u,v)) — dá pra projetar posições de osso pro espaço do canvas com esse ajuste (é assim
   que `assets/portraits/ssm_shared_reference.png` é gerado: grade da malha + 33 ossos que caem no canvas).
 - A câmera de retrato do jogo é **em perspectiva**: planos mais fundos renderizam menores, e as bordas do mesh
-  (fora do quadro no plano 2) podem entrar no enquadramento. Não temos os parâmetros da câmera — o
-  enquadramento só é validável in-game (a arte xadrez `ssm_test_rig/001.png`, com marcadores de canto coloridos,
-  existe pra calibrar isso empiricamente por screenshot se precisar).
-- Canvas do `ssm_shared`: **980×976** (proporção 1.004, casada com o bounding box do plano 4 na mesma densidade
-  de pixel da textura vanilla equivalente, `human_female_body_01.dds` 420×512). Ambas as dimensões múltiplas de
-  4 (exigência do BC3).
+  (fora do quadro no plano 2) podem entrar no enquadramento. Não temos os parâmetros da câmera.
+- **O enquadramento, porém, não é opaco** — ver 2.5. Só a relação sprite↔canvas exige o jogo aberto; qual pedaço
+  do sprite cada contexto de UI mostra está declarado nos `.gui` e sai por aritmética.
+- Canvas do `ssm_shared`: **980×780** (era 980×976 antes do recorte do topo do plano). Cobre o plano recortado
+  preservando a densidade anterior; ambas as dimensões múltiplas de 4 (exigência do BC3). A proporção é casada
+  com o bounding box do plano na mesma densidade de pixel da textura vanilla equivalente
+  (`human_female_body_01.dds` 420×512).
+
+### 2.5 Enquadramento: o que a câmera mostra, e como se sabe
+
+Durante muito tempo isto foi estimativa visual sobre screenshots ("o corte fica em torno de `y≈300` no banner e
+`y≈200` no card de origem"). O número importa porque define o **teto permanente da composição** de toda arte
+futura, então virou medição. Duas partes, com custos bem diferentes:
+
+**Parte derivável dos arquivos (grátis, e se revalida a cada patch).** O enquadramento é declarativo: cada
+contexto de UI é um `containerWindowType` com `size` + `clipping = yes`, contendo um `iconType` que desenha um
+`portraitType` numa `position` e `scale`. Logo:
+
+```
+topo_visível = (clip.y0 − icone.y) / scale     [em coordenadas do sprite]
+```
+
+`scripts/measure-framing/index.ts` percorre os 169 `.gui` e resolve **122 contextos**. Armadilhas que custaram
+erro e estão cobertas por teste:
+
+- **Deslocamento de ancestral só conta depois que existe um recorte.** Acima do container que recorta, mover um
+  nó move o retrato e a janela juntos, e a diferença — que é o que se mede — não muda. Acumular essas ressalvas
+  descartava 27 contextos perfeitamente resolvíveis por causa de um `orientation = center` irrelevante.
+- **O conjunto de sprites de retrato não é reconhecível por prefixo.** Lendo os blocos `.gfx` por
+  `type = character` aparecem 17 `portraitType`, incluindo `GFX_contacts_portrait_character_masked` e
+  `GFX_FC_portrait_character_masked` — tela de contatos e primeiro contato, que um filtro por
+  `GFX_portrait_character` descartaria em silêncio. Cobertura foi de 90 para 122.
+- **Ambiguidade é reportada, nunca chutada.** 4 contextos declaram `clipping` sem `size` e ficam fora da tabela;
+  a tabela de `orientation` omite de propósito `top`, `left` e `right`, cuja grafia não diz se o outro eixo é
+  borda ou centro.
+- **"Sem recorte" é resultado, não falha.** 28 contextos não têm nenhum ancestral com `clipping`: exibem o
+  sprite inteiro, e são eles que provam que o topo do sprite chega à tela.
+
+**Parte que exige o jogo aberto (uma vez).** Nada nos arquivos diz qual pedaço do canvas de textura a câmera
+captura. Mediu-se pintando a coordenada na **cor** de cada faixa de uma arte de calibração
+(`scripts/generate-calibration/`), instalando-a nas 16 espécies e lendo screenshots por script. O resultado está
+em `scripts/measure-framing/ancora.json`:
+
+```
+y_canvas = 198.8 + 2.042 · y_sprite          x_canvas = −91.5 + 2.034 · x_sprite
+```
+
+Três achados que valem mais que os números:
+
+1. **O topo do sprite cai em `y_canvas ≈ 199`** (do canvas de 976). A faixa `0..199` — 20,4% da altura — não
+   chega à tela em contexto nenhum. É ela que `recortarPlanoAcima` remove.
+2. **A projeção é isotrópica**: `k_x` 2,034 contra `k_y` 2,042, 0,4% de diferença. Confirma por medição a
+   escolha original do canvas quase quadrado, e obriga qualquer canvas novo a preservar a proporção.
+3. **As variantes de `portraitType` não mudam a câmera.** Um ajuste feito sobre um contexto `close_up` prevê
+   corretamente a escala de um contexto `gamesetup_mask` cujo `scale` de 0,8 foi lido do `.gui` e nunca entrou
+   na conta. Uma âncora só serve para os 122 contextos.
+
+Em X a câmera captura **mais largo que a textura** (`x_canvas = 0` cai em `x_sprite = 45`), então o canvas
+inteiro entra no quadro — o que mede, e não só infere de marcadores de canto, por que apertar a UV em U cortaria
+o enquadramento em vez de recuperar resolução.
+
+**Lições de método desta medição**, que valem para a próxima:
+
+- **Localizar por cor não funciona.** A tolerância que o BC3 exige (±12 sobre passo 32) aceita 78% dos valores
+  por canal, então ~58% dos pixels de uma tela qualquer decodificam por acaso. O que identifica a calibração é a
+  **linearidade** — só nela o índice cresce monotonicamente por dezenas de pixels.
+- **Codifique com Gray, não com base direta.** Mistura de duas faixas vizinhas é rejeitada pela tolerância, mas
+  mistura de **três** nunca é rejeitável: a média de três níveis consecutivos é ela mesma um nível válido. Não há
+  defesa local — só a escolha de fazer a resposta sair certa. Com Gray refletido (forma canônica, paridade sobre
+  os dígitos já convertidos), 120/120 acertos com desvio 0; com base 8 direta, 90/120 e um erro de 19 faixas.
+- **Duas medidas que fixam dois parâmetros não validam nada.** A confiança veio de três previsões que não
+  alimentaram o ajuste (altura da região na tela, escala e base visível de um contexto de outra variante).
+- **Divergência precisa de explicação, não de tolerância maior.** O topo visível do banner errou por 259 px — e a
+  razão é que o sprite ali é `GFX_portrait_gamesetup_mask`, que desvanece as bordas, com a bandeira do império e
+  o título por cima. A base do mesmo banner bate com 0,4%.
 
 ### 2.4 As animações herdadas
 
