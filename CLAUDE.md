@@ -43,15 +43,12 @@ bun run overwrite       # pwsh scripts/overwrite.ps1 — apaga e recopia o mod n
   uso fora do Windows.
 - `scripts/txt-to-json.ts` é um utilitário avulso (sem entrada no package.json), rodado diretamente com
   `bun scripts/txt-to-json.ts`.
-- `scripts/migrate-portraits/index.ts` (também sem entrada no package.json) migra **uma** espécie por invocação do
-  rig `sl_shared` pro `ssm_shared`: `bun scripts/migrate-portraits/index.ts ssm_<espécie>`. Reenquadra os PNGs de
-  `assets/portraits/ssm_<espécie>/` in place (trim → largura 600 → topo do guia, ver constantes em `reframe.ts`,
-  derivadas da camada `guia-de-enquadramento` do `assets/portraits/ssm_shared_reference.psd`), preserva o original
-  como `ssm_old_<espécie>` (registrado automaticamente em `ssm_species_classes.txt`/`ssm_portrait_sets.txt` pra
-  comparação lado a lado in-game — remover na preparação de release, junto com `ssm_test_rig`), e chama o
-  `generate-portraits` pras duas espécies ao final. Re-rodar numa espécie já migrada é **erro** (o `ssm_old_*`
-  existente é o sinal); pra refazer, restaure o estado pré-migração pelo git e rode de novo. Usa o ImageMagick de
-  `bin/` (exige `bun run setup`).
+- `scripts/restore-masters/index.ts` (também sem entrada no package.json) é um one-shot já executado: restaurou a
+  arte-fonte das 16 espécies do `ssm_shared` ao estado pré-migração, trimada, quando `assets/portraits/` passou a
+  guardar master nativo. Fica no repositório como registro executável da operação; não precisa rodar de novo.
+  **Não existe mais um script de "migrar espécie de rig"** — trocar o rig de uma espécie é editar o campo `rig` do
+  `portrait.json` e rodar `bun run portrait`, já que o enquadramento é derivado a cada execução (veja "Pipeline de
+  portraits" abaixo).
 - Não existe suíte de testes automatizada de correção *in-game* — validar uma mudança de conteúdo/script Clausewitz
   significa abrir o mod no Stellaris (via `copy`/`overwrite`) ou validar os arquivos com a extensão cwtools do VS
   Code (veja abaixo). Lógica determinística e crítica (ex.: o patch binário do `.mesh` em
@@ -81,8 +78,9 @@ scripts/generate-portraits/index.ts"`. Ao criar um pipeline novo, siga esse mesm
   `nvtt_export.exe`, que não é mais usado em lugar nenhum do repositório.
 - **`bin/imagemagick/magick.exe`** (+ DLLs e arquivos de suporte) — [ImageMagick](https://imagemagick.org)
   portátil, pra manipulação de imagem via linha de comando (resize, crop, conversão de formato, composição) sem
-  depender do Photoshop. É o motor de imagem de `scripts/migrate-portraits/` (trim/resize/composição do
-  reenquadramento de rig — veja a seção "Comandos"); também serve pra uso manual/ad-hoc.
+  depender do Photoshop. É o motor de imagem do enquadramento em `scripts/generate-portraits/framing.ts`
+  (trim/resize/composição da arte-fonte no canvas do rig — veja "Pipeline de portraits"); também serve pra uso
+  manual/ad-hoc.
 
 Detalhes de `scripts/download-bin.ts`:
 
@@ -138,23 +136,36 @@ sempre espelhando exatamente o que existe em `assets/city_sets/`, toda vez que r
 `assets/portraits/ssm_<espécie>/`, toda vez que roda:
 
 1. Cada pasta `assets/portraits/ssm_<espécie>/` tem um **`portrait.json` obrigatório**:
-   `{ "name": "<espécie sem prefixo>", "gendered": boolean, "rig"?: "sl_shared" | "ssm_shared", "counts": { "male"?,
-   "female"?, "flat"? } }`. Espécies `gendered: true` têm subpastas `male/`/`female/`; `gendered: false` são "flat"
-   (PNGs `NNN.png` direto na raiz da pasta da espécie, ex.: `ssm_cyborg`, `ssm_new_order`). O arquivo é a fonte de
-   verdade declarada — não é inferido a partir da contagem real de arquivos. `rig` é opcional e omitido em toda
-   espécie publicada hoje (omitido = `"sl_shared"`, o comportamento atual) — veja a seção "`sl_shared` vs.
-   `ssm_shared`" logo abaixo pra quando (e por que) declarar `"ssm_shared"` numa espécie nova.
-2. **Validação antes de qualquer escrita ou remoção** (mesmo padrão de `scripts/generate-names/`): confere que
+   `{ "name": "<espécie sem prefixo>", "gendered": boolean, "rig"?: "sl_shared" | "ssm_shared", "modo"?: "largura"
+   | "altura", "counts": { "male"?, "female"?, "flat"? } }`. Espécies `gendered: true` têm subpastas
+   `male/`/`female/`; `gendered: false` são "flat" (PNGs `NNN.png` direto na raiz da pasta da espécie, ex.:
+   `ssm_cyborg`, `ssm_new_order`). O arquivo é a fonte de verdade declarada — não é inferido a partir da contagem
+   real de arquivos. `rig` omitido = `"sl_shared"`; `modo` omitido = `"largura"` (só faz sentido em rig com guia,
+   veja abaixo).
+2. **Dois contratos de arte, um por rig** (`RIGS` em `scripts/generate-portraits/types.ts`):
+   - **`ssm_shared` — master + enquadramento derivado.** `assets/` guarda a arte **nativa**, em qualquer resolução,
+     trimada no bounding box de conteúdo. O enquadramento (trim → resize → composição no canvas do rig) roda a
+     cada `bun run portrait`, em `framing.ts`, escrevendo em `.portraits-framed/` (fora do git, veja
+     `.gitignore`), que é o que alimenta o `converter.ts`. O guia de enquadramento é expresso em **fração do
+     canvas** — é isso que torna o canvas do rig uma constante trocável, sem recalibrar nada e sem reprocessar a
+     arte-fonte. `modo` escolhe entre escalar pela largura do guia (padrão) ou pela altura mínima (composições
+     atipicamente largas). Efeito colateral útil: `.portraits-framed/` é o enquadramento final em PNG, conferível
+     a olho sem abrir um DDS.
+   - **`sl_shared` — legado congelado.** O PNG em `assets/` já vem enquadrado e é usado como está, exigindo o
+     canvas exato do rig (825×1650). É copiado byte a byte para o staging, então cópia idêntica ⇒ DDS idêntico:
+     as duas espécies que restaram aqui são estruturalmente imunes a mudanças no enquadramento.
+3. **Validação antes de qualquer escrita ou remoção** (mesmo padrão de `scripts/generate-names/`): confere que
    `name` bate com o nome da pasta, que a contagem declarada em `counts` bate exatamente com os PNGs encontrados,
-   que os arquivos são `001.png`..`NNN.png` sequenciais e zero-padded a 3 dígitos, sem buracos, e que todo PNG tem
-   exatamente a resolução esperada pelo `rig` declarado (825×1650 pro `sl_shared` legado, 980×976 pro
-   `ssm_shared`). Qualquer divergência é erro — nada é escrito nem apagado se houver um erro em qualquer espécie.
-3. Só depois de validado tudo: para cada espécie, qualquer `.dds` já existente em
+   que os arquivos são `001.png`..`NNN.png` sequenciais e zero-padded a 3 dígitos, sem buracos, e — conforme o
+   contrato do rig — ou que o PNG tem o canvas exato (legado), ou que o master tem canal alfa e a geometria
+   calculada cabe no canvas (`ssm_shared`). Qualquer divergência é erro — nada é escrito nem apagado se houver um
+   erro em qualquer espécie.
+4. Só depois de validado tudo: para cada espécie, qualquer `.dds` já existente em
    `mod/sagittarius-species/gfx/models/portraits/ssm_<espécie>/` que não corresponda a um PNG de origem é
    **apagado** (limpeza total, sem exceção — histórico: essa decisão já removeu deliberadamente texturas órfãs
-   sem PNG de origem que estavam publicadas, como `ssm_cyborg/013.dds`). Depois disso, os PNGs são convertidos via
-   `converter.ts`, e o `ssm_<espécie>_portrait.txt` inteiro é regenerado a partir do zero.
-4. O template do `.txt` gerado é 100% derivado da forma da pasta (`gendered` vs. flat) e da contagem de arquivos —
+   sem PNG de origem que estavam publicadas, como `ssm_cyborg/013.dds`). Depois disso, a arte é enquadrada e
+   convertida via `converter.ts`, e o `ssm_<espécie>_portrait.txt` inteiro é regenerado a partir do zero.
+5. O template do `.txt` gerado é 100% derivado da forma da pasta (`gendered` vs. flat) e da contagem de arquivos —
    `clothes_selector`, `attachment_selector` e `custom_attachment_label` são sempre os mesmos valores constantes em
    toda espécie hoje; `entity` é `sl_humanoid_01_entity` ou `ssm_humanoid_01_entity` conforme o `rig` do
    `portrait.json` (`RIGS` em `scripts/generate-portraits/types.ts`); `greeting_sound` varia só por gênero
@@ -194,10 +205,10 @@ pro histórico completo. Hoje existem dois:
   proporção vanilla teria esticado a arte verticalmente (~28%) em vez de só aumentar a densidade de pixel; editar a
   geometria do mesh pra forçar a proporção 840×1024 foi descartado por mexer em escala não uniforme sobre uma malha
   com esqueleto de ~40 ossos, arriscando cisalhamento nas animações sem uma forma barata de validar visualmente.
-  É o ponto de partida pra espécies novas (`"rig": "ssm_shared"` no `portrait.json`, veja acima), e as espécies
-  existentes estão sendo migradas pra ele uma a uma via `scripts/migrate-portraits/` (ver "Comandos") — cada
-  migração deixa uma cópia `ssm_old_<espécie>` no rig legado pra comparação in-game, removida na preparação de
-  release.
+  É o rig de **16 das 18 espécies** (`"rig": "ssm_shared"` no `portrait.json`) e o ponto de partida pra espécies
+  novas; só `ssm_mermaids` e `ssm_astral` permanecem no `sl_shared`, congeladas por decisão da release 1.8.0.
+  Trocar o rig de uma espécie é editar o campo `rig` e rodar `bun run portrait` — não existe mais um passo de
+  migração, porque o enquadramento é derivado a cada execução.
 
 `ssm_shared/` é **derivado**, não editado à mão: `scripts/generate-shared-rig/` (comando `bun run shared-rig`) lê
 `sl_shared/humanoid_01_portrait.mesh` e aplica três transformações em sequência: `removerPlanosOcultos` excisa os
