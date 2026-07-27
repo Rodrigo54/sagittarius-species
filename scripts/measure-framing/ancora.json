@@ -14,6 +14,52 @@
   "k": 2.042,
   "c": 198.8,
 
+  "eixo_x": {
+    "_comentario": [
+      "    x_canvas = c_x + k_x * x_sprite",
+      "",
+      "Medido depois, num screenshot em que os retratos exibidos usavam a arte",
+      "de calibração do eixo X (os primeiros prints mostravam só o slot 001 de",
+      "cada espécie, que é sempre a arte do eixo Y)."
+    ],
+    "k": 2.034,
+    "c": -91.5,
+    "_ajuste": {
+      "contexto": "species_portrait_picker_view.gui :: portrait/portrait",
+      "janela_sprite": [167, 403],
+      "canvas_medido": [248, 728]
+    },
+    "_validacao_independente": {
+      "o_que": "escala do banner de criação de império (scale 0.8, lido do .gui)",
+      "previsto": 2.543,
+      "medido": 2.571,
+      "erro": "1.1%"
+    },
+    "_conclusoes": {
+      "x_canvas_0_em_sprite": 45,
+      "x_canvas_980_em_sprite": 525,
+      "canvas_inteiro_entra_em_x": true,
+      "nota": [
+        "A câmera captura mais que a largura do canvas: x_sprite = 0 cairia em",
+        "x_canvas = -91.5, fora da textura. Confirma por medição o que o",
+        "documento de enquadramento já havia concluído a partir dos marcadores",
+        "de canto — não há faixa morta horizontal a recuperar, e apertar a UV em",
+        "U cortaria o enquadramento."
+      ]
+    },
+    "_isotropia": {
+      "k_y": 2.042,
+      "k_x": 2.034,
+      "diferenca": "0.4%",
+      "significado": [
+        "A projeção do canvas no mesh é isotrópica dentro do erro de medição,",
+        "o que confirma a escolha original do canvas 980x976: a proporção está",
+        "casada com o bounding box do plano, sem esticar a arte em nenhum eixo.",
+        "Qualquer canvas novo precisa preservar essa proporção pelo mesmo motivo."
+      ]
+    }
+  },
+
   "_ajuste": {
     "contexto": "species_portrait_picker_view.gui :: portrait/portrait",
     "porque": [
