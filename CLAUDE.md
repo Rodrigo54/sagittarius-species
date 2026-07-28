@@ -12,7 +12,7 @@ Clausewitz script.
 ## O que é este projeto
 
 Sagittarius Species é um mod para Stellaris (Paradox Interactive) que adiciona retratos de espécies gerados por IA
-(15+ espécies: elfos, moluscos, avianos, ciborgues, necromantes, etc.). Este repositório é um pipeline de
+(18 espécies: elfos, moluscos, avianos, ciborgues, necromantes, etc.). Este repositório é um pipeline de
 conteúdo/assets, não uma aplicação — não existe um passo de build/test/lint no sentido tradicional. As duas coisas
 que existem são:
 
@@ -162,23 +162,20 @@ sempre espelhando exatamente o que existe em `assets/city_sets/`, toda vez que r
 2. **Dois contratos de arte, um por rig** (`RIGS` em `scripts/generate-portraits/types.ts`):
    - **`ssm_shared` — master + enquadramento derivado.** `assets/` guarda a arte **nativa**, em qualquer resolução,
      trimada no bounding box de conteúdo. O enquadramento (trim → resize → composição no canvas do rig) roda a
-     cada `bun run portrait`, em `framing.ts`, escrevendo em `.portraits-framed/` (fora do git, veja
-     `.gitignore`), que é o que alimenta o `converter.ts`. O guia de enquadramento é expresso em **fração do
-     canvas** — é isso que torna o canvas do rig uma constante trocável, sem recalibrar nada e sem reprocessar a
-     arte-fonte. `modo` escolhe entre escalar pela largura do guia (padrão) ou pela altura mínima (composições
-     atipicamente largas). `ancora` escolhe o que encosta no topo do guia: o bounding box da arte (padrão) ou a
-     **cabeça** — a primeira linha em que a silhueta fica sólida, medida por **densidade** de pixels opacos.
-     `"ancora": "cabeca"` existe para composições com chifre, antena ou penacho, que pelo bounding box empurram
-     a cabeça para baixo e deixam o personagem menor que o das outras espécies; com ela, o ornamento sobe para a
-     faixa acima do guia, que é a zona sacrificável (veja "Enquadramento"). Não é padrão porque **metade das
-     espécies tem alguma estrutura fina no topo** e nem toda é sacrificável — em algumas ela é a característica
-     da espécie, e foi um erro desse tipo que fez `ssm_mermaids` ser revertida. A detecção é **por imagem**, o
-     que normaliza variantes com ornamentos de tamanhos diferentes: em `ssm_green_elves`, os machos sobem os
-     144 px inteiros e as fêmeas 110, porque os chifres delas são menores. Efeito colateral útil:
-     `.portraits-framed/` é o enquadramento final em PNG, conferível a olho sem abrir um DDS.
+     cada `bun run portrait`, em `framing.ts`, escrevendo em `.portraits-framed/` (fora do git — é o enquadramento
+     final em PNG, conferível a olho sem abrir um DDS). O guia é expresso em **fração do canvas**, o que torna o
+     canvas do rig uma constante trocável sem recalibrar nada. `modo` escolhe entre escalar pela largura do guia
+     (padrão) ou pela altura mínima (`altura`, pra composições atipicamente largas). `ancora` escolhe o que
+     encosta no topo do guia: o bounding box da arte (padrão) ou a **cabeça** (`"ancora": "cabeca"`) — a primeira
+     linha em que a silhueta fica sólida por **densidade** de pixels opacos, não largura (um chifre de veado é
+     largo já na base). Existe pra espécies com chifre/antena/penacho que, pelo bbox, empurram a cabeça pra baixo
+     e saem menores que as outras; não é padrão porque metade do acervo tem alguma estrutura fina no topo, e em
+     algumas ela é a característica da espécie (foi um erro desse tipo que fez `ssm_mermaids` ser revertida — ver
+     `future-plans.md`). A detecção é por imagem, então variantes com ornamentos de tamanhos diferentes ficam com
+     as cabeças alinhadas entre si. Rationale completo e candidatas por espécie: `ssm-shared-enquadramento.md`.
    - **`sl_shared` — legado congelado.** O PNG em `assets/` já vem enquadrado e é usado como está, exigindo o
-     canvas exato do rig (825×1650). É copiado byte a byte para o staging, então cópia idêntica ⇒ DDS idêntico:
-     as duas espécies que restaram aqui são estruturalmente imunes a mudanças no enquadramento.
+     canvas exato do rig (825×1650) — cópia byte a byte pro staging. As duas espécies que restaram aqui
+     (`ssm_mermaids`, `ssm_astral`) são estruturalmente imunes a mudanças no enquadramento.
 3. **Validação antes de qualquer escrita ou remoção** (mesmo padrão de `scripts/generate-names/`): confere que
    `name` bate com o nome da pasta, que a contagem declarada em `counts` bate exatamente com os PNGs encontrados,
    que os arquivos são `001.png`..`NNN.png` sequenciais e zero-padded a 3 dígitos, sem buracos, e — conforme o
@@ -204,75 +201,35 @@ Todo `entity` de todo `ssm_<espécie>_portrait.txt` aponta pra um rig (mesh + an
 espécies ao mesmo tempo, dentro de `gfx/models/portraits/<rig>/` — veja "A técnica usada aqui" em `portraits.md`
 pro histórico completo. Hoje existem dois:
 
-- **`sl_shared/`** — o rig original, herdado do extinto Stellar Legion Mod. **Usado por todas as 15+ espécies
-  publicadas** e nunca modificado: sua UV desperdiça boa parte do canvas de `character_textures` (cada um dos 6
-  planos do mesh lê só metade vertical da textura, e a arte em si ainda usa só uma fração dessa metade — ver
-  `future-plans.md`), mas mudar isso quebraria a arte de toda espécie já publicada, então fica como está.
-- **`ssm_shared/`** — fork isolado do `sl_shared`, com as mesmas animações e o mesmo esqueleto, mas com o mesh
-  reduzido a **um único plano** (`pPlaneShape4` — os outros 5 são removidos do binário) e a UV desse plano
-  remapeada pra usar o canvas inteiro (sem a divisão frente/trás). Os 6 planos do `sl_shared` original são dois
-  conjuntos completos corpo/cabelo/roupa do sistema vanilla de camadas de retrato, empilhados em profundidade
-  (relevo 2.5D) — funciona com arte pequena e central, mas com arte preenchendo o canvas as camadas viram um
-  "fantasma"/gêmeo atrás do personagem (ver `ssm-shared-historico-da-sessao.md`). O plano mantido é o
-  `pPlaneShape4` porque cada camada difere em skinning, shader e geometria, e os outros candidatos falharam
-  in-game: o `pPlaneShape2` era a "camada do braço direito" (83% do peso de skinning na cadeia do braço — a
-  gesticulação dos `.anim` esticava arte cheia em até 29% de strain, a "distorção"); o `pPlaneShape6`, o mais
-  rígido, é camada de *cabelo* e fica fundo e curvado (a borda inferior curlada aparecia no quadro como um "papel
-  curvado" transparente na cintura). O plano 4 é camada de **corpo** (shader `PdxMeshPortrait`, renderiza arte
-  comum), praticamente sem curvatura (0.12 unidades), quase na origem, com strain baixo (10.1% máx / 0.3%
-  mediana — 8x melhor que o plano 2). O plano também é **recortado no topo**: as duas primeiras linhas de
-  vértices da grade 11×11 são removidas, deixando 9×11 (99 vértices, 160 triângulos). A faixa removida
-  corresponde aos 195 px superiores do canvas antigo, que a câmera de retrato **nunca captura** — medição
-  in-game situa o topo do sprite em `y_canvas ≈ 199` (ver `scripts/measure-framing/ancora.json` e a seção 2.3
-  da referência técnica). Canvas de `character_textures` nesse rig: **980×780**, que cobre exatamente o plano
-  recortado preservando a densidade anterior (`976 − 195 = 781`, arredondado pra 780 porque o BC3 exige múltiplos
-  de 4). Preservar a proporção é obrigatório: a projeção do canvas no mesh é isotrópica (medido: `k_x` 2.034
-  contra `k_y` 2.042, 0.4% de diferença), então esticar um eixo esticaria a arte. **É aqui que a densidade sobe
-  quando houver arte em resolução maior** — multiplicar as duas dimensões pelo mesmo fator, e mais nada.
-  O canvas anterior era 980×976, escolhido pra bater com o bounding box do plano inteiro (18.90 × 18.86 unidades
-  de mesh) na mesma densidade da textura vanilla equivalente (`human_female_body_01.dds`, 420×512 — ~2x essa
-  resolução). Cogitamos usar a proporção vanilla direto (840×1024), mas o mesh deste mod não tem a proporção do
-  mesh vanilla — bater a proporção vanilla teria esticado a arte verticalmente (~28%) em vez de só aumentar a
-  densidade; editar a geometria pra forçar 840×1024 foi descartado por mexer em escala não uniforme sobre uma
-  malha com esqueleto de ~40 ossos, arriscando cisalhamento nas animações sem forma barata de validar.
-  É o rig de **16 das 18 espécies** (`"rig": "ssm_shared"` no `portrait.json`) e o ponto de partida pra espécies
-  novas; só `ssm_mermaids` e `ssm_astral` permanecem no `sl_shared`, congeladas por decisão da release 1.8.0.
-  Trocar o rig de uma espécie é editar o campo `rig` e rodar `bun run portrait` — não existe mais um passo de
-  migração, porque o enquadramento é derivado a cada execução.
+- **`sl_shared/`** — o rig original, herdado do extinto Stellar Legion Mod. Usado pelas duas espécies que ainda
+  não migraram (`ssm_mermaids`, `ssm_astral`, congeladas por decisão da release 1.8.0) e nunca modificado: sua UV
+  desperdiça boa parte do canvas (cada um dos 6 planos do mesh lê só metade vertical da textura — ver
+  `future-plans.md`), mas mudar isso quebraria a arte já publicada dessas espécies.
+- **`ssm_shared/`** — fork do `sl_shared` com o mesh reduzido a **um único plano** (`pPlaneShape4`, escolhido
+  entre os 6 originais por ser a camada de corpo com a menor distorção durante as animações — comparação
+  completa contra os outros candidatos em `ssm-shared-historico-da-sessao.md`), UV remapeada pra usar o canvas
+  inteiro, e **recortado no topo**: as linhas de vértice que correspondem à faixa que a câmera de retrato nunca
+  captura são removidas do binário (ver "Enquadramento" abaixo). Canvas de `character_textures`: **980×780**
+  (isotrópico — qualquer canvas novo precisa preservar essa proporção, e subir densidade é só multiplicar as
+  duas dimensões pelo mesmo fator). É o rig de **16 das 18 espécies** e o ponto de partida pra espécies novas.
+
+Trocar o rig de uma espécie é editar o campo `rig` do `portrait.json` e rodar `bun run portrait` — o
+enquadramento é derivado a cada execução, não existe mais um passo de migração.
 
 `ssm_shared/` é **derivado**, não editado à mão: `scripts/generate-shared-rig/` (comando `bun run shared-rig`) lê
-`sl_shared/humanoid_01_portrait.mesh` e aplica quatro transformações em sequência: `removerPlanosOcultos` excisa os
-subtrees dos 5 planos não mantidos do binário (cada plano é autocontido — mesh + esqueleto próprio, sem referência
-cruzada — e o formato é um fluxo de tokens sem tabela de offsets, então remover intervalos contíguos de bytes é
-uma operação fechada; a remoção estrutural foi escolhida no lugar de triângulos degenerados porque faces
-degeneradas crasham o importador do Blender, e validação visual via Blender importa); `corrigirShaderDoMesh`
-garante o shader de corpo (`PdxMeshPortrait`) no material do plano mantido — no-op pro `pPlaneShape4`, que já é
-camada de corpo, mas fica de guarda porque os shaders de cabelo/roupa (`PdxMeshPortraitHair`/`Clothes`) esperam
-máscara de tintura/seleção e não renderizam arte comum: com um deles o retrato aparece in-game como um quadro
-vazio, só canal alfa, apesar de renderizar normal no Blender, que ignora o shader; `corrigirUvDoMesh`
-reescala o array `u0` (UV) do plano restante (`(V−0.5)×2` — o `pPlaneShape4` lia a metade de cima do canvas, a
-sempre-vazia na arte legada; nenhuma
-posição de vértice, osso ou animação muda); por fim `recortarPlanoAcima` remove as linhas de vértices do topo do
-plano que a câmera nunca captura, reescalando a UV do que sobra pra voltar a cobrir 0..1. Este último é o único
-que **encurta arrays** — mexe em tudo que é indexado por vértice (`p`, `n`, `ta`, `u0`, pesos de skinning),
-reindexa os triângulos, recalcula a `aabb` e reescreve o int32 de contagem que antecede cada payload; continua
-fechado no formato pelo mesmo motivo dos outros (fluxo de tokens, sem tabela global de offsets). Não gera faces
-degeneradas, pelo mesmo motivo da excisão de planos. O resultado vai pra `ssm_shared/`, junto com os `.asset`/`.gfx`
-renomeados pro namespace `ssm_` (`ssm_humanoid_01_entity`, `ssm_humanoid_01_mesh`,
-`ssm_humanoid_01_{happy,happy_2,sad,sad_2}_animation`) e cópia dos `.anim` (que não mudam — as animações
-continuam valendo pro plano mantido). Rodar `bun run shared-rig` de novo é seguro e idempotente: sempre regenera
-`ssm_shared/` do zero a partir de `sl_shared/`, nunca edita `sl_shared/` em si. A lógica de patch binário do
-`.mesh` (`scripts/generate-shared-rig/mesh-uv.ts`) tem teste Bun (`mesh-uv.test.ts`) que confere, contra o
-arquivo real, que a excisão é exatamente a emenda dos segmentos preservados (byte a byte, por derivação
-independente), que só o payload de `u0` do plano mantido muda no remapeamento, e que o recorte remove
-exatamente as linhas previstas sem mover nenhum vértice, mantendo índices de triângulo válidos, esqueleto e
-locators intactos e `U` inalterado.
-`sl_spider_01_entity` (variante do `sl_shared` com escala maior, não usada por nenhuma espécie hoje) não tem
-equivalente no `ssm_shared` — só é criado se/quando alguma espécie precisar dele.
-Referência aprofundada: `ssm-shared-referencia-tecnica.md` (formato binário pdxasset, anatomia dos 6 planos —
-shader/UV/geometria/skinning de cada um —, ferramental Blender e lições de método) e
-`ssm-shared-animacao-do-zero.md` (guia pra construir um rig de retrato inteiro do zero — mesh, esqueleto,
-skinning e animação autorais).
+`sl_shared/humanoid_01_portrait.mesh` e aplica, em sequência, `removerPlanosOcultos` (excisa os 5 planos não
+mantidos), `corrigirShaderDoMesh` (garante o shader de corpo `PdxMeshPortrait` no plano mantido),
+`corrigirUvDoMesh` (remapeia a UV do plano pra cobrir o canvas inteiro) e `recortarPlanoAcima` (remove as linhas
+de vértice do topo nunca capturadas pela câmera, reindexando triângulos, skinning e `aabb`). Também copia e
+renomeia `.asset`/`.gfx`/`.anim` pro namespace `ssm_`. Rodar de novo é seguro e idempotente: sempre regenera
+`ssm_shared/` do zero a partir de `sl_shared/`, nunca edita `sl_shared/` em si. A lógica de patch binário
+(`scripts/generate-shared-rig/mesh-uv.ts`) tem teste Bun (`mesh-uv.test.ts`) que confere a excisão, o
+remapeamento de UV e o recorte byte a byte contra o arquivo real.
+
+Referência aprofundada: `ssm-shared-referencia-tecnica.md` (formato binário pdxasset, anatomia dos 6 planos,
+ferramental Blender e lições de método), `ssm-shared-historico-da-sessao.md` (por que o `pPlaneShape4` foi
+escolhido e como o canvas 980×780 foi derivado) e `ssm-shared-animacao-do-zero.md` (guia pra construir um rig de
+retrato do zero).
 
 ### Enquadramento: o que a câmera de retrato mostra
 
@@ -284,32 +241,23 @@ numa `position` e `scale`. A janela visível é aritmética de layout, em coorde
 topo_visível = (clip.y0 − icone.y) / scale
 ```
 
-`scripts/measure-framing/` deriva isso pros **122 contextos** que exibem retrato (a lista de sprites de retrato
-vem dos próprios `.gfx`, por `type = character` — reconhecer por prefixo de nome perderia
-`GFX_contacts_portrait_character_masked` e `GFX_FC_portrait_character_masked`, que são a tela de contatos e a de
-primeiro contato).
-
-O que **não** está em arquivo nenhum é qual pedaço do canvas de textura a câmera captura. Isso foi medido
-in-game uma vez, com arte de calibração que codifica a coordenada na cor de cada faixa, e está congelado em
-`scripts/measure-framing/ancora.json` com as validações que o sustentam. O resultado prático:
+`scripts/measure-framing/index.ts` deriva isso pros **122 contextos** que exibem retrato e grava
+`contextos.json` — **se revalida sozinho** a cada patch da Paradox, só rodar de novo. O que não está em arquivo
+nenhum — qual pedaço do canvas de textura a câmera captura — foi medido in-game uma vez, com arte de calibração
+que codifica a coordenada na cor de cada faixa, e está congelado em `scripts/measure-framing/ancora.json` com as
+validações que o sustentam. Números que importam pra compor arte nova:
 
 - o topo do sprite cai em **`y_canvas ≈ 199`** do canvas antigo de 976 — a faixa acima disso nunca chega à tela,
   e é exatamente ela que `recortarPlanoAcima` remove;
-- em X a câmera captura **mais largo que a textura** (`x_canvas = 0` cai em `x_sprite = 45`), então o canvas
-  inteiro entra no quadro e **não há faixa morta horizontal a recuperar** — apertar a UV em U cortaria o
-  enquadramento;
-- a projeção é **isotrópica** (`k_x` 2.034 contra `k_y` 2.042), o que obriga qualquer canvas novo a preservar a
-  proporção;
-- as variantes de `portraitType` (`close_up`, `gamesetup_mask`, `hologram`, …) **não mudam a câmera**, só máscara
-  e efeito — uma âncora só serve pra todos os contextos.
+- em X a câmera captura **mais largo que a textura**, então o canvas inteiro entra no quadro e **não há faixa
+  morta horizontal a recuperar** — apertar a UV em U cortaria o enquadramento;
+- a projeção é **isotrópica** (`k_x` ≈ `k_y`), o que obriga qualquer canvas novo a preservar a proporção;
+- o contexto mais agressivo começa a exibir em `y_canvas ≈ 457` (do canvas antigo) e a arte hoje começa em 339 —
+  **7 dos 90 contextos com janela já cortam o topo da arte atual**, e sempre cortaram. A faixa entre o contexto
+  mais generoso e o mais agressivo é a zona de elementos sacrificáveis (pontas de cabelo, chifres, ornamentos).
 
-Números derivados de `contextos.json` + `ancora.json` que valem pra compor arte nova: o contexto mais agressivo
-começa a exibir em `y_canvas ≈ 457` (do canvas antigo), e a arte hoje começa em 339 — ou seja, **7 dos 90
-contextos com janela já cortam o topo da arte atual**, e sempre cortaram. A faixa entre o contexto mais generoso
-e o mais agressivo é a zona de elementos sacrificáveis (pontas de cabelo, chifres, ornamentos).
-
-Refazer a medição só é necessário se o canvas do rig mudar ou se um patch mexer na câmera; a tabela de contextos
-se revalida sozinha rodando `scripts/measure-framing/index.ts` de novo.
+Relato completo da sessão que mediu isso (método, armadilhas, decisões descartadas): `ssm-shared-enquadramento.md`.
+Anatomia binária e lições de método por trás da medição: seção 2.5 de `ssm-shared-referencia-tecnica.md`.
 
 ## Pipeline de listas de nomes / localização / species_names
 
