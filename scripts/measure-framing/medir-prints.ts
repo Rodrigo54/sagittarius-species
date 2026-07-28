@@ -27,7 +27,7 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { basename, join } from 'node:path';
 import { decodificar } from '../generate-calibration/encoding';
-import { decodificarPng, lerPixel, type Imagem } from '../generate-calibration/png';
+import { decodificarPng, lerPixel, type Imagem } from '../png';
 
 /** Altura de cada faixa da arte de calibração, em pixels de canvas. */
 const FAIXA = 8;

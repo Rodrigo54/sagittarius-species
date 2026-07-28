@@ -2,6 +2,7 @@
   "name": "green_elves",
   "gendered": true,
   "rig": "ssm_shared",
+  "ancora": "cabeca",
   "counts": {
     "male": 10,
     "female": 10

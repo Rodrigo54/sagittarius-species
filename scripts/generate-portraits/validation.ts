@@ -1,6 +1,6 @@
 import { open } from 'node:fs/promises';
 import { basename } from 'node:path';
-import { medirTrims, resolverGuia, validarEnquadramento } from './framing';
+import { medirInicioDoCorpo, medirTrims, resolverGuia, validarEnquadramento } from './framing';
 import { rigDe, type SpeciesInfo } from './types';
 
 /** Confere que os arquivos são exatamente "001.png".."NNN.png", zero-padded a 3
@@ -105,7 +105,10 @@ async function validarMaster(
 
   if (erros.length > 0) return erros;
 
-  const medidas = await medirTrims(arquivos);
+  // Mesmas medidas que o staging vai usar — inclusive a âncora, sem a qual a
+  // validação julgaria uma geometria diferente da que será composta.
+  const trims = await medirTrims(arquivos);
+  const medidas = info.config.ancora === 'cabeca' ? await medirInicioDoCorpo(trims) : trims;
   const guia = resolverGuia(rig.canvas, rig.guia);
   return validarEnquadramento(medidas, info.config.modo ?? 'largura', guia, info.slug);
 }
@@ -121,10 +124,12 @@ export async function validarEspecie(info: SpeciesInfo): Promise<string[]> {
     );
   }
 
-  if (config.modo !== undefined && rigDe(config).guia === undefined) {
-    erros.push(
-      `${slug}: portrait.json declara "modo": "${config.modo}", mas o rig "${config.rig ?? 'sl_shared'}" usa arte já enquadrada — não há enquadramento a derivar`
-    );
+  for (const campo of ['modo', 'ancora'] as const) {
+    if (config[campo] !== undefined && rigDe(config).guia === undefined) {
+      erros.push(
+        `${slug}: portrait.json declara "${campo}": "${config[campo]}", mas o rig "${config.rig ?? 'sl_shared'}" usa arte já enquadrada — não há enquadramento a derivar`
+      );
+    }
   }
 
   if (config.gendered) {

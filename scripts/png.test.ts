@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test';
 import { deflateSync } from 'node:zlib';
-import { codificar, decodificar } from './encoding';
-import { gerarCalibracao } from './index';
+import { codificar, decodificar } from './generate-calibration/encoding';
+import { gerarCalibracao } from './generate-calibration/index';
 import { codificarPng, criarImagem, decodificarPng, lerPixel, pintar } from './png';
 
 /** Monta um PNG RGBA a partir de scanlines já filtradas, para exercitar a

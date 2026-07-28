@@ -8,8 +8,10 @@
  */
 
 import { $ } from 'bun';
+import { readFile } from 'node:fs/promises';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { decodificarPng, type Imagem } from '../png';
 import type { GuiaEnquadramento, ModoEnquadramento, RigInfo } from './types';
 
 const __DIRNAME = dirname(fileURLToPath(import.meta.url));
@@ -21,6 +23,10 @@ export interface MedidaTrim {
   /** Bounding box do conteúdo (sem a transparência em volta). */
   largura: number;
   altura: number;
+  /** Onde a silhueta fica sólida, em fração da altura do conteúdo. Só é
+   * medido quando a espécie ancora pela cabeça; `0` significa "o topo do
+   * conteúdo já é sólido", que é o comportamento padrão. */
+  inicioDoCorpo?: number;
 }
 
 export interface Geometria {
@@ -83,6 +89,44 @@ export async function medirTrims(arquivos: string[]): Promise<MedidaTrim[]> {
   });
 }
 
+/** Fração do máximo de densidade a partir da qual a silhueta conta como
+ * "sólida". Medido no acervo: com este limiar, composições de cabelo normal
+ * ficam entre 2,6% e 10% da altura, e as que têm chifre/penacho/antena entre
+ * 12,7% e 25,2% — separação larga o bastante para o limiar não ser crítico. */
+const LIMIAR_DE_SOLIDEZ = 0.35;
+
+/** Onde a silhueta passa a ser sólida, em fração da altura.
+ *
+ * Mede **densidade** (quantos pixels opacos por linha), não largura. A
+ * tentativa óbvia — "estrutura fina é estreita" — foi medida e é falsa: os
+ * chifres de veado dos `ssm_green_elves` se espalham horizontalmente e ocupam
+ * 82% da largura logo na primeira linha, mais que a própria cabeça. O que os
+ * distingue é cobrirem pouca área dentro desse bounding box largo. */
+export function detectarInicioDoCorpo(img: Imagem): number {
+  const densidade: number[] = [];
+  for (let y = 0; y < img.altura; y++) {
+    let opacos = 0;
+    for (let x = 0; x < img.largura; x++) {
+      if (img.pixels[(y * img.largura + x) * 4 + 3] > 128) opacos++;
+    }
+    densidade.push(opacos);
+  }
+
+  const alvo = Math.max(...densidade) * LIMIAR_DE_SOLIDEZ;
+  const linha = densidade.findIndex((d) => d >= alvo);
+  return linha <= 0 ? 0 : linha / img.altura;
+}
+
+/** Preenche `inicioDoCorpo` nas medidas, lendo os pixels de cada master. */
+export async function medirInicioDoCorpo(medidas: MedidaTrim[]): Promise<MedidaTrim[]> {
+  return Promise.all(
+    medidas.map(async (medida) => ({
+      ...medida,
+      inicioDoCorpo: detectarInicioDoCorpo(decodificarPng(await readFile(medida.arquivo))),
+    }))
+  );
+}
+
 /** Única fonte de verdade da matemática de encaixe — usada tanto pela
  * validação quanto pela composição real, pra nunca divergir entre as duas. */
 export function calcularGeometria(
@@ -90,18 +134,29 @@ export function calcularGeometria(
   modo: ModoEnquadramento,
   guia: GuiaEmPx
 ): Geometria {
-  if (modo === 'largura') {
-    const altura = Math.round((guia.largura * medida.altura) / medida.largura);
-    return { largura: guia.largura, altura, x: guia.x, y: guia.topo };
-  }
+  const base =
+    modo === 'largura'
+      ? {
+          largura: guia.largura,
+          altura: Math.round((guia.largura * medida.altura) / medida.largura),
+          x: guia.x,
+        }
+      : (() => {
+          const largura = Math.round((guia.alturaMinima * medida.largura) / medida.altura);
+          return {
+            largura,
+            altura: guia.alturaMinima,
+            x: Math.round(guia.centroX - largura / 2),
+          };
+        })();
 
-  const largura = Math.round((guia.alturaMinima * medida.largura) / medida.altura);
-  return {
-    largura,
-    altura: guia.alturaMinima,
-    x: Math.round(guia.centroX - largura / 2),
-    y: guia.topo,
-  };
+  // Ancorar pela cabeça sobe a arte, para que o ornamento fino fique acima do
+  // guia em vez de empurrar o personagem para baixo. O limite é o topo do
+  // canvas: acima dele não existe plano, então subir mais só apagaria arte.
+  const recuo = Math.round((medida.inicioDoCorpo ?? 0) * base.altura);
+  const y = Math.max(0, guia.topo - recuo);
+
+  return { ...base, y };
 }
 
 /** Erros da regra de enquadramento. Modo `largura`: a arte escalada pra
@@ -128,9 +183,13 @@ export function validarEnquadramento(
 
     const geometria = calcularGeometria(medida, modo, guia);
 
-    if (modo === 'largura' && geometria.altura < guia.alturaMinima) {
+    // A arte precisa alcançar a borda inferior do canvas — busto cortado pelo
+    // quadro, nunca flutuando. Confere sobre a geometria final, e não sobre a
+    // altura isolada, porque ancorar pela cabeça sobe a arte e portanto sobe
+    // também a base.
+    if (modo === 'largura' && geometria.y + geometria.altura < guia.canvas.altura) {
       erros.push(
-        `${slug}: "${basename(medida.arquivo)}" tem conteúdo ${medida.largura}x${medida.altura} — escalado pra largura ${guia.largura} resulta em altura ${geometria.altura}, abaixo do mínimo ${guia.alturaMinima} pra alcançar a borda inferior do canvas (busto flutuaria). Arte atípica: declare "modo": "altura" no portrait.json, ou ajuste a arte.`
+        `${slug}: "${basename(medida.arquivo)}" tem conteúdo ${medida.largura}x${medida.altura} — escalado pra largura ${guia.largura} resulta em altura ${geometria.altura} a partir de y=${geometria.y}, terminando em ${geometria.y + geometria.altura}, antes da borda inferior do canvas (${guia.canvas.altura}); o busto flutuaria. Arte atípica: declare "modo": "altura" no portrait.json, ou ajuste a arte.`
       );
     }
 

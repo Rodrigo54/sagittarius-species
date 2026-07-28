@@ -14,6 +14,24 @@ export type RigId = 'sl_shared' | 'ssm_shared';
  * base. Declarado por espécie no `portrait.json`. */
 export type ModoEnquadramento = 'largura' | 'altura';
 
+/** O que encosta no topo do guia.
+ *
+ * `conteudo` (padrão): o topo do bounding box da arte.
+ *
+ * `cabeca`: a primeira linha em que a silhueta fica **sólida**, ignorando o
+ * que houver de fino e esparso acima dela. Existe para composições com
+ * chifres, antenas ou penachos: ancorando pelo bounding box, esses ornamentos
+ * empurram a cabeça para baixo e o personagem sai menor que o das outras
+ * espécies. Com `cabeca`, o ornamento sobe para a faixa acima do guia — que
+ * é visível em parte dos contextos de UI e cortada nos mais agressivos (ver
+ * "Enquadramento" no CLAUDE.md), ou seja, exatamente onde elementos
+ * sacrificáveis devem ficar.
+ *
+ * Não é o padrão porque nem toda estrutura fina é sacrificável: metade das
+ * espécies tem alguma, e em algumas (tentáculos, por exemplo) ela é a
+ * característica da espécie. A escolha é por espécie, com julgamento visual. */
+export type AncoraVertical = 'conteudo' | 'cabeca';
+
 /** Enquadramento-alvo dentro do canvas do rig, expresso em **fração do
  * canvas** — é isso que faz o canvas ser uma constante trocável: mudar a
  * resolução da textura não exige recalibrar o guia. */
@@ -89,6 +107,8 @@ export interface PortraitConfig {
   rig?: RigId;
   /** Só faz sentido em rig com `guia`. Omitido = `largura`. */
   modo?: ModoEnquadramento;
+  /** Só faz sentido em rig com `guia`. Omitido = `conteudo`. */
+  ancora?: AncoraVertical;
   counts: {
     male?: number;
     female?: number;

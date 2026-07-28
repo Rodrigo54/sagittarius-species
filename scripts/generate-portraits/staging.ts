@@ -13,7 +13,7 @@
 
 import { copyFile, mkdir, rm } from 'node:fs/promises';
 import { join, relative } from 'node:path';
-import { enquadrarPng, medirTrims, resolverGuia } from './framing';
+import { enquadrarPng, medirInicioDoCorpo, medirTrims, resolverGuia } from './framing';
 import { rigDe, type SpeciesInfo } from './types';
 
 export interface Preparado {
@@ -52,8 +52,12 @@ export async function prepararEspecie(
   }
 
   const guia = resolverGuia(rig.canvas, rig.guia);
-  const medidas = await medirTrims(origens);
   const modo = info.config.modo ?? 'largura';
+  // A detecção lê os pixels de cada master, então só roda para quem pede.
+  const medidas =
+    info.config.ancora === 'cabeca'
+      ? await medirInicioDoCorpo(await medirTrims(origens))
+      : await medirTrims(origens);
 
   for (const medida of medidas) {
     await enquadrarPng(medida, modo, guia, destinos.get(medida.arquivo)!);

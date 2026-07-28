@@ -151,11 +151,11 @@ sempre espelhando exatamente o que existe em `assets/city_sets/`, toda vez que r
 
 1. Cada pasta `assets/portraits/ssm_<espécie>/` tem um **`portrait.json` obrigatório**:
    `{ "name": "<espécie sem prefixo>", "gendered": boolean, "rig"?: "sl_shared" | "ssm_shared", "modo"?: "largura"
-   | "altura", "counts": { "male"?, "female"?, "flat"? } }`. Espécies `gendered: true` têm subpastas
-   `male/`/`female/`; `gendered: false` são "flat" (PNGs `NNN.png` direto na raiz da pasta da espécie, ex.:
-   `ssm_cyborg`, `ssm_new_order`). O arquivo é a fonte de verdade declarada — não é inferido a partir da contagem
-   real de arquivos. `rig` omitido = `"sl_shared"`; `modo` omitido = `"largura"` (só faz sentido em rig com guia,
-   veja abaixo).
+   | "altura", "ancora"?: "conteudo" | "cabeca", "counts": { "male"?, "female"?, "flat"? } }`. Espécies
+   `gendered: true` têm subpastas `male/`/`female/`; `gendered: false` são "flat" (PNGs `NNN.png` direto na raiz
+   da pasta da espécie, ex.: `ssm_cyborg`, `ssm_new_order`). O arquivo é a fonte de verdade declarada — não é
+   inferido a partir da contagem real de arquivos. `rig` omitido = `"sl_shared"`; `modo` omitido = `"largura"` e
+   `ancora` omitida = `"conteudo"` (as duas só fazem sentido em rig com guia, veja abaixo).
 2. **Dois contratos de arte, um por rig** (`RIGS` em `scripts/generate-portraits/types.ts`):
    - **`ssm_shared` — master + enquadramento derivado.** `assets/` guarda a arte **nativa**, em qualquer resolução,
      trimada no bounding box de conteúdo. O enquadramento (trim → resize → composição no canvas do rig) roda a
@@ -163,8 +163,16 @@ sempre espelhando exatamente o que existe em `assets/city_sets/`, toda vez que r
      `.gitignore`), que é o que alimenta o `converter.ts`. O guia de enquadramento é expresso em **fração do
      canvas** — é isso que torna o canvas do rig uma constante trocável, sem recalibrar nada e sem reprocessar a
      arte-fonte. `modo` escolhe entre escalar pela largura do guia (padrão) ou pela altura mínima (composições
-     atipicamente largas). Efeito colateral útil: `.portraits-framed/` é o enquadramento final em PNG, conferível
-     a olho sem abrir um DDS.
+     atipicamente largas). `ancora` escolhe o que encosta no topo do guia: o bounding box da arte (padrão) ou a
+     **cabeça** — a primeira linha em que a silhueta fica sólida, medida por **densidade** de pixels opacos.
+     `"ancora": "cabeca"` existe para composições com chifre, antena ou penacho, que pelo bounding box empurram
+     a cabeça para baixo e deixam o personagem menor que o das outras espécies; com ela, o ornamento sobe para a
+     faixa acima do guia, que é a zona sacrificável (veja "Enquadramento"). Não é padrão porque **metade das
+     espécies tem alguma estrutura fina no topo** e nem toda é sacrificável — em algumas ela é a característica
+     da espécie, e foi um erro desse tipo que fez `ssm_mermaids` ser revertida. A detecção é **por imagem**, o
+     que normaliza variantes com ornamentos de tamanhos diferentes: em `ssm_green_elves`, os machos sobem os
+     144 px inteiros e as fêmeas 110, porque os chifres delas são menores. Efeito colateral útil:
+     `.portraits-framed/` é o enquadramento final em PNG, conferível a olho sem abrir um DDS.
    - **`sl_shared` — legado congelado.** O PNG em `assets/` já vem enquadrado e é usado como está, exigindo o
      canvas exato do rig (825×1650). É copiado byte a byte para o staging, então cópia idêntica ⇒ DDS idêntico:
      as duas espécies que restaram aqui são estruturalmente imunes a mudanças no enquadramento.

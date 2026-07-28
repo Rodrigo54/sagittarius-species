@@ -24,7 +24,7 @@ import { join } from 'node:path';
 import { PASTA_ASSETS } from '../converter';
 import { RIGS } from '../generate-portraits/types';
 import { CANTOS, MARCADOR, MAX_INDICE, codificar } from './encoding';
-import { codificarPng, criarImagem, pintarRetangulo, type Imagem } from './png';
+import { codificarPng, criarImagem, pintarRetangulo, type Imagem } from '../png';
 
 /** Altura (ou largura) de cada faixa, em pixels de canvas.
  *
