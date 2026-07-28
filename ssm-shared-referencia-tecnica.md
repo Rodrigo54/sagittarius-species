@@ -131,7 +131,7 @@ futura, então virou medição. Duas partes, com custos bem diferentes:
 contexto de UI é um `containerWindowType` com `size` + `clipping = yes`, contendo um `iconType` que desenha um
 `portraitType` numa `position` e `scale`. Logo:
 
-```
+```text
 topo_visível = (clip.y0 − icone.y) / scale     [em coordenadas do sprite]
 ```
 
@@ -156,7 +156,7 @@ captura. Mediu-se pintando a coordenada na **cor** de cada faixa de uma arte de 
 (`scripts/generate-calibration/`), instalando-a nas 16 espécies e lendo screenshots por script. O resultado está
 em `scripts/measure-framing/ancora.json`:
 
-```
+```text
 y_canvas = 198.8 + 2.042 · y_sprite          x_canvas = −91.5 + 2.034 · x_sprite
 ```
 
@@ -188,6 +188,46 @@ o enquadramento em vez de recuperar resolução.
 - **Divergência precisa de explicação, não de tolerância maior.** O topo visível do banner errou por 259 px — e a
   razão é que o sprite ali é `GFX_portrait_gamesetup_mask`, que desvanece as bordas, com a bandeira do império e
   o título por cima. A base do mesmo banner bate com 0,4%.
+
+### 2.6 Âncora vertical: bounding box ou cabeça
+
+O enquadramento encosta a arte no topo do guia. **O que** encosta é escolha por espécie (`"ancora"` no
+`portrait.json`): o bounding box do conteúdo (padrão) ou a **cabeça**.
+
+O problema que motivou a alternativa: os `ssm_green_elves` têm chifres de veado. Ancorados pelo bounding box, os
+chifres tomam o topo do guia e empurram a cabeça para baixo — o personagem renderiza menor e mais baixo que os
+outros elfos. Com âncora na cabeça, o ornamento sobe para a faixa acima do guia, que é visível em parte dos
+contextos e cortada nos mais agressivos: exatamente onde elemento sacrificável deve ficar.
+
+**A heurística óbvia é falsa, e foi medida.** "Estrutura fina é estreita" parece razoável e leva ao lugar errado:
+os chifres se espalham lateralmente e ocupam **82% da largura já na primeira linha** — mais que a própria cabeça.
+Um detector por largura acharia o topo em 0. O que separa ornamento de crânio é **densidade**: galhos cobrem
+pouca área dentro de um bounding box largo. `detectarInicioDoCorpo` mede a fração de pixels opacos por linha e
+devolve a primeira que atinge 35% do máximo da imagem.
+
+**A separação é larga, então o limiar não é crítico.** Medido no acervo (`bun
+scripts/measure-framing/densidade-da-arte.ts`, que reproduz a tabela a qualquer momento):
+
+| grupo | onde a silhueta fica sólida |
+|---|---|
+| cabelo normal (8 espécies) | 2,6% a 10,0% da altura |
+| chifre / penacho / antena (8 espécies) | 12,7% a 25,2% |
+
+**A detecção é por imagem, e isso é o ponto.** Nos `ssm_green_elves`, os machos sobem os 144 px inteiros até o
+topo do canvas e as fêmeas sobem 110, porque os chifres delas são menores — as cabeças ficam alinhadas entre si.
+Um recuo fixo por espécie não faria isso, e cinco espécies têm variação interna acima de 10 pontos percentuais
+(`knight` vai de 4,4% a 28,6%). Vale lembrar que "variantes desalinhadas entre si" é justamente o defeito que fez
+`ssm_astral` ser revertida.
+
+**Por que não é o padrão.** Metade do acervo tem estrutura fina no topo, e nem toda é sacrificável — em algumas
+ela é a característica da espécie (os tentáculos do `ssm_octopus`, com 23%, são o candidato óbvio). Empurrar isso
+para a faixa de corte é o mesmo erro que tirou a cauda da sereia do quadro. O script de diagnóstico aponta as
+candidatas; a decisão é visual, espécie a espécie, comparando o antes e o depois em `.portraits-framed/`.
+
+**Consequência na validação.** Ancorar pela cabeça sobe a arte, e portanto sobe a base junto. A regra "a arte
+precisa alcançar a borda inferior do canvas" passou a ser conferida sobre a geometria final (`y + altura`), e não
+sobre a altura isolada assumindo que o topo é o guia. A subida também para no topo do canvas: acima dele não
+existe plano, e subir mais só apagaria arte.
 
 ### 2.4 As animações herdadas
 

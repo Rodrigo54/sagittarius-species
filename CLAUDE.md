@@ -58,6 +58,9 @@ bun run overwrite       # pwsh scripts/overwrite.ps1 — apaga e recopia o mod n
   - `scripts/measure-framing/medir-prints.ts` — lê screenshots com a arte de calibração instalada e mede a
     relação entre coordenadas do sprite e do canvas. É a única etapa que exige o jogo aberto; o resultado está
     congelado em `ancora.json`.
+  - `scripts/measure-framing/densidade-da-arte.ts` — diagnostica, por espécie, onde a silhueta da arte fica
+    sólida, ou seja quanto há de chifre/antena/penacho acima da cabeça. É o que aponta as candidatas a
+    `"ancora": "cabeca"`; a decisão em si é visual, espécie a espécie.
   - `scripts/generate-calibration/index.ts` — gera a arte de calibração legível por máquina (a coordenada está
     codificada na cor de cada faixa). Duas imagens, uma por eixo.
   - `scripts/install-calibration/index.ts` — instala essa arte por cima das texturas do `mod/` nas 16 espécies e
@@ -277,7 +280,7 @@ O enquadramento do retrato **não é uma câmera opaca do engine** — é declar
 UI é um `containerWindowType` com `size` + `clipping = yes`, contendo um `iconType` que desenha um `portraitType`
 numa `position` e `scale`. A janela visível é aritmética de layout, em coordenadas do sprite de retrato:
 
-```
+```text
 topo_visível = (clip.y0 − icone.y) / scale
 ```
 

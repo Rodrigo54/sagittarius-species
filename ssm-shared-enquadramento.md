@@ -3,7 +3,7 @@
 Relato da sessão que executou a correção, em 2026-07-27, na branch `feature/portrait-framing` a partir da
 `develop` pós-1.8.0. O documento anterior era um **plano** escrito em 2026-07-25; este é o registro do que de
 fato foi feito, incluindo os pontos em que o plano estava errado. Contexto de fundo: `CLAUDE.md` (seções
-"`sl_shared` vs. `ssm_shared`" e "Enquadramento"), `ssm-shared-referencia-tecnica.md` (seção 2.5) e
+"`sl_shared` vs. `ssm_shared`" e "Enquadramento"), `ssm-shared-referencia-tecnica.md` (seções 2.5 e 2.6) e
 `ssm-shared-historico-da-sessao.md`.
 
 ## TL;DR
@@ -97,7 +97,27 @@ O trabalho foi organizado para que cada bloco tivesse um critério de aceitaçã
   entre as 16 espécies. A dispersão residual entre espécies ficou **igual à de antes** (9,5 → 9,7 px), provando
   que ela é propriedade da composição de cada arte, não do enquadramento.
 
-## 5. Caminhos descartados (não refazer)
+## 5. Depois da entrega: âncora na cabeça
+
+Com o enquadramento já corrigido e validado in-game, apareceu um caso que ele não resolvia: os
+`ssm_green_elves` têm chifres, e ancorados pelo bounding box os chifres tomavam o topo do guia, empurrando a
+cabeça para baixo — o personagem saía menor e mais baixo que os outros elfos.
+
+Virou um campo novo no `portrait.json` (`"ancora": "cabeca"`), aplicado só a essa espécie. Detalhes técnicos na
+**seção 2.6 da referência técnica**. O que vale registrar aqui é o que a investigação contrariou:
+
+- **A heurística óbvia estava errada.** "Estrutura fina é estreita" é falso para chifres de veado: eles se
+  espalham e ocupam 82% da largura já na primeira linha, mais que a cabeça. Detectar por largura acharia
+  exatamente a linha errada. O que funciona é **densidade** — pouca área dentro de um bounding box largo.
+- **Não é caso isolado.** Metade do acervo (8 de 16) tem estrutura fina acima da cabeça, de 12,7% a 25,2% da
+  altura. Mas aplicar em todas seria repetir o erro da sereia: em algumas espécies o ornamento é a
+  característica, e o `ssm_octopus` (23%, tentáculos) é o candidato óbvio a esse engano.
+- **Detectar por imagem resolveu de graça um problema conhecido.** Como o recuo é medido em cada arte, variantes
+  com ornamentos de tamanhos diferentes ficam com as cabeças alinhadas entre si — nos green elves, machos sobem
+  144 px e fêmeas 110. É exatamente o defeito que fez `ssm_astral` ser revertida ("variantes desalinhadas entre
+  si"), e que um recuo fixo por espécie não corrigiria.
+
+## 6. Caminhos descartados (não refazer)
 
 **Transladar o esqueleto no `.mesh`/`.anim`.** Se completa (bind pose + os 4 `.anim`), o skinning aplica
 `pose × bind⁻¹` e a diferença permanece → nada muda in-game. Se parcial, a arte sai deslocada e as deformações
@@ -114,7 +134,7 @@ técnica.
 **Localizar a calibração nos screenshots por cor.** A tolerância que o BC3 exige faz ~58% dos pixels de uma tela
 qualquer decodificarem por acaso.
 
-## 6. O que ficou em aberto
+## 7. O que ficou em aberto
 
 - **`ssm_mermaids` e `ssm_astral`** seguem no `sl_shared`, congeladas. Refazer a migração delas ficou mais barato
   depois desta entrega, porque o enquadramento agora é derivado e ajustável em vez de destrutivo — mas os
@@ -126,8 +146,14 @@ qualquer decodificarem por acaso.
 - **Zona de sacrifício.** A faixa entre o contexto mais generoso e o mais agressivo aparece só em parte dos
   contextos — é onde pontas de cabelo, chifres e ornamentos podem entrar sabendo que serão cortados às vezes.
   Os números por contexto estão em `scripts/measure-framing/contextos.json`.
+- **Sete espécies candidatas a `"ancora": "cabeca"`**, listadas por
+  `bun scripts/measure-framing/densidade-da-arte.ts`: `knight` (25,2%), `octopus` (23,0%), `hastur` (19,6%),
+  `necron` (16,7%), `cyborg` (15,7%), `new_order` (14,6%) e `mercenary` (12,7%). Nenhuma foi mexida — a decisão
+  é visual, espécie a espécie, comparando o antes e o depois em `.portraits-framed/`. O `octopus` é o caso a
+  tratar com mais cuidado: se aqueles 23% forem tentáculos, empurrá-los para a faixa de corte repete o erro que
+  reverteu a sereia.
 
-## 7. Referências
+## 8. Referências
 
 - `CLAUDE.md` — "`sl_shared` vs. `ssm_shared`", "Enquadramento", "Pipeline de portraits", "Comandos"
 - `ssm-shared-referencia-tecnica.md` — seção 2.1 (topologia do plano) e **2.5** (enquadramento: derivação,
