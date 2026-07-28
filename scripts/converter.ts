@@ -6,8 +6,9 @@ import { fileURLToPath } from 'node:url';
 
 const __DIRNAME = dirname(fileURLToPath(import.meta.url));
 
-export const PASTA_ASSETS = join(__DIRNAME, '../assets');
-export const PASTA_MOD = join(__DIRNAME, '../mod/sagittarius-species');
+export const PASTA_RAIZ = join(__DIRNAME, '..');
+export const PASTA_ASSETS = join(PASTA_RAIZ, 'assets');
+export const PASTA_MOD = join(PASTA_RAIZ, 'mod/sagittarius-species');
 
 const TEXCONV = join(__DIRNAME, '../bin/texconv/texconv.exe');
 
@@ -72,7 +73,9 @@ export async function converter(arquivos: string[], options: ConverterOptions) {
       ...arquivosDoGrupo,
     ];
 
-    const result = await $`${TEXCONV} ${args}`;
-    console.log(result);
+    // Silencioso no sucesso (o texconv narra arquivo por arquivo, o que
+    // enterra a saída útil do pipeline); no erro, o $ lança com o stderr.
+    await $`${TEXCONV} ${args}`.quiet();
+    console.log(`  ${String(arquivosDoGrupo.length).padStart(3)} -> ${pastaDestino}`);
   }
 }

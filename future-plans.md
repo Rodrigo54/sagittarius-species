@@ -40,6 +40,15 @@ executar o Blender nem validar visualmente o resultado.
 
 ## Corrigir o desperdício de UV do `sl_humanoid_01_entity` — feito
 
+> **Atualização (2026-07-27)**: o desperdício **vertical** que sobrava depois desta correção também foi
+> resolvido. A faixa superior do canvas que a câmera de retrato nunca captura foi recortada da geometria do
+> plano, e o canvas encolheu de 980×976 para 980×780 — texturas 20% menores, sem perda visível. O tamanho da
+> faixa deixou de ser estimativa: `scripts/measure-framing/` deriva dos `.gui` do jogo o enquadramento de 122
+> contextos de UI, e uma âncora medida in-game converte isso para coordenadas do canvas. Relato em
+> `ssm-shared-enquadramento.md`, detalhes técnicos na seção 2.5 da referência técnica. Ficou medido, de quebra,
+> que **não há desperdício horizontal a recuperar**: a câmera captura mais largo que a textura, então apertar a
+> UV em U cortaria o enquadramento.
+
 Implementado: veja a seção "`sl_shared` vs. `ssm_shared`" do `CLAUDE.md`. Resumo do que foi decidido, contra o que
 estava especulado aqui: o caminho escolhido foi o da "entity irmã" (isola o impacto, `sl_shared/` nunca foi
 tocado), mas com dois ajustes em relação ao que este documento imaginava —
@@ -77,11 +86,15 @@ temporariamente, os bugs das tentativas de correção — ver `ssm-shared-histor
 placeholder xadrez com marcadores de canto coloridos (flagra flip/rotação/distorção de longe); `002.png` é arte
 real pintada pelo Rodrigo (usada pra testar em condição realista, não só num xadrez sintético).
 Registrada em `ssm_species_classes.txt` (`ssm_sagittarius`) e `ssm_portrait_sets.txt` (`ssm_humanoids`). Não é uma
-espécie real do mod — remover antes de publicar uma release. O mesmo vale pras cópias de comparação
-`ssm_old_<espécie>` criadas por `scripts/migrate-portraits/` (ver `CLAUDE.md`): acumulam durante a migração de rig
-pra comparação in-game e são varridas todas de uma vez na preparação de release (assets + registros nos dois `.txt`
-+ pasta de DDS e `ssm_old_<espécie>_portrait.txt` no `mod/` — o pipeline **não** limpa pastas de espécie órfãs no
-`mod/`, a varredura é manual).
+espécie real do mod — remover antes de publicar uma release. O mesmo valia pras cópias de comparação
+`ssm_old_<espécie>`, que o extinto `scripts/migrate-portraits/` criava para comparação lado a lado in-game e que
+eram varridas na preparação de release.
+
+> **Atualização (2026-07-27)**: esse fluxo acabou. Com o enquadramento derivado no pipeline, não existe mais
+> migração de rig nem cópia de comparação — trocar o rig de uma espécie é editar o campo `rig` do
+> `portrait.json`. Fica valendo o alerta que sobrou: o pipeline limpa `.dds` órfãos, mas **não** limpa pastas de
+> espécie órfãs no `mod/`; se uma espécie for removida de `assets/`, a pasta dela em
+> `mod/gfx/models/portraits/` e o `_portrait.txt` correspondente precisam ser apagados à mão.
 
 ## Migração de rig (`scripts/migrate-portraits/`) — pendências de qualidade visual encontradas em teste in-game — revertido
 
@@ -103,9 +116,15 @@ encaixe:
 **Decisão (preparação da release 1.8.0)**: em vez de ajustar o enquadramento, as duas espécies foram revertidas
 pro rig `sl_shared` — a cópia `ssm_old_<espécie>` (visual pré-migração) voltou a ser `ssm_mermaids`/`ssm_astral`
 oficial, com `"rig": "sl_shared"` explícito no `portrait.json`, e a versão migrada pro `ssm_shared` foi
-descartada. As outras 16 espécies migradas seguem no `ssm_shared` normalmente. Se algum dia vier uma correção de
-enquadramento pra essas duas (folga extra pra cauda/asas, normalização de escala entre variantes no modo
-`--altura`), a migração precisa ser refeita do zero via `scripts/migrate-portraits/`.
+descartada. As outras 16 espécies migradas seguem no `ssm_shared` normalmente.
+
+> **Atualização (2026-07-27)**: refazer a migração dessas duas ficou bem mais barato. O enquadramento passou a
+> ser **derivado no pipeline** a partir de master nativo (ver `CLAUDE.md`, "Pipeline de portraits"), em vez de
+> reescrever a arte-fonte in place — trocar de rig é editar o campo `rig` do `portrait.json` e rodar
+> `bun run portrait`, e experimentar enquadramentos não degrada mais nada. `scripts/migrate-portraits/` não
+> existe mais. O que **continua pendente** são os defeitos em si: a cauda da sereia fora do quadro pede folga
+> extra, e as variantes do astral pedem normalização de escala dentro da espécie. Nenhum dos dois é consequência
+> do canvas; ambos são regra nova de enquadramento mais julgamento visual, imagem a imagem.
 
 ## BlenderMCP — configurado, com ressalvas de compatibilidade
 

@@ -307,6 +307,243 @@ export function corrigirShaderDoMesh(original: Buffer): Buffer {
   return resultado;
 }
 
+/** Substitui o payload de várias propriedades de uma vez, permitindo que a
+ * **contagem mude**.
+ *
+ * Os outros patches deste módulo ou preservam o tamanho (UV) ou removem
+ * subtrees inteiros (planos ocultos). Recortar o plano é o primeiro que
+ * encurta arrays, e por isso precisa reescrever também o int32 de contagem que
+ * antecede cada payload. Continua sendo uma operação fechada no formato pelo
+ * mesmo motivo dos demais: o arquivo é um fluxo de tokens, sem tabela global
+ * de offsets que precisasse ser corrigida depois. */
+function reescreverPropriedades(
+  original: Buffer,
+  substituicoes: { prop: PropriedadeEncontrada; valores: ArrayLike<number> }[]
+): Buffer {
+  const ordenadas = [...substituicoes].sort((a, b) => a.prop.offsetValor - b.prop.offsetValor);
+
+  const partes: Buffer[] = [];
+  let cursor = 0;
+
+  for (const { prop, valores } of ordenadas) {
+    if (prop.tipo !== 'f' && prop.tipo !== 'i') {
+      throw new Error(`só arrays numéricos podem ser reescritos (${prop.nome} é '${prop.tipo}')`);
+    }
+    const inicioContagem = prop.offsetValor - 4;
+    const fimPayload = prop.offsetValor + prop.contagem * 4;
+    if (inicioContagem < cursor) {
+      throw new Error('substituições sobrepostas — bug no cálculo de offsets');
+    }
+
+    partes.push(original.subarray(cursor, inicioContagem));
+
+    const bloco = Buffer.alloc(4 + valores.length * 4);
+    bloco.writeInt32LE(valores.length, 0);
+    for (let i = 0; i < valores.length; i++) {
+      if (prop.tipo === 'f') bloco.writeFloatLE(valores[i], 4 + i * 4);
+      else bloco.writeInt32LE(valores[i], 4 + i * 4);
+    }
+    partes.push(bloco);
+
+    cursor = fimPayload;
+  }
+
+  partes.push(original.subarray(cursor));
+  return Buffer.concat(partes);
+}
+
+/** Onde a lâmina cai, em fração da altura do canvas.
+ *
+ * Vem de medição in-game, não de estimativa (ver
+ * `scripts/measure-framing/ancora.json`): o topo do sprite de retrato cai em
+ * `y_canvas ≈ 199`, então a faixa `0..199` do canvas — 20,4% da altura — não
+ * chega à tela em nenhum dos 122 contextos de UI do jogo.
+ *
+ * O valor usado é 195, e não 199, porque as linhas de vértice do plano caem em
+ * `y_canvas` 2, 97, **195**, 293… A linha 195 está 4 px acima do limite
+ * medido, o que torna o recorte uma **remoção pura de duas linhas**: nenhum
+ * vértice precisa ser reposicionado, nenhuma UV precisa ser interpolada. Os
+ * 4 px abandonados não pagam a complexidade que reposicionar custaria. */
+export const V_DE_CORTE = 195 / 976;
+
+/** Tolerância ao classificar vértices por linha da grade: os V de uma mesma
+ * linha não são bit a bit idênticos no arquivo original. */
+const TOLERANCIA_LINHA = 0.02;
+
+/** Remove do plano mantido as linhas de vértices acima de `vDeCorte`, e
+ * reescala a UV do que sobra para voltar a cobrir 0..1.
+ *
+ * Por que isso recupera resolução: a faixa removida nunca é exibida, mas
+ * continua consumindo pixels da textura. Cortando a geometria, o mesmo canvas
+ * passa a cobrir menos plano — ou, mantida a densidade, o canvas encolhe sem
+ * perder nada. O enquadramento in-game não muda: remover geometria que estava
+ * fora do quadro não move o que está dentro dele.
+ *
+ * Precisa mexer em tudo que é indexado por vértice (`p`, `n`, `ta`, `u0`, e os
+ * pesos de skinning), reindexar os triângulos e recalcular a `aabb`. Não gera
+ * faces degeneradas — elas quebram o importador do `io_pdx_mesh`, e validação
+ * visual no Blender é parte do fluxo. */
+export function recortarPlanoAcima(original: Buffer, vDeCorte = V_DE_CORTE): Buffer {
+  const props = escanearPropriedades(original);
+
+  const doPlano = (nome: string, pai: string): PropriedadeEncontrada => {
+    const achadas = props.filter(
+      (p) =>
+        p.nome === nome &&
+        p.caminho[p.caminho.length - 1] === pai &&
+        p.caminho.includes(PLANO_MANTIDO)
+    );
+    if (achadas.length !== 1) {
+      throw new Error(`esperava 1 propriedade "${nome}" sob "${pai}" no ${PLANO_MANTIDO}, achou ${achadas.length}`);
+    }
+    return achadas[0];
+  };
+
+  const ler = (prop: PropriedadeEncontrada): number[] => {
+    const saida: number[] = [];
+    for (let i = 0; i < prop.contagem; i++) {
+      saida.push(
+        prop.tipo === 'f'
+          ? original.readFloatLE(prop.offsetValor + i * 4)
+          : original.readInt32LE(prop.offsetValor + i * 4)
+      );
+    }
+    return saida;
+  };
+
+  const propP = doPlano('p', 'mesh');
+  const propN = doPlano('n', 'mesh');
+  const propTa = doPlano('ta', 'mesh');
+  const propU0 = doPlano('u0', 'mesh');
+  const propTri = doPlano('tri', 'mesh');
+  const propBones = doPlano('bones', 'skin');
+  const propIx = doPlano('ix', 'skin');
+  const propW = doPlano('w', 'skin');
+  const propMin = doPlano('min', 'aabb');
+  const propMax = doPlano('max', 'aabb');
+
+  const p = ler(propP);
+  const n = ler(propN);
+  const ta = ler(propTa);
+  const u0 = ler(propU0);
+  const tri = ler(propTri);
+  const ix = ler(propIx);
+  const w = ler(propW);
+
+  const nVertices = p.length / 3;
+  if (!Number.isInteger(nVertices)) throw new Error(`array "p" com ${p.length} floats não é múltiplo de 3`);
+  if (u0.length !== nVertices * 2) throw new Error(`"u0" tem ${u0.length} floats para ${nVertices} vértices`);
+  if (n.length !== nVertices * 3) throw new Error(`"n" tem ${n.length} floats para ${nVertices} vértices`);
+  if (ta.length !== nVertices * 4) throw new Error(`"ta" tem ${ta.length} floats para ${nVertices} vértices`);
+
+  const influencias = ix.length / nVertices;
+  if (!Number.isInteger(influencias) || w.length !== ix.length) {
+    throw new Error(`skin inconsistente: ${ix.length} índices e ${w.length} pesos para ${nVertices} vértices`);
+  }
+  const bones = ler(propBones)[0];
+
+  // Mantém quem está na linha de corte ou abaixo dela. A tolerância existe
+  // porque os V de uma mesma linha não são bit a bit iguais no original.
+  const manter: boolean[] = [];
+  for (let v = 0; v < nVertices; v++) {
+    manter.push(u0[v * 2 + 1] >= vDeCorte - TOLERANCIA_LINHA);
+  }
+
+  const novoIndice = new Map<number, number>();
+  for (let v = 0; v < nVertices; v++) {
+    if (manter[v]) novoIndice.set(v, novoIndice.size);
+  }
+  const nNovos = novoIndice.size;
+  if (nNovos === nVertices) {
+    throw new Error(`vDeCorte ${vDeCorte} não remove vértice nenhum — o corte seria um no-op`);
+  }
+  if (nNovos < 3) throw new Error(`vDeCorte ${vDeCorte} deixaria só ${nNovos} vértice(s)`);
+
+  // A UV do que sobra volta a cobrir 0..1. Usa o V mínimo real dos vértices
+  // mantidos (e não o vDeCorte teórico), para que a linha de corte caia
+  // exatamente em V=0 mesmo com a variação bit a bit dentro da linha.
+  let vMin = Infinity;
+  for (let v = 0; v < nVertices; v++) if (manter[v]) vMin = Math.min(vMin, u0[v * 2 + 1]);
+  const escala = 1 / (1 - vMin);
+
+  const novoP: number[] = [];
+  const novoN: number[] = [];
+  const novoTa: number[] = [];
+  const novoU0: number[] = [];
+  const novoIx: number[] = [];
+  const novoW: number[] = [];
+
+  for (let v = 0; v < nVertices; v++) {
+    if (!manter[v]) continue;
+    novoP.push(p[v * 3], p[v * 3 + 1], p[v * 3 + 2]);
+    novoN.push(n[v * 3], n[v * 3 + 1], n[v * 3 + 2]);
+    novoTa.push(ta[v * 4], ta[v * 4 + 1], ta[v * 4 + 2], ta[v * 4 + 3]);
+    novoU0.push(u0[v * 2], (u0[v * 2 + 1] - vMin) * escala);
+    for (let k = 0; k < influencias; k++) {
+      novoIx.push(ix[v * influencias + k]);
+      novoW.push(w[v * influencias + k]);
+    }
+  }
+
+  // Um triângulo só sobrevive inteiro: descartar parcialmente criaria buraco
+  // ou face degenerada.
+  const novoTri: number[] = [];
+  for (let t = 0; t < tri.length; t += 3) {
+    const a = novoIndice.get(tri[t]);
+    const b = novoIndice.get(tri[t + 1]);
+    const c = novoIndice.get(tri[t + 2]);
+    if (a === undefined || b === undefined || c === undefined) continue;
+    novoTri.push(a, b, c);
+  }
+  if (novoTri.length === 0) throw new Error('o recorte não deixou nenhum triângulo');
+
+  const eixos = [0, 1, 2].map((eixo) => {
+    const valores: number[] = [];
+    for (let v = 0; v < nNovos; v++) valores.push(novoP[v * 3 + eixo]);
+    return { min: Math.min(...valores), max: Math.max(...valores) };
+  });
+
+  const resultado = reescreverPropriedades(original, [
+    { prop: propP, valores: novoP },
+    { prop: propN, valores: novoN },
+    { prop: propTa, valores: novoTa },
+    { prop: propU0, valores: novoU0 },
+    { prop: propTri, valores: novoTri },
+    { prop: propMin, valores: eixos.map((e) => e.min) },
+    { prop: propMax, valores: eixos.map((e) => e.max) },
+    { prop: propIx, valores: novoIx },
+    { prop: propW, valores: novoW },
+  ]);
+
+  // Sanidade: o fluxo tem que continuar parseável, com as contagens coerentes
+  // entre si — uma emenda errada corromperia tudo a partir dali em silêncio.
+  const conferencia = escanearPropriedades(resultado).filter((x) =>
+    x.caminho.includes(PLANO_MANTIDO)
+  );
+  const contagem = (nome: string, pai: string) =>
+    conferencia.find((x) => x.nome === nome && x.caminho[x.caminho.length - 1] === pai)?.contagem;
+
+  if (
+    contagem('p', 'mesh') !== nNovos * 3 ||
+    contagem('n', 'mesh') !== nNovos * 3 ||
+    contagem('ta', 'mesh') !== nNovos * 4 ||
+    contagem('u0', 'mesh') !== nNovos * 2 ||
+    contagem('tri', 'mesh') !== novoTri.length ||
+    contagem('ix', 'skin') !== nNovos * influencias ||
+    contagem('w', 'skin') !== nNovos * influencias
+  ) {
+    throw new Error('após o recorte, as contagens não batem — a emenda corrompeu o fluxo');
+  }
+  const bonesDepois = conferencia.find(
+    (x) => x.nome === 'bones' && x.caminho[x.caminho.length - 1] === 'skin'
+  );
+  if (!bonesDepois || resultado.readInt32LE(bonesDepois.offsetValor) !== bones) {
+    throw new Error('a contagem de ossos por vértice mudou, o que não deveria acontecer');
+  }
+
+  return resultado;
+}
+
 /** Reescala o V de cada par (U, V) de um array de UV plano [u0,v0,u1,v1,...]:
  * planos que hoje usam a metade de baixo (V em [0, 0.5]) passam a usar o
  * canvas inteiro (V×2); os que usam a metade de cima (V em [0.5, 1]) também

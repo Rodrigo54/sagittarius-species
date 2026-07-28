@@ -53,7 +53,7 @@ optional depending on what you're touching:
 - **[texconv](https://github.com/microsoft/DirectXTex)** (`bin/texconv/`) — PNG→DDS conversion engine.
   Auto-downloaded by `bun run setup`.
 - **[ImageMagick](https://imagemagick.org)** (`bin/imagemagick/`) — image manipulation (trim/resize/composite)
-  used by `scripts/migrate-portraits/`. Auto-downloaded by `bun run setup`.
+  used by the portrait framing step in `scripts/generate-portraits/`. Auto-downloaded by `bun run setup`.
 - **Blender + [io_pdx_mesh](https://github.com/ross-g/io_pdx_mesh)** — optional, only needed to edit the shared
   animated rig itself (mesh/skeleton/animations, `.mesh`/`.anim` files). Not required for the normal portrait
   pipeline.

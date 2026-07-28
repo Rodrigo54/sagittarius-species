@@ -1,5 +1,5 @@
 name = "Sagittarius Species"
-version = "1.8.0"
+version = "1.9.0"
 path = "mod/sagittarius-species"
 tags = {
 	"Species"

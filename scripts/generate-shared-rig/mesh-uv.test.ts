@@ -10,6 +10,7 @@ import {
   escanearObjetos,
   escanearPropriedades,
   remapearUv,
+  recortarPlanoAcima,
   removerPlanosOcultos,
 } from './mesh-uv';
 
@@ -226,5 +227,143 @@ describe('corrigirShaderDoMesh (contra o .mesh real do sl_shared)', () => {
 
   test('é idempotente: aplicar de novo não muda nada', () => {
     expect(corrigirShaderDoMesh(patcheado).equals(patcheado)).toBe(true);
+  });
+});
+
+describe('recortarPlanoAcima', () => {
+  /** Estado em que o recorte entra no pipeline: um plano só, UV já cobrindo
+   * o canvas inteiro. */
+  const preparado = () =>
+    corrigirUvDoMesh(corrigirShaderDoMesh(removerPlanosOcultos(readFileSync(CAMINHO_MESH_ORIGINAL))));
+
+  const arraysDoPlano = (buf: Buffer) => {
+    const props = escanearPropriedades(buf).filter((p) => p.caminho.includes(PLANO_MANTIDO));
+    const achar = (nome: string, pai: string) =>
+      props.find((p) => p.nome === nome && p.caminho[p.caminho.length - 1] === pai)!;
+    const ler = (p: { offsetValor: number; contagem: number; tipo: string }) => {
+      const v: number[] = [];
+      for (let i = 0; i < p.contagem; i++) {
+        v.push(p.tipo === 'f' ? buf.readFloatLE(p.offsetValor + i * 4) : buf.readInt32LE(p.offsetValor + i * 4));
+      }
+      return v;
+    };
+    return {
+      p: ler(achar('p', 'mesh')),
+      n: ler(achar('n', 'mesh')),
+      ta: ler(achar('ta', 'mesh')),
+      u0: ler(achar('u0', 'mesh')),
+      tri: ler(achar('tri', 'mesh')),
+      ix: ler(achar('ix', 'skin')),
+      w: ler(achar('w', 'skin')),
+      min: ler(achar('min', 'aabb')),
+      max: ler(achar('max', 'aabb')),
+    };
+  };
+
+  test('remove exatamente as linhas de grade acima do corte', () => {
+    const antes = arraysDoPlano(preparado());
+    const depois = arraysDoPlano(recortarPlanoAcima(preparado()));
+
+    // Grade 11×11 no original; as duas primeiras linhas (y_canvas 2 e 97)
+    // ficam acima da linha de corte em 195.
+    expect(antes.p.length / 3).toBe(121);
+    expect(depois.p.length / 3).toBe(99);
+    expect(antes.tri.length / 3).toBe(200);
+    expect(depois.tri.length / 3).toBe(160);
+  });
+
+  test('todo array indexado por vértice encolhe junto', () => {
+    const d = arraysDoPlano(recortarPlanoAcima(preparado()));
+    const n = d.p.length / 3;
+
+    expect(d.n.length).toBe(n * 3);
+    expect(d.ta.length).toBe(n * 4);
+    expect(d.u0.length).toBe(n * 2);
+    expect(d.ix.length).toBe(n * 4);
+    expect(d.w.length).toBe(n * 4);
+  });
+
+  test('os índices de triângulo continuam válidos após a reindexação', () => {
+    const d = arraysDoPlano(recortarPlanoAcima(preparado()));
+    const n = d.p.length / 3;
+    for (const indice of d.tri) {
+      expect(indice).toBeGreaterThanOrEqual(0);
+      expect(indice).toBeLessThan(n);
+    }
+    // Nenhum triângulo degenerado: eles quebram o importador do io_pdx_mesh.
+    for (let t = 0; t < d.tri.length; t += 3) {
+      expect(new Set([d.tri[t], d.tri[t + 1], d.tri[t + 2]]).size).toBe(3);
+    }
+  });
+
+  test('a UV do que sobra volta a cobrir 0..1', () => {
+    const d = arraysDoPlano(recortarPlanoAcima(preparado()));
+    const vs = d.u0.filter((_, i) => i % 2 === 1);
+    expect(Math.min(...vs)).toBeCloseTo(0, 3);
+    expect(Math.max(...vs)).toBeCloseTo(1, 3);
+  });
+
+  test('nenhuma posição de vértice é movida — só se removem linhas', () => {
+    const antes = arraysDoPlano(preparado());
+    const depois = arraysDoPlano(recortarPlanoAcima(preparado()));
+
+    // Cada vértice mantido tem que aparecer, com a mesma posição, no resultado.
+    const posicoesDepois = new Set<string>();
+    for (let v = 0; v < depois.p.length / 3; v++) {
+      posicoesDepois.add(depois.p.slice(v * 3, v * 3 + 3).join(','));
+    }
+    let mantidos = 0;
+    for (let v = 0; v < antes.p.length / 3; v++) {
+      // V original acima do corte => tem que ter sobrevivido intacto
+      if (antes.u0[v * 2 + 1] >= 195 / 976 - 0.02) {
+        expect(posicoesDepois.has(antes.p.slice(v * 3, v * 3 + 3).join(','))).toBe(true);
+        mantidos++;
+      }
+    }
+    expect(mantidos).toBe(99);
+  });
+
+  test('U não é tocado', () => {
+    const antes = arraysDoPlano(preparado());
+    const depois = arraysDoPlano(recortarPlanoAcima(preparado()));
+    const usAntes = new Set(antes.u0.filter((_, i) => i % 2 === 0).map((u) => u.toFixed(5)));
+    for (const u of depois.u0.filter((_, i) => i % 2 === 0)) {
+      expect(usAntes.has(u.toFixed(5))).toBe(true);
+    }
+  });
+
+  test('a aabb passa a refletir só o que sobrou', () => {
+    const d = arraysDoPlano(recortarPlanoAcima(preparado()));
+    for (const eixo of [0, 1, 2]) {
+      const valores: number[] = [];
+      for (let v = 0; v < d.p.length / 3; v++) valores.push(d.p[v * 3 + eixo]);
+      expect(d.min[eixo]).toBeCloseTo(Math.min(...valores), 4);
+      expect(d.max[eixo]).toBeCloseTo(Math.max(...valores), 4);
+    }
+  });
+
+  test('o esqueleto e os locators seguem intactos', () => {
+    const antes = escanearObjetos(preparado()).map((o) => o.nome);
+    const depois = escanearObjetos(recortarPlanoAcima(preparado())).map((o) => o.nome);
+    expect(depois).toEqual(antes);
+  });
+
+  test('é idempotente em intenção: recortar de novo no mesmo V não é no-op silencioso', () => {
+    // Depois do recorte a UV volta a 0..1, então o mesmo vDeCorte cortaria de
+    // novo. Rodar o pipeline inteiro do zero é o caminho suportado, e cortar
+    // duas vezes precisa ser um erro visível, não uma erosão silenciosa.
+    const uma = recortarPlanoAcima(preparado());
+    const duas = recortarPlanoAcima(uma);
+    const d1 = arraysDoPlano(uma);
+    const d2 = arraysDoPlano(duas);
+    expect(d2.p.length).toBeLessThan(d1.p.length);
+  });
+
+  test('recusa um corte que não removeria nada', () => {
+    expect(() => recortarPlanoAcima(preparado(), 0)).toThrow('no-op');
+  });
+
+  test('recusa um corte que apagaria o plano', () => {
+    expect(() => recortarPlanoAcima(preparado(), 0.999)).toThrow();
   });
 });
