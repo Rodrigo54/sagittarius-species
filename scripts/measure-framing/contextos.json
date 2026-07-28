@@ -1,0 +1,2215 @@
+{
+  "contextos": [
+    {
+      "arquivo": "agreement_negotiation_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "agreement_negotiation_view",
+        "summary box",
+        "target_country_info",
+        "target_country_portrait_character"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask_character_without_room",
+      "scale": 0.311,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "colonize_planet_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "expansion_source_planet_sub_entry",
+        "portrait",
+        "species_portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.18,
+      "janela": {
+        "x0": 122.22222222222223,
+        "y0": 22.22222222222222,
+        "x1": 455.5555555555556,
+        "y1": 377.77777777777777
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "colonize_planet_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "expansion_source_fleet_entry",
+        "portrait",
+        "species_portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.18,
+      "janela": {
+        "x0": 122.22222222222223,
+        "y0": 22.22222222222222,
+        "x1": 455.5555555555556,
+        "y1": 377.77777777777777
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "combat_stats_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "combat_stats_view",
+        "our_leader",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.3,
+      "janela": {
+        "x0": 166.66666666666669,
+        "y0": 50,
+        "x1": 416.6666666666667,
+        "y1": 333.33333333333337
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "combat_stats_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "combat_stats_view",
+        "their_leader",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.3,
+      "janela": {
+        "x0": 166.66666666666669,
+        "y0": 50,
+        "x1": 416.6666666666667,
+        "y1": 333.33333333333337
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "contract_accept_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "contract_accept_view",
+        "contract_info_container",
+        "portrait_container",
+        "leader_portrait_window",
+        "leader_portrait"
+      ],
+      "sprite": "GFX_portrait_character_close_up",
+      "scale": 0.4,
+      "janela": {
+        "x0": 100,
+        "y0": 0,
+        "x1": 437.5,
+        "y1": 400
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "customize_species_editors.gui",
+      "caminho": [
+        "<guiTypes>",
+        "diplomacy_room_entry",
+        "button"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask",
+      "scale": 0.346,
+      "janela": {
+        "x0": -17.341040462427745,
+        "y0": -17.341040462427745,
+        "x1": 965.3179190751446,
+        "y1": 358.38150289017346
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_artist_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "enclave_artist_window",
+        "portrait_background",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 1,
+      "janela": {
+        "x0": -250,
+        "y0": 0,
+        "x1": 714,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_artist_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "enclave_artist_window",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask",
+      "scale": 1,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 964,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_caravaneer_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "enclave_caravaneer_window",
+        "portrait_background",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 1,
+      "janela": {
+        "x0": -250,
+        "y0": 0,
+        "x1": 714,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_caravaneer_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "enclave_caravaneer_window",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask",
+      "scale": 1,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 964,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_caravaneer_event_view_edit.gui",
+      "caminho": [
+        "<guiTypes>",
+        "enclave_caravaneer_window_edit",
+        "portrait_background",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 1,
+      "janela": {
+        "x0": -250,
+        "y0": 0,
+        "x1": 714,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_caravaneer_event_view_edit.gui",
+      "caminho": [
+        "<guiTypes>",
+        "enclave_caravaneer_window_edit",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask",
+      "scale": 1,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 964,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_champions forge_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "enclave_champions_forge_window",
+        "portrait_background",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 1,
+      "janela": {
+        "x0": -250,
+        "y0": 0,
+        "x1": 714,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_champions forge_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "enclave_champions_forge_window",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask",
+      "scale": 1,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 964,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_curator_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "enclave_curator_window",
+        "portrait_background",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 1,
+      "janela": {
+        "x0": -250,
+        "y0": 0,
+        "x1": 714,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_curator_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "enclave_curator_window",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask",
+      "scale": 1,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 964,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "DiplomaticEventWindow",
+        "portrait_background",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 1,
+      "janela": {
+        "x0": -250,
+        "y0": 0,
+        "x1": 714,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "DiplomaticEventWindow",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask",
+      "scale": 1,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 964,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_formless_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "formless_diplomacy_window",
+        "portrait_background",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 1,
+      "janela": {
+        "x0": -250,
+        "y0": 0,
+        "x1": 714,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_formless_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "formless_diplomacy_window",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask",
+      "scale": 1,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 964,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_incoming_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "incoming_diplomacy_view",
+        "portrait_container",
+        "portrait_character"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask_character_without_room",
+      "scale": 0.73666,
+      "janela": {
+        "x0": 0,
+        "y0": -6.78739174110173,
+        "x1": 950.2348437542421,
+        "y1": 339.36958705508647
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_incoming_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "incoming_diplomacy_view_action_war_peace",
+        "portrait_container",
+        "portrait_character"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask_character_without_room",
+      "scale": 1,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 714,
+        "y1": 341
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_incoming_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "incoming_diplomacy_view_action_trade_offer",
+        "portrait_container",
+        "portrait_character"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask_character_without_room",
+      "scale": 1,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 964,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_incoming_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "incoming_diplomacy_view_action_agreement_proposal",
+        "portrait_container",
+        "portrait_character"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask_character_without_room",
+      "scale": 1.008,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 952.3809523809524,
+        "y1": 347.22222222222223
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_incoming_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "incoming_diplomacy_view_invite_to_federation",
+        "portrait_container",
+        "portrait_character"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask_character_without_room",
+      "scale": 0.73666,
+      "janela": {
+        "x0": 0,
+        "y0": -6.78739174110173,
+        "x1": 950.2348437542421,
+        "y1": 339.36958705508647
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_mercenary_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "enclave_mercenary_window",
+        "portrait_background",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 1,
+      "janela": {
+        "x0": -250,
+        "y0": 0,
+        "x1": 714,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_mercenary_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "enclave_mercenary_window",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask",
+      "scale": 1,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 964,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_salvager_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "enclave_salvager_window",
+        "portrait_background",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 1,
+      "janela": {
+        "x0": -250,
+        "y0": 0,
+        "x1": 714,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_salvager_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "enclave_salvager_window",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask",
+      "scale": 1,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 964,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_trader_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "enclave_trader_window",
+        "portrait_background",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 1,
+      "janela": {
+        "x0": -250,
+        "y0": 0,
+        "x1": 714,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_trader_event_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "enclave_trader_window",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask",
+      "scale": 1,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 964,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "diplomacy_view",
+        "diplomacy_tab",
+        "founder_species"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.15,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "diplomacy_view",
+        "diplomacy_tab",
+        "portrait_container",
+        "portrait_character"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask_character_without_room",
+      "scale": 1,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 964,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "diplomacy_view",
+        "espionage_tab",
+        "spynetwork_header_panel",
+        "envoy_assign",
+        "envoy_portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.25,
+      "janela": {
+        "x0": 160,
+        "y0": 76,
+        "x1": 440,
+        "y1": 396
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "asset_card_entry",
+        "asset_portrait"
+      ],
+      "sprite": "GFX_Asset_portrait_character_masked",
+      "scale": 0.2,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "asset_card_entry",
+        "asset_portrait_static"
+      ],
+      "sprite": "GFX_Asset_portrait_character_masked",
+      "scale": 1,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "asset_cardex_entry",
+        "asset_portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.2,
+      "janela": {
+        "x0": 10,
+        "y0": -60,
+        "x1": 730,
+        "y1": 1140
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "diplomacy_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "asset_cardex_entry",
+        "asset_portrait_static"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 1,
+      "janela": {
+        "x0": -13,
+        "y0": -10,
+        "x1": 131,
+        "y1": 230
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "empire_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "planet_list_leaders_entry",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.26,
+      "janela": {
+        "x0": 173.07692307692307,
+        "y0": 46.15384615384615,
+        "x1": 419.2307692307692,
+        "y1": 338.46153846153845
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "empire_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "planet_list_pop_entry",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.2,
+      "janela": {
+        "x0": 150,
+        "y0": 40,
+        "x1": 500,
+        "y1": 360
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "empire_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "create_vassal_entry",
+        "portrait_window",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.25,
+      "janela": {
+        "x0": 160,
+        "y0": 48,
+        "x1": 416,
+        "y1": 340
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "endscreen.gui",
+      "caminho": [
+        "<guiTypes>",
+        "endscreen_view",
+        "portrait_window",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask_character_without_room",
+      "scale": 0.566,
+      "janela": {
+        "x0": -7.06713780918728,
+        "y0": -3.53356890459364,
+        "x1": 957.5971731448764,
+        "y1": 340.9893992932862
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "endscreen.gui",
+      "caminho": [
+        "<guiTypes>",
+        "endscreen_view",
+        "species_window",
+        "species"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.25,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "envoy_selection_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "envoy_selection_entry",
+        "portrait",
+        "envoy_portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.2,
+      "janela": {
+        "x0": 160,
+        "y0": 10,
+        "x1": 420,
+        "y1": 360
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "federation_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "federation_view",
+        "levels_window",
+        "portrait_window",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.6,
+      "janela": {
+        "x0": -166.66666666666669,
+        "y0": 13.333333333333334,
+        "x1": 1283.3333333333335,
+        "y1": 596.6666666666667
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "first_contact_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "first_contact_view",
+        "leader_window",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.25,
+      "janela": {
+        "x0": 160,
+        "y0": 76,
+        "x1": 416,
+        "y1": 380
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "first_contact_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "first_contact_view",
+        "species_portrait_container",
+        "species"
+      ],
+      "sprite": "GFX_FC_portrait_character_masked",
+      "scale": 0.66,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "fleet_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "fleet_view_entry",
+        "colonizer_pop",
+        "species_portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.3,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "fleet_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "fleet_view_shipyard_entry",
+        "colonizer_pop",
+        "species_portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.3,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "fleet_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "fleet_view_shipyard_entry",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.3,
+      "janela": {
+        "x0": 166.66666666666669,
+        "y0": 50,
+        "x1": 416.6666666666667,
+        "y1": 333.33333333333337
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "frontend.gui",
+      "caminho": [
+        "<guiTypes>",
+        "frontendgui",
+        "portrait_room"
+      ],
+      "sprite": "GFX_portrait_room",
+      "scale": 1,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "frontend.gui",
+      "caminho": [
+        "<guiTypes>",
+        "frontendgui",
+        "character_without_room"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask_character_without_room",
+      "scale": 1,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "frontend.gui",
+      "caminho": [
+        "<guiTypes>",
+        "frontendgui",
+        "portrait_planet"
+      ],
+      "sprite": "GFX_portrait_planet_character",
+      "scale": 1,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "frontend.gui",
+      "caminho": [
+        "<guiTypes>",
+        "frontendgui",
+        "portrait_character"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 1,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "frontend.gui",
+      "caminho": [
+        "<guiTypes>",
+        "frontendgui",
+        "portrait_character_large"
+      ],
+      "sprite": "GFX_portrait_character_large",
+      "scale": 1,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "galactic_community_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "galactic_community_view",
+        "community_window",
+        "portrait_greeting_window",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.65,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "galaxy_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "galaxy_view",
+        "galaxy",
+        "empire_profile",
+        "species_box",
+        "species"
+      ],
+      "sprite": "GFX_contacts_portrait_character_masked",
+      "scale": 0.6,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 533.3333333333334,
+        "y1": 380
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "galaxy_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "galaxy_view",
+        "agreements",
+        "overlord_info",
+        "overlord_info_portrait_window",
+        "overlord_info_portrait_icon_character"
+      ],
+      "sprite": "GFX_portrait_room_masked_character_only",
+      "scale": 0.54,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "galaxy_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "galaxy_view",
+        "agreements",
+        "agreement_info",
+        "subject_info_portrait_character"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask_character_without_room",
+      "scale": 0.758,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "government_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "government_view",
+        "government_window",
+        "info_window",
+        "portrait_window",
+        "portrait_background"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask",
+      "scale": 0.566,
+      "janela": {
+        "x0": -7.06713780918728,
+        "y0": -3.53356890459364,
+        "x1": 957.5971731448764,
+        "y1": 340.9893992932862
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "government_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "government_view",
+        "government_window",
+        "demographics_window",
+        "population_window",
+        "species_leader_image"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.24,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "leader_pool_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "leader_pool_entry",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.26,
+      "janela": {
+        "x0": 192.3076923076923,
+        "y0": 57.69230769230769,
+        "x1": 438.46153846153845,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "leader_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "leader_view",
+        "portrait_window",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask",
+      "scale": 0.566,
+      "janela": {
+        "x0": -7.06713780918728,
+        "y0": -3.53356890459364,
+        "x1": 957.5971731448764,
+        "y1": 340.9893992932862
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "loadgame_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "LoadGameScreen",
+        "selected_window",
+        "portrait_window",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.58,
+      "janela": {
+        "x0": 146.55172413793105,
+        "y0": 34.48275862068966,
+        "x1": 422.4137931034483,
+        "y1": 362.0689655172414
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "loadgame_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "LoadGameSessionEntry",
+        "portrait_window",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.27,
+      "janela": {
+        "x0": 148.14814814814815,
+        "y0": 37.03703703703704,
+        "x1": 422.2222222222222,
+        "y1": 362.96296296296293
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "main.gui",
+      "caminho": [
+        "<guiTypes>",
+        "debug_stats",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.5,
+      "janela": {
+        "x0": 150,
+        "y0": -80,
+        "x1": 950,
+        "y1": 420
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "manual_resettlement_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "resettlement_pop_entry_left",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.17,
+      "janela": {
+        "x0": 135.2941176470588,
+        "y0": 41.17647058823529,
+        "x1": 458.8235294117647,
+        "y1": 364.70588235294116
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "manual_resettlement_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "resettlement_pop_entry_right",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.17,
+      "janela": {
+        "x0": 135.2941176470588,
+        "y0": 41.17647058823529,
+        "x1": 458.8235294117647,
+        "y1": 364.70588235294116
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "market_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "slave_market_pop_entry",
+        "portrait",
+        "species_portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.19,
+      "janela": {
+        "x0": 168.42105263157896,
+        "y0": 78.94736842105263,
+        "x1": 431.57894736842104,
+        "y1": 368.42105263157896
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "mp_gamesetup.gui",
+      "caminho": [
+        "<guiTypes>",
+        "mp_game_setup_human_entry",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.26,
+      "janela": {
+        "x0": 173.07692307692307,
+        "y0": 57.69230769230769,
+        "x1": 419.2307692307692,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "new_game_setup.gui",
+      "caminho": [
+        "<guiTypes>",
+        "quick_start_preview",
+        "portrait_window",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 1,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "new_game_setup.gui",
+      "caminho": [
+        "<guiTypes>",
+        "species_preview",
+        "portrait_window",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask",
+      "scale": 0.8,
+      "janela": {
+        "x0": -5,
+        "y0": -5,
+        "x1": 958.75,
+        "y1": 351.25
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "new_game_setup.gui",
+      "caminho": [
+        "<guiTypes>",
+        "species_preview",
+        "species_window",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character_close_up",
+      "scale": 0.335,
+      "janela": {
+        "x0": 137.3134328358209,
+        "y0": -41.7910447761194,
+        "x1": 417.910447761194,
+        "y1": 435.820895522388
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_vertical",
+        "character_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_mid_close_up",
+      "scale": 0.7,
+      "janela": {
+        "x0": 142.85714285714286,
+        "y0": 21.42857142857143,
+        "x1": 430,
+        "y1": 418.5714285714286
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_vertical_small",
+        "character_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_mid_close_up",
+      "scale": 0.29,
+      "janela": {
+        "x0": 151.7241379310345,
+        "y0": 20.689655172413794,
+        "x1": 413.7931034482759,
+        "y1": 358.62068965517244
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_sector_governor",
+        "character_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_hologram",
+      "scale": 0.4,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 462.5,
+        "y1": 355
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_toast",
+        "character_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_mid_close_up",
+      "scale": 0.35,
+      "janela": {
+        "x0": 137.14285714285714,
+        "y0": 0,
+        "x1": 457.14285714285717,
+        "y1": 391.42857142857144
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_horizontal",
+        "character_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_close_up",
+      "scale": 0.33,
+      "janela": {
+        "x0": 121.2121212121212,
+        "y0": 60.6060606060606,
+        "x1": 836.3636363636364,
+        "y1": 363.6363636363636
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_horizontal_slim",
+        "character_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_close_up",
+      "scale": 0.3,
+      "janela": {
+        "x0": 66.66666666666667,
+        "y0": 66.66666666666667,
+        "x1": 566.6666666666667,
+        "y1": 353.33333333333337
+      },
+      "semRecorte": false,
+      "ressalvas": [
+        "\"paragon_portrait_container_horizontal_slim\" declara clipping sem size — recorte indeterminado"
+      ]
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_horizontal_arkship_leader",
+        "character_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_close_up",
+      "scale": 0.5,
+      "janela": {
+        "x0": 120,
+        "y0": 40,
+        "x1": 410,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_horizontal_governor",
+        "character_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_close_up",
+      "scale": 0.5,
+      "janela": {
+        "x0": 120,
+        "y0": 40,
+        "x1": 592,
+        "y1": 320
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_assign_councilor",
+        "character_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_close_up",
+      "scale": 0.3,
+      "janela": {
+        "x0": 66.66666666666667,
+        "y0": 66.66666666666667,
+        "x1": 566.6666666666667,
+        "y1": 353.33333333333337
+      },
+      "semRecorte": false,
+      "ressalvas": [
+        "\"paragon_portrait_container_assign_councilor\" declara clipping sem size — recorte indeterminado"
+      ]
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_leader_assignment",
+        "character_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_close_up",
+      "scale": 0.3,
+      "janela": {
+        "x0": 66.66666666666667,
+        "y0": 66.66666666666667,
+        "x1": 566.6666666666667,
+        "y1": 353.33333333333337
+      },
+      "semRecorte": false,
+      "ressalvas": [
+        "\"paragon_portrait_container_leader_assignment\" declara clipping sem size — recorte indeterminado"
+      ]
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_expanded",
+        "character_expanded_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_mid_close_up",
+      "scale": 0.8,
+      "janela": {
+        "x0": 62.5,
+        "y0": -12.5,
+        "x1": 187.5,
+        "y1": 631.25
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_council",
+        "leader_container",
+        "character_portrait_container_council_clipping_mask",
+        "portrait_positioning_container",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_hologram",
+      "scale": 0.57,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_council_gestalt",
+        "leader_container",
+        "character_portrait_container_council_clipping_mask",
+        "portrait_positioning_container",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_mid_close_up",
+      "scale": 0.75,
+      "janela": {
+        "x0": 160,
+        "y0": 126.66666666666667,
+        "x1": 410.6666666666667,
+        "y1": 489.3333333333333
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_ruler_council",
+        "character_portrait_container_council_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_hologram",
+      "scale": 0.7,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_ruler_government",
+        "character_portrait_container_council_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_mid_close_up",
+      "scale": 0.65,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_heir",
+        "character_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_close_up",
+      "scale": 0.3,
+      "janela": {
+        "x0": 83.33333333333334,
+        "y0": -50,
+        "x1": 870,
+        "y1": 350
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_research",
+        "leader_container",
+        "character_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_close_up",
+      "scale": 0.4,
+      "janela": {
+        "x0": 125,
+        "y0": 25,
+        "x1": 715,
+        "y1": 325
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_recruit_event",
+        "character_expanded_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_large",
+      "scale": 1,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_story_event",
+        "character_expanded_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_large_event",
+      "scale": 1,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_conversation_event",
+        "character_expanded_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_large",
+      "scale": 1,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "paragon_ui_types.gui",
+      "caminho": [
+        "<guiTypes>",
+        "paragon_portrait_container_crisis_conversation_event",
+        "character_expanded_portrait_container_clipping_mask",
+        "character_portrait"
+      ],
+      "sprite": "GFX_portrait_character_large_crisis_event",
+      "scale": 1,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "planet_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "planet_view",
+        "side_bar_window",
+        "pop_details_window",
+        "pop_species_info",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.33,
+      "janela": {
+        "x0": 181.8181818181818,
+        "y0": 75.75757575757575,
+        "x1": 439.3939393939394,
+        "y1": 366.66666666666663
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "planet_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "demographics_species_entry",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.15,
+      "janela": {
+        "x0": 133.33333333333334,
+        "y0": -13.333333333333334,
+        "x1": 526.6666666666667,
+        "y1": 373.33333333333337
+      },
+      "semRecorte": false,
+      "ressalvas": [
+        "\"demographics_species_entry\" declara clipping sem size — recorte indeterminado"
+      ]
+    },
+    {
+      "arquivo": "planet_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "demographics_pop_group_entry",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.15,
+      "janela": {
+        "x0": 133.33333333333334,
+        "y0": 26.666666666666668,
+        "x1": 500,
+        "y1": 393.33333333333337
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "planet_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "planet_species_entry",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.15,
+      "janela": {
+        "x0": 153.33333333333334,
+        "y0": 13.333333333333334,
+        "x1": 520,
+        "y1": 380
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "planet_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "planet_pop_entry",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.15,
+      "janela": {
+        "x0": 133.33333333333334,
+        "y0": 20,
+        "x1": 500,
+        "y1": 386.6666666666667
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "rename_dialog.gui",
+      "caminho": [
+        "<guiTypes>",
+        "rename_species_dialog",
+        "portrait_window",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.53,
+      "janela": {
+        "x0": 113.20754716981132,
+        "y0": 30.188679245283016,
+        "x1": 396.2264150943396,
+        "y1": 379.2452830188679
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "select_empire_design.gui",
+      "caminho": [
+        "<guiTypes>",
+        "prescripted_empire_design_entry",
+        "portrait_container",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character_close_up",
+      "scale": 0.19,
+      "janela": {
+        "x0": 131.57894736842104,
+        "y0": 42.10526315789474,
+        "x1": 447.36842105263156,
+        "y1": 368.42105263157896
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "select_empire_design.gui",
+      "caminho": [
+        "<guiTypes>",
+        "user_empire_design_entry",
+        "portrait_container",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character_close_up",
+      "scale": 0.19,
+      "janela": {
+        "x0": 131.57894736842104,
+        "y0": 42.10526315789474,
+        "x1": 447.36842105263156,
+        "y1": 368.42105263157896
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "select_empire_design.gui",
+      "caminho": [
+        "<guiTypes>",
+        "user_empire_design_entry_narrow",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.19,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "slave_pool_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "slave_pool_pop_entry",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.17,
+      "janela": {
+        "x0": 135.2941176470588,
+        "y0": 41.17647058823529,
+        "x1": 458.8235294117647,
+        "y1": 364.70588235294116
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "species_mod_apply_window.gui",
+      "caminho": [
+        "<guiTypes>",
+        "species_mod_apply_window",
+        "template",
+        "species"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.13,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "species_mod_apply_window.gui",
+      "caminho": [
+        "<guiTypes>",
+        "species_mod_apply_species_item",
+        "species_container",
+        "species"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.12,
+      "janela": {
+        "x0": 116.66666666666667,
+        "y0": 25,
+        "x1": 508.33333333333337,
+        "y1": 358.33333333333337
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "species_mod_window.gui",
+      "caminho": [
+        "<guiTypes>",
+        "species_mod_window",
+        "species_portrait_container",
+        "species_portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.375,
+      "janela": {
+        "x0": 120,
+        "y0": 0,
+        "x1": 440,
+        "y1": 381.3333333333333
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "species_portrait_picker_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "species_portrait_picker_entry",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character_close_up",
+      "scale": 0.36,
+      "janela": {
+        "x0": 166.66666666666669,
+        "y0": 27.77777777777778,
+        "x1": 402.77777777777777,
+        "y1": 361.11111111111114
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "species_portrait_picker_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "species_portrait_picker_entry_additional_content_small",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character_close_up",
+      "scale": 0.29,
+      "janela": {
+        "x0": 165.51724137931035,
+        "y0": 27.586206896551726,
+        "x1": 396.55172413793105,
+        "y1": 355.1724137931035
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "standard_dialog.gui",
+      "caminho": [
+        "<guiTypes>",
+        "message_window_dialog_leader_level_up",
+        "portrait_window",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.26,
+      "janela": {
+        "x0": 96.15384615384615,
+        "y0": -26.923076923076923,
+        "x1": 461.53846153846155,
+        "y1": 400
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "standard_dialog.gui",
+      "caminho": [
+        "<guiTypes>",
+        "contract_end_dialog",
+        "desc_window",
+        "leader_portrait_window",
+        "leader_portrait"
+      ],
+      "sprite": "GFX_portrait_character_close_up",
+      "scale": 0.4,
+      "janela": {
+        "x0": 100,
+        "y0": 0,
+        "x1": 437.5,
+        "y1": 400
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "starbase_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "popcat_selection_entry",
+        "portrait",
+        "species_portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.2,
+      "janela": {
+        "x0": 140,
+        "y0": 45,
+        "x1": 465,
+        "y1": 345
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "start_screen.gui",
+      "caminho": [
+        "<guiTypes>",
+        "start_screen_window",
+        "leader_window",
+        "leader_portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.75,
+      "janela": {
+        "x0": 93.33333333333333,
+        "y0": 13.333333333333334,
+        "x1": 493.3333333333333,
+        "y1": 346.6666666666667
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "start_screen.gui",
+      "caminho": [
+        "<guiTypes>",
+        "start_screen_window",
+        "species_window",
+        "species_portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.17,
+      "janela": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 882.3529411764705,
+        "y1": 705.8823529411765
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "synaptic_lathe_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "synaptic_lathe_view",
+        "synaptic_lathe_side_bar_window",
+        "pop_details_window",
+        "pop_species_info",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.33,
+      "janela": {
+        "x0": 181.8181818181818,
+        "y0": 75.75757575757575,
+        "x1": 439.3939393939394,
+        "y1": 366.66666666666663
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "synaptic_lathe_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "synaptic_lathe_pop_entry",
+        "portrait",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.15,
+      "janela": {
+        "x0": 153.33333333333334,
+        "y0": 0,
+        "x1": 520,
+        "y1": 366.6666666666667
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "the_shroud.gui",
+      "caminho": [
+        "<guiTypes>",
+        "patron_envoy_slot",
+        "portrait_window",
+        "portrait"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.25,
+      "janela": {
+        "x0": 82,
+        "y0": 76,
+        "x1": 286,
+        "y1": 380
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "topbar_species_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "topbar_species_view",
+        "topbar_species_tab",
+        "selected_species",
+        "portrait",
+        "selected_species_icon"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.6,
+      "janela": {
+        "x0": 91.66666666666667,
+        "y0": -36.66666666666667,
+        "x1": 638.3333333333334,
+        "y1": 376.6666666666667
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "topbar_species_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "species_entry",
+        "species_container",
+        "species"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.25,
+      "janela": {
+        "x0": 120,
+        "y0": 12,
+        "x1": 496,
+        "y1": 336
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "topbar_species_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "species_entry_sub",
+        "species_container",
+        "species"
+      ],
+      "sprite": "GFX_portrait_character",
+      "scale": 0.12,
+      "janela": {
+        "x0": 116.66666666666667,
+        "y0": 25,
+        "x1": 508.33333333333337,
+        "y1": 375
+      },
+      "semRecorte": false,
+      "ressalvas": []
+    },
+    {
+      "arquivo": "trade_view.gui",
+      "caminho": [
+        "<guiTypes>",
+        "trade_view",
+        "portrait_character"
+      ],
+      "sprite": "GFX_portrait_gamesetup_mask_character_without_room",
+      "scale": 1,
+      "janela": null,
+      "semRecorte": true,
+      "ressalvas": []
+    }
+  ]
+}

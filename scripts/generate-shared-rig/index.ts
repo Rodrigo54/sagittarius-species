@@ -1,7 +1,12 @@
 import { existsSync } from 'node:fs';
 import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { corrigirShaderDoMesh, corrigirUvDoMesh, removerPlanosOcultos } from './mesh-uv';
+import {
+  corrigirShaderDoMesh,
+  corrigirUvDoMesh,
+  recortarPlanoAcima,
+  removerPlanosOcultos,
+} from './mesh-uv';
 import { ANIMATIONS_ASSET, ENTITIES_ASSET, MESHES_GFX } from './templates';
 
 const PASTA_MOD_PORTRAITS = join(import.meta.dir, '../../mod/sagittarius-species/gfx/models/portraits');
@@ -39,8 +44,14 @@ const ARQUIVOS_ANIM = [
  *    in-game aparece um quadro vazio).
  * 3. `corrigirUvDoMesh` — a UV do plano restante passa a usar o canvas
  *    inteiro em vez de metade (ver `future-plans.md` e `portraits.md`).
+ * 4. `recortarPlanoAcima` — remove as linhas de vértices do topo do plano que
+ *    a câmera de retrato nunca captura. Medição in-game (ver
+ *    `scripts/measure-framing/ancora.json`) situa o topo do sprite em
+ *    `y_canvas ≈ 199`, então a faixa acima disso consome pixels de textura sem
+ *    nunca chegar à tela. Cortando a geometria, o mesmo canvas passa a cobrir
+ *    só o que aparece — +25% de densidade vertical, sem mudar o enquadramento.
  *
- * Regenerável a qualquer momento a partir da fonte (`sl_shared/` + as duas
+ * Regenerável a qualquer momento a partir da fonte (`sl_shared/` + as
  * transformações), não é uma migração de disparo único.
  */
 async function main() {
@@ -58,7 +69,9 @@ async function main() {
   }
 
   const meshOriginal = await readFile(caminhoMeshOrigem);
-  const meshCorrigido = corrigirUvDoMesh(corrigirShaderDoMesh(removerPlanosOcultos(meshOriginal)));
+  const meshCorrigido = recortarPlanoAcima(
+    corrigirUvDoMesh(corrigirShaderDoMesh(removerPlanosOcultos(meshOriginal)))
+  );
 
   await mkdir(PASTA_SSM_SHARED, { recursive: true });
 

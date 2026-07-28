@@ -1,0 +1,137 @@
+{
+  "_comentario": [
+    "Relação medida entre coordenadas do sprite de retrato (derivadas dos .gui",
+    "pelo index.ts) e coordenadas do canvas de textura do rig ssm_shared.",
+    "",
+    "    y_canvas = c + k * y_sprite",
+    "",
+    "Medido em 2026-07-27, canvas 980x976, contra screenshots 1920x1080 do jogo.",
+    "Refazer só se o canvas do rig mudar ou se um patch mexer na câmera de",
+    "retrato — a tabela de contextos (contextos.json) se revalida sozinha, mas",
+    "esta âncora exige o jogo aberto."
+  ],
+
+  "k": 2.042,
+  "c": 198.8,
+
+  "eixo_x": {
+    "_comentario": [
+      "    x_canvas = c_x + k_x * x_sprite",
+      "",
+      "Medido depois, num screenshot em que os retratos exibidos usavam a arte",
+      "de calibração do eixo X (os primeiros prints mostravam só o slot 001 de",
+      "cada espécie, que é sempre a arte do eixo Y)."
+    ],
+    "k": 2.034,
+    "c": -91.5,
+    "_ajuste": {
+      "contexto": "species_portrait_picker_view.gui :: portrait/portrait",
+      "janela_sprite": [167, 403],
+      "canvas_medido": [248, 728]
+    },
+    "_validacao_independente": {
+      "o_que": "escala do banner de criação de império (scale 0.8, lido do .gui)",
+      "previsto": 2.543,
+      "medido": 2.571,
+      "erro": "1.1%"
+    },
+    "_conclusoes": {
+      "x_canvas_0_em_sprite": 45,
+      "x_canvas_980_em_sprite": 525,
+      "canvas_inteiro_entra_em_x": true,
+      "nota": [
+        "A câmera captura mais que a largura do canvas: x_sprite = 0 cairia em",
+        "x_canvas = -91.5, fora da textura. Confirma por medição o que o",
+        "documento de enquadramento já havia concluído a partir dos marcadores",
+        "de canto — não há faixa morta horizontal a recuperar, e apertar a UV em",
+        "U cortaria o enquadramento."
+      ]
+    },
+    "_isotropia": {
+      "k_y": 2.042,
+      "k_x": 2.034,
+      "diferenca": "0.4%",
+      "significado": [
+        "A projeção do canvas no mesh é isotrópica dentro do erro de medição,",
+        "o que confirma a escolha original do canvas 980x976: a proporção está",
+        "casada com o bounding box do plano, sem esticar a arte em nenhum eixo.",
+        "Qualquer canvas novo precisa preservar essa proporção pelo mesmo motivo."
+      ]
+    }
+  },
+
+  "_ajuste": {
+    "contexto": "species_portrait_picker_view.gui :: portrait/portrait",
+    "porque": [
+      "As miniaturas do seletor de retratos são o melhor ajuste disponível: a",
+      "região medida cobre o container inteiro (85px de largura, 119px de",
+      "altura), então nem o topo nem a base estão truncados, e sete miniaturas",
+      "independentes concordam no mesmo valor."
+    ],
+    "janela_sprite": [28, 361],
+    "canvas_medido": [256, 936],
+    "escala_medida_px_canvas_por_px_tela": 5.714
+  },
+
+  "_validacoes_independentes": [
+    {
+      "o_que": "altura da região na tela",
+      "previsto": "(361 - 28) * 0.36 = 119.9 px",
+      "medido": "119 px",
+      "nota": "a escala 0.36 vem do .gui e não entrou no ajuste"
+    },
+    {
+      "o_que": "escala do banner de criação de império",
+      "contexto": "new_game_setup.gui :: portrait_window (GFX_portrait_gamesetup_mask, scale 0.8)",
+      "previsto": "k / 0.8 = 2.553 px canvas por px tela",
+      "medido": "2.536",
+      "erro": "0.6%"
+    },
+    {
+      "o_que": "base visível do mesmo banner",
+      "previsto": "c + k * (285 - 4) / 0.8 = 916 px de canvas",
+      "medido": "912",
+      "erro": "0.4%"
+    }
+  ],
+
+  "_o_que_nao_bateu": {
+    "o_que": "topo visível do banner",
+    "previsto": 189,
+    "medido": 448,
+    "explicacao": [
+      "A região de calibração do banner está truncada no topo, não o",
+      "enquadramento. O sprite ali é GFX_portrait_gamesetup_mask, que aplica",
+      "máscara de desvanecimento nas bordas, e a bandeira do império e o título",
+      "cobrem a parte de cima. A decodificação por cor falha nessa faixa, e o",
+      "detector corta o trecho. A base do mesmo banner, sem máscara por cima,",
+      "bate com 0.4% de erro."
+    ]
+  },
+
+  "_conclusoes": {
+    "topo_do_sprite_em_canvas": 199,
+    "faixa_nunca_visivel": [0, 199],
+    "fracao_da_altura_recuperavel": 0.204,
+    "ganho_de_densidade_se_recortar": 1.25,
+    "linha_de_grade_do_mesh_mais_proxima": 195,
+    "nota_sobre_a_linha_de_grade": [
+      "As linhas de vértice do pPlaneShape4 caem em y_canvas 2, 97, 195, 293...",
+      "A linha 195 fica 4 px acima do limite medido (199), o que torna o corte",
+      "uma remoção pura de duas linhas — sem precisar reposicionar vértices nem",
+      "recalcular UV por interpolação. Os 4 px abandonados são desprezíveis",
+      "perto da complexidade que reposicionar custaria."
+    ]
+  },
+
+  "_variantes_de_camera": {
+    "achado": [
+      "As variantes de portraitType (close_up, gamesetup_mask, etc.) NÃO mudam",
+      "a câmera. A prova é indireta mas forte: o ajuste feito sobre um contexto",
+      "close_up prevê corretamente a escala de um contexto gamesetup_mask cujo",
+      "scale (0.8) foi lido do .gui e não entrou na conta. Se as câmeras",
+      "diferissem, k seria diferente e a previsão erraria proporcionalmente."
+    ],
+    "consequencia": "Uma única âncora serve para todos os contextos da tabela."
+  }
+}
