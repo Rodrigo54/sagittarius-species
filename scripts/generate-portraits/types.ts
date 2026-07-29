@@ -1,3 +1,5 @@
+import type { GeracaoArt } from '../generate-art/oop-types';
+
 /** Qual rig compartilhado (`gfx/models/portraits/<rig>/`) a espécie usa.
  * `sl_shared` é o rig original do Stellar Legion Mod (UV desperdiça metade
  * do canvas — ver future-plans.md); `ssm_shared` é o fork com a UV
@@ -114,6 +116,11 @@ export interface PortraitConfig {
     female?: number;
     flat?: number;
   };
+  /** Presente = a espécie tem receita de geração via IA (`bun run
+   * generate-art`, workflow OOP no ComfyUI local). Ausente na maioria das
+   * espécies hoje — é opt-in por espécie, não um requisito do pipeline
+   * `bun run portrait`, que nunca lê este campo. */
+  geracaoArt?: GeracaoArt;
 }
 
 export interface SpeciesInfo {
