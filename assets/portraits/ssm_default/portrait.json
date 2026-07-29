@@ -32,7 +32,7 @@
       "width": 832,
       "height": 1216,
       "denoise": 0.8,
-      "controlNetStrength": 0.8,
+      "controlNetStrength": 0.8,      
       "lora": "DetailedEyes_V3.safetensors",
       "loraStrength": 0.6
     },
@@ -44,7 +44,7 @@
       "variantes": {
         "001": {
           "person": {
-            "age": 24,
+            "age": 18,
             "ethnicity": "Caucasian",
             "body_shape": "Athletic"
           },
@@ -55,7 +55,8 @@
           "eyes": {
             "shape": "Round",
             "color": "Blue"
-          }
+          },
+          "extra": "(young boy), flat masculine chest, male chest armor, muscular male torso"
         },
         "002": {
           "person": {
