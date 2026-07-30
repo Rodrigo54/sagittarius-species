@@ -1,4 +1,6 @@
-# Opções para salvar imagens dds
+# Imagens
+
+## Opções para salvar imagens dds
 
 | compressed                      |     |
 | ------------------------------- | --- |
@@ -21,3 +23,17 @@
 | B8G8R8A8 (sRGB, DX 10+)     | ✅  |
 | B8G8R8X8 (Linear, X8R8G8B8) | ✅  |
 | B8G8R8X8 (sRGB, DX 10+)     | ✅  |
+
+## Modelos usados
+
+mahuaXLTurbo_v20.safetensors
+mahuaXLTurbo10_v10.safetensors
+protovisionXLHighFidelity3D_releaseV660Bakedvae.safetensors
+pilgrimMidjourney_v20.safetensors
+pilgrimUnrealSDXL_v10.safetensors
+pilgrim2DSDXL_v60.safetensors
+pilgrimBASESDXL_v4GMG.safetensors
+juggernautXL_ragnarokBy.safetensors
+
+jimEIDOMODE_version10.ckpt
+revAnimated_v2Rebirth.safetensors
