@@ -305,7 +305,7 @@
       ],
       "detect_hand": "enable",
       "detect_body": "enable",
-      "detect_face": "enable",
+      "detect_face": "disable",
       "resolution": 512
     }
   },

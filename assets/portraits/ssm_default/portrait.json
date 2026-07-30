@@ -21,10 +21,10 @@
         "hand_pose": "ArmAtSide",
         "leg_pose": "CrossedLegs"
       },
-      "extra": "3D render, CGI character art, stylized video game character art, digital painting, not photorealistic, serious expression, confident posture, looking at camera, no helmet, bare head, face fully visible, wearing a futuristic sci-fi space suit with metallic plating, science fiction astronaut uniform, space marine armor, smooth flat chest armor plate, no protrusions on chest armor"
+      "extra": "3D render, CGI character art, stylized video game character art, digital painting, not photorealistic, serious expression, confident posture, looking at camera, no helmet, bare head, face fully visible, wearing a futuristic sci-fi space suit, navy blue metallic plating, science fiction astronaut uniform, space marine armor, smooth flat white chest armor plate, no protrusions on chest armor, gold metallic trim details, gold accents"
     },
     "modelo": {
-      "checkpoint": "pilgrimBASESDXL_v4GMG.safetensors",
+      "checkpoint": "pilgrimMidjourney_v20.safetensors",
       "steps": 28,
       "cfg": 5,
       "sampler_name": "euler_ancestral",
@@ -32,9 +32,8 @@
       "width": 832,
       "height": 1216,
       "denoise": 0.8,
-      "controlNetStrength": 0.8,      
-      "lora": "DetailedEyes_V3.safetensors",
-      "loraStrength": 0.6
+      "controlNetStrength": 0.7,
+      "loraStrength": 0
     },
     "male": {
       "person": {
@@ -44,7 +43,7 @@
       "variantes": {
         "001": {
           "person": {
-            "age": 18,
+            "age": 20,
             "ethnicity": "Caucasian",
             "body_shape": "Athletic"
           },
@@ -60,8 +59,8 @@
         },
         "002": {
           "person": {
-            "age": 26,
-            "ethnicity": "Pacific",
+            "age": 20,
+            "ethnicity": "Caucasian",
             "body_shape": "Slim"
           },
           "hair": {
@@ -157,7 +156,7 @@
           },
           "hair": {
             "style": "Undercut",
-            "main_color": "Silver"
+            "main_color": "Blonde"
           },
           "eyes": {
             "shape": "Almond",
@@ -432,7 +431,7 @@
       "person": {
         "gender": "Female"
       },
-      "referenceImage": "assets/portraits/ssm_default/reference_male.png",
+      "referenceImage": "assets/portraits/ssm_default/reference_female.png",
       "variantes": {
         "001": {
           "person": {
@@ -553,7 +552,7 @@
             "shape": "Oval",
             "color": "Amber"
           },
-          "extra": "dark skin, deep brown skin tone, black skin, African facial features"
+          "extra": "(blonde hair), dark skin, deep brown skin tone, black skin, African facial features"
         },
         "009": {
           "person": {
