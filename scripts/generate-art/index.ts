@@ -122,8 +122,11 @@ async function main(): Promise<void> {
   const pastaStagingGenero = join(PASTA_STAGING, slug, genero);
 
   if (promote) {
-    const { promovidos } = await promoverEspecie(config, slug, genero, pastaStagingGenero, pastaEspecieAssets);
+    const { promovidos, removidos } = await promoverEspecie(config, slug, genero, pastaStagingGenero, pastaEspecieAssets);
     console.log(`Promovido: ${promovidos} imagem(ns) de ${slug}/${genero} para assets/portraits/${slug}/...`);
+    if (removidos > 0) {
+      console.log(`Removido(s) ${removidos} PNG(s) órfão(s) além de "counts.${genero}" em assets/portraits/${slug}/...`);
+    }
     return;
   }
 
