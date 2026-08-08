@@ -12,7 +12,8 @@
     "shared-rig": "bun scripts/generate-shared-rig/index.ts",
     "rooms": "bun scripts/generate-rooms/index.ts",
     "names": "bun scripts/generate-names/index.ts",
-    "generate-art": "bun scripts/generate-art/index.ts"
+    "generate-art": "bun scripts/generate-art/index.ts",
+    "generate-art-v2": "bun scripts/generate-art-v2/index.ts"
   },
   "author": "",
   "license": "ISC",

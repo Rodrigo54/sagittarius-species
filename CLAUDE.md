@@ -267,6 +267,12 @@ Caminho **alternativo/opt-in** pra produzir os PNGs de origem que o pipeline de 
 declarada em `geracaoArt` no `portrait.json` da espécie. Ausente na maioria das espécies hoje; presente em
 `ssm_default` e `ssm_astral`.
 
+**Quem roda `bun run generate-art`/`bun run generate-art-v2` (ou qualquer variante futura) é sempre o Rodrigo, nunca
+o Claude por conta própria** — geração de imagem consome GPU local por vários segundos a minutos por variante, e
+rodar sem avisar pode travar a máquina no meio de outra coisa. Claude pode editar `portrait.json`/prompts/pipeline,
+rodar `--export-prompt` (não toca a GPU) e validações pontuais já combinadas explicitamente na conversa — mas
+enfileirar geração de verdade no ComfyUI é decisão do Rodrigo, executada por ele.
+
 - **`scripts/portrait-schema/`** — schema `zod` (`schema.ts`) que descreve o `portrait.json` **inteiro**
   (`name`/`gendered`/`rig`/`counts`/`modo`/`ancora` + `geracaoArt`), fonte de verdade única usada tanto por
   `generate-portraits` quanto por `generate-art` (substituiu validação manual duplicada nos dois). `.strict()`
