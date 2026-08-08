@@ -1,0 +1,2168 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome da espécie sem o prefixo ssm_ — precisa bater com o nome da pasta assets/portraits/ssm_<name>/."
+    },
+    "gendered": {
+      "type": "boolean",
+      "description": "true = a espécie tem subpastas male/female; false = espécie \"flat\", PNGs NNN.png direto na raiz da pasta."
+    },
+    "rig": {
+      "description": "Rig de retrato compartilhado. Omitido = sl_shared.",
+      "type": "string",
+      "enum": [
+        "sl_shared",
+        "ssm_shared"
+      ]
+    },
+    "modo": {
+      "description": "Modo de enquadramento — só faz sentido em rig com guia (ssm_shared). Omitido = largura.",
+      "type": "string",
+      "enum": [
+        "largura",
+        "altura"
+      ]
+    },
+    "ancora": {
+      "description": "O que encosta no topo do guia — só faz sentido em rig com guia (ssm_shared). Omitido = conteudo.",
+      "type": "string",
+      "enum": [
+        "conteudo",
+        "cabeca"
+      ]
+    },
+    "counts": {
+      "type": "object",
+      "properties": {
+        "male": {
+          "description": "Quantidade de variantes masculinas.",
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "female": {
+          "description": "Quantidade de variantes femininas.",
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "flat": {
+          "description": "Quantidade de variantes (espécie sem gênero).",
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "additionalProperties": false,
+      "description": "Quantidade de variantes por gênero — precisa bater exato com os PNGs encontrados em assets/portraits/ssm_<name>/."
+    },
+    "geracaoArt": {
+      "type": "object",
+      "properties": {
+        "base": {
+          "type": "object",
+          "properties": {
+            "tipo": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "enum": [
+                    "Human",
+                    "Elf",
+                    "Mermaid",
+                    "Necroid",
+                    "Furry",
+                    "Molluscoid",
+                    "Eldritch",
+                    "Robot",
+                    "Avian",
+                    "Alien",
+                    "Cyborg"
+                  ],
+                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                },
+                "description": {
+                  "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "value"
+              ],
+              "additionalProperties": false,
+              "description": "Arquétipo visual da espécie/indivíduo pro prompt de geração de arte via IA. Não é o species_class do jogo (esse não muda, não existe em portrait.json)."
+            },
+            "person": {
+              "type": "object",
+              "properties": {
+                "age": {
+                  "description": "Idade aparente do indivíduo.",
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "ethnicity": {
+                  "description": "Etnia.",
+                  "type": "string",
+                  "enum": [
+                    "African",
+                    "Asian",
+                    "Caucasian",
+                    "Latino",
+                    "Pacific",
+                    "Alien"
+                  ]
+                },
+                "body_shape": {
+                  "description": "Tipo físico/corpo.",
+                  "type": "string",
+                  "enum": [
+                    "Slim",
+                    "Athletic",
+                    "Average",
+                    "Curvy",
+                    "Chubby",
+                    "Hourglass",
+                    "Muscular"
+                  ]
+                },
+                "gender": {
+                  "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                  "type": "string",
+                  "enum": [
+                    "Female",
+                    "Male",
+                    "Androgynous"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "description": "Atributos da pessoa/indivíduo."
+            },
+            "hair": {
+              "type": "object",
+              "properties": {
+                "style": {
+                  "description": "Estilo/corte de cabelo.",
+                  "type": "string",
+                  "enum": [
+                    "Short",
+                    "Long",
+                    "Curly",
+                    "Straight",
+                    "Wavy",
+                    "Bald",
+                    "Ponytail",
+                    "Braided",
+                    "Bun",
+                    "Spiky",
+                    "Undercut"
+                  ]
+                },
+                "main_color": {
+                  "description": "Cor principal do cabelo.",
+                  "type": "string",
+                  "enum": [
+                    " ",
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum"
+                  ]
+                },
+                "optional_color": {
+                  "description": "Cor secundária do cabelo (mechas, dip-dye, etc.).",
+                  "type": "string",
+                  "enum": [
+                    " ",
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "description": "Cabelo."
+            },
+            "eyes": {
+              "type": "object",
+              "properties": {
+                "shape": {
+                  "description": "Formato dos olhos.",
+                  "type": "string",
+                  "enum": [
+                    "Round",
+                    "Almond",
+                    "Hooded",
+                    "Monolid",
+                    "Upturned",
+                    "Downturned",
+                    "Oval",
+                    "Closed"
+                  ]
+                },
+                "color": {
+                  "description": "Cor dos olhos.",
+                  "type": "string",
+                  "enum": [
+                    "Blue",
+                    "Green",
+                    "Brown",
+                    "Hazel",
+                    "Gray",
+                    "Amber",
+                    "Violet"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "description": "Olhos."
+            },
+            "torso": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "description": "Descrição livre do que está sobre o tronco: tema/material/cor (armadura, escama, pele nua, pelagem, roupa comum — o que fizer sentido pra espécie).",
+                  "type": "string"
+                },
+                "state": {
+                  "description": "Estado estruturado do tronco (âncora: prioridade alta, peso automático no prompt). Neutro — não julga \"mais coberto é melhor\" (escama à mostra é um estado tão correto quanto armadura completa, dependendo da espécie).",
+                  "type": "string",
+                  "enum": [
+                    "Bare",
+                    "FullyCovered",
+                    "ArmsCoveredTorsoBare",
+                    "TorsoCoveredArmsBare",
+                    "PartiallyCovered"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "description": "O que está sobre o tronco do indivíduo — substitui o antigo campo clothing (vocabulário de roupa civil, sem opção pra armadura/escama/pele nua)."
+            },
+            "extra_prompt": {
+              "type": "object",
+              "properties": {
+                "positive": {
+                  "description": "Texto livre concatenado ao prompt positivo (base→gênero→variante, sempre por cima, nunca substitui os níveis acima).",
+                  "type": "string"
+                },
+                "negative": {
+                  "description": "Texto livre concatenado ao prompt negativo, por cima do negativo compartilhado de base.json (base→gênero→variante, sempre por cima, nunca substitui).",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Texto livre pra cobrir o que os campos estruturados não expressam — substitui o antigo campo extra (que só existia pro lado positivo)."
+            }
+          },
+          "additionalProperties": false,
+          "description": "Bloco de atributos — usado tanto em \"base\" quanto em cada variante, sempre como overrides parciais mesclados por seção (nunca o objeto inteiro substituído). Não tem mais pose/view/style/mouth: esses ficaram travados globalmente em base.json, pra bater sempre com o rig ssm_shared."
+        },
+        "modelo": {
+          "type": "object",
+          "properties": {
+            "checkpoint": {
+              "description": "Nome do arquivo em models/checkpoints/ do ComfyUI local.",
+              "type": "string"
+            },
+            "steps": {
+              "description": "Passos do sampler.",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "cfg": {
+              "description": "CFG scale do sampler.",
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "sampler_name": {
+              "description": "Nome do sampler (ex.: euler_ancestral).",
+              "type": "string"
+            },
+            "scheduler": {
+              "description": "Nome do scheduler (ex.: sgm_uniform).",
+              "type": "string"
+            },
+            "width": {
+              "description": "Largura do canvas de geração / redimensionamento da referência.",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "height": {
+              "description": "Altura do canvas de geração / redimensionamento da referência.",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "denoise": {
+              "description": "Força do denoise no img2img (0 a 1; 1 = ignora a referência, equivalente a txt2img).",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "controlNetStrength": {
+              "description": "Força do ControlNet (0 a 10; 1 = padrão do node).",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "lora": {
+              "description": "Nome do arquivo em models/loras/ do ComfyUI local.",
+              "type": "string"
+            },
+            "loraStrength": {
+              "description": "Força do LoRA, aplicada em model e clip.",
+              "type": "number"
+            }
+          },
+          "additionalProperties": false,
+          "description": "Configuração de checkpoint/sampler/img2img/ControlNet/LoRA — campos ausentes mantêm o valor já presente em base.json."
+        },
+        "male": {
+          "type": "object",
+          "properties": {
+            "tipo": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "enum": [
+                    "Human",
+                    "Elf",
+                    "Mermaid",
+                    "Necroid",
+                    "Furry",
+                    "Molluscoid",
+                    "Eldritch",
+                    "Robot",
+                    "Avian",
+                    "Alien",
+                    "Cyborg"
+                  ],
+                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                },
+                "description": {
+                  "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "value"
+              ],
+              "additionalProperties": false,
+              "description": "Arquétipo visual da espécie/indivíduo pro prompt de geração de arte via IA. Não é o species_class do jogo (esse não muda, não existe em portrait.json)."
+            },
+            "person": {
+              "type": "object",
+              "properties": {
+                "age": {
+                  "description": "Idade aparente do indivíduo.",
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "ethnicity": {
+                  "description": "Etnia.",
+                  "type": "string",
+                  "enum": [
+                    "African",
+                    "Asian",
+                    "Caucasian",
+                    "Latino",
+                    "Pacific",
+                    "Alien"
+                  ]
+                },
+                "body_shape": {
+                  "description": "Tipo físico/corpo.",
+                  "type": "string",
+                  "enum": [
+                    "Slim",
+                    "Athletic",
+                    "Average",
+                    "Curvy",
+                    "Chubby",
+                    "Hourglass",
+                    "Muscular"
+                  ]
+                },
+                "gender": {
+                  "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                  "type": "string",
+                  "enum": [
+                    "Female",
+                    "Male",
+                    "Androgynous"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "description": "Atributos da pessoa/indivíduo."
+            },
+            "hair": {
+              "type": "object",
+              "properties": {
+                "style": {
+                  "description": "Estilo/corte de cabelo.",
+                  "type": "string",
+                  "enum": [
+                    "Short",
+                    "Long",
+                    "Curly",
+                    "Straight",
+                    "Wavy",
+                    "Bald",
+                    "Ponytail",
+                    "Braided",
+                    "Bun",
+                    "Spiky",
+                    "Undercut"
+                  ]
+                },
+                "main_color": {
+                  "description": "Cor principal do cabelo.",
+                  "type": "string",
+                  "enum": [
+                    " ",
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum"
+                  ]
+                },
+                "optional_color": {
+                  "description": "Cor secundária do cabelo (mechas, dip-dye, etc.).",
+                  "type": "string",
+                  "enum": [
+                    " ",
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "description": "Cabelo."
+            },
+            "eyes": {
+              "type": "object",
+              "properties": {
+                "shape": {
+                  "description": "Formato dos olhos.",
+                  "type": "string",
+                  "enum": [
+                    "Round",
+                    "Almond",
+                    "Hooded",
+                    "Monolid",
+                    "Upturned",
+                    "Downturned",
+                    "Oval",
+                    "Closed"
+                  ]
+                },
+                "color": {
+                  "description": "Cor dos olhos.",
+                  "type": "string",
+                  "enum": [
+                    "Blue",
+                    "Green",
+                    "Brown",
+                    "Hazel",
+                    "Gray",
+                    "Amber",
+                    "Violet"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "description": "Olhos."
+            },
+            "torso": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "description": "Descrição livre do que está sobre o tronco: tema/material/cor (armadura, escama, pele nua, pelagem, roupa comum — o que fizer sentido pra espécie).",
+                  "type": "string"
+                },
+                "state": {
+                  "description": "Estado estruturado do tronco (âncora: prioridade alta, peso automático no prompt). Neutro — não julga \"mais coberto é melhor\" (escama à mostra é um estado tão correto quanto armadura completa, dependendo da espécie).",
+                  "type": "string",
+                  "enum": [
+                    "Bare",
+                    "FullyCovered",
+                    "ArmsCoveredTorsoBare",
+                    "TorsoCoveredArmsBare",
+                    "PartiallyCovered"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "description": "O que está sobre o tronco do indivíduo — substitui o antigo campo clothing (vocabulário de roupa civil, sem opção pra armadura/escama/pele nua)."
+            },
+            "extra_prompt": {
+              "type": "object",
+              "properties": {
+                "positive": {
+                  "description": "Texto livre concatenado ao prompt positivo (base→gênero→variante, sempre por cima, nunca substitui os níveis acima).",
+                  "type": "string"
+                },
+                "negative": {
+                  "description": "Texto livre concatenado ao prompt negativo, por cima do negativo compartilhado de base.json (base→gênero→variante, sempre por cima, nunca substitui).",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Texto livre pra cobrir o que os campos estruturados não expressam — substitui o antigo campo extra (que só existia pro lado positivo)."
+            },
+            "referenceImage": {
+              "description": "Caminho (relativo à raiz do repo) da imagem de referência deste gênero — usada tanto pro img2img quanto pro ControlNet OpenPose. Uma por gênero, não uma por espécie.",
+              "type": "string"
+            },
+            "variantes": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "pattern": "^\\d{3}$"
+              },
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "tipo": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "string",
+                        "enum": [
+                          "Human",
+                          "Elf",
+                          "Mermaid",
+                          "Necroid",
+                          "Furry",
+                          "Molluscoid",
+                          "Eldritch",
+                          "Robot",
+                          "Avian",
+                          "Alien",
+                          "Cyborg"
+                        ],
+                        "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                      },
+                      "description": {
+                        "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "value"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Arquétipo visual da espécie/indivíduo pro prompt de geração de arte via IA. Não é o species_class do jogo (esse não muda, não existe em portrait.json)."
+                  },
+                  "person": {
+                    "type": "object",
+                    "properties": {
+                      "age": {
+                        "description": "Idade aparente do indivíduo.",
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "ethnicity": {
+                        "description": "Etnia.",
+                        "type": "string",
+                        "enum": [
+                          "African",
+                          "Asian",
+                          "Caucasian",
+                          "Latino",
+                          "Pacific",
+                          "Alien"
+                        ]
+                      },
+                      "body_shape": {
+                        "description": "Tipo físico/corpo.",
+                        "type": "string",
+                        "enum": [
+                          "Slim",
+                          "Athletic",
+                          "Average",
+                          "Curvy",
+                          "Chubby",
+                          "Hourglass",
+                          "Muscular"
+                        ]
+                      },
+                      "gender": {
+                        "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                        "type": "string",
+                        "enum": [
+                          "Female",
+                          "Male",
+                          "Androgynous"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Atributos da pessoa/indivíduo."
+                  },
+                  "hair": {
+                    "type": "object",
+                    "properties": {
+                      "style": {
+                        "description": "Estilo/corte de cabelo.",
+                        "type": "string",
+                        "enum": [
+                          "Short",
+                          "Long",
+                          "Curly",
+                          "Straight",
+                          "Wavy",
+                          "Bald",
+                          "Ponytail",
+                          "Braided",
+                          "Bun",
+                          "Spiky",
+                          "Undercut"
+                        ]
+                      },
+                      "main_color": {
+                        "description": "Cor principal do cabelo.",
+                        "type": "string",
+                        "enum": [
+                          " ",
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum"
+                        ]
+                      },
+                      "optional_color": {
+                        "description": "Cor secundária do cabelo (mechas, dip-dye, etc.).",
+                        "type": "string",
+                        "enum": [
+                          " ",
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Cabelo."
+                  },
+                  "eyes": {
+                    "type": "object",
+                    "properties": {
+                      "shape": {
+                        "description": "Formato dos olhos.",
+                        "type": "string",
+                        "enum": [
+                          "Round",
+                          "Almond",
+                          "Hooded",
+                          "Monolid",
+                          "Upturned",
+                          "Downturned",
+                          "Oval",
+                          "Closed"
+                        ]
+                      },
+                      "color": {
+                        "description": "Cor dos olhos.",
+                        "type": "string",
+                        "enum": [
+                          "Blue",
+                          "Green",
+                          "Brown",
+                          "Hazel",
+                          "Gray",
+                          "Amber",
+                          "Violet"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Olhos."
+                  },
+                  "torso": {
+                    "type": "object",
+                    "properties": {
+                      "description": {
+                        "description": "Descrição livre do que está sobre o tronco: tema/material/cor (armadura, escama, pele nua, pelagem, roupa comum — o que fizer sentido pra espécie).",
+                        "type": "string"
+                      },
+                      "state": {
+                        "description": "Estado estruturado do tronco (âncora: prioridade alta, peso automático no prompt). Neutro — não julga \"mais coberto é melhor\" (escama à mostra é um estado tão correto quanto armadura completa, dependendo da espécie).",
+                        "type": "string",
+                        "enum": [
+                          "Bare",
+                          "FullyCovered",
+                          "ArmsCoveredTorsoBare",
+                          "TorsoCoveredArmsBare",
+                          "PartiallyCovered"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "O que está sobre o tronco do indivíduo — substitui o antigo campo clothing (vocabulário de roupa civil, sem opção pra armadura/escama/pele nua)."
+                  },
+                  "extra_prompt": {
+                    "type": "object",
+                    "properties": {
+                      "positive": {
+                        "description": "Texto livre concatenado ao prompt positivo (base→gênero→variante, sempre por cima, nunca substitui os níveis acima).",
+                        "type": "string"
+                      },
+                      "negative": {
+                        "description": "Texto livre concatenado ao prompt negativo, por cima do negativo compartilhado de base.json (base→gênero→variante, sempre por cima, nunca substitui).",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Texto livre pra cobrir o que os campos estruturados não expressam — substitui o antigo campo extra (que só existia pro lado positivo)."
+                  }
+                },
+                "additionalProperties": false,
+                "description": "Bloco de atributos — usado tanto em \"base\" quanto em cada variante, sempre como overrides parciais mesclados por seção (nunca o objeto inteiro substituído). Não tem mais pose/view/style/mouth: esses ficaram travados globalmente em base.json, pra bater sempre com o rig ssm_shared."
+              },
+              "description": "Uma variante nomeada por indivíduo — chave é o índice zero-padded a 3 dígitos (\"001\"..\"NNN\"), mesma convenção do PNG final. A contagem de chaves precisa bater exatamente com counts.<gênero>."
+            }
+          },
+          "required": [
+            "variantes"
+          ],
+          "additionalProperties": false,
+          "description": "Bloco de um gênero (male/female/flat): overrides sobre base, mais uma variante nomeada por indivíduo."
+        },
+        "female": {
+          "type": "object",
+          "properties": {
+            "tipo": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "enum": [
+                    "Human",
+                    "Elf",
+                    "Mermaid",
+                    "Necroid",
+                    "Furry",
+                    "Molluscoid",
+                    "Eldritch",
+                    "Robot",
+                    "Avian",
+                    "Alien",
+                    "Cyborg"
+                  ],
+                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                },
+                "description": {
+                  "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "value"
+              ],
+              "additionalProperties": false,
+              "description": "Arquétipo visual da espécie/indivíduo pro prompt de geração de arte via IA. Não é o species_class do jogo (esse não muda, não existe em portrait.json)."
+            },
+            "person": {
+              "type": "object",
+              "properties": {
+                "age": {
+                  "description": "Idade aparente do indivíduo.",
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "ethnicity": {
+                  "description": "Etnia.",
+                  "type": "string",
+                  "enum": [
+                    "African",
+                    "Asian",
+                    "Caucasian",
+                    "Latino",
+                    "Pacific",
+                    "Alien"
+                  ]
+                },
+                "body_shape": {
+                  "description": "Tipo físico/corpo.",
+                  "type": "string",
+                  "enum": [
+                    "Slim",
+                    "Athletic",
+                    "Average",
+                    "Curvy",
+                    "Chubby",
+                    "Hourglass",
+                    "Muscular"
+                  ]
+                },
+                "gender": {
+                  "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                  "type": "string",
+                  "enum": [
+                    "Female",
+                    "Male",
+                    "Androgynous"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "description": "Atributos da pessoa/indivíduo."
+            },
+            "hair": {
+              "type": "object",
+              "properties": {
+                "style": {
+                  "description": "Estilo/corte de cabelo.",
+                  "type": "string",
+                  "enum": [
+                    "Short",
+                    "Long",
+                    "Curly",
+                    "Straight",
+                    "Wavy",
+                    "Bald",
+                    "Ponytail",
+                    "Braided",
+                    "Bun",
+                    "Spiky",
+                    "Undercut"
+                  ]
+                },
+                "main_color": {
+                  "description": "Cor principal do cabelo.",
+                  "type": "string",
+                  "enum": [
+                    " ",
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum"
+                  ]
+                },
+                "optional_color": {
+                  "description": "Cor secundária do cabelo (mechas, dip-dye, etc.).",
+                  "type": "string",
+                  "enum": [
+                    " ",
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "description": "Cabelo."
+            },
+            "eyes": {
+              "type": "object",
+              "properties": {
+                "shape": {
+                  "description": "Formato dos olhos.",
+                  "type": "string",
+                  "enum": [
+                    "Round",
+                    "Almond",
+                    "Hooded",
+                    "Monolid",
+                    "Upturned",
+                    "Downturned",
+                    "Oval",
+                    "Closed"
+                  ]
+                },
+                "color": {
+                  "description": "Cor dos olhos.",
+                  "type": "string",
+                  "enum": [
+                    "Blue",
+                    "Green",
+                    "Brown",
+                    "Hazel",
+                    "Gray",
+                    "Amber",
+                    "Violet"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "description": "Olhos."
+            },
+            "torso": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "description": "Descrição livre do que está sobre o tronco: tema/material/cor (armadura, escama, pele nua, pelagem, roupa comum — o que fizer sentido pra espécie).",
+                  "type": "string"
+                },
+                "state": {
+                  "description": "Estado estruturado do tronco (âncora: prioridade alta, peso automático no prompt). Neutro — não julga \"mais coberto é melhor\" (escama à mostra é um estado tão correto quanto armadura completa, dependendo da espécie).",
+                  "type": "string",
+                  "enum": [
+                    "Bare",
+                    "FullyCovered",
+                    "ArmsCoveredTorsoBare",
+                    "TorsoCoveredArmsBare",
+                    "PartiallyCovered"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "description": "O que está sobre o tronco do indivíduo — substitui o antigo campo clothing (vocabulário de roupa civil, sem opção pra armadura/escama/pele nua)."
+            },
+            "extra_prompt": {
+              "type": "object",
+              "properties": {
+                "positive": {
+                  "description": "Texto livre concatenado ao prompt positivo (base→gênero→variante, sempre por cima, nunca substitui os níveis acima).",
+                  "type": "string"
+                },
+                "negative": {
+                  "description": "Texto livre concatenado ao prompt negativo, por cima do negativo compartilhado de base.json (base→gênero→variante, sempre por cima, nunca substitui).",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Texto livre pra cobrir o que os campos estruturados não expressam — substitui o antigo campo extra (que só existia pro lado positivo)."
+            },
+            "referenceImage": {
+              "description": "Caminho (relativo à raiz do repo) da imagem de referência deste gênero — usada tanto pro img2img quanto pro ControlNet OpenPose. Uma por gênero, não uma por espécie.",
+              "type": "string"
+            },
+            "variantes": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "pattern": "^\\d{3}$"
+              },
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "tipo": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "string",
+                        "enum": [
+                          "Human",
+                          "Elf",
+                          "Mermaid",
+                          "Necroid",
+                          "Furry",
+                          "Molluscoid",
+                          "Eldritch",
+                          "Robot",
+                          "Avian",
+                          "Alien",
+                          "Cyborg"
+                        ],
+                        "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                      },
+                      "description": {
+                        "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "value"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Arquétipo visual da espécie/indivíduo pro prompt de geração de arte via IA. Não é o species_class do jogo (esse não muda, não existe em portrait.json)."
+                  },
+                  "person": {
+                    "type": "object",
+                    "properties": {
+                      "age": {
+                        "description": "Idade aparente do indivíduo.",
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "ethnicity": {
+                        "description": "Etnia.",
+                        "type": "string",
+                        "enum": [
+                          "African",
+                          "Asian",
+                          "Caucasian",
+                          "Latino",
+                          "Pacific",
+                          "Alien"
+                        ]
+                      },
+                      "body_shape": {
+                        "description": "Tipo físico/corpo.",
+                        "type": "string",
+                        "enum": [
+                          "Slim",
+                          "Athletic",
+                          "Average",
+                          "Curvy",
+                          "Chubby",
+                          "Hourglass",
+                          "Muscular"
+                        ]
+                      },
+                      "gender": {
+                        "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                        "type": "string",
+                        "enum": [
+                          "Female",
+                          "Male",
+                          "Androgynous"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Atributos da pessoa/indivíduo."
+                  },
+                  "hair": {
+                    "type": "object",
+                    "properties": {
+                      "style": {
+                        "description": "Estilo/corte de cabelo.",
+                        "type": "string",
+                        "enum": [
+                          "Short",
+                          "Long",
+                          "Curly",
+                          "Straight",
+                          "Wavy",
+                          "Bald",
+                          "Ponytail",
+                          "Braided",
+                          "Bun",
+                          "Spiky",
+                          "Undercut"
+                        ]
+                      },
+                      "main_color": {
+                        "description": "Cor principal do cabelo.",
+                        "type": "string",
+                        "enum": [
+                          " ",
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum"
+                        ]
+                      },
+                      "optional_color": {
+                        "description": "Cor secundária do cabelo (mechas, dip-dye, etc.).",
+                        "type": "string",
+                        "enum": [
+                          " ",
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Cabelo."
+                  },
+                  "eyes": {
+                    "type": "object",
+                    "properties": {
+                      "shape": {
+                        "description": "Formato dos olhos.",
+                        "type": "string",
+                        "enum": [
+                          "Round",
+                          "Almond",
+                          "Hooded",
+                          "Monolid",
+                          "Upturned",
+                          "Downturned",
+                          "Oval",
+                          "Closed"
+                        ]
+                      },
+                      "color": {
+                        "description": "Cor dos olhos.",
+                        "type": "string",
+                        "enum": [
+                          "Blue",
+                          "Green",
+                          "Brown",
+                          "Hazel",
+                          "Gray",
+                          "Amber",
+                          "Violet"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Olhos."
+                  },
+                  "torso": {
+                    "type": "object",
+                    "properties": {
+                      "description": {
+                        "description": "Descrição livre do que está sobre o tronco: tema/material/cor (armadura, escama, pele nua, pelagem, roupa comum — o que fizer sentido pra espécie).",
+                        "type": "string"
+                      },
+                      "state": {
+                        "description": "Estado estruturado do tronco (âncora: prioridade alta, peso automático no prompt). Neutro — não julga \"mais coberto é melhor\" (escama à mostra é um estado tão correto quanto armadura completa, dependendo da espécie).",
+                        "type": "string",
+                        "enum": [
+                          "Bare",
+                          "FullyCovered",
+                          "ArmsCoveredTorsoBare",
+                          "TorsoCoveredArmsBare",
+                          "PartiallyCovered"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "O que está sobre o tronco do indivíduo — substitui o antigo campo clothing (vocabulário de roupa civil, sem opção pra armadura/escama/pele nua)."
+                  },
+                  "extra_prompt": {
+                    "type": "object",
+                    "properties": {
+                      "positive": {
+                        "description": "Texto livre concatenado ao prompt positivo (base→gênero→variante, sempre por cima, nunca substitui os níveis acima).",
+                        "type": "string"
+                      },
+                      "negative": {
+                        "description": "Texto livre concatenado ao prompt negativo, por cima do negativo compartilhado de base.json (base→gênero→variante, sempre por cima, nunca substitui).",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Texto livre pra cobrir o que os campos estruturados não expressam — substitui o antigo campo extra (que só existia pro lado positivo)."
+                  }
+                },
+                "additionalProperties": false,
+                "description": "Bloco de atributos — usado tanto em \"base\" quanto em cada variante, sempre como overrides parciais mesclados por seção (nunca o objeto inteiro substituído). Não tem mais pose/view/style/mouth: esses ficaram travados globalmente em base.json, pra bater sempre com o rig ssm_shared."
+              },
+              "description": "Uma variante nomeada por indivíduo — chave é o índice zero-padded a 3 dígitos (\"001\"..\"NNN\"), mesma convenção do PNG final. A contagem de chaves precisa bater exatamente com counts.<gênero>."
+            }
+          },
+          "required": [
+            "variantes"
+          ],
+          "additionalProperties": false,
+          "description": "Bloco de um gênero (male/female/flat): overrides sobre base, mais uma variante nomeada por indivíduo."
+        },
+        "flat": {
+          "type": "object",
+          "properties": {
+            "tipo": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "enum": [
+                    "Human",
+                    "Elf",
+                    "Mermaid",
+                    "Necroid",
+                    "Furry",
+                    "Molluscoid",
+                    "Eldritch",
+                    "Robot",
+                    "Avian",
+                    "Alien",
+                    "Cyborg"
+                  ],
+                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                },
+                "description": {
+                  "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "value"
+              ],
+              "additionalProperties": false,
+              "description": "Arquétipo visual da espécie/indivíduo pro prompt de geração de arte via IA. Não é o species_class do jogo (esse não muda, não existe em portrait.json)."
+            },
+            "person": {
+              "type": "object",
+              "properties": {
+                "age": {
+                  "description": "Idade aparente do indivíduo.",
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "ethnicity": {
+                  "description": "Etnia.",
+                  "type": "string",
+                  "enum": [
+                    "African",
+                    "Asian",
+                    "Caucasian",
+                    "Latino",
+                    "Pacific",
+                    "Alien"
+                  ]
+                },
+                "body_shape": {
+                  "description": "Tipo físico/corpo.",
+                  "type": "string",
+                  "enum": [
+                    "Slim",
+                    "Athletic",
+                    "Average",
+                    "Curvy",
+                    "Chubby",
+                    "Hourglass",
+                    "Muscular"
+                  ]
+                },
+                "gender": {
+                  "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                  "type": "string",
+                  "enum": [
+                    "Female",
+                    "Male",
+                    "Androgynous"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "description": "Atributos da pessoa/indivíduo."
+            },
+            "hair": {
+              "type": "object",
+              "properties": {
+                "style": {
+                  "description": "Estilo/corte de cabelo.",
+                  "type": "string",
+                  "enum": [
+                    "Short",
+                    "Long",
+                    "Curly",
+                    "Straight",
+                    "Wavy",
+                    "Bald",
+                    "Ponytail",
+                    "Braided",
+                    "Bun",
+                    "Spiky",
+                    "Undercut"
+                  ]
+                },
+                "main_color": {
+                  "description": "Cor principal do cabelo.",
+                  "type": "string",
+                  "enum": [
+                    " ",
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum"
+                  ]
+                },
+                "optional_color": {
+                  "description": "Cor secundária do cabelo (mechas, dip-dye, etc.).",
+                  "type": "string",
+                  "enum": [
+                    " ",
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "description": "Cabelo."
+            },
+            "eyes": {
+              "type": "object",
+              "properties": {
+                "shape": {
+                  "description": "Formato dos olhos.",
+                  "type": "string",
+                  "enum": [
+                    "Round",
+                    "Almond",
+                    "Hooded",
+                    "Monolid",
+                    "Upturned",
+                    "Downturned",
+                    "Oval",
+                    "Closed"
+                  ]
+                },
+                "color": {
+                  "description": "Cor dos olhos.",
+                  "type": "string",
+                  "enum": [
+                    "Blue",
+                    "Green",
+                    "Brown",
+                    "Hazel",
+                    "Gray",
+                    "Amber",
+                    "Violet"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "description": "Olhos."
+            },
+            "torso": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "description": "Descrição livre do que está sobre o tronco: tema/material/cor (armadura, escama, pele nua, pelagem, roupa comum — o que fizer sentido pra espécie).",
+                  "type": "string"
+                },
+                "state": {
+                  "description": "Estado estruturado do tronco (âncora: prioridade alta, peso automático no prompt). Neutro — não julga \"mais coberto é melhor\" (escama à mostra é um estado tão correto quanto armadura completa, dependendo da espécie).",
+                  "type": "string",
+                  "enum": [
+                    "Bare",
+                    "FullyCovered",
+                    "ArmsCoveredTorsoBare",
+                    "TorsoCoveredArmsBare",
+                    "PartiallyCovered"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "description": "O que está sobre o tronco do indivíduo — substitui o antigo campo clothing (vocabulário de roupa civil, sem opção pra armadura/escama/pele nua)."
+            },
+            "extra_prompt": {
+              "type": "object",
+              "properties": {
+                "positive": {
+                  "description": "Texto livre concatenado ao prompt positivo (base→gênero→variante, sempre por cima, nunca substitui os níveis acima).",
+                  "type": "string"
+                },
+                "negative": {
+                  "description": "Texto livre concatenado ao prompt negativo, por cima do negativo compartilhado de base.json (base→gênero→variante, sempre por cima, nunca substitui).",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Texto livre pra cobrir o que os campos estruturados não expressam — substitui o antigo campo extra (que só existia pro lado positivo)."
+            },
+            "referenceImage": {
+              "description": "Caminho (relativo à raiz do repo) da imagem de referência deste gênero — usada tanto pro img2img quanto pro ControlNet OpenPose. Uma por gênero, não uma por espécie.",
+              "type": "string"
+            },
+            "variantes": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "pattern": "^\\d{3}$"
+              },
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "tipo": {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "string",
+                        "enum": [
+                          "Human",
+                          "Elf",
+                          "Mermaid",
+                          "Necroid",
+                          "Furry",
+                          "Molluscoid",
+                          "Eldritch",
+                          "Robot",
+                          "Avian",
+                          "Alien",
+                          "Cyborg"
+                        ],
+                        "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                      },
+                      "description": {
+                        "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "value"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Arquétipo visual da espécie/indivíduo pro prompt de geração de arte via IA. Não é o species_class do jogo (esse não muda, não existe em portrait.json)."
+                  },
+                  "person": {
+                    "type": "object",
+                    "properties": {
+                      "age": {
+                        "description": "Idade aparente do indivíduo.",
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "ethnicity": {
+                        "description": "Etnia.",
+                        "type": "string",
+                        "enum": [
+                          "African",
+                          "Asian",
+                          "Caucasian",
+                          "Latino",
+                          "Pacific",
+                          "Alien"
+                        ]
+                      },
+                      "body_shape": {
+                        "description": "Tipo físico/corpo.",
+                        "type": "string",
+                        "enum": [
+                          "Slim",
+                          "Athletic",
+                          "Average",
+                          "Curvy",
+                          "Chubby",
+                          "Hourglass",
+                          "Muscular"
+                        ]
+                      },
+                      "gender": {
+                        "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                        "type": "string",
+                        "enum": [
+                          "Female",
+                          "Male",
+                          "Androgynous"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Atributos da pessoa/indivíduo."
+                  },
+                  "hair": {
+                    "type": "object",
+                    "properties": {
+                      "style": {
+                        "description": "Estilo/corte de cabelo.",
+                        "type": "string",
+                        "enum": [
+                          "Short",
+                          "Long",
+                          "Curly",
+                          "Straight",
+                          "Wavy",
+                          "Bald",
+                          "Ponytail",
+                          "Braided",
+                          "Bun",
+                          "Spiky",
+                          "Undercut"
+                        ]
+                      },
+                      "main_color": {
+                        "description": "Cor principal do cabelo.",
+                        "type": "string",
+                        "enum": [
+                          " ",
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum"
+                        ]
+                      },
+                      "optional_color": {
+                        "description": "Cor secundária do cabelo (mechas, dip-dye, etc.).",
+                        "type": "string",
+                        "enum": [
+                          " ",
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Cabelo."
+                  },
+                  "eyes": {
+                    "type": "object",
+                    "properties": {
+                      "shape": {
+                        "description": "Formato dos olhos.",
+                        "type": "string",
+                        "enum": [
+                          "Round",
+                          "Almond",
+                          "Hooded",
+                          "Monolid",
+                          "Upturned",
+                          "Downturned",
+                          "Oval",
+                          "Closed"
+                        ]
+                      },
+                      "color": {
+                        "description": "Cor dos olhos.",
+                        "type": "string",
+                        "enum": [
+                          "Blue",
+                          "Green",
+                          "Brown",
+                          "Hazel",
+                          "Gray",
+                          "Amber",
+                          "Violet"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Olhos."
+                  },
+                  "torso": {
+                    "type": "object",
+                    "properties": {
+                      "description": {
+                        "description": "Descrição livre do que está sobre o tronco: tema/material/cor (armadura, escama, pele nua, pelagem, roupa comum — o que fizer sentido pra espécie).",
+                        "type": "string"
+                      },
+                      "state": {
+                        "description": "Estado estruturado do tronco (âncora: prioridade alta, peso automático no prompt). Neutro — não julga \"mais coberto é melhor\" (escama à mostra é um estado tão correto quanto armadura completa, dependendo da espécie).",
+                        "type": "string",
+                        "enum": [
+                          "Bare",
+                          "FullyCovered",
+                          "ArmsCoveredTorsoBare",
+                          "TorsoCoveredArmsBare",
+                          "PartiallyCovered"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "O que está sobre o tronco do indivíduo — substitui o antigo campo clothing (vocabulário de roupa civil, sem opção pra armadura/escama/pele nua)."
+                  },
+                  "extra_prompt": {
+                    "type": "object",
+                    "properties": {
+                      "positive": {
+                        "description": "Texto livre concatenado ao prompt positivo (base→gênero→variante, sempre por cima, nunca substitui os níveis acima).",
+                        "type": "string"
+                      },
+                      "negative": {
+                        "description": "Texto livre concatenado ao prompt negativo, por cima do negativo compartilhado de base.json (base→gênero→variante, sempre por cima, nunca substitui).",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Texto livre pra cobrir o que os campos estruturados não expressam — substitui o antigo campo extra (que só existia pro lado positivo)."
+                  }
+                },
+                "additionalProperties": false,
+                "description": "Bloco de atributos — usado tanto em \"base\" quanto em cada variante, sempre como overrides parciais mesclados por seção (nunca o objeto inteiro substituído). Não tem mais pose/view/style/mouth: esses ficaram travados globalmente em base.json, pra bater sempre com o rig ssm_shared."
+              },
+              "description": "Uma variante nomeada por indivíduo — chave é o índice zero-padded a 3 dígitos (\"001\"..\"NNN\"), mesma convenção do PNG final. A contagem de chaves precisa bater exatamente com counts.<gênero>."
+            }
+          },
+          "required": [
+            "variantes"
+          ],
+          "additionalProperties": false,
+          "description": "Bloco de um gênero (male/female/flat): overrides sobre base, mais uma variante nomeada por indivíduo."
+        }
+      },
+      "required": [
+        "base"
+      ],
+      "additionalProperties": false,
+      "description": "Configuração completa de geração de arte via IA (bun run generate-art) pra esta espécie — campo opt-in, ausente na maioria das espécies hoje."
+    }
+  },
+  "required": [
+    "name",
+    "gendered",
+    "counts"
+  ],
+  "additionalProperties": false,
+  "description": "Formato completo de assets/portraits/ssm_<especie>/portrait.json."
+}

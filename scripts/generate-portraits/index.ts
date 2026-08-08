@@ -30,14 +30,28 @@ async function main() {
   }
   const slugs = filtro !== undefined ? [filtro] : todosSlugs;
 
-  const especies = await Promise.all(
-    slugs.map((slug) => carregarEspecie(PASTA_PORTRAITS_ASSETS, slug))
+  // carregarEspecie (via lerConfig) já valida a FORMA do portrait.json contra
+  // o schema zod e lança exceção se estiver malformado — capturado aqui, não
+  // deixado propagar cru, pra não quebrar o padrão "valida tudo, reporta tudo
+  // de uma vez" só porque uma espécie entre 18 tem um erro de forma.
+  const resultadosCarga = await Promise.all(
+    slugs.map(async (slug) => {
+      try {
+        return { slug, info: await carregarEspecie(PASTA_PORTRAITS_ASSETS, slug), erro: undefined };
+      } catch (erro) {
+        return { slug, info: undefined, erro: erro instanceof Error ? erro.message : String(erro) };
+      }
+    })
   );
 
-  // Valida tudo antes de mexer em qualquer arquivo — erro trava a geração sem
+  const errosDeCarga = resultadosCarga.flatMap((r) => (r.erro !== undefined ? [r.erro] : []));
+  const especies = resultadosCarga.flatMap((r) => (r.info !== undefined ? [r.info] : []));
+
+  // Valida o resto (arquivos no disco: contagem de PNGs, geometria, canal
+  // alfa) antes de mexer em qualquer arquivo — erro trava a geração sem
   // deixar o mod num estado parcialmente limpo/atualizado.
   const errosPorEspecie = await Promise.all(especies.map((info) => validarEspecie(info)));
-  const erros = errosPorEspecie.flat();
+  const erros = [...errosDeCarga, ...errosPorEspecie.flat()];
   if (erros.length > 0) {
     console.error(
       `${erros.length} erro(s) de validação encontrado(s) — nada foi escrito ou apagado:`

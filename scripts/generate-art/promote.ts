@@ -1,7 +1,6 @@
 import { copyFile, mkdir, readdir, unlink } from 'node:fs/promises';
 import { join } from 'node:path';
-import type { PortraitConfig } from '../generate-portraits/types';
-import type { GeneroAlvo } from './validation';
+import type { GeneroAlvo, PortraitConfig } from '../portrait-schema';
 
 /** Nome de PNG numerado na convenção do pipeline (`001.png`..`NNN.png`) — o
  * único formato de arquivo que a limpeza de órfãos abaixo tem permissão de

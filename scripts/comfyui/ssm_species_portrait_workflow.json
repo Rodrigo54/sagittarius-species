@@ -5,139 +5,13 @@
       "ckpt_name": "pilgrimMidjourney_v20.safetensors"
     }
   },
-  "2": {
-    "class_type": "OOPStyleNode",
-    "_meta": {
-      "title": "Estilo"
-    },
-    "inputs": {
-      "base_style": " "
-    }
-  },
-  "3": {
-    "class_type": "OOPViewNode",
-    "_meta": {
-      "title": "Enquadramento de câmera"
-    },
-    "inputs": {
-      "angle": "Normal",
-      "viewType": "Portrait",
-      "backgroundBlur": false
-    }
-  },
-  "4": {
-    "class_type": "OOPHairNode",
-    "_meta": {
-      "title": "Cabelo (troque a cada espécie)"
-    },
-    "inputs": {
-      "style": "Short",
-      "main_color": "Black",
-      "randomize": false
-    }
-  },
-  "5": {
-    "class_type": "OOPEyesNode",
-    "_meta": {
-      "title": "Olhos (troque a cada espécie)"
-    },
-    "inputs": {
-      "shape": "Almond",
-      "color": "Green",
-      "randomize": false
-    }
-  },
-  "6": {
-    "class_type": "OOPMouthNode",
-    "inputs": {
-      "shape": "Round",
-      "randomize": false
-    }
-  },
-  "7": {
-    "class_type": "OOPClothingNode",
-    "_meta": {
-      "title": "Roupa (troque a cada espécie)"
-    },
-    "inputs": {
-      "upper_type": "Jacket",
-      "lower_type": "Trousers",
-      "randomize": false
-    }
-  },
-  "8": {
-    "class_type": "OOPPoseNode",
-    "inputs": {
-      "base_pose": "Stand",
-      "hand_pose": "ArmAtSide",
-      "leg_pose": "CrossedLegs",
-      "randomize": false
-    }
-  },
-  "9": {
-    "class_type": "OOPPersonNode",
-    "_meta": {
-      "title": "Pessoa base (troque gender/ethnicity/age a cada espécie)"
-    },
-    "inputs": {
-      "age": 28,
-      "body_shape": "Average",
-      "ethnicity": "Alien",
-      "gender": "Female",
-      "randomize": false,
-      "hair": [
-        "4",
-        0
-      ],
-      "eyes": [
-        "5",
-        0
-      ],
-      "mouth": [
-        "6",
-        0
-      ],
-      "clothing": [
-        "7",
-        0
-      ],
-      "poses": [
-        "8",
-        0
-      ]
-    }
-  },
-  "10": {
-    "class_type": "OOPNode",
-    "_meta": {
-      "title": "Composição final do prompt (OOP)"
-    },
-    "inputs": {
-      "Clip": [
-        "27",
-        1
-      ],
-      "Style": [
-        "2",
-        0
-      ],
-      "View": [
-        "3",
-        0
-      ],
-      "Person": [
-        "9",
-        0
-      ]
-    }
-  },
   "11": {
     "class_type": "CLIPTextEncode",
     "_meta": {
-      "title": "Negativo"
+      "title": "Negativo (texto pronto, montado em TS por prompt-builder.ts — base.json + extra_prompt.negative)"
     },
     "inputs": {
-      "text": "lowres, worst quality, low quality, normal quality, jpeg artifacts, blurry, deformed, disfigured, mutated, bad anatomy, malformed limbs, extra limbs, extra arms, extra legs, missing arms, missing legs, extra fingers, fewer digits, missing fingers, fused fingers, too many fingers, mutated hands, poorly drawn hands, poorly drawn feet, bad hands, bad feet, long neck, gross proportions, bad proportions, floating limbs, disconnected limbs, amputation, cloned face, extra digit, poorly drawn face, ugly face, cross-eyed, asymmetric eyes, deformed eyes, bad eyes, marks on face, skin spots, acnes, skin blemishes, out of frame, body out of frame, cropped, close up, tilted head, facing away, multiple people, multiple heads, duplicate, helmet, full-face helmet, visor, motorcycle helmet, face covering, mask covering face, hat, cat ears, wings, repeating hair, beard, facial hair, tattoo, open mouth, black and white, monochrome, grayscale, weird colors, glossy, dark, shadows, sketches, video game, photoshop, tiling, busy background, cluttered background, nsfw, nipples, text, signature, watermark, error, hands in shot, embedding:EasyNegative, embedding:ng_deepnegative_v1_75t, photorealistic, photograph, photo, realistic photography, real person, DSLR, film grain, nipple armor, nipple plate, chest armor bumps, protruding chest armor, anatomically shaped breast armor, chest cups, NASA logo, real world logo, real flag, national flag, country flag, real world insignia, real military insignia, brand logo, trademark, real organization emblem, meatball logo",
+      "text": "",
       "clip": [
         "27",
         1
@@ -210,30 +84,13 @@
       ]
     }
   },
-  "16": {
-    "class_type": "StringConcatenate",
-    "_meta": {
-      "title": "Texto livre (campo extra do portrait.json)"
-    },
-    "inputs": {
-      "string_a": [
-        "10",
-        1
-      ],
-      "string_b": "",
-      "delimiter": ", "
-    }
-  },
   "17": {
     "class_type": "CLIPTextEncode",
     "_meta": {
-      "title": "Positivo final (OOP + texto livre)"
+      "title": "Positivo (texto pronto, montado em TS por prompt-builder.ts)"
     },
     "inputs": {
-      "text": [
-        "16",
-        0
-      ],
+      "text": "",
       "clip": [
         "27",
         1

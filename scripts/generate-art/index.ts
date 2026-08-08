@@ -4,10 +4,11 @@ import { PASTA_ASSETS, PASTA_RAIZ } from '../converter';
 import { lerConfig } from '../generate-portraits/discovery';
 import { aguardarConclusao, baixarImagem, enfileirar, enviarImagemDeReferencia } from './comfyui-client';
 import { mesclarCampos } from './merge';
-import type { GeracaoArtModelo, OOPCamposCompostos } from './oop-types';
+import type { GeneroAlvo, GeracaoArtModelo } from '../portrait-schema';
+import { BASE_FIXO } from './base';
 import { promoverEspecie } from './promote';
+import { montarPrompts } from './prompt-builder';
 import { seedDeterministica } from './seed';
-import { type GeneroAlvo, validarGeracaoArt } from './validation';
 import { montarPrompt, type PromptComfyUI } from './workflow';
 
 const PASTA_PORTRAITS_ASSETS = join(PASTA_ASSETS, 'portraits');
@@ -29,13 +30,18 @@ interface Argumentos {
   variantes?: string[];
   seed?: number;
   promote: boolean;
+  /** Monta e imprime o prompt (positivo + negativo) de cada variante pedida,
+   * sem enfileirar nada no ComfyUI — ciclo de debug instantâneo pra
+   * inspecionar o texto composto (posição/peso dos campos-âncora,
+   * concatenação de extra_prompt) sem gastar GPU. */
+  exportPrompt: boolean;
 }
 
 function parseArgs(argv: string[]): Argumentos {
   const [slug, genero, ...resto] = argv;
   if (!slug || !genero) {
     console.error(
-      'Uso: bun run generate-art <slug> <male|female|flat> [--variante=NNN[,NNN,...]] [--seed=N] [--promote]'
+      'Uso: bun run generate-art <slug> <male|female|flat> [--variante=NNN[,NNN,...]] [--seed=N] [--promote] [--export-prompt]'
     );
     process.exit(1);
   }
@@ -47,10 +53,15 @@ function parseArgs(argv: string[]): Argumentos {
   let variantes: string[] | undefined;
   let seed: number | undefined;
   let promote = false;
+  let exportPrompt = false;
 
   for (const arg of resto) {
     if (arg === '--promote') {
       promote = true;
+      continue;
+    }
+    if (arg === '--export-prompt') {
+      exportPrompt = true;
       continue;
     }
     const casaVariante = arg.match(/^--variante=([\d,]+)$/);
@@ -77,15 +88,19 @@ function parseArgs(argv: string[]): Argumentos {
     console.error('--promote não aceita --variante junto — promove sempre o lote inteiro do gênero.');
     process.exit(1);
   }
+  if (promote && exportPrompt) {
+    console.error('--promote e --export-prompt não fazem sentido juntos — promote não monta prompt nenhum.');
+    process.exit(1);
+  }
 
-  return { slug, genero: genero as GeneroAlvo, variantes, seed, promote };
+  return { slug, genero: genero as GeneroAlvo, variantes, seed, promote, exportPrompt };
 }
 
 async function gerarVariante(
   slug: string,
   genero: GeneroAlvo,
   chave: string,
-  campos: OOPCamposCompostos,
+  prompts: { positive: string; negative: string },
   seed: number,
   template: PromptComfyUI,
   pastaDestino: string,
@@ -93,7 +108,7 @@ async function gerarVariante(
   imagemReferenciaEnviada: string | undefined
 ): Promise<void> {
   const filenamePrefix = `ssm_${slug.replace(/^ssm_/, '')}_${genero}_${chave}`;
-  const prompt = montarPrompt(template, campos, { seed, filenamePrefix, modelo, imagemReferenciaEnviada });
+  const prompt = montarPrompt(template, prompts, { seed, filenamePrefix, modelo, imagemReferenciaEnviada });
 
   console.log(`[${slug}/${genero}/${chave}] enfileirando no ComfyUI (seed ${seed})...`);
   const promptId = await enfileirar(prompt);
@@ -107,15 +122,23 @@ async function gerarVariante(
 }
 
 async function main(): Promise<void> {
-  const { slug, genero, variantes: variantesPedidas, seed, promote } = parseArgs(process.argv.slice(2));
+  const { slug, genero, variantes: variantesPedidas, seed, promote, exportPrompt } = parseArgs(process.argv.slice(2));
 
   const pastaEspecieAssets = join(PASTA_PORTRAITS_ASSETS, slug);
+  // A FORMA de portrait.json (enums, campos obrigatórios, contagem de
+  // variantes batendo com counts) já foi validada pelo zod dentro de
+  // lerConfig — lançou exceção (capturada pelo .catch() no fim deste
+  // arquivo) se estivesse malformado. O que resta conferir aqui é
+  // específico desta invocação de CLI, não do arquivo em si: o gênero
+  // pedido (`slug male|female|flat`) pode legitimamente não existir pra
+  // esta espécie (nem toda espécie declara os três).
   const config = await lerConfig(pastaEspecieAssets);
-
-  const errosValidacao = validarGeracaoArt(config, slug, genero);
-  if (errosValidacao.length > 0) {
-    console.error(`${errosValidacao.length} erro(s) de validação — nada foi enfileirado ou promovido:`);
-    for (const erro of errosValidacao) console.error(` - ${erro}`);
+  if (!config.geracaoArt) {
+    console.error(`${slug}: portrait.json não declara "geracaoArt" — nada a gerar.`);
+    process.exit(1);
+  }
+  if (!config.geracaoArt[genero]) {
+    console.error(`${slug}: portrait.json não declara "geracaoArt.${genero}".`);
     process.exit(1);
   }
 
@@ -140,6 +163,20 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
+  if (exportPrompt) {
+    // Só monta e imprime o prompt de cada variante — nada de ComfyUI (sem
+    // carregar o template, sem enviar referência, sem gastar GPU).
+    for (const chave of chaves) {
+      const camposVariante = bloco.variantes[chave]!;
+      const campos = mesclarCampos(config.geracaoArt!.base, bloco, camposVariante);
+      const { positive, negative } = montarPrompts(campos, BASE_FIXO);
+      console.log(`\n=== ${slug}/${genero}/${chave} ===`);
+      console.log(`POSITIVO (${positive.length} chars):\n${positive}`);
+      console.log(`NEGATIVO (${negative.length} chars):\n${negative}`);
+    }
+    return;
+  }
+
   const template = JSON.parse(await Bun.file(CAMINHO_WORKFLOW).text()) as PromptComfyUI;
   const modelo = config.geracaoArt!.modelo;
 
@@ -154,8 +191,9 @@ async function main(): Promise<void> {
   for (const chave of chaves) {
     const camposVariante = bloco.variantes[chave]!;
     const campos = mesclarCampos(config.geracaoArt!.base, bloco, camposVariante);
+    const prompts = montarPrompts(campos, BASE_FIXO);
     const seedFinal = seed ?? seedDeterministica(slug, genero, chave);
-    await gerarVariante(slug, genero, chave, campos, seedFinal, template, pastaStagingGenero, modelo, imagemReferenciaEnviada);
+    await gerarVariante(slug, genero, chave, prompts, seedFinal, template, pastaStagingGenero, modelo, imagemReferenciaEnviada);
   }
 
   console.log(`Concluído: ${chaves.length} imagem(ns) gerada(s) em ${pastaStagingGenero}`);

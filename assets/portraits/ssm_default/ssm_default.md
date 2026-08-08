@@ -12,9 +12,15 @@ ficção científica — traje espacial futurista com placas metálicas, uniform
 marine, sem capacete (rosto sempre visível). É a linha de base humana do pacote de espécies, servindo de
 contraponto visual às espécies mais estilizadas/fantásticas (elfos, moluscos, avianos etc.).
 
-Estilo de arte declarado em `portrait.json` (`geracaoArt.base`): render 3D / CGI de personagem de videogame,
-digital painting, não fotorrealista. Pose padrão em pé, braços ao lado do corpo, pernas cruzadas, plano médio
-(medium shot), olhando para a câmera, expressão séria e postura confiante.
+`geracaoArt` no `portrait.json` (schema atual, ver `scripts/portrait-schema/`):
+
+- `tipo`: `{ value: "Human", description: "futuristic sci-fi space marine" }`.
+- `torso`: `{ state: "FullyCovered", description: "navy blue metallic plating, science fiction astronaut
+  uniform, space marine armor, smooth flat white chest armor plate, gold metallic trim details, gold accents" }`.
+- `extra_prompt.positive` (nível `base`): `"no helmet, bare head, face fully visible"`.
+- Estilo de arte, pose e enquadramento **não são mais campos por espécie** — estão travados globalmente em
+  `scripts/generate-art/base.json` (render 3D/CGI de personagem de videogame, digital painting, não fotorrealista,
+  pose em pé com braços ao lado do corpo, plano médio, olhando pra câmera, expressão séria).
 
 ## Prompt de referência (Midjourney)
 
@@ -44,24 +50,25 @@ Prompt para gerar `reference_female.png`, com base na variante `female.001` do `
 
 - Mesmos parâmetros de estilo/luz/fundo do prompt masculino, pelos mesmos motivos (fidelidade ao `--style raw`,
   imagem vira base de pose/composição de todo o bloco `female`).
-- **Atenção:** hoje `geracaoArt.female.referenceImage` no `portrait.json` aponta para `reference_male.png` (mesmo
-  arquivo do bloco masculino) — ao gerar essa imagem, além de salvar como `reference_female.png`, é preciso
-  atualizar esse campo no `portrait.json` para ele apontar para o arquivo certo.
 
-## Denoise em duas passadas (corpo/roupa vs. rosto)
+## `--export-prompt`: conferir o texto composto sem gastar GPU
 
-`geracaoArt.modelo` declara dois valores de denoise: `denoise: 0.7` (1ª passada do `KSampler` — corpo e roupa,
-perto da referência) e `faceDenoise: 0.9` (2ª passada, restrita à região do rosto por uma máscara do MediaPipe,
-mais livre pra seguir a etnia/cabelo/olhos de cada variante). Isso exigiu adicionar uma 2ª passada de `KSampler`
-ao `scripts/comfyui/ssm_species_portrait_workflow.json` (nodes 28-36: detecção de rosto → máscara → segunda
-amostragem restrita à máscara) — **esse workflow é compartilhado por todas as 18 espécies**, então a 2ª passada
-roda pra todas, não só pra `ssm_default`; espécies sem `faceDenoise` configurado usam o valor padrão do template.
+`bun run generate-art ssm_default male --variante=001 --export-prompt` (ou `female`) monta e imprime o prompt
+final (positivo + negativo) exatamente como vai pro ComfyUI, sem enfileirar nada — útil pra conferir que
+`tipo`/`torso`/`extra_prompt` estão compondo do jeito esperado antes de rodar um teste de verdade.
 
-**Resolvido:** `LoadMediaPipeFaceLandmarker` (id `28`) é um node nativo do ComfyUI (`comfy_extras/nodes_mediapipe.py`,
-não um custom node de terceiros); o modelo (`mediapipe_face_fp32.safetensors`, ~5.4 MB, publicado pela própria
-Comfy-Org no Hugging Face) foi baixado para `models/detection/` da instalação local. Validado ponta a ponta com
-`bun run generate-art ssm_default male --variante=001` — as duas passadas rodam sem erro e o resultado bate com o
-esperado (roupa igual à referência, rosto seguindo etnia/cabelo/olhos da variante). Um detalhe de serialização
-que vale registrar: o valor do combo `regions` do `MediaPipeFaceMask` (id `30`) é a **string simples** `"all"`,
-não um objeto aninhado — a API do ComfyUI remonta a estrutura aninhada internamente a partir dos `dynamic_paths`
-do schema do node.
+## Reforços conhecidos por variante
+
+Algumas variantes têm `extra_prompt.positive` específico, além do que `base`/`male`/`female` já declaram:
+
+- **`male/001`**: `"(young boy), flat masculine chest, male chest armor, muscular male torso"` — ajuste pontual
+  de uma geração específica.
+- **`male/002`**: `"(pink hair:0.8), flat masculine chest, male chest armor, muscular male torso"` — a ênfase de
+  peso na cor de cabelo (rosa) fez o gênero "balançar" pra mais feminino nos testes originais; esse reforço
+  fecha os três atributos (cabelo, peito masculino, torso musculoso) ao mesmo tempo (ver bug #10 em
+  `generate-art-historico-da-sessao.md`).
+- **Variantes com `ethnicity: "African"`** (`male`: `008`, `013`, `016`, `017`, `019`, `024`, `025`; `female`:
+  `008`, `015`, `020`, `024`): `"(dark skin, deep brown skin tone, African facial features:1.3)"` — etnia é
+  atributo de área pequena do rosto, perde fácil pra referência via img2img/ControlNet sem esse reforço com peso
+  (`female/008` também tem `(blonde hair:1.3)` antes, porque essa variante tem cabelo loiro que também precisou
+  de reforço nos testes originais).

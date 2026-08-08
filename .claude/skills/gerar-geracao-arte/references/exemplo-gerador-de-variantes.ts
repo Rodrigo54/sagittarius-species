@@ -9,6 +9,12 @@
 // entrevista da skill decidiu pra espécie em questão (podem ser bem
 // diferentes: uma espécie de moluscos não tem "hair", uma espécie flat não
 // tem "gender" por variante, etc.).
+//
+// A forma de saída por variante (`{ person, hair, eyes }`) não mudou entre o
+// schema antigo (OOP) e o atual (scripts/portrait-schema/) — só campos como
+// `tipo`/`torso`/`extra_prompt` mudaram de forma, e esses normalmente vivem
+// em `geracaoArt.base` (uma vez por espécie), não por indivíduo, então este
+// gerador não precisa tocar neles.
 
 const ETNIAS = ['Caucasian', 'African', 'Asian', 'Latino', 'Pacific'] as const; // ou só ['Alien'] pra espécie não-humana
 const ESTILOS_CABELO = ['Short', 'Long', 'Wavy', 'Curly', 'Straight', 'Ponytail', 'Braided', 'Bun', 'Spiky', 'Undercut'] as const; // sem 'Bald' se a espécie não deve ter careca

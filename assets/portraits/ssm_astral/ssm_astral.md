@@ -3,7 +3,7 @@
 **Nome exibido:** Astral
 **Species class:** HUM (a confirmar)
 **Rig:** `sl_shared`
-**Gendered:** sim (`male`/`female`, 15/15 variantes)
+**Gendered:** sim (`male`/`female`, 25/25 variantes)
 
 ## Descrição
 
@@ -12,10 +12,26 @@ e uma gema/cristal energético no peito, ligado por veias de energia que se espa
 ordem mística ou entidade cósmica, tons dominantes roxo, violeta e preto com metal escuro/bronze.
 
 `portrait.json` já tem `geracaoArt` configurado (rig continua `sl_shared` — legado congelado — mas a espécie
-ganhou um pipeline de geração via IA em paralelo, ver `bun run generate-art`). Os prompts abaixo documentam as
-referências de img2img/ControlNet (`reference_male.png`/`reference_female.png`) usadas por esse `geracaoArt`, não
-são mais só uma reconstrução visual solta — cada mudança de prompt aqui deveria ser espelhada em
-`geracaoArt.base.extra` (e vice-versa) pra documentação e configuração não divergirem.
+ganhou um pipeline de geração via IA em paralelo, ver `bun run generate-art`), migrado pro schema atual
+(`scripts/portrait-schema/`, ver `generate-art-migracao-schema-proprio.md`):
+
+- `tipo`: `{ value: "Human", description: "mystical order warrior, cosmic sentinel aesthetic, glowing purple
+  eyes, no visible pupils" }`.
+- `eyes.color`: `"Violet"` (fixo — é o traço de identidade mais reconhecível da espécie, por isso vive como campo
+  estruturado dedicado, não só texto).
+- `torso`: `{ state: "FullyCovered", description: "dark purple-violet ornate armor with bronze and gold trim,
+  purple star-shaped mineral gem embedded in chest, faceted raw crystal cut like a multi-pointed star, not a
+  circular orb, not a round gem, not concentric rings, gemstone texture not a flat painted symbol, purple energy
+  veins spreading across the armor from the crystal" }`.
+- `extra_prompt.positive` (nível `base`): `"no hood, no cloak, no cape, bare head, hair fully visible, face fully
+  visible, full arms and hands visible within frame, no part of the body cropped by frame edges"`.
+- `extra_prompt.positive` (nível `male`): `"strong masculine face, square jawline, defined brow ridge, broad
+  shoulders, visibly male, not feminine"`.
+
+Os prompts abaixo documentam as referências de img2img/ControlNet (`reference_male.png`/`reference_female.png`)
+usadas por esse `geracaoArt` — cada mudança de prompt aqui deveria ser espelhada no `geracaoArt` acima (e
+vice-versa) pra documentação e configuração não divergirem. Use `bun run generate-art ssm_astral male
+--variante=001 --export-prompt` (ou `female`) pra conferir o texto composto de verdade sem gastar GPU.
 
 ## Prompt de referência (Midjourney) — Male
 
@@ -32,7 +48,7 @@ inteiros dentro do quadro**, sem cortar nas bordas — enquadramento mais aberto
 - Mesmos parâmetros de estilo/fundo/luz do padrão do pacote (`--style raw`, fundo branco liso, luz frontal sem
   sombra) — ver rationale em `assets/portraits/ssm_default/ssm_default.md`.
 - Olhos "sem pupila" e o cristal do peito são os elementos de identidade visual da espécie; vale reforçá-los
-  explicitamente em qualquer variante nova pra manter consistência entre as 26 variantes masculinas.
+  explicitamente em qualquer variante nova pra manter consistência entre as 25 variantes masculinas.
 - **Braços dentro do quadro:** a primeira tentativa (`--ar 2:3` + `full arms visible within frame` só no texto)
   ainda cortou os braços nas bordas laterais — a pose (mãos perto do cinto/quadril, cotovelos afastados do
   tronco) é larga demais pro quadro vertical estreito de 2:3 no zoom de "medium shot"; é geometria, não só

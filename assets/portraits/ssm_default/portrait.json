@@ -8,20 +8,17 @@
   },
   "geracaoArt": {
     "base": {
-      "style": {
-        "base_style": "3DRendering"
+      "tipo": {
+        "value": "Human",
+        "description": "futuristic sci-fi space marine"
       },
-      "view": {
-        "angle": "Normal",
-        "viewType": "MediumShot",
-        "backgroundBlur": false
+      "torso": {
+        "state": "FullyCovered",
+        "description": "navy blue metallic plating, science fiction astronaut uniform, space marine armor, smooth flat white chest armor plate, gold metallic trim details, gold accents"
       },
-      "pose": {
-        "base_pose": "Stand",
-        "hand_pose": "ArmAtSide",
-        "leg_pose": "CrossedLegs"
-      },
-      "extra": "3D render, CGI character art, stylized video game character art, digital painting, not photorealistic, serious expression, confident posture, looking at camera, no helmet, bare head, face fully visible, wearing a futuristic sci-fi space suit, navy blue metallic plating, science fiction astronaut uniform, space marine armor, smooth flat white chest armor plate, no protrusions on chest armor, gold metallic trim details, gold accents"
+      "extra_prompt": {
+        "positive": "no helmet, bare head, face fully visible"
+      }
     },
     "modelo": {
       "checkpoint": "pilgrimMidjourney_v20.safetensors",
@@ -55,7 +52,9 @@
             "shape": "Round",
             "color": "Blue"
           },
-          "extra": "(young boy), flat masculine chest, male chest armor, muscular male torso"
+          "extra_prompt": {
+            "positive": "(young boy), flat masculine chest, male chest armor, muscular male torso"
+          }
         },
         "002": {
           "person": {
@@ -71,7 +70,9 @@
             "shape": "Monolid",
             "color": "Blue"
           },
-          "extra": "(pink hair:0.8), flat masculine chest, male chest armor, muscular male torso"
+          "extra_prompt": {
+            "positive": "(pink hair:0.8), flat masculine chest, male chest armor, muscular male torso"
+          }
         },
         "003": {
           "person": {
@@ -162,7 +163,9 @@
             "shape": "Almond",
             "color": "Blue"
           },
-          "extra": "dark skin, deep brown skin tone, black skin, African facial features"
+          "extra_prompt": {
+            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
+          }
         },
         "009": {
           "person": {
@@ -238,7 +241,9 @@
             "shape": "Almond",
             "color": "Blue"
           },
-          "extra": "dark skin, deep brown skin tone, black skin, African facial features"
+          "extra_prompt": {
+            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
+          }
         },
         "014": {
           "person": {
@@ -284,7 +289,9 @@
             "shape": "Round",
             "color": "Brown"
           },
-          "extra": "dark skin, deep brown skin tone, black skin, African facial features"
+          "extra_prompt": {
+            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
+          }
         },
         "017": {
           "person": {
@@ -300,7 +307,9 @@
             "shape": "Round",
             "color": "Green"
           },
-          "extra": "dark skin, deep brown skin tone, black skin, African facial features"
+          "extra_prompt": {
+            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
+          }
         },
         "018": {
           "person": {
@@ -331,7 +340,9 @@
             "shape": "Upturned",
             "color": "Hazel"
           },
-          "extra": "dark skin, deep brown skin tone, black skin, African facial features"
+          "extra_prompt": {
+            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
+          }
         },
         "020": {
           "person": {
@@ -407,7 +418,9 @@
             "shape": "Oval",
             "color": "Violet"
           },
-          "extra": "dark skin, deep brown skin tone, black skin, African facial features"
+          "extra_prompt": {
+            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
+          }
         },
         "025": {
           "person": {
@@ -423,7 +436,9 @@
             "shape": "Monolid",
             "color": "Amber"
           },
-          "extra": "dark skin, deep brown skin tone, black skin, African facial features"
+          "extra_prompt": {
+            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
+          }
         }
       }
     },
@@ -552,7 +567,9 @@
             "shape": "Oval",
             "color": "Amber"
           },
-          "extra": "(blonde hair), dark skin, deep brown skin tone, black skin, African facial features"
+          "extra_prompt": {
+            "positive": "(blonde hair:1.3), (dark skin, deep brown skin tone, African facial features:1.3)"
+          }
         },
         "009": {
           "person": {
@@ -658,7 +675,9 @@
             "shape": "Hooded",
             "color": "Green"
           },
-          "extra": "dark skin, deep brown skin tone, black skin, African facial features"
+          "extra_prompt": {
+            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
+          }
         },
         "016": {
           "person": {
@@ -734,7 +753,9 @@
             "shape": "Monolid",
             "color": "Hazel"
           },
-          "extra": "dark skin, deep brown skin tone, black skin, African facial features"
+          "extra_prompt": {
+            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
+          }
         },
         "021": {
           "person": {
@@ -795,7 +816,9 @@
             "shape": "Upturned",
             "color": "Blue"
           },
-          "extra": "dark skin, deep brown skin tone, black skin, African facial features"
+          "extra_prompt": {
+            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
+          }
         },
         "025": {
           "person": {

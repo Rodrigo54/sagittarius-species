@@ -33,6 +33,7 @@ bun run portrait     # bun scripts/generate-portraits/index.ts — sincroniza as
 bun run shared-rig   # bun scripts/generate-shared-rig/index.ts — deriva gfx/.../ssm_shared/ a partir de sl_shared/ (veja seção "sl_shared vs. ssm_shared")
 bun run rooms         # bun scripts/generate-rooms/index.ts — sincroniza assets/city_sets/ com mod/ (DDS + .txt), direto no mod/
 bun run names          # bun scripts/generate-names/index.ts — gera name_lists + species_names (veja seção abaixo)
+bun run generate-art   # bun scripts/generate-art/index.ts <slug> <male|female|flat> [--variante=NNN,...] [--seed=N] [--promote] [--export-prompt] — gera retratos via IA no ComfyUI local (veja seção abaixo)
 bun run copy           # pwsh scripts/copy.ps1 — copia o mod para a pasta local de mods do Stellaris
 bun run overwrite       # pwsh scripts/overwrite.ps1 — apaga e recopia o mod na pasta local de mods do Stellaris
 ```
@@ -258,6 +259,50 @@ validações que o sustentam. Números que importam pra compor arte nova:
 
 Relato completo da sessão que mediu isso (método, armadilhas, decisões descartadas): `ssm-shared-enquadramento.md`.
 Anatomia binária e lições de método por trás da medição: seção 2.5 de `ssm-shared-referencia-tecnica.md`.
+
+## Pipeline de geração de arte via IA (`bun run generate-art`)
+
+Caminho **alternativo/opt-in** pra produzir os PNGs de origem que o pipeline de portraits acima consome (ver
+"Pipeline de portraits") — em vez de arte desenhada à mão, gera via IA (ComfyUI local) a partir de uma receita
+declarada em `geracaoArt` no `portrait.json` da espécie. Ausente na maioria das espécies hoje; presente em
+`ssm_default` e `ssm_astral`.
+
+- **`scripts/portrait-schema/`** — schema `zod` (`schema.ts`) que descreve o `portrait.json` **inteiro**
+  (`name`/`gendered`/`rig`/`counts`/`modo`/`ancora` + `geracaoArt`), fonte de verdade única usada tanto por
+  `generate-portraits` quanto por `generate-art` (substituiu validação manual duplicada nos dois). `.strict()`
+  em todo objeto — chave desconhecida é erro, não é ignorada em silêncio. `vocabulario.ts` guarda os enums
+  aceitos (etnia, cabelo, olho, corpo — cópia estática, não mais extraída ao vivo do ComfyUI; e dois vocabulários
+  novos, exclusivos deste schema: `TIPOS`, o arquétipo visual da espécie, sem relação com `species_class` do
+  jogo; e `ESTADOS_TORSO`, o que cobre o tronco). `gerar-json-schema.ts` gera `portrait.schema.json` (via
+  `z.toJSONSchema()` nativo do zod v4) — artefato derivado, associado em `.vscode/settings.json` pra
+  autocomplete/validação do `portrait.json` direto no editor; rode de novo se `schema.ts` mudar.
+- **`scripts/generate-art/base.json`** — tudo que é fixo/global na geração (não configurável por espécie):
+  estilo de arte, pose, enquadramento de câmera e expressão facial (travados pra sempre bater com o rig
+  `ssm_shared`, evitando corte de braço/cabeça), e o negativo compartilhado de qualidade/anatomia.
+- **`scripts/generate-art/prompt-builder.ts`** — compõe os prompts final (positivo e negativo) inteiramente em
+  TypeScript a partir dos campos de `geracaoArt` + `base.json`, com ordem fixa e peso automático nos campos-âncora
+  (`tipo`, `torso.state`, `eyes.color` — os que mais se perdem quando são só texto solto). Não depende de nenhum
+  custom node externo pra isso — ver `generate-art-migracao-schema-proprio.md` pro porquê (o pipeline usava o
+  pacote `ComfyUI-OOP` antes, abolido nessa migração).
+- **`scripts/generate-art/merge.ts`** — mescla `base` → override de gênero → override de variante, raso por
+  seção; `extra_prompt.positive`/`.negative` concatenam entre níveis (nunca "o último vence").
+- **`scripts/comfyui/ssm_species_portrait_workflow.json`** — template do workflow ComfyUI (formato API, 17
+  nodes): checkpoint, LoRA, ControlNet OpenPose (consistência de pose via referência por gênero), img2img,
+  remoção de fundo com canal alfa. Os dois `CLIPTextEncode` (positivo/negativo) recebem texto pronto injetado
+  por `workflow.ts`, não compõem nada internamente.
+- **`geracaoArt` no `portrait.json`**: `base` (`tipo`, `torso`, `eyes`/`hair`/`person` quando fixos pra toda
+  espécie, `extra_prompt`), `modelo` (checkpoint/sampler/img2img/ControlNet/LoRA), `male`/`female`/`flat`
+  (`referenceImage` + `variantes` nomeadas `"001"`..`"NNN"`, uma por indivíduo, contagem batendo exato com
+  `counts.<gênero>` — conferido pelo schema via `.superRefine`).
+- **`--export-prompt`** — monta e imprime o prompt (positivo + negativo) de uma ou mais variantes sem enfileirar
+  nada no ComfyUI, ciclo de debug instantâneo sem custo de GPU.
+- Skill dedicada pra preencher `geracaoArt` de uma espécie via entrevista: `.claude/skills/gerar-geracao-arte/`
+  (`/gerar-geracao-arte`).
+
+Relato completo de como esse pipeline foi criado (bugs, decisões, configuração testada): primeiro
+`generate-art-historico-da-sessao.md` (sessão que criou o pipeline original, baseado em `ComfyUI-OOP` — formato
+desatualizado, não reflete o schema atual), depois `generate-art-migracao-schema-proprio.md` (sessão que aboliu
+essa dependência e desenhou o schema `zod` atual — este é o que reflete o formato de hoje).
 
 ## Pipeline de listas de nomes / localização / species_names
 

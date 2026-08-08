@@ -58,6 +58,7 @@ Uso geral:
 - sdXL_v10RefinerVAEFix.safetensors
 - silverstarXL_v6.safetensors
 - silverstarXLFantasy_v4.safetensors
+- tamarinXL_v10.safetensors
 - turboDiffusionXL_v12.safetensors
 - v2-1_768-ema-pruned.safetensors
 - wildcardxXLFusion_fusionOG.safetensors

@@ -1,10 +1,13 @@
-import type { GeracaoArt } from '../generate-art/oop-types';
+import type { PortraitConfig, RigId } from '../portrait-schema';
 
-/** Qual rig compartilhado (`gfx/models/portraits/<rig>/`) a espécie usa.
- * `sl_shared` é o rig original do Stellar Legion Mod (UV desperdiça metade
+export type { PortraitConfig, RigId };
+
+/** `sl_shared` é o rig original do Stellar Legion Mod (UV desperdiça metade
  * do canvas — ver future-plans.md); `ssm_shared` é o fork com a UV
- * corrigida e um único plano, usado por 16 das 18 espécies. */
-export type RigId = 'sl_shared' | 'ssm_shared';
+ * corrigida e um único plano, usado por 16 das 18 espécies. O *valor* aceito
+ * (`RigId`) vem de `portrait-schema` — fonte de verdade única de "quais
+ * strings são um rig válido"; o que cada valor *significa* em termos de
+ * canvas/geometria é definido aqui embaixo, em `RIGS`. */
 
 /** `largura` (padrão): escala a arte pra largura do guia, topo no topo do
  * guia — regra padrão pra composições "busto alto e estreito". O excesso de
@@ -13,8 +16,10 @@ export type RigId = 'sl_shared' | 'ssm_shared';
  * do canvas), permitindo que a largura resultante ultrapasse o guia (nunca o
  * canvas) — pra composições atipicamente largas (ombros largos, capuz), onde
  * preencher a largura do guia deixaria a arte curta demais pra alcançar a
- * base. Declarado por espécie no `portrait.json`. */
-export type ModoEnquadramento = 'largura' | 'altura';
+ * base. Declarado por espécie no `portrait.json`. Valor aceito também vem de
+ * `portrait-schema` (`MODOS_ENQUADRAMENTO`); o tipo aqui é só pra manter o
+ * nome em português já usado neste arquivo. */
+export type ModoEnquadramento = NonNullable<PortraitConfig['modo']>;
 
 /** O que encosta no topo do guia.
  *
@@ -32,7 +37,7 @@ export type ModoEnquadramento = 'largura' | 'altura';
  * Não é o padrão porque nem toda estrutura fina é sacrificável: metade das
  * espécies tem alguma, e em algumas (tentáculos, por exemplo) ela é a
  * característica da espécie. A escolha é por espécie, com julgamento visual. */
-export type AncoraVertical = 'conteudo' | 'cabeca';
+export type AncoraVertical = NonNullable<PortraitConfig['ancora']>;
 
 /** Enquadramento-alvo dentro do canvas do rig, expresso em **fração do
  * canvas** — é isso que faz o canvas ser uma constante trocável: mudar a
@@ -101,27 +106,6 @@ export const RIGS: Record<RigId, RigInfo> = {
     guia: { largura: 600 / 980, topo: (339 - 195) / 781, centroX: 0.5 },
   },
 };
-
-export interface PortraitConfig {
-  name: string;
-  gendered: boolean;
-  /** Omitido = `sl_shared`. */
-  rig?: RigId;
-  /** Só faz sentido em rig com `guia`. Omitido = `largura`. */
-  modo?: ModoEnquadramento;
-  /** Só faz sentido em rig com `guia`. Omitido = `conteudo`. */
-  ancora?: AncoraVertical;
-  counts: {
-    male?: number;
-    female?: number;
-    flat?: number;
-  };
-  /** Presente = a espécie tem receita de geração via IA (`bun run
-   * generate-art`, workflow OOP no ComfyUI local). Ausente na maioria das
-   * espécies hoje — é opt-in por espécie, não um requisito do pipeline
-   * `bun run portrait`, que nunca lê este campo. */
-  geracaoArt?: GeracaoArt;
-}
 
 export interface SpeciesInfo {
   /** Nome da pasta, ex.: "ssm_astral" */

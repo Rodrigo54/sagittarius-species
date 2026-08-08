@@ -1,5 +1,11 @@
 # Histórico da sessão: pipeline de geração de arte via IA (`generate-art`) e rework do `ssm_default`
 
+> **Nota:** o pipeline descrito aqui usava o pacote `ComfyUI-OOP` pra compor o prompt (nodes `OOPStyleNode`,
+> `OOPClothingNode`, etc.) e um `geracaoArt.base.extra` de string única. Isso foi substituído numa sessão
+> posterior por composição em TypeScript e um schema `zod` próprio — ver
+> `generate-art-migracao-schema-proprio.md` pro que mudou e por quê. Este relato fica como está, como registro
+> histórico da sessão que criou o pipeline original; não reflete o schema/formato atual do `portrait.json`.
+
 Relato detalhado da sessão que criou o pipeline `bun run generate-art` — geração de retratos de espécie via
 ComfyUI local, orquestrada a partir do `portrait.json` — e o usou pra reworkear a espécie humana (`ssm_default`,
 25 machos + 25 fêmeas) do zero. Existe pra uma conversa nova poder retomar o trabalho (ajustar outra espécie,

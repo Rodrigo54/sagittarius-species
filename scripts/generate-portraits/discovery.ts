@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { readFile, readdir } from 'node:fs/promises';
-import { join } from 'node:path';
+import { basename, join } from 'node:path';
+import { zPortraitConfig } from '../portrait-schema';
 import type { PortraitConfig, SpeciesInfo } from './types';
 
 const ordenarNumericamente = (arquivos: string[]) =>
@@ -22,9 +23,24 @@ export async function listarPastasEspecies(pastaPortraits: string): Promise<stri
     .sort();
 }
 
+/** Lê e valida `portrait.json` contra o schema `zod` de `portrait-schema/` —
+ * único ponto de carga usado por `generate-portraits` e `generate-art`, então
+ * validar aqui cobre os dois pipelines de uma vez (nenhum dos dois faz
+ * `JSON.parse` de `portrait.json` por conta própria). Substitui
+ * `validarGeracaoArt`/`validarEspecie`'s antiga checagem de forma/enum —
+ * essas duas funções continuam existindo só pro que zod não valida
+ * (arquivos no disco: contagem de PNGs, geometria, canal alfa). */
 export async function lerConfig(pastaEspecie: string): Promise<PortraitConfig> {
   const conteudo = await readFile(join(pastaEspecie, 'portrait.json'), 'utf-8');
-  return JSON.parse(conteudo);
+  const resultado = zPortraitConfig.safeParse(JSON.parse(conteudo));
+  if (!resultado.success) {
+    const slug = basename(pastaEspecie);
+    const erros = resultado.error.issues
+      .map((issue) => `${slug}: portrait.json — ${issue.path.join('.') || '(raiz)'}: ${issue.message}`)
+      .join('\n');
+    throw new Error(erros);
+  }
+  return resultado.data;
 }
 
 export async function carregarEspecie(

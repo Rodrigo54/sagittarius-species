@@ -1,23 +1,23 @@
-import type { GeracaoArtModelo, OOPCamposCompostos } from './oop-types';
+import type { GeracaoArtModelo } from '../portrait-schema';
 
 /** IDs dos nodes em `scripts/comfyui/ssm_species_portrait_workflow.json` —
  * hardcoded porque o template é um arquivo fixo desta pipeline, não algo
  * gerado dinamicamente. Se o workflow for editado no ComfyUI e reexportado,
- * estes IDs precisam ser conferidos/atualizados junto. */
+ * estes IDs precisam ser conferidos/atualizados junto.
+ *
+ * Não tem mais `style`/`view`/`hair`/`eyes`/`mouth`/`clothing`/`pose`/
+ * `person`/`textoLivre` — esses nodes (OOP + StringConcatenate) foram
+ * removidos do workflow (ver `generate-art-migracao-schema-proprio.md`); o
+ * texto final (positivo e negativo) já vem pronto de
+ * `prompt-builder.ts#montarPrompts` e é injetado direto nos dois
+ * `CLIPTextEncode` abaixo. */
 const NODE_IDS = {
   checkpoint: '1',
-  style: '2',
-  view: '3',
-  hair: '4',
-  eyes: '5',
-  mouth: '6',
-  clothing: '7',
-  pose: '8',
-  person: '9',
+  negativo: '11',
   latente: '12',
   sampler: '13',
   saveImage: '15',
-  textoLivre: '16',
+  positivo: '17',
   controlNetImagem: '22',
   controlNetApply: '25',
   lora: '27',
@@ -27,13 +27,6 @@ const NODE_IDS = {
  * `{ [nodeId]: { class_type, inputs, ... } }` — não confundir com o texto do
  * prompt de geração. */
 export type PromptComfyUI = Record<string, { class_type: string; inputs: Record<string, unknown>; [k: string]: unknown }>;
-
-function aplicarSecao(workflow: PromptComfyUI, nodeId: string, secao: object | undefined): void {
-  if (!secao) return;
-  for (const [chave, valor] of Object.entries(secao as Record<string, unknown>)) {
-    if (valor !== undefined) workflow[nodeId]!.inputs[chave] = valor;
-  }
-}
 
 export interface OpcoesMontagem {
   seed: number;
@@ -46,28 +39,21 @@ export interface OpcoesMontagem {
   imagemReferenciaEnviada?: string;
 }
 
-/** Clona o template e aplica os campos mesclados (`mesclarCampos`) nos
- * inputs dos nodes correspondentes, mais a seed, o prefixo de arquivo desta
- * geração específica e a configuração de modelo/sampler (`geracaoArt.modelo`,
- * se declarada). Campos ausentes mantêm o valor que já estava no template
- * (não são apagados). */
+/** Clona o template e injeta o texto já pronto (`prompts.positive`/
+ * `.negative`, montado por `prompt-builder.ts#montarPrompts`) direto nos dois
+ * `CLIPTextEncode`, mais a seed, o prefixo de arquivo desta geração
+ * específica e a configuração de modelo/sampler (`geracaoArt.modelo`, se
+ * declarada). Campos ausentes de `modelo` mantêm o valor que já estava no
+ * template (não são apagados). */
 export function montarPrompt(
   template: PromptComfyUI,
-  campos: OOPCamposCompostos,
+  prompts: { positive: string; negative: string },
   opcoes: OpcoesMontagem
 ): PromptComfyUI {
   const workflow = structuredClone(template);
 
-  aplicarSecao(workflow, NODE_IDS.style, campos.style);
-  aplicarSecao(workflow, NODE_IDS.view, campos.view);
-  aplicarSecao(workflow, NODE_IDS.hair, campos.hair);
-  aplicarSecao(workflow, NODE_IDS.eyes, campos.eyes);
-  aplicarSecao(workflow, NODE_IDS.mouth, campos.mouth);
-  aplicarSecao(workflow, NODE_IDS.clothing, campos.clothing);
-  aplicarSecao(workflow, NODE_IDS.pose, campos.pose);
-  aplicarSecao(workflow, NODE_IDS.person, campos.person);
-
-  workflow[NODE_IDS.textoLivre]!.inputs.string_b = campos.extra ?? '';
+  workflow[NODE_IDS.positivo]!.inputs.text = prompts.positive;
+  workflow[NODE_IDS.negativo]!.inputs.text = prompts.negative;
   workflow[NODE_IDS.sampler]!.inputs.seed = opcoes.seed;
   workflow[NODE_IDS.saveImage]!.inputs.filename_prefix = opcoes.filenamePrefix;
 

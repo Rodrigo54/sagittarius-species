@@ -8,26 +8,24 @@
   },
   "geracaoArt": {
     "base": {
-      "style": {
-        "base_style": "3DRendering"
-      },
-      "view": {
-        "angle": "Normal",
-        "viewType": "MediumShot",
-        "backgroundBlur": false
-      },
-      "pose": {
-        "base_pose": "Stand",
-        "hand_pose": "ArmAtSide",
-        "leg_pose": "CrossedLegs"
+      "tipo": {
+        "value": "Human",
+        "description": "mystical order warrior, cosmic sentinel aesthetic, glowing purple eyes, no visible pupils"
       },
       "eyes": {
         "color": "Violet"
       },
-      "extra": "3D render, CGI character art, stylized video game character art, digital painting, not photorealistic, glowing purple eyes, no visible pupils, purple star-shaped mineral gem embedded in chest, faceted raw crystal cut like a multi-pointed star, not a circular orb, not a round gem, not concentric rings, gemstone texture not a flat painted symbol, serious stern expression, looking at camera, mystical order warrior, cosmic sentinel aesthetic, no hood, no cloak, no cape, bare head, hair fully visible, face fully visible, full arms and hands visible within frame, no part of the body cropped by frame edges, dark purple-violet ornate armor with bronze and gold trim, purple energy veins spreading across the armor from the crystal"
+      "torso": {
+        "state": "FullyCovered",
+        "description": "dark purple-violet ornate armor with bronze and gold trim, purple star-shaped mineral gem embedded in chest, faceted raw crystal cut with sharp angular multi-pointed star facets, geometric star-cut gemstone with visible facet edges and depth, purple energy veins spreading across the armor from the crystal"
+      },
+      "extra_prompt": {
+        "positive": "bare head, hair fully visible, face fully visible, full arms and hands visible within frame",
+        "negative": "(circular orb, round gem:1.2), sphere gem, ball-shaped gem, glowing orb, magic orb, flat painted symbol, concentric rings, hood, cloak, cape"
+      }
     },
     "modelo": {
-      "checkpoint": "pilgrim2DSDXL_v60.safetensors",
+      "checkpoint": "turboDiffusionXL_v12.safetensors",
       "steps": 28,
       "cfg": 5,
       "sampler_name": "euler_ancestral",
@@ -36,6 +34,7 @@
       "height": 1040,
       "denoise": 0.8,
       "controlNetStrength": 0.8,
+      "lora": "DetailedEyes_V3.safetensors",
       "loraStrength": 0
     },
     "male": {
@@ -43,7 +42,9 @@
         "gender": "Male"
       },
       "referenceImage": "assets/portraits/ssm_astral/reference_male.png",
-      "extra": "masculine facial features, strong square jawline, defined brow ridge, rugged male face, broad shoulders, visibly male, not androgynous, not feminine",
+      "extra_prompt": {
+        "positive": "strong masculine face, square jawline, defined brow ridge, broad shoulders"
+      },
       "variantes": {
         "001": {
           "person": {
@@ -52,8 +53,8 @@
             "body_shape": "Average"
           },
           "hair": {
-            "style": "Bun",
-            "main_color": "Blonde"
+            "style": "Undercut",
+            "main_color": "Black"
           },
           "eyes": {
             "shape": "Almond"
@@ -66,8 +67,8 @@
             "body_shape": "Average"
           },
           "hair": {
-            "style": "Long",
-            "main_color": "Violet"
+            "style": "Short",
+            "main_color": "Brown"
           },
           "eyes": {
             "shape": "Hooded"
