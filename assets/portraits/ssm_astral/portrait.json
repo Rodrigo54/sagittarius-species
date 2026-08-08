@@ -6,7 +6,7 @@
     "male": 25,
     "female": 25
   },
-  "geracaoArt": {
+  "geracaoArtV2": {
     "base": {
       "tipo": {
         "value": "Human",
@@ -25,39 +25,31 @@
       }
     },
     "modelo": {
-      "checkpoint": "turboDiffusionXL_v12.safetensors",
-      "steps": 28,
-      "cfg": 5,
-      "sampler_name": "euler_ancestral",
-      "scheduler": "sgm_uniform",
-      "width": 832,
-      "height": 1040,
-      "denoise": 0.8,
-      "controlNetStrength": 0.8,
-      "lora": "DetailedEyes_V3.safetensors",
-      "loraStrength": 0
+      "variant": "distilled",
+      "steps": 4,
+      "cfg": 1,
+      "aspectRatio": "4:5"
     },
     "male": {
       "person": {
         "gender": "Male"
       },
-      "referenceImage": "assets/portraits/ssm_astral/reference_male.png",
       "extra_prompt": {
         "positive": "strong masculine face, square jawline, defined brow ridge, broad shoulders"
       },
       "variantes": {
         "001": {
           "person": {
-            "age": 21,
-            "ethnicity": "Latino",
-            "body_shape": "Average"
+            "age": 25,
+            "ethnicity": "Caucasian",
+            "body_shape": "Slim"
           },
           "hair": {
-            "style": "Undercut",
-            "main_color": "Black"
+            "style": "Curly",
+            "main_color": "Blonde"
           },
           "eyes": {
-            "shape": "Almond"
+            "shape": "Oval"
           }
         },
         "002": {
@@ -76,16 +68,16 @@
         },
         "003": {
           "person": {
-            "age": 25,
-            "ethnicity": "Asian",
-            "body_shape": "Slim"
+            "age": 21,
+            "ethnicity": "Latino",
+            "body_shape": "Average"
           },
           "hair": {
-            "style": "Curly",
-            "main_color": "Blonde"
+            "style": "Short",
+            "main_color": "Black"
           },
           "eyes": {
-            "shape": "Oval"
+            "shape": "Almond"
           }
         },
         "004": {
@@ -396,13 +388,16 @@
             "shape": "Hooded"
           }
         }
-      }
+      },
+      "referenceImage": [
+        "assets/portraits/ssm_astral/reference_male_1.png",
+        "assets/portraits/ssm_astral/reference_male_2.png"
+      ]
     },
     "female": {
       "person": {
         "gender": "Female"
       },
-      "referenceImage": "assets/portraits/ssm_astral/reference_female.png",
       "variantes": {
         "001": {
           "person": {
@@ -754,7 +749,10 @@
             "shape": "Almond"
           }
         }
-      }
+      },
+      "referenceImage": [
+        "assets/portraits/ssm_astral/reference_female.png"
+      ]
     }
   }
 }
