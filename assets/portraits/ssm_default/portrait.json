@@ -6,7 +6,7 @@
     "male": 25,
     "female": 25
   },
-  "geracaoArt": {
+  "geracaoArtV2": {
     "base": {
       "tipo": {
         "value": "Human",
@@ -17,26 +17,22 @@
         "description": "navy blue metallic plating, science fiction astronaut uniform, space marine armor, smooth flat white chest armor plate, gold metallic trim details, gold accents"
       },
       "extra_prompt": {
-        "positive": "no helmet, bare head, face fully visible"
+        "positive": "(no helmet, no hood, no head covering, full head of hair:1.2), face fully visible"
       }
     },
     "modelo": {
-      "checkpoint": "pilgrimMidjourney_v20.safetensors",
-      "steps": 28,
-      "cfg": 5,
-      "sampler_name": "euler_ancestral",
-      "scheduler": "sgm_uniform",
-      "width": 832,
-      "height": 1216,
-      "denoise": 0.8,
-      "controlNetStrength": 0.7,
-      "loraStrength": 0
+      "variant": "distilled",
+      "steps": 4,
+      "cfg": 1,
+      "aspectRatio": "2:3"
     },
     "male": {
       "person": {
         "gender": "Male"
       },
-      "referenceImage": "assets/portraits/ssm_default/reference_male.png",
+      "extra_prompt": {
+        "positive": "(teenager:1.2), (male chest armor, muscular male torso)"
+      },
       "variantes": {
         "001": {
           "person": {
@@ -131,7 +127,7 @@
           },
           "eyes": {
             "shape": "Downturned",
-            "color": "Violet"
+            "color": "Blue"
           }
         },
         "007": {
@@ -440,13 +436,15 @@
             "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
           }
         }
-      }
+      },
+      "referenceImage": [
+        "assets/portraits/ssm_default/reference_male.png"
+      ]
     },
     "female": {
       "person": {
         "gender": "Female"
       },
-      "referenceImage": "assets/portraits/ssm_default/reference_female.png",
       "variantes": {
         "001": {
           "person": {
@@ -835,7 +833,10 @@
             "color": "Brown"
           }
         }
-      }
+      },
+      "referenceImage": [
+        "assets/portraits/ssm_default/reference_female.png"
+      ]
     }
   }
 }
