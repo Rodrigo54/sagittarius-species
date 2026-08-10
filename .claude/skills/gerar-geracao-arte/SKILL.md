@@ -79,10 +79,12 @@ direto pro que falta.
    falta de `state` estruturado que causou o bug mais recorrente da sessão que motivou a migração de schema
    (barriga de fora mesmo com o texto pedindo cobertura total, repetidas vezes, até o campo estruturado existir).
 4. **Etnia/paleta é relevante pra essa espécie?** Se for humanoide, pergunte se a diversidade de etnia
-   (`ETNIAS`: `African`, `Asian`, `Caucasian`, `Latino`, `Pacific`, `Alien`) deve variar entre indivíduos (como
-   fizemos pro humano) ou ficar fixa numa só (ex. `Alien` pra tudo, comum em espécie não-humanoide). Não pergunte
-   isso pra espécie claramente não-humanoide onde nenhuma etnia real faz sentido — proponha `Alien` fixo e
-   confirme.
+   (`ETNIAS`: `African`, `Asian`, `Caucasian`, `Latino`, `Pacific`, `Mixed`, `Nordic` — cada uma já tem um
+   reforço de prompt embutido no composer, `TEXTO_ETNIA` em `prompt-builder.ts`, não precisa escrever nada a
+   mais pra isso) deve variar entre indivíduos (como fizemos pro humano) ou ficar fixa numa só. `ethnicity` é
+   campo **opcional** — pra espécie claramente não-humanoide onde nenhuma etnia real faz sentido (`Robot`,
+   `Molluscoid`, etc.), não pergunte isso e simplesmente **omita** `person.ethnicity` (não force nenhum valor do
+   enum como placeholder).
 5. **Imagens de referência/conceito, por gênero.** Pergunte se existe arte legada da espécie ou conceito visual
    (ex.: gerado no Midjourney) pra usar como referência — cada imagem entra numa cadeia de `ReferenceLatent` que
    dá amplitude visual ao resultado, então **cada entrada da lista deve ser um indivíduo/conceito diferente da
@@ -149,11 +151,15 @@ repita o resumo atualizado e pergunte de novo. Só depois disso, escreva qualque
   nada no ComfyUI — ciclo de debug instantâneo. Sempre vale rodar isso antes do teste de 5 imagens de verdade,
   pra confirmar visualmente (lendo o texto) que os campos-âncora estão presentes e na ordem certa.
 - **Armadilhas conhecidas:**
-  - Área pequena do rosto (cor de olho, etnia) e cobertura de tronco perdem mais fácil do que atributo de área
-    grande (cor de cabelo). É exatamente pra isso que `torso.state` e `eyes.color` recebem peso automático
-    (`(...:1.3)`) e posição prioritária no composer (detalhado em `generate-art-v1-historico-da-sessao.md` —
-    lição do motor anterior que continua valendo, é sobre como o texto compete por atenção, não sobre SDXL em
-    si).
+  - Área pequena do rosto (cor de olho, etnia) perde mais fácil do que atributo de área grande (cor de cabelo).
+    `eyes.color` e `person.ethnicity` são as duas únicas âncoras com peso automático e posição prioritária no
+    composer (`prompt-builder.ts`) — **etnia não precisa de reforço manual em `extra_prompt`**, o texto completo
+    (palavra da etnia + traços de pele/rosto, ex. `"(African, dark skin, deep brown skin tone, African facial
+    features:1.3)"`) já é gerado automaticamente a partir só de `person.ethnicity` (`TEXTO_ETNIA`). Cobertura de
+    tronco segue outro mecanismo: `torso.state` vira texto curto sem peso no positivo, e o **oposto** do estado
+    pedido é excluído com peso no negativo (`NEGATIVO_ESTADO_TORSO`) — é lá que o reforço de verdade mora
+    (detalhado em `generate-art-v1-historico-da-sessao.md` — lição do motor anterior que continua valendo, é
+    sobre como o texto compete por atenção, não sobre SDXL em si).
   - **Na variante `"distilled"` (`cfg: 1`), o negativo inteiro é descartado** (o node correspondente vira
     `ConditioningZeroOut`, ver `scripts/generate-art/base.ts`) — a única alavanca contra algo que o modelo insiste
     em gerar errado é o **positivo**. Duas armadilhas reais nessa variante: negação simples ("no helmet") é fraca

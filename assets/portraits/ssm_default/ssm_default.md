@@ -71,9 +71,12 @@ Algumas variantes têm `extra_prompt.positive` específico, além do que `base`/
   de cabelo rosa fazendo o gênero "balançar" pra mais feminino nos testes originais — ver bug #10 em
   `generate-art-v1-historico-da-sessao.md` — mas o texto atual do campo já não reflete mais esse reforço
   específico).
-- **Variantes com `ethnicity: "African"`** (`male`: `008`, `013`, `016`, `019`, `024`, `025`; `female`: `008`,
-  `015`, `020`, `024`): `"(dark skin, deep brown skin tone, African facial features:1.3)"` — etnia é atributo de
-  área pequena do rosto, perde fácil sem esse reforço com peso (`female/008` também tem `(blonde hair:1.3)`
-  antes, porque essa variante tem cabelo loiro que também precisou de reforço nos testes originais). **Exceção:
-  `male/017`** também é `ethnicity: "African"` mas não tem mais esse reforço em `extra_prompt` — confira o
-  resultado dessa variante com atenção redobrada se for regenerá-la.
+- **Reforço de etnia não é mais manual.** Até pouco tempo atrás, variantes `ethnicity: "African"` precisavam de
+  `extra_prompt.positive` manual (`"(dark skin, deep brown skin tone, African facial features:1.3)"`) — etnia é
+  atributo de área pequena do rosto, perde fácil sem reforço com peso, e ninguém tinha adicionado isso pras
+  outras etnias (`Asian`/`Pacific` saíam com traço fraco/nenhum). Agora o reforço é **automático**, gerado a
+  partir só de `person.ethnicity` (`TEXTO_ETNIA` em `scripts/generate-art/prompt-builder.ts`, cobre as 7 etnias
+  do vocabulário) — os `extra_prompt` manuais que só existiam pra isso foram removidos do `portrait.json`
+  (`female/008` manteve só `"(blonde hair:1.3)"`, não relacionado a etnia). `male/017`, que antes era uma
+  exceção documentada (`African` sem o reforço manual), deixou de ser exceção — toda variante `African` recebe o
+  mesmo reforço agora, sem precisar de nada extra no JSON.
