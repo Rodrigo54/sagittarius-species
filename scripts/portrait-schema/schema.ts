@@ -52,7 +52,7 @@ const zTipo = z
       ),
   })
   .strict()
-  .describe('Arquétipo visual da espécie/indivíduo pro prompt de geração de arte via IA. Não é o species_class do jogo (esse não muda, não existe em portrait.json).');
+  .describe('Arquétipo visual da espécie/indivíduo pro prompt de geração de arte via IA.');
 
 const zPessoa = z
   .object({

@@ -35,7 +35,11 @@ export const FORMAS_CORPO_DESCRICOES: Record<(typeof FORMAS_CORPO)[number], stri
   Muscular: 'corpo musculoso',
 };
 
-export const ETNIAS = ['African', 'Asian', 'Caucasian', 'Latino', 'Pacific', 'Alien'] as const;
+/** Cada valor tem um texto de reforço correspondente em `prompt-builder.ts`
+ * (`TEXTO_ETNIA`) — se um valor novo entrar aqui, o TypeScript trava a build
+ * até ganhar entrada lá também (mesmo mecanismo de `FORMAS_CORPO_DESCRICOES`
+ * etc., `Record` não-`Partial`). */
+export const ETNIAS = ['African', 'Asian', 'Caucasian', 'Latino', 'Pacific', 'Mixed', 'Nordic'] as const;
 
 export const GENEROS_PESSOA = ['Female', 'Male', 'Androgynous'] as const;
 
@@ -103,10 +107,8 @@ export const FORMAS_OLHO_DESCRICOES: Record<(typeof FORMAS_OLHO)[number], string
 
 export const CORES_OLHO = ['Blue', 'Green', 'Brown', 'Hazel', 'Gray', 'Amber', 'Violet'] as const;
 
-/** Arquétipo visual — vocabulário **novo**, exclusivo deste schema, sem
- * relação com `species_class` (mecânica de jogo, não existe em
- * `portrait.json` hoje — ver `ssm_species_classes.txt`/`ssm_portrait_sets.txt`
- * se algum dia precisar existir). Categoria ampla e reaproveitável entre
+/** Arquétipo visual pro prompt de geração de arte via IA — vocabulário
+ * **novo**, exclusivo deste schema. Categoria ampla e reaproveitável entre
  * espécies (ex.: `Human` cobre `ssm_default`, `ssm_knight`, `ssm_astral` e
  * `ssm_mercenary`, todas visualmente bem diferentes entre si) — a
  * diferenciação visual entre espécies que compartilham o mesmo `value` é

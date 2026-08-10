@@ -143,3 +143,19 @@ incompatibilidades adicionais com APIs removidas no Blender 4.x+ (`use_auto_smoo
 `ShaderNodeSeparateRGB`) — não vale a pena persegui-las até que exportar/criar material vire necessário de
 verdade; contornado por enquanto monkeypatching `create_material` pra no-op e aplicando uma textura de teste
 própria (UV grid) direto via `bpy`.
+
+## Etnia por arquétipo (`ETNIAS` específico por `TIPOS`)
+
+Ideia levantada durante uma sessão de ajuste do reforço automático de etnia em `geracaoArt` (ver
+`scripts/generate-art/prompt-builder.ts`): hoje `ETNIAS` (`scripts/portrait-schema/vocabulario.ts`) é uma lista
+**única e global**, usada do mesmo jeito não importa o `tipo` (arquétipo visual) da espécie — faz sentido pra
+`Human` (`African`/`Asian`/`Nordic`/etc.), mas não faz sentido nenhum pra `Robot` (não tem etnia) e seria um
+vocabulário completamente diferente pra `Elf`/`Mermaid`/`Molluscoid`/etc. (ex.: um elfo poderia ter "sub-etnias"
+tipo Alto Elfo/Elfo da Floresta/Elfo Negro, sem nenhuma relação com `African`/`Asian`).
+
+Não implementado de propósito: as únicas duas espécies com `geracaoArt` configurado hoje (`ssm_default`,
+`ssm_astral`) são as duas `tipo: "Human"` — não existe ainda nenhum caso concreto de espécie `Elf`/`Mermaid`/
+`Robot`/etc. com `geracaoArt` que precisaria de etnia própria. Generalizar `ETNIAS` pra depender de `TIPOS` agora
+seria complexidade especulativa (YAGNI), sem `portrait.json` real pra validar o formato contra. Quando a primeira
+espécie não-`Human` precisar disso de verdade, o formato certo (provavelmente algo como um mapa `Record<Tipo,
+string[]>`, ou um enum por arquétipo) fica mais claro com um caso real na mesa.

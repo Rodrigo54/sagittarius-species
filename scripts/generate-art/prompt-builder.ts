@@ -7,9 +7,10 @@ import type { BaseFixo } from './base';
  *
  * Ordem fixa e determinística. Peso de ênfase (sintaxe A1111, `(texto:peso)`)
  * é usado com disciplina, não em tudo: **só nos dois atributos mais frágeis**
- * (`eyes.color`, `person.ethnicity` — área pequena do rosto, historicamente
- * os que mais se perdem pra referência/viés do checkpoint), com frase curta
- * (uma palavra/poucas palavras, nunca uma sentença) e peso moderado
+ * (`eyes.color`, `person.ethnicity` — área pequena do rosto). `eyes.color` é
+ * uma frase curta (`comPeso`, ver abaixo); `person.ethnicity` é uma frase
+ * descritiva combinando a palavra crua da etnia com traços de pele/rosto
+ * (`TEXTO_ETNIA`, texto completo já com peso embutido). Peso moderado
  * (1.1–1.3 — acima disso já vazou pra atributo vizinho em testes reais, ver
  * histórico). Pra "distorção" (algo que o checkpoint insiste em gerar
  * errado, tipo tronco exposto ou aparência andrógina), o peso vai no
@@ -75,12 +76,24 @@ function textoOlhosCor(campos: CamposCompostos): string | undefined {
   return cor ? comPeso(`${cor.toLowerCase()} eyes`) : undefined;
 }
 
-/** Etnia — a outra âncora com peso. Só a palavra, sem frase longa (o
- * reforço de pele/traços fica em `extra_prompt`, texto livre, sem peso do
- * composer — quem escreve decide se pesa ou não). */
+/** Etnia — a outra âncora com peso. Frase combinando a palavra crua da
+ * etnia com traços descritivos de pele/rosto, na posição de prioridade alta
+ * (mesma posição que antes só tinha a palavra crua) — texto completo já
+ * inclui o peso, não passa por `comPeso`, porque o peso varia por etnia
+ * (1.3 pras que precisam de reforço mais forte, 1.2 pras demais). */
+const TEXTO_ETNIA: Record<NonNullable<CamposCompostos['person']>['ethnicity'] & string, string> = {
+  African: '(African, dark skin, deep brown skin tone, African facial features:1.3)',
+  Asian: '(Asian, tan skin tone, East Asian facial features:1.3)',
+  Pacific: '(Pacific, Pacific Islander or Southeast Asian facial features, tan skin tone:1.3)',
+  Mixed: '(Mixed, European and Indigenous Brazilian ancestry or European and African Brazilian ancestry, brown skin tone:1.3)',
+  Caucasian: '(Caucasian, fair skin tone, European facial features:1.2)',
+  Latino: '(Latino, olive/tan skin tone, Latin American facial features:1.2)',
+  Nordic: '(Nordic, fair skin tone, Scandinavian facial features:1.2)',
+};
+
 function textoEtniaAncora(campos: CamposCompostos): string | undefined {
   const etnia = campos.person?.ethnicity;
-  return etnia ? comPeso(etnia) : undefined;
+  return etnia ? TEXTO_ETNIA[etnia] : undefined;
 }
 
 const TEXTO_GENERO: Partial<Record<NonNullable<CamposCompostos['person']>['gender'] & string, string>> = {

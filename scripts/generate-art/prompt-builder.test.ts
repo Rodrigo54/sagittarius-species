@@ -14,7 +14,7 @@ const BASE_TESTE: BaseFixo = {
 };
 
 describe('montarPrompts', () => {
-  test('só eyes.color e person.ethnicity recebem peso (:1.2) no positivo — as duas únicas âncoras', () => {
+  test('eyes.color e person.ethnicity são as duas únicas âncoras com peso no positivo', () => {
     const { positive } = montarPrompts(
       {
         eyes: { color: 'Violet' },
@@ -26,19 +26,41 @@ describe('montarPrompts', () => {
       BASE_TESTE
     );
     expect(positive).toContain('(violet eyes:1.2)');
-    expect(positive).toContain('(African:1.2)');
-    // nada mais tem peso — só essas duas ocorrências de ":1.2)" no total.
-    expect((positive.match(/:1\.2\)/g) ?? []).length).toBe(2);
+    expect(positive).toContain('(African, dark skin, deep brown skin tone, African facial features:1.3)');
+    // nada mais tem peso — só as duas âncoras têm sintaxe "(...:peso)".
+    expect((positive.match(/\([^()]*:\d\.\d\)/g) ?? []).length).toBe(2);
   });
 
   test('peso vem logo depois do estilo, antes de tudo mais', () => {
     const { positive } = montarPrompts({ eyes: { color: 'Blue' }, person: { ethnicity: 'Asian' } }, BASE_TESTE);
     const idxEstilo = positive.indexOf('ESTILO_FIXO');
     const idxOlhos = positive.indexOf('(blue eyes:1.2)');
-    const idxEtnia = positive.indexOf('(Asian:1.2)');
+    const idxEtnia = positive.indexOf('(Asian, tan skin tone, East Asian facial features:1.3)');
     expect(idxEstilo).toBe(0);
     expect(idxOlhos).toBeGreaterThan(idxEstilo);
     expect(idxEtnia).toBeGreaterThan(idxOlhos);
+  });
+
+  test('cada uma das 7 etnias gera seu texto de reforço combinado (palavra crua + traços descritivos)', () => {
+    const REFORCO_ESPERADO = {
+      African: '(African, dark skin, deep brown skin tone, African facial features:1.3)',
+      Asian: '(Asian, tan skin tone, East Asian facial features:1.3)',
+      Pacific: '(Pacific, Pacific Islander or Southeast Asian facial features, tan skin tone:1.3)',
+      Mixed: '(Mixed, European and Indigenous Brazilian ancestry or European and African Brazilian ancestry, brown skin tone:1.3)',
+      Caucasian: '(Caucasian, fair skin tone, European facial features:1.2)',
+      Latino: '(Latino, olive/tan skin tone, Latin American facial features:1.2)',
+      Nordic: '(Nordic, fair skin tone, Scandinavian facial features:1.2)',
+    } as const;
+
+    for (const [etnia, esperado] of Object.entries(REFORCO_ESPERADO)) {
+      const { positive } = montarPrompts({ person: { ethnicity: etnia as never } }, BASE_TESTE);
+      expect(positive).toContain(esperado);
+    }
+  });
+
+  test('sem person.ethnicity, nenhum reforço de etnia entra no prompt', () => {
+    const { positive } = montarPrompts({ person: { age: 20 } }, BASE_TESTE);
+    expect(positive).not.toContain('facial features');
   });
 
   test('torso.state vira texto curto e afirmativo, SEM peso no positivo', () => {

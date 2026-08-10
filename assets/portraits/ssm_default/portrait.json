@@ -158,9 +158,6 @@
           "eyes": {
             "shape": "Almond",
             "color": "Blue"
-          },
-          "extra_prompt": {
-            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
           }
         },
         "009": {
@@ -236,9 +233,6 @@
           "eyes": {
             "shape": "Almond",
             "color": "Blue"
-          },
-          "extra_prompt": {
-            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
           }
         },
         "014": {
@@ -284,9 +278,6 @@
           "eyes": {
             "shape": "Round",
             "color": "Brown"
-          },
-          "extra_prompt": {
-            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
           }
         },
         "017": {
@@ -332,9 +323,6 @@
           "eyes": {
             "shape": "Upturned",
             "color": "Hazel"
-          },
-          "extra_prompt": {
-            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
           }
         },
         "020": {
@@ -410,9 +398,6 @@
           "eyes": {
             "shape": "Oval",
             "color": "Violet"
-          },
-          "extra_prompt": {
-            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
           }
         },
         "025": {
@@ -428,9 +413,6 @@
           "eyes": {
             "shape": "Monolid",
             "color": "Amber"
-          },
-          "extra_prompt": {
-            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
           }
         }
       },
@@ -563,7 +545,7 @@
             "color": "Amber"
           },
           "extra_prompt": {
-            "positive": "(blonde hair:1.3), (dark skin, deep brown skin tone, African facial features:1.3)"
+            "positive": "(blonde hair:1.3)"
           }
         },
         "009": {
@@ -669,9 +651,6 @@
           "eyes": {
             "shape": "Hooded",
             "color": "Green"
-          },
-          "extra_prompt": {
-            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
           }
         },
         "016": {
@@ -747,9 +726,6 @@
           "eyes": {
             "shape": "Monolid",
             "color": "Hazel"
-          },
-          "extra_prompt": {
-            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
           }
         },
         "021": {
@@ -810,9 +786,6 @@
           "eyes": {
             "shape": "Upturned",
             "color": "Blue"
-          },
-          "extra_prompt": {
-            "positive": "(dark skin, deep brown skin tone, African facial features:1.3)"
           }
         },
         "025": {
