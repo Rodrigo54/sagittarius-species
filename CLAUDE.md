@@ -263,14 +263,14 @@ Anatomia binária e lições de método por trás da medição: seção 2.5 de `
 ## Pipeline de geração de arte via IA (`bun run generate-art`)
 
 Caminho **alternativo/opt-in** pra produzir os PNGs de origem que o pipeline de portraits acima consome (ver
-"Pipeline de portraits") — em vez de arte desenhada à mão, gera via IA (ComfyUI local) a partir de uma receita
-declarada em `geracaoArt` no `portrait.json` da espécie. Ausente na maioria das espécies hoje; presente em
-`ssm_default` e `ssm_astral`.
+"Pipeline de portraits") — em vez de arte desenhada à mão, gera via IA (ComfyUI local, modelo **Flux.2 Klein**) a
+partir de uma receita declarada em `geracaoArt` no `portrait.json` da espécie. Ausente na maioria das espécies
+hoje; presente em `ssm_default` e `ssm_astral`.
 
-**Quem roda `bun run generate-art`/`bun run generate-art-v2` (ou qualquer variante futura) é sempre o Rodrigo, nunca
-o Claude por conta própria** — geração de imagem consome GPU local por vários segundos a minutos por variante, e
-rodar sem avisar pode travar a máquina no meio de outra coisa. Claude pode editar `portrait.json`/prompts/pipeline,
-rodar `--export-prompt` (não toca a GPU) e validações pontuais já combinadas explicitamente na conversa — mas
+**Quem roda `bun run generate-art` (ou qualquer variante futura) é sempre o Rodrigo, nunca o Claude por conta
+própria** — geração de imagem consome GPU local por vários segundos a minutos por variante, e rodar sem avisar
+pode travar a máquina no meio de outra coisa. Claude pode editar `portrait.json`/prompts/pipeline, rodar
+`--export-prompt` (não toca a GPU) e validações pontuais já combinadas explicitamente na conversa — mas
 enfileirar geração de verdade no ComfyUI é decisão do Rodrigo, executada por ele.
 
 - **`scripts/portrait-schema/`** — schema `zod` (`schema.ts`) que descreve o `portrait.json` **inteiro**
@@ -288,27 +288,34 @@ enfileirar geração de verdade no ComfyUI é decisão do Rodrigo, executada por
 - **`scripts/generate-art/prompt-builder.ts`** — compõe os prompts final (positivo e negativo) inteiramente em
   TypeScript a partir dos campos de `geracaoArt` + `base.json`, com ordem fixa e peso automático nos campos-âncora
   (`tipo`, `torso.state`, `eyes.color` — os que mais se perdem quando são só texto solto). Não depende de nenhum
-  custom node externo pra isso — ver `generate-art-migracao-schema-proprio.md` pro porquê (o pipeline usava o
-  pacote `ComfyUI-OOP` antes, abolido nessa migração).
+  custom node externo pra isso — o texto pronto é injetado direto nos dois `CLIPTextEncode` do grafo (ver
+  `scripts/generate-art/workflow.ts`).
 - **`scripts/generate-art/merge.ts`** — mescla `base` → override de gênero → override de variante, raso por
   seção; `extra_prompt.positive`/`.negative` concatenam entre níveis (nunca "o último vence").
-- **`scripts/comfyui/ssm_species_portrait_workflow.json`** — template do workflow ComfyUI (formato API, 17
-  nodes): checkpoint, LoRA, ControlNet OpenPose (consistência de pose via referência por gênero), img2img,
-  remoção de fundo com canal alfa. Os dois `CLIPTextEncode` (positivo/negativo) recebem texto pronto injetado
-  por `workflow.ts`, não compõem nada internamente.
+- **`scripts/comfyui/ssm_species_portrait_workflow.json`** (variante "base", padrão) e
+  **`ssm_species_portrait_workflow_distilled.json`** (variante "distilled", ~5x mais rápida, útil pra iteração
+  de prompt) — templates do workflow ComfyUI (formato API): UNET/CLIP/VAE do Flux.2 Klein fixos (um único
+  arquivo de cada instalado hoje, sem checkpoint/LoRA configurável por espécie), `ReferenceLatent` encadeado por
+  imagem de `referenceImage` (consistência visual, sem ControlNet/img2img/denoise), remoção de fundo com canal
+  alfa. `scripts/generate-art/workflow.ts` clona o template e injeta o texto pronto, seed, `steps`/`cfg`/
+  resolução e a cadeia de referência — os dois `CLIPTextEncode` não compõem nada internamente.
 - **`geracaoArt` no `portrait.json`**: `base` (`tipo`, `torso`, `eyes`/`hair`/`person` quando fixos pra toda
-  espécie, `extra_prompt`), `modelo` (checkpoint/sampler/img2img/ControlNet/LoRA), `male`/`female`/`flat`
-  (`referenceImage` + `variantes` nomeadas `"001"`..`"NNN"`, uma por indivíduo, contagem batendo exato com
-  `counts.<gênero>` — conferido pelo schema via `.superRefine`).
+  espécie, `extra_prompt`), `modelo` (`variant`: `"base"` ou `"distilled"`; `steps`/`cfg`/`aspectRatio` — sem
+  checkpoint/LoRA/sampler, ver `scripts/portrait-schema/schema.ts`), `male`/`female`/`flat` (`referenceImage`
+  como **lista** de imagens de referência/conceito por gênero + `variantes` nomeadas `"001"`..`"NNN"`, uma por
+  indivíduo, contagem batendo exato com `counts.<gênero>` — conferido pelo schema via `.superRefine`).
 - **`--export-prompt`** — monta e imprime o prompt (positivo + negativo) de uma ou mais variantes sem enfileirar
   nada no ComfyUI, ciclo de debug instantâneo sem custo de GPU.
 - Skill dedicada pra preencher `geracaoArt` de uma espécie via entrevista: `.claude/skills/gerar-geracao-arte/`
   (`/gerar-geracao-arte`).
 
-Relato completo de como esse pipeline foi criado (bugs, decisões, configuração testada): primeiro
-`generate-art-v1-historico-da-sessao.md` (sessão que criou o pipeline original, baseado em `ComfyUI-OOP` — formato
-desatualizado, não reflete o schema atual), depois `generate-art-migracao-schema-proprio.md` (sessão que aboliu
-essa dependência e desenhou o schema `zod` atual — este é o que reflete o formato de hoje).
+Este pipeline (Flux.2 Klein) substituiu de vez um pipeline anterior baseado em SDXL clássico (checkpoint/LoRA/
+ControlNet OpenPose/img2img), apagado do repositório. Relato completo de como o pipeline original foi criado e
+depois evoluído (bugs, decisões, configuração testada — histórico, não reflete o código/schema atual): primeiro
+`generate-art-v1-historico-da-sessao.md` (sessão que criou o pipeline original baseado em `ComfyUI-OOP`), depois
+`generate-art-migracao-schema-proprio.md` (sessão que aboliu essa dependência e desenhou o schema `zod` que o
+pipeline atual ainda usa). Setup do ComfyUI local (modelos instalados, pastas, gotchas) em
+`handoff-comfyui-image-models-2026-08-08.md`.
 
 ## Pipeline de listas de nomes / localização / species_names
 
