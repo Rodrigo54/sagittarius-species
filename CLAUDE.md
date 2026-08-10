@@ -191,11 +191,13 @@ por que as configs ficam no `.code-workspace`): `docs/cwtools.md`.
 
 ## Metadados de release
 
-A versão é rastreada de forma independente em três lugares e precisa ser mantida em sincronia manualmente ao
-cortar uma release: `package.json` (`version`), `mod/sagittarius-species/descriptor.mod` (`version`, além de
-`supported_version` para a versão compatível do jogo Stellaris) e o badge de versão no `README.md`. O texto da
-listagem no Steam Workshop fica em `steam-workshop/description.md` e `steam-workshop/change-notes.md`; o
-`remote_file_id` do `descriptor.mod` é o ID do item no Steam Workshop usado para publicação.
+A versão é rastreada de forma independente em dois lugares e precisa ser mantida em sincronia manualmente ao
+cortar uma release: `package.json` (`version`) e `mod/sagittarius-species/descriptor.mod` (`version`, além de
+`supported_version` para a versão compatível do jogo Stellaris). O badge de versão no `README.md` é dinâmico
+(`shields.io` lendo `package.json` direto do GitHub) — não precisa de edição manual, só reflete `package.json`
+depois do próximo push. O texto da listagem no Steam Workshop fica em `steam-workshop/description.md` e
+`steam-workshop/change-notes.md`; o `remote_file_id` do `descriptor.mod` é o ID do item no Steam Workshop usado
+para publicação.
 
 ## Publicação no Steam Workshop
 
