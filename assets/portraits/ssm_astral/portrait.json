@@ -39,14 +39,15 @@
       },
       "variantes": {
         "001": {
+          "seed": 44497035,
           "person": {
-            "age": 25,
-            "ethnicity": "Caucasian",
+            "age": 17,
+            "ethnicity": "Nordic",
             "body_shape": "Slim"
           },
           "hair": {
             "style": "Short Curly",
-            "main_color": "Copper"
+            "main_color": "Mustard"
           },
           "eyes": {
             "shape": "Oval"
@@ -95,17 +96,18 @@
           }
         },
         "005": {
+          "seed": 42497027,
           "person": {
-            "age": 27,
+            "age": 22,
             "ethnicity": "Asian",
-            "body_shape": "Average"
+            "body_shape": "Slim"
           },
           "hair": {
-            "style": "Long",
-            "main_color": "White"
+            "style": "Curly",
+            "main_color": "Amber"
           },
           "eyes": {
-            "shape": "Round"
+            "shape": "Upturned"
           }
         },
         "006": {
@@ -116,7 +118,7 @@
           },
           "hair": {
             "style": "Short",
-            "main_color": "Lavender"
+            "main_color": "Pink"
           },
           "eyes": {
             "shape": "Monolid"
@@ -179,14 +181,15 @@
           }
         },
         "011": {
+          "seed": 43497028,
           "person": {
-            "age": 23,
-            "ethnicity": "Caucasian",
-            "body_shape": "Athletic"
+            "age": 18,
+            "ethnicity": "Asian",
+            "body_shape": "Slim"
           },
           "hair": {
             "style": "Bun",
-            "main_color": "White"
+            "main_color": "Blonde"
           },
           "eyes": {
             "shape": "Downturned"
@@ -213,8 +216,9 @@
             "body_shape": "Average"
           },
           "hair": {
-            "style": "Wavy",
-            "main_color": "White"
+            "style": "Short Wavy",
+            "main_color": "Charcoal",
+            "optional_color": "Silver"
           },
           "eyes": {
             "shape": "Downturned"
@@ -237,7 +241,7 @@
         "015": {
           "person": {
             "age": 29,
-            "ethnicity": "Pacific",
+            "ethnicity": "Nordic",
             "body_shape": "Muscular"
           },
           "hair": {
@@ -279,12 +283,12 @@
         "018": {
           "person": {
             "age": 24,
-            "ethnicity": "Caucasian",
+            "ethnicity": "Latino",
             "body_shape": "Athletic"
           },
           "hair": {
-            "style": "Ponytail",
-            "main_color": "Blonde"
+            "style": "Long Curly",
+            "main_color": "Mustard"
           },
           "eyes": {
             "shape": "Almond"
@@ -354,7 +358,7 @@
           },
           "hair": {
             "style": "Curly",
-            "main_color": "Black"
+            "main_color": "Blue"
           },
           "eyes": {
             "shape": "Almond"
@@ -448,14 +452,15 @@
             "body_shape": "Muscular"
           },
           "hair": {
-            "style": "Ponytail",
-            "main_color": "Red"
+            "style": "Long Straight",
+            "main_color": "Rose"
           },
           "eyes": {
             "shape": "Upturned"
           }
         },
         "005": {
+          "seed": 42497047,
           "person": {
             "age": 21,
             "ethnicity": "Pacific",
@@ -490,7 +495,7 @@
             "body_shape": "Slim"
           },
           "hair": {
-            "style": "Braided",
+            "style": "Dreadlocks",
             "main_color": "Blonde"
           },
           "eyes": {
@@ -498,13 +503,14 @@
           }
         },
         "008": {
+          "seed": 42497095,
           "person": {
             "age": 22,
             "ethnicity": "African",
-            "body_shape": "Muscular"
+            "body_shape": "Curvy"
           },
           "hair": {
-            "style": "Long",
+            "style": "Long Wavy",
             "main_color": "Violet"
           },
           "eyes": {
@@ -546,8 +552,8 @@
             "body_shape": "Athletic"
           },
           "hair": {
-            "style": "Bun",
-            "main_color": "Blonde"
+            "style": "Afro",
+            "main_color": "Brown"
           },
           "eyes": {
             "shape": "Oval"
@@ -575,7 +581,8 @@
           },
           "hair": {
             "style": "Spiky",
-            "main_color": "Gray"
+            "main_color": "Gray",
+            "optional_color": "Charcoal"
           },
           "eyes": {
             "shape": "Downturned"
@@ -603,7 +610,8 @@
           },
           "hair": {
             "style": "Short",
-            "main_color": "White"
+            "main_color": "Charcoal",
+            "optional_color": "White"
           },
           "eyes": {
             "shape": "Hooded"
@@ -682,12 +690,12 @@
         "021": {
           "person": {
             "age": 21,
-            "ethnicity": "Caucasian",
+            "ethnicity": "Nordic",
             "body_shape": "Slim"
           },
           "hair": {
-            "style": "Ponytail",
-            "main_color": "Red"
+            "style": "Long Straight",
+            "main_color": "Copper"
           },
           "eyes": {
             "shape": "Oval"
@@ -696,12 +704,12 @@
         "022": {
           "person": {
             "age": 25,
-            "ethnicity": "African",
+            "ethnicity": "Mixed",
             "body_shape": "Slim"
           },
           "hair": {
             "style": "Undercut",
-            "main_color": "Red"
+            "main_color": "Magenta"
           },
           "eyes": {
             "shape": "Upturned"
@@ -714,8 +722,8 @@
             "body_shape": "Slim"
           },
           "hair": {
-            "style": "Ponytail",
-            "main_color": "Red"
+            "style": "Long Curly",
+            "main_color": "Amber"
           },
           "eyes": {
             "shape": "Oval"
@@ -751,7 +759,8 @@
         }
       },
       "referenceImage": [
-        "assets/portraits/ssm_astral/reference_female.png"
+        "assets/portraits/ssm_astral/reference_female_1.png",
+        "assets/portraits/ssm_astral/reference_female_2.png"
       ]
     }
   }
