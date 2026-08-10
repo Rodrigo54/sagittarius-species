@@ -35,7 +35,7 @@ describe('montarPrompts', () => {
     const { positive } = montarPrompts({ eyes: { color: 'Blue' }, person: { ethnicity: 'Asian' } }, BASE_TESTE);
     const idxEstilo = positive.indexOf('ESTILO_FIXO');
     const idxOlhos = positive.indexOf('(blue eyes:1.2)');
-    const idxEtnia = positive.indexOf('(Asian, tan skin tone, East Asian facial features:1.3)');
+    const idxEtnia = positive.indexOf('(Asian, light skin tone, East Asian facial features:1.3)');
     expect(idxEstilo).toBe(0);
     expect(idxOlhos).toBeGreaterThan(idxEstilo);
     expect(idxEtnia).toBeGreaterThan(idxOlhos);
@@ -44,7 +44,7 @@ describe('montarPrompts', () => {
   test('cada uma das 7 etnias gera seu texto de reforço combinado (palavra crua + traços descritivos)', () => {
     const REFORCO_ESPERADO = {
       African: '(African, dark skin, deep brown skin tone, African facial features:1.3)',
-      Asian: '(Asian, tan skin tone, East Asian facial features:1.3)',
+      Asian: '(Asian, light skin tone, East Asian facial features:1.3)',
       Pacific: '(Pacific, Pacific Islander or Southeast Asian facial features, tan skin tone:1.3)',
       Mixed: '(Mixed, European and Indigenous Brazilian ancestry or European and African Brazilian ancestry, brown skin tone:1.3)',
       Caucasian: '(Caucasian, fair skin tone, European facial features:1.2)',

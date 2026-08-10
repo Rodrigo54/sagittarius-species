@@ -83,7 +83,7 @@ function textoOlhosCor(campos: CamposCompostos): string | undefined {
  * (1.3 pras que precisam de reforço mais forte, 1.2 pras demais). */
 const TEXTO_ETNIA: Record<NonNullable<CamposCompostos['person']>['ethnicity'] & string, string> = {
   African: '(African, dark skin, deep brown skin tone, African facial features:1.3)',
-  Asian: '(Asian, tan skin tone, East Asian facial features:1.3)',
+  Asian: '(Asian, light skin tone, East Asian facial features:1.3)',
   Pacific: '(Pacific, Pacific Islander or Southeast Asian facial features, tan skin tone:1.3)',
   Mixed: '(Mixed, European and Indigenous Brazilian ancestry or European and African Brazilian ancestry, brown skin tone:1.3)',
   Caucasian: '(Caucasian, fair skin tone, European facial features:1.2)',
