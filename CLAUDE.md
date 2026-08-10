@@ -33,7 +33,7 @@ bun run portrait     # bun scripts/generate-portraits/index.ts — sincroniza as
 bun run shared-rig   # bun scripts/generate-shared-rig/index.ts — deriva gfx/.../ssm_shared/ a partir de sl_shared/ (veja seção "sl_shared vs. ssm_shared")
 bun run rooms         # bun scripts/generate-rooms/index.ts — sincroniza assets/city_sets/ com mod/ (DDS + .txt), direto no mod/
 bun run names          # bun scripts/generate-names/index.ts — gera name_lists + species_names (veja seção abaixo)
-bun run generate-art   # bun scripts/generate-art/index.ts <slug> <male|female|flat> [--variante=NNN,...] [--seed=N] [--promote] [--export-prompt] — gera retratos via IA no ComfyUI local (veja seção abaixo)
+bun run art   # bun scripts/generate-art/index.ts <slug> <male|female|flat> [--variante=NNN,...] [--seed=N] [--promote] [--export-prompt] — gera retratos via IA no ComfyUI local (veja seção abaixo)
 bun run copy           # pwsh scripts/copy.ps1 — copia o mod para a pasta local de mods do Stellaris
 bun run overwrite       # pwsh scripts/overwrite.ps1 — apaga e recopia o mod na pasta local de mods do Stellaris
 ```
@@ -260,14 +260,14 @@ validações que o sustentam. Números que importam pra compor arte nova:
 Relato completo da sessão que mediu isso (método, armadilhas, decisões descartadas): `ssm-shared-enquadramento.md`.
 Anatomia binária e lições de método por trás da medição: seção 2.5 de `ssm-shared-referencia-tecnica.md`.
 
-## Pipeline de geração de arte via IA (`bun run generate-art`)
+## Pipeline de geração de arte via IA (`bun run art`)
 
 Caminho **alternativo/opt-in** pra produzir os PNGs de origem que o pipeline de portraits acima consome (ver
 "Pipeline de portraits") — em vez de arte desenhada à mão, gera via IA (ComfyUI local, modelo **Flux.2 Klein**) a
 partir de uma receita declarada em `geracaoArt` no `portrait.json` da espécie. Ausente na maioria das espécies
 hoje; presente em `ssm_default` e `ssm_astral`.
 
-**Quem roda `bun run generate-art` (ou qualquer variante futura) é sempre o Rodrigo, nunca o Claude por conta
+**Quem roda `bun run art` (ou qualquer variante futura) é sempre o Rodrigo, nunca o Claude por conta
 própria** — geração de imagem consome GPU local por vários segundos a minutos por variante, e rodar sem avisar
 pode travar a máquina no meio de outra coisa. Claude pode editar `portrait.json`/prompts/pipeline, rodar
 `--export-prompt` (não toca a GPU) e validações pontuais já combinadas explicitamente na conversa — mas
