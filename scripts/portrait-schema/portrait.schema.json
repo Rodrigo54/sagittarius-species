@@ -24,6 +24,10 @@
       "enum": [
         "largura",
         "altura"
+      ],
+      "enumDescriptions": [
+        "escala a arte pela largura do guia (padrão)",
+        "escala a arte pela altura mínima do guia (composições atipicamente largas)"
       ]
     },
     "ancora": {
@@ -32,6 +36,10 @@
       "enum": [
         "conteudo",
         "cabeca"
+      ],
+      "enumDescriptions": [
+        "encosta no topo do guia o bounding box da arte (padrão)",
+        "encosta no topo do guia a cabeça, primeira linha densa de pixels opacos"
       ]
     },
     "counts": {
@@ -83,7 +91,20 @@
                     "Alien",
                     "Cyborg"
                   ],
-                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary).",
+                  "enumDescriptions": [
+                    "humano",
+                    "élfico",
+                    "sereia/tritão",
+                    "necroide, morto-vivo/esquelético",
+                    "peludo, antropomórfico animal",
+                    "moluscoide, tipo molusco/lesma",
+                    "eldritch, criatura cósmica/tentacular",
+                    "robótico",
+                    "aviano, tipo ave",
+                    "alienígena genérico",
+                    "ciborgue, parte orgânico e parte máquina"
+                  ]
                 },
                 "description": {
                   "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
@@ -127,6 +148,15 @@
                     "Chubby",
                     "Hourglass",
                     "Muscular"
+                  ],
+                  "enumDescriptions": [
+                    "corpo magro",
+                    "corpo atlético",
+                    "corpo mediano",
+                    "corpo com curvas acentuadas",
+                    "corpo rechonchudo",
+                    "corpo em ampulheta, cintura marcada",
+                    "corpo musculoso"
                   ]
                 },
                 "gender": {
@@ -159,7 +189,36 @@
                     "Braided",
                     "Bun",
                     "Spiky",
-                    "Undercut"
+                    "Undercut",
+                    "Afro",
+                    "Dreadlocks",
+                    "Long Curly",
+                    "Short Curly",
+                    "Long Straight",
+                    "Short Straight",
+                    "Long Wavy",
+                    "Short Wavy"
+                  ],
+                  "enumDescriptions": [
+                    "cabelo curto",
+                    "cabelo longo",
+                    "cabelo cacheado",
+                    "cabelo liso",
+                    "cabelo ondulado",
+                    "careca, sem cabelo",
+                    "rabo de cavalo",
+                    "cabelo trançado",
+                    "coque",
+                    "cabelo espetado",
+                    "raspado nas laterais, mais longo no topo",
+                    "cabelo afro (black power)",
+                    "dreadlocks",
+                    "cabelo cacheado longo",
+                    "cabelo cacheado curto",
+                    "cabelo liso longo",
+                    "cabelo liso curto",
+                    "cabelo ondulado longo",
+                    "cabelo ondulado curto"
                   ]
                 },
                 "main_color": {
@@ -285,6 +344,16 @@
                     "Downturned",
                     "Oval",
                     "Closed"
+                  ],
+                  "enumDescriptions": [
+                    "olhos redondos",
+                    "olhos amendoados",
+                    "olhos com pálpebra caída, cobrindo parte da dobra",
+                    "olhos sem dobra visível na pálpebra",
+                    "olhos puxados para cima nos cantos externos",
+                    "olhos caídos para baixo nos cantos externos",
+                    "olhos ovais",
+                    "olhos fechados"
                   ]
                 },
                 "color": {
@@ -320,6 +389,13 @@
                     "ArmsCoveredTorsoBare",
                     "TorsoCoveredArmsBare",
                     "PartiallyCovered"
+                  ],
+                  "enumDescriptions": [
+                    "tronco à mostra, sem cobertura",
+                    "tronco totalmente coberto",
+                    "braços cobertos, tronco à mostra",
+                    "tronco coberto, braços à mostra",
+                    "tronco parcialmente coberto"
                   ]
                 }
               },
@@ -428,7 +504,20 @@
                     "Alien",
                     "Cyborg"
                   ],
-                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary).",
+                  "enumDescriptions": [
+                    "humano",
+                    "élfico",
+                    "sereia/tritão",
+                    "necroide, morto-vivo/esquelético",
+                    "peludo, antropomórfico animal",
+                    "moluscoide, tipo molusco/lesma",
+                    "eldritch, criatura cósmica/tentacular",
+                    "robótico",
+                    "aviano, tipo ave",
+                    "alienígena genérico",
+                    "ciborgue, parte orgânico e parte máquina"
+                  ]
                 },
                 "description": {
                   "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
@@ -472,6 +561,15 @@
                     "Chubby",
                     "Hourglass",
                     "Muscular"
+                  ],
+                  "enumDescriptions": [
+                    "corpo magro",
+                    "corpo atlético",
+                    "corpo mediano",
+                    "corpo com curvas acentuadas",
+                    "corpo rechonchudo",
+                    "corpo em ampulheta, cintura marcada",
+                    "corpo musculoso"
                   ]
                 },
                 "gender": {
@@ -504,7 +602,36 @@
                     "Braided",
                     "Bun",
                     "Spiky",
-                    "Undercut"
+                    "Undercut",
+                    "Afro",
+                    "Dreadlocks",
+                    "Long Curly",
+                    "Short Curly",
+                    "Long Straight",
+                    "Short Straight",
+                    "Long Wavy",
+                    "Short Wavy"
+                  ],
+                  "enumDescriptions": [
+                    "cabelo curto",
+                    "cabelo longo",
+                    "cabelo cacheado",
+                    "cabelo liso",
+                    "cabelo ondulado",
+                    "careca, sem cabelo",
+                    "rabo de cavalo",
+                    "cabelo trançado",
+                    "coque",
+                    "cabelo espetado",
+                    "raspado nas laterais, mais longo no topo",
+                    "cabelo afro (black power)",
+                    "dreadlocks",
+                    "cabelo cacheado longo",
+                    "cabelo cacheado curto",
+                    "cabelo liso longo",
+                    "cabelo liso curto",
+                    "cabelo ondulado longo",
+                    "cabelo ondulado curto"
                   ]
                 },
                 "main_color": {
@@ -630,6 +757,16 @@
                     "Downturned",
                     "Oval",
                     "Closed"
+                  ],
+                  "enumDescriptions": [
+                    "olhos redondos",
+                    "olhos amendoados",
+                    "olhos com pálpebra caída, cobrindo parte da dobra",
+                    "olhos sem dobra visível na pálpebra",
+                    "olhos puxados para cima nos cantos externos",
+                    "olhos caídos para baixo nos cantos externos",
+                    "olhos ovais",
+                    "olhos fechados"
                   ]
                 },
                 "color": {
@@ -665,6 +802,13 @@
                     "ArmsCoveredTorsoBare",
                     "TorsoCoveredArmsBare",
                     "PartiallyCovered"
+                  ],
+                  "enumDescriptions": [
+                    "tronco à mostra, sem cobertura",
+                    "tronco totalmente coberto",
+                    "braços cobertos, tronco à mostra",
+                    "tronco coberto, braços à mostra",
+                    "tronco parcialmente coberto"
                   ]
                 }
               },
@@ -717,7 +861,20 @@
                           "Alien",
                           "Cyborg"
                         ],
-                        "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                        "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary).",
+                        "enumDescriptions": [
+                          "humano",
+                          "élfico",
+                          "sereia/tritão",
+                          "necroide, morto-vivo/esquelético",
+                          "peludo, antropomórfico animal",
+                          "moluscoide, tipo molusco/lesma",
+                          "eldritch, criatura cósmica/tentacular",
+                          "robótico",
+                          "aviano, tipo ave",
+                          "alienígena genérico",
+                          "ciborgue, parte orgânico e parte máquina"
+                        ]
                       },
                       "description": {
                         "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
@@ -761,6 +918,15 @@
                           "Chubby",
                           "Hourglass",
                           "Muscular"
+                        ],
+                        "enumDescriptions": [
+                          "corpo magro",
+                          "corpo atlético",
+                          "corpo mediano",
+                          "corpo com curvas acentuadas",
+                          "corpo rechonchudo",
+                          "corpo em ampulheta, cintura marcada",
+                          "corpo musculoso"
                         ]
                       },
                       "gender": {
@@ -793,7 +959,36 @@
                           "Braided",
                           "Bun",
                           "Spiky",
-                          "Undercut"
+                          "Undercut",
+                          "Afro",
+                          "Dreadlocks",
+                          "Long Curly",
+                          "Short Curly",
+                          "Long Straight",
+                          "Short Straight",
+                          "Long Wavy",
+                          "Short Wavy"
+                        ],
+                        "enumDescriptions": [
+                          "cabelo curto",
+                          "cabelo longo",
+                          "cabelo cacheado",
+                          "cabelo liso",
+                          "cabelo ondulado",
+                          "careca, sem cabelo",
+                          "rabo de cavalo",
+                          "cabelo trançado",
+                          "coque",
+                          "cabelo espetado",
+                          "raspado nas laterais, mais longo no topo",
+                          "cabelo afro (black power)",
+                          "dreadlocks",
+                          "cabelo cacheado longo",
+                          "cabelo cacheado curto",
+                          "cabelo liso longo",
+                          "cabelo liso curto",
+                          "cabelo ondulado longo",
+                          "cabelo ondulado curto"
                         ]
                       },
                       "main_color": {
@@ -919,6 +1114,16 @@
                           "Downturned",
                           "Oval",
                           "Closed"
+                        ],
+                        "enumDescriptions": [
+                          "olhos redondos",
+                          "olhos amendoados",
+                          "olhos com pálpebra caída, cobrindo parte da dobra",
+                          "olhos sem dobra visível na pálpebra",
+                          "olhos puxados para cima nos cantos externos",
+                          "olhos caídos para baixo nos cantos externos",
+                          "olhos ovais",
+                          "olhos fechados"
                         ]
                       },
                       "color": {
@@ -954,6 +1159,13 @@
                           "ArmsCoveredTorsoBare",
                           "TorsoCoveredArmsBare",
                           "PartiallyCovered"
+                        ],
+                        "enumDescriptions": [
+                          "tronco à mostra, sem cobertura",
+                          "tronco totalmente coberto",
+                          "braços cobertos, tronco à mostra",
+                          "tronco coberto, braços à mostra",
+                          "tronco parcialmente coberto"
                         ]
                       }
                     },
@@ -1009,7 +1221,20 @@
                     "Alien",
                     "Cyborg"
                   ],
-                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary).",
+                  "enumDescriptions": [
+                    "humano",
+                    "élfico",
+                    "sereia/tritão",
+                    "necroide, morto-vivo/esquelético",
+                    "peludo, antropomórfico animal",
+                    "moluscoide, tipo molusco/lesma",
+                    "eldritch, criatura cósmica/tentacular",
+                    "robótico",
+                    "aviano, tipo ave",
+                    "alienígena genérico",
+                    "ciborgue, parte orgânico e parte máquina"
+                  ]
                 },
                 "description": {
                   "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
@@ -1053,6 +1278,15 @@
                     "Chubby",
                     "Hourglass",
                     "Muscular"
+                  ],
+                  "enumDescriptions": [
+                    "corpo magro",
+                    "corpo atlético",
+                    "corpo mediano",
+                    "corpo com curvas acentuadas",
+                    "corpo rechonchudo",
+                    "corpo em ampulheta, cintura marcada",
+                    "corpo musculoso"
                   ]
                 },
                 "gender": {
@@ -1085,7 +1319,36 @@
                     "Braided",
                     "Bun",
                     "Spiky",
-                    "Undercut"
+                    "Undercut",
+                    "Afro",
+                    "Dreadlocks",
+                    "Long Curly",
+                    "Short Curly",
+                    "Long Straight",
+                    "Short Straight",
+                    "Long Wavy",
+                    "Short Wavy"
+                  ],
+                  "enumDescriptions": [
+                    "cabelo curto",
+                    "cabelo longo",
+                    "cabelo cacheado",
+                    "cabelo liso",
+                    "cabelo ondulado",
+                    "careca, sem cabelo",
+                    "rabo de cavalo",
+                    "cabelo trançado",
+                    "coque",
+                    "cabelo espetado",
+                    "raspado nas laterais, mais longo no topo",
+                    "cabelo afro (black power)",
+                    "dreadlocks",
+                    "cabelo cacheado longo",
+                    "cabelo cacheado curto",
+                    "cabelo liso longo",
+                    "cabelo liso curto",
+                    "cabelo ondulado longo",
+                    "cabelo ondulado curto"
                   ]
                 },
                 "main_color": {
@@ -1211,6 +1474,16 @@
                     "Downturned",
                     "Oval",
                     "Closed"
+                  ],
+                  "enumDescriptions": [
+                    "olhos redondos",
+                    "olhos amendoados",
+                    "olhos com pálpebra caída, cobrindo parte da dobra",
+                    "olhos sem dobra visível na pálpebra",
+                    "olhos puxados para cima nos cantos externos",
+                    "olhos caídos para baixo nos cantos externos",
+                    "olhos ovais",
+                    "olhos fechados"
                   ]
                 },
                 "color": {
@@ -1246,6 +1519,13 @@
                     "ArmsCoveredTorsoBare",
                     "TorsoCoveredArmsBare",
                     "PartiallyCovered"
+                  ],
+                  "enumDescriptions": [
+                    "tronco à mostra, sem cobertura",
+                    "tronco totalmente coberto",
+                    "braços cobertos, tronco à mostra",
+                    "tronco coberto, braços à mostra",
+                    "tronco parcialmente coberto"
                   ]
                 }
               },
@@ -1298,7 +1578,20 @@
                           "Alien",
                           "Cyborg"
                         ],
-                        "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                        "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary).",
+                        "enumDescriptions": [
+                          "humano",
+                          "élfico",
+                          "sereia/tritão",
+                          "necroide, morto-vivo/esquelético",
+                          "peludo, antropomórfico animal",
+                          "moluscoide, tipo molusco/lesma",
+                          "eldritch, criatura cósmica/tentacular",
+                          "robótico",
+                          "aviano, tipo ave",
+                          "alienígena genérico",
+                          "ciborgue, parte orgânico e parte máquina"
+                        ]
                       },
                       "description": {
                         "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
@@ -1342,6 +1635,15 @@
                           "Chubby",
                           "Hourglass",
                           "Muscular"
+                        ],
+                        "enumDescriptions": [
+                          "corpo magro",
+                          "corpo atlético",
+                          "corpo mediano",
+                          "corpo com curvas acentuadas",
+                          "corpo rechonchudo",
+                          "corpo em ampulheta, cintura marcada",
+                          "corpo musculoso"
                         ]
                       },
                       "gender": {
@@ -1374,7 +1676,36 @@
                           "Braided",
                           "Bun",
                           "Spiky",
-                          "Undercut"
+                          "Undercut",
+                          "Afro",
+                          "Dreadlocks",
+                          "Long Curly",
+                          "Short Curly",
+                          "Long Straight",
+                          "Short Straight",
+                          "Long Wavy",
+                          "Short Wavy"
+                        ],
+                        "enumDescriptions": [
+                          "cabelo curto",
+                          "cabelo longo",
+                          "cabelo cacheado",
+                          "cabelo liso",
+                          "cabelo ondulado",
+                          "careca, sem cabelo",
+                          "rabo de cavalo",
+                          "cabelo trançado",
+                          "coque",
+                          "cabelo espetado",
+                          "raspado nas laterais, mais longo no topo",
+                          "cabelo afro (black power)",
+                          "dreadlocks",
+                          "cabelo cacheado longo",
+                          "cabelo cacheado curto",
+                          "cabelo liso longo",
+                          "cabelo liso curto",
+                          "cabelo ondulado longo",
+                          "cabelo ondulado curto"
                         ]
                       },
                       "main_color": {
@@ -1500,6 +1831,16 @@
                           "Downturned",
                           "Oval",
                           "Closed"
+                        ],
+                        "enumDescriptions": [
+                          "olhos redondos",
+                          "olhos amendoados",
+                          "olhos com pálpebra caída, cobrindo parte da dobra",
+                          "olhos sem dobra visível na pálpebra",
+                          "olhos puxados para cima nos cantos externos",
+                          "olhos caídos para baixo nos cantos externos",
+                          "olhos ovais",
+                          "olhos fechados"
                         ]
                       },
                       "color": {
@@ -1535,6 +1876,13 @@
                           "ArmsCoveredTorsoBare",
                           "TorsoCoveredArmsBare",
                           "PartiallyCovered"
+                        ],
+                        "enumDescriptions": [
+                          "tronco à mostra, sem cobertura",
+                          "tronco totalmente coberto",
+                          "braços cobertos, tronco à mostra",
+                          "tronco coberto, braços à mostra",
+                          "tronco parcialmente coberto"
                         ]
                       }
                     },
@@ -1590,7 +1938,20 @@
                     "Alien",
                     "Cyborg"
                   ],
-                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary).",
+                  "enumDescriptions": [
+                    "humano",
+                    "élfico",
+                    "sereia/tritão",
+                    "necroide, morto-vivo/esquelético",
+                    "peludo, antropomórfico animal",
+                    "moluscoide, tipo molusco/lesma",
+                    "eldritch, criatura cósmica/tentacular",
+                    "robótico",
+                    "aviano, tipo ave",
+                    "alienígena genérico",
+                    "ciborgue, parte orgânico e parte máquina"
+                  ]
                 },
                 "description": {
                   "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
@@ -1634,6 +1995,15 @@
                     "Chubby",
                     "Hourglass",
                     "Muscular"
+                  ],
+                  "enumDescriptions": [
+                    "corpo magro",
+                    "corpo atlético",
+                    "corpo mediano",
+                    "corpo com curvas acentuadas",
+                    "corpo rechonchudo",
+                    "corpo em ampulheta, cintura marcada",
+                    "corpo musculoso"
                   ]
                 },
                 "gender": {
@@ -1666,7 +2036,36 @@
                     "Braided",
                     "Bun",
                     "Spiky",
-                    "Undercut"
+                    "Undercut",
+                    "Afro",
+                    "Dreadlocks",
+                    "Long Curly",
+                    "Short Curly",
+                    "Long Straight",
+                    "Short Straight",
+                    "Long Wavy",
+                    "Short Wavy"
+                  ],
+                  "enumDescriptions": [
+                    "cabelo curto",
+                    "cabelo longo",
+                    "cabelo cacheado",
+                    "cabelo liso",
+                    "cabelo ondulado",
+                    "careca, sem cabelo",
+                    "rabo de cavalo",
+                    "cabelo trançado",
+                    "coque",
+                    "cabelo espetado",
+                    "raspado nas laterais, mais longo no topo",
+                    "cabelo afro (black power)",
+                    "dreadlocks",
+                    "cabelo cacheado longo",
+                    "cabelo cacheado curto",
+                    "cabelo liso longo",
+                    "cabelo liso curto",
+                    "cabelo ondulado longo",
+                    "cabelo ondulado curto"
                   ]
                 },
                 "main_color": {
@@ -1792,6 +2191,16 @@
                     "Downturned",
                     "Oval",
                     "Closed"
+                  ],
+                  "enumDescriptions": [
+                    "olhos redondos",
+                    "olhos amendoados",
+                    "olhos com pálpebra caída, cobrindo parte da dobra",
+                    "olhos sem dobra visível na pálpebra",
+                    "olhos puxados para cima nos cantos externos",
+                    "olhos caídos para baixo nos cantos externos",
+                    "olhos ovais",
+                    "olhos fechados"
                   ]
                 },
                 "color": {
@@ -1827,6 +2236,13 @@
                     "ArmsCoveredTorsoBare",
                     "TorsoCoveredArmsBare",
                     "PartiallyCovered"
+                  ],
+                  "enumDescriptions": [
+                    "tronco à mostra, sem cobertura",
+                    "tronco totalmente coberto",
+                    "braços cobertos, tronco à mostra",
+                    "tronco coberto, braços à mostra",
+                    "tronco parcialmente coberto"
                   ]
                 }
               },
@@ -1879,7 +2295,20 @@
                           "Alien",
                           "Cyborg"
                         ],
-                        "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                        "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary).",
+                        "enumDescriptions": [
+                          "humano",
+                          "élfico",
+                          "sereia/tritão",
+                          "necroide, morto-vivo/esquelético",
+                          "peludo, antropomórfico animal",
+                          "moluscoide, tipo molusco/lesma",
+                          "eldritch, criatura cósmica/tentacular",
+                          "robótico",
+                          "aviano, tipo ave",
+                          "alienígena genérico",
+                          "ciborgue, parte orgânico e parte máquina"
+                        ]
                       },
                       "description": {
                         "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
@@ -1923,6 +2352,15 @@
                           "Chubby",
                           "Hourglass",
                           "Muscular"
+                        ],
+                        "enumDescriptions": [
+                          "corpo magro",
+                          "corpo atlético",
+                          "corpo mediano",
+                          "corpo com curvas acentuadas",
+                          "corpo rechonchudo",
+                          "corpo em ampulheta, cintura marcada",
+                          "corpo musculoso"
                         ]
                       },
                       "gender": {
@@ -1955,7 +2393,36 @@
                           "Braided",
                           "Bun",
                           "Spiky",
-                          "Undercut"
+                          "Undercut",
+                          "Afro",
+                          "Dreadlocks",
+                          "Long Curly",
+                          "Short Curly",
+                          "Long Straight",
+                          "Short Straight",
+                          "Long Wavy",
+                          "Short Wavy"
+                        ],
+                        "enumDescriptions": [
+                          "cabelo curto",
+                          "cabelo longo",
+                          "cabelo cacheado",
+                          "cabelo liso",
+                          "cabelo ondulado",
+                          "careca, sem cabelo",
+                          "rabo de cavalo",
+                          "cabelo trançado",
+                          "coque",
+                          "cabelo espetado",
+                          "raspado nas laterais, mais longo no topo",
+                          "cabelo afro (black power)",
+                          "dreadlocks",
+                          "cabelo cacheado longo",
+                          "cabelo cacheado curto",
+                          "cabelo liso longo",
+                          "cabelo liso curto",
+                          "cabelo ondulado longo",
+                          "cabelo ondulado curto"
                         ]
                       },
                       "main_color": {
@@ -2081,6 +2548,16 @@
                           "Downturned",
                           "Oval",
                           "Closed"
+                        ],
+                        "enumDescriptions": [
+                          "olhos redondos",
+                          "olhos amendoados",
+                          "olhos com pálpebra caída, cobrindo parte da dobra",
+                          "olhos sem dobra visível na pálpebra",
+                          "olhos puxados para cima nos cantos externos",
+                          "olhos caídos para baixo nos cantos externos",
+                          "olhos ovais",
+                          "olhos fechados"
                         ]
                       },
                       "color": {
@@ -2116,6 +2593,13 @@
                           "ArmsCoveredTorsoBare",
                           "TorsoCoveredArmsBare",
                           "PartiallyCovered"
+                        ],
+                        "enumDescriptions": [
+                          "tronco à mostra, sem cobertura",
+                          "tronco totalmente coberto",
+                          "braços cobertos, tronco à mostra",
+                          "tronco coberto, braços à mostra",
+                          "tronco parcialmente coberto"
                         ]
                       }
                     },
@@ -2181,7 +2665,20 @@
                     "Alien",
                     "Cyborg"
                   ],
-                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary).",
+                  "enumDescriptions": [
+                    "humano",
+                    "élfico",
+                    "sereia/tritão",
+                    "necroide, morto-vivo/esquelético",
+                    "peludo, antropomórfico animal",
+                    "moluscoide, tipo molusco/lesma",
+                    "eldritch, criatura cósmica/tentacular",
+                    "robótico",
+                    "aviano, tipo ave",
+                    "alienígena genérico",
+                    "ciborgue, parte orgânico e parte máquina"
+                  ]
                 },
                 "description": {
                   "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
@@ -2225,6 +2722,15 @@
                     "Chubby",
                     "Hourglass",
                     "Muscular"
+                  ],
+                  "enumDescriptions": [
+                    "corpo magro",
+                    "corpo atlético",
+                    "corpo mediano",
+                    "corpo com curvas acentuadas",
+                    "corpo rechonchudo",
+                    "corpo em ampulheta, cintura marcada",
+                    "corpo musculoso"
                   ]
                 },
                 "gender": {
@@ -2257,7 +2763,36 @@
                     "Braided",
                     "Bun",
                     "Spiky",
-                    "Undercut"
+                    "Undercut",
+                    "Afro",
+                    "Dreadlocks",
+                    "Long Curly",
+                    "Short Curly",
+                    "Long Straight",
+                    "Short Straight",
+                    "Long Wavy",
+                    "Short Wavy"
+                  ],
+                  "enumDescriptions": [
+                    "cabelo curto",
+                    "cabelo longo",
+                    "cabelo cacheado",
+                    "cabelo liso",
+                    "cabelo ondulado",
+                    "careca, sem cabelo",
+                    "rabo de cavalo",
+                    "cabelo trançado",
+                    "coque",
+                    "cabelo espetado",
+                    "raspado nas laterais, mais longo no topo",
+                    "cabelo afro (black power)",
+                    "dreadlocks",
+                    "cabelo cacheado longo",
+                    "cabelo cacheado curto",
+                    "cabelo liso longo",
+                    "cabelo liso curto",
+                    "cabelo ondulado longo",
+                    "cabelo ondulado curto"
                   ]
                 },
                 "main_color": {
@@ -2383,6 +2918,16 @@
                     "Downturned",
                     "Oval",
                     "Closed"
+                  ],
+                  "enumDescriptions": [
+                    "olhos redondos",
+                    "olhos amendoados",
+                    "olhos com pálpebra caída, cobrindo parte da dobra",
+                    "olhos sem dobra visível na pálpebra",
+                    "olhos puxados para cima nos cantos externos",
+                    "olhos caídos para baixo nos cantos externos",
+                    "olhos ovais",
+                    "olhos fechados"
                   ]
                 },
                 "color": {
@@ -2418,6 +2963,13 @@
                     "ArmsCoveredTorsoBare",
                     "TorsoCoveredArmsBare",
                     "PartiallyCovered"
+                  ],
+                  "enumDescriptions": [
+                    "tronco à mostra, sem cobertura",
+                    "tronco totalmente coberto",
+                    "braços cobertos, tronco à mostra",
+                    "tronco coberto, braços à mostra",
+                    "tronco parcialmente coberto"
                   ]
                 }
               },
@@ -2495,7 +3047,20 @@
                     "Alien",
                     "Cyborg"
                   ],
-                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary).",
+                  "enumDescriptions": [
+                    "humano",
+                    "élfico",
+                    "sereia/tritão",
+                    "necroide, morto-vivo/esquelético",
+                    "peludo, antropomórfico animal",
+                    "moluscoide, tipo molusco/lesma",
+                    "eldritch, criatura cósmica/tentacular",
+                    "robótico",
+                    "aviano, tipo ave",
+                    "alienígena genérico",
+                    "ciborgue, parte orgânico e parte máquina"
+                  ]
                 },
                 "description": {
                   "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
@@ -2539,6 +3104,15 @@
                     "Chubby",
                     "Hourglass",
                     "Muscular"
+                  ],
+                  "enumDescriptions": [
+                    "corpo magro",
+                    "corpo atlético",
+                    "corpo mediano",
+                    "corpo com curvas acentuadas",
+                    "corpo rechonchudo",
+                    "corpo em ampulheta, cintura marcada",
+                    "corpo musculoso"
                   ]
                 },
                 "gender": {
@@ -2571,7 +3145,36 @@
                     "Braided",
                     "Bun",
                     "Spiky",
-                    "Undercut"
+                    "Undercut",
+                    "Afro",
+                    "Dreadlocks",
+                    "Long Curly",
+                    "Short Curly",
+                    "Long Straight",
+                    "Short Straight",
+                    "Long Wavy",
+                    "Short Wavy"
+                  ],
+                  "enumDescriptions": [
+                    "cabelo curto",
+                    "cabelo longo",
+                    "cabelo cacheado",
+                    "cabelo liso",
+                    "cabelo ondulado",
+                    "careca, sem cabelo",
+                    "rabo de cavalo",
+                    "cabelo trançado",
+                    "coque",
+                    "cabelo espetado",
+                    "raspado nas laterais, mais longo no topo",
+                    "cabelo afro (black power)",
+                    "dreadlocks",
+                    "cabelo cacheado longo",
+                    "cabelo cacheado curto",
+                    "cabelo liso longo",
+                    "cabelo liso curto",
+                    "cabelo ondulado longo",
+                    "cabelo ondulado curto"
                   ]
                 },
                 "main_color": {
@@ -2697,6 +3300,16 @@
                     "Downturned",
                     "Oval",
                     "Closed"
+                  ],
+                  "enumDescriptions": [
+                    "olhos redondos",
+                    "olhos amendoados",
+                    "olhos com pálpebra caída, cobrindo parte da dobra",
+                    "olhos sem dobra visível na pálpebra",
+                    "olhos puxados para cima nos cantos externos",
+                    "olhos caídos para baixo nos cantos externos",
+                    "olhos ovais",
+                    "olhos fechados"
                   ]
                 },
                 "color": {
@@ -2732,6 +3345,13 @@
                     "ArmsCoveredTorsoBare",
                     "TorsoCoveredArmsBare",
                     "PartiallyCovered"
+                  ],
+                  "enumDescriptions": [
+                    "tronco à mostra, sem cobertura",
+                    "tronco totalmente coberto",
+                    "braços cobertos, tronco à mostra",
+                    "tronco coberto, braços à mostra",
+                    "tronco parcialmente coberto"
                   ]
                 }
               },
@@ -2787,7 +3407,20 @@
                           "Alien",
                           "Cyborg"
                         ],
-                        "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                        "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary).",
+                        "enumDescriptions": [
+                          "humano",
+                          "élfico",
+                          "sereia/tritão",
+                          "necroide, morto-vivo/esquelético",
+                          "peludo, antropomórfico animal",
+                          "moluscoide, tipo molusco/lesma",
+                          "eldritch, criatura cósmica/tentacular",
+                          "robótico",
+                          "aviano, tipo ave",
+                          "alienígena genérico",
+                          "ciborgue, parte orgânico e parte máquina"
+                        ]
                       },
                       "description": {
                         "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
@@ -2831,6 +3464,15 @@
                           "Chubby",
                           "Hourglass",
                           "Muscular"
+                        ],
+                        "enumDescriptions": [
+                          "corpo magro",
+                          "corpo atlético",
+                          "corpo mediano",
+                          "corpo com curvas acentuadas",
+                          "corpo rechonchudo",
+                          "corpo em ampulheta, cintura marcada",
+                          "corpo musculoso"
                         ]
                       },
                       "gender": {
@@ -2863,7 +3505,36 @@
                           "Braided",
                           "Bun",
                           "Spiky",
-                          "Undercut"
+                          "Undercut",
+                          "Afro",
+                          "Dreadlocks",
+                          "Long Curly",
+                          "Short Curly",
+                          "Long Straight",
+                          "Short Straight",
+                          "Long Wavy",
+                          "Short Wavy"
+                        ],
+                        "enumDescriptions": [
+                          "cabelo curto",
+                          "cabelo longo",
+                          "cabelo cacheado",
+                          "cabelo liso",
+                          "cabelo ondulado",
+                          "careca, sem cabelo",
+                          "rabo de cavalo",
+                          "cabelo trançado",
+                          "coque",
+                          "cabelo espetado",
+                          "raspado nas laterais, mais longo no topo",
+                          "cabelo afro (black power)",
+                          "dreadlocks",
+                          "cabelo cacheado longo",
+                          "cabelo cacheado curto",
+                          "cabelo liso longo",
+                          "cabelo liso curto",
+                          "cabelo ondulado longo",
+                          "cabelo ondulado curto"
                         ]
                       },
                       "main_color": {
@@ -2989,6 +3660,16 @@
                           "Downturned",
                           "Oval",
                           "Closed"
+                        ],
+                        "enumDescriptions": [
+                          "olhos redondos",
+                          "olhos amendoados",
+                          "olhos com pálpebra caída, cobrindo parte da dobra",
+                          "olhos sem dobra visível na pálpebra",
+                          "olhos puxados para cima nos cantos externos",
+                          "olhos caídos para baixo nos cantos externos",
+                          "olhos ovais",
+                          "olhos fechados"
                         ]
                       },
                       "color": {
@@ -3024,6 +3705,13 @@
                           "ArmsCoveredTorsoBare",
                           "TorsoCoveredArmsBare",
                           "PartiallyCovered"
+                        ],
+                        "enumDescriptions": [
+                          "tronco à mostra, sem cobertura",
+                          "tronco totalmente coberto",
+                          "braços cobertos, tronco à mostra",
+                          "tronco coberto, braços à mostra",
+                          "tronco parcialmente coberto"
                         ]
                       }
                     },
@@ -3079,7 +3767,20 @@
                     "Alien",
                     "Cyborg"
                   ],
-                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary).",
+                  "enumDescriptions": [
+                    "humano",
+                    "élfico",
+                    "sereia/tritão",
+                    "necroide, morto-vivo/esquelético",
+                    "peludo, antropomórfico animal",
+                    "moluscoide, tipo molusco/lesma",
+                    "eldritch, criatura cósmica/tentacular",
+                    "robótico",
+                    "aviano, tipo ave",
+                    "alienígena genérico",
+                    "ciborgue, parte orgânico e parte máquina"
+                  ]
                 },
                 "description": {
                   "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
@@ -3123,6 +3824,15 @@
                     "Chubby",
                     "Hourglass",
                     "Muscular"
+                  ],
+                  "enumDescriptions": [
+                    "corpo magro",
+                    "corpo atlético",
+                    "corpo mediano",
+                    "corpo com curvas acentuadas",
+                    "corpo rechonchudo",
+                    "corpo em ampulheta, cintura marcada",
+                    "corpo musculoso"
                   ]
                 },
                 "gender": {
@@ -3155,7 +3865,36 @@
                     "Braided",
                     "Bun",
                     "Spiky",
-                    "Undercut"
+                    "Undercut",
+                    "Afro",
+                    "Dreadlocks",
+                    "Long Curly",
+                    "Short Curly",
+                    "Long Straight",
+                    "Short Straight",
+                    "Long Wavy",
+                    "Short Wavy"
+                  ],
+                  "enumDescriptions": [
+                    "cabelo curto",
+                    "cabelo longo",
+                    "cabelo cacheado",
+                    "cabelo liso",
+                    "cabelo ondulado",
+                    "careca, sem cabelo",
+                    "rabo de cavalo",
+                    "cabelo trançado",
+                    "coque",
+                    "cabelo espetado",
+                    "raspado nas laterais, mais longo no topo",
+                    "cabelo afro (black power)",
+                    "dreadlocks",
+                    "cabelo cacheado longo",
+                    "cabelo cacheado curto",
+                    "cabelo liso longo",
+                    "cabelo liso curto",
+                    "cabelo ondulado longo",
+                    "cabelo ondulado curto"
                   ]
                 },
                 "main_color": {
@@ -3281,6 +4020,16 @@
                     "Downturned",
                     "Oval",
                     "Closed"
+                  ],
+                  "enumDescriptions": [
+                    "olhos redondos",
+                    "olhos amendoados",
+                    "olhos com pálpebra caída, cobrindo parte da dobra",
+                    "olhos sem dobra visível na pálpebra",
+                    "olhos puxados para cima nos cantos externos",
+                    "olhos caídos para baixo nos cantos externos",
+                    "olhos ovais",
+                    "olhos fechados"
                   ]
                 },
                 "color": {
@@ -3316,6 +4065,13 @@
                     "ArmsCoveredTorsoBare",
                     "TorsoCoveredArmsBare",
                     "PartiallyCovered"
+                  ],
+                  "enumDescriptions": [
+                    "tronco à mostra, sem cobertura",
+                    "tronco totalmente coberto",
+                    "braços cobertos, tronco à mostra",
+                    "tronco coberto, braços à mostra",
+                    "tronco parcialmente coberto"
                   ]
                 }
               },
@@ -3371,7 +4127,20 @@
                           "Alien",
                           "Cyborg"
                         ],
-                        "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                        "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary).",
+                        "enumDescriptions": [
+                          "humano",
+                          "élfico",
+                          "sereia/tritão",
+                          "necroide, morto-vivo/esquelético",
+                          "peludo, antropomórfico animal",
+                          "moluscoide, tipo molusco/lesma",
+                          "eldritch, criatura cósmica/tentacular",
+                          "robótico",
+                          "aviano, tipo ave",
+                          "alienígena genérico",
+                          "ciborgue, parte orgânico e parte máquina"
+                        ]
                       },
                       "description": {
                         "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
@@ -3415,6 +4184,15 @@
                           "Chubby",
                           "Hourglass",
                           "Muscular"
+                        ],
+                        "enumDescriptions": [
+                          "corpo magro",
+                          "corpo atlético",
+                          "corpo mediano",
+                          "corpo com curvas acentuadas",
+                          "corpo rechonchudo",
+                          "corpo em ampulheta, cintura marcada",
+                          "corpo musculoso"
                         ]
                       },
                       "gender": {
@@ -3447,7 +4225,36 @@
                           "Braided",
                           "Bun",
                           "Spiky",
-                          "Undercut"
+                          "Undercut",
+                          "Afro",
+                          "Dreadlocks",
+                          "Long Curly",
+                          "Short Curly",
+                          "Long Straight",
+                          "Short Straight",
+                          "Long Wavy",
+                          "Short Wavy"
+                        ],
+                        "enumDescriptions": [
+                          "cabelo curto",
+                          "cabelo longo",
+                          "cabelo cacheado",
+                          "cabelo liso",
+                          "cabelo ondulado",
+                          "careca, sem cabelo",
+                          "rabo de cavalo",
+                          "cabelo trançado",
+                          "coque",
+                          "cabelo espetado",
+                          "raspado nas laterais, mais longo no topo",
+                          "cabelo afro (black power)",
+                          "dreadlocks",
+                          "cabelo cacheado longo",
+                          "cabelo cacheado curto",
+                          "cabelo liso longo",
+                          "cabelo liso curto",
+                          "cabelo ondulado longo",
+                          "cabelo ondulado curto"
                         ]
                       },
                       "main_color": {
@@ -3573,6 +4380,16 @@
                           "Downturned",
                           "Oval",
                           "Closed"
+                        ],
+                        "enumDescriptions": [
+                          "olhos redondos",
+                          "olhos amendoados",
+                          "olhos com pálpebra caída, cobrindo parte da dobra",
+                          "olhos sem dobra visível na pálpebra",
+                          "olhos puxados para cima nos cantos externos",
+                          "olhos caídos para baixo nos cantos externos",
+                          "olhos ovais",
+                          "olhos fechados"
                         ]
                       },
                       "color": {
@@ -3608,6 +4425,13 @@
                           "ArmsCoveredTorsoBare",
                           "TorsoCoveredArmsBare",
                           "PartiallyCovered"
+                        ],
+                        "enumDescriptions": [
+                          "tronco à mostra, sem cobertura",
+                          "tronco totalmente coberto",
+                          "braços cobertos, tronco à mostra",
+                          "tronco coberto, braços à mostra",
+                          "tronco parcialmente coberto"
                         ]
                       }
                     },
@@ -3663,7 +4487,20 @@
                     "Alien",
                     "Cyborg"
                   ],
-                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary).",
+                  "enumDescriptions": [
+                    "humano",
+                    "élfico",
+                    "sereia/tritão",
+                    "necroide, morto-vivo/esquelético",
+                    "peludo, antropomórfico animal",
+                    "moluscoide, tipo molusco/lesma",
+                    "eldritch, criatura cósmica/tentacular",
+                    "robótico",
+                    "aviano, tipo ave",
+                    "alienígena genérico",
+                    "ciborgue, parte orgânico e parte máquina"
+                  ]
                 },
                 "description": {
                   "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
@@ -3707,6 +4544,15 @@
                     "Chubby",
                     "Hourglass",
                     "Muscular"
+                  ],
+                  "enumDescriptions": [
+                    "corpo magro",
+                    "corpo atlético",
+                    "corpo mediano",
+                    "corpo com curvas acentuadas",
+                    "corpo rechonchudo",
+                    "corpo em ampulheta, cintura marcada",
+                    "corpo musculoso"
                   ]
                 },
                 "gender": {
@@ -3739,7 +4585,36 @@
                     "Braided",
                     "Bun",
                     "Spiky",
-                    "Undercut"
+                    "Undercut",
+                    "Afro",
+                    "Dreadlocks",
+                    "Long Curly",
+                    "Short Curly",
+                    "Long Straight",
+                    "Short Straight",
+                    "Long Wavy",
+                    "Short Wavy"
+                  ],
+                  "enumDescriptions": [
+                    "cabelo curto",
+                    "cabelo longo",
+                    "cabelo cacheado",
+                    "cabelo liso",
+                    "cabelo ondulado",
+                    "careca, sem cabelo",
+                    "rabo de cavalo",
+                    "cabelo trançado",
+                    "coque",
+                    "cabelo espetado",
+                    "raspado nas laterais, mais longo no topo",
+                    "cabelo afro (black power)",
+                    "dreadlocks",
+                    "cabelo cacheado longo",
+                    "cabelo cacheado curto",
+                    "cabelo liso longo",
+                    "cabelo liso curto",
+                    "cabelo ondulado longo",
+                    "cabelo ondulado curto"
                   ]
                 },
                 "main_color": {
@@ -3865,6 +4740,16 @@
                     "Downturned",
                     "Oval",
                     "Closed"
+                  ],
+                  "enumDescriptions": [
+                    "olhos redondos",
+                    "olhos amendoados",
+                    "olhos com pálpebra caída, cobrindo parte da dobra",
+                    "olhos sem dobra visível na pálpebra",
+                    "olhos puxados para cima nos cantos externos",
+                    "olhos caídos para baixo nos cantos externos",
+                    "olhos ovais",
+                    "olhos fechados"
                   ]
                 },
                 "color": {
@@ -3900,6 +4785,13 @@
                     "ArmsCoveredTorsoBare",
                     "TorsoCoveredArmsBare",
                     "PartiallyCovered"
+                  ],
+                  "enumDescriptions": [
+                    "tronco à mostra, sem cobertura",
+                    "tronco totalmente coberto",
+                    "braços cobertos, tronco à mostra",
+                    "tronco coberto, braços à mostra",
+                    "tronco parcialmente coberto"
                   ]
                 }
               },
@@ -3955,7 +4847,20 @@
                           "Alien",
                           "Cyborg"
                         ],
-                        "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary)."
+                        "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary).",
+                        "enumDescriptions": [
+                          "humano",
+                          "élfico",
+                          "sereia/tritão",
+                          "necroide, morto-vivo/esquelético",
+                          "peludo, antropomórfico animal",
+                          "moluscoide, tipo molusco/lesma",
+                          "eldritch, criatura cósmica/tentacular",
+                          "robótico",
+                          "aviano, tipo ave",
+                          "alienígena genérico",
+                          "ciborgue, parte orgânico e parte máquina"
+                        ]
                       },
                       "description": {
                         "description": "Texto livre que diferencia o sabor dentro do mesmo \"value\" (ex.: \"cute Pixar-style robot\" vs. \"war machine aesthetic\", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de \"value\" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.",
@@ -3999,6 +4904,15 @@
                           "Chubby",
                           "Hourglass",
                           "Muscular"
+                        ],
+                        "enumDescriptions": [
+                          "corpo magro",
+                          "corpo atlético",
+                          "corpo mediano",
+                          "corpo com curvas acentuadas",
+                          "corpo rechonchudo",
+                          "corpo em ampulheta, cintura marcada",
+                          "corpo musculoso"
                         ]
                       },
                       "gender": {
@@ -4031,7 +4945,36 @@
                           "Braided",
                           "Bun",
                           "Spiky",
-                          "Undercut"
+                          "Undercut",
+                          "Afro",
+                          "Dreadlocks",
+                          "Long Curly",
+                          "Short Curly",
+                          "Long Straight",
+                          "Short Straight",
+                          "Long Wavy",
+                          "Short Wavy"
+                        ],
+                        "enumDescriptions": [
+                          "cabelo curto",
+                          "cabelo longo",
+                          "cabelo cacheado",
+                          "cabelo liso",
+                          "cabelo ondulado",
+                          "careca, sem cabelo",
+                          "rabo de cavalo",
+                          "cabelo trançado",
+                          "coque",
+                          "cabelo espetado",
+                          "raspado nas laterais, mais longo no topo",
+                          "cabelo afro (black power)",
+                          "dreadlocks",
+                          "cabelo cacheado longo",
+                          "cabelo cacheado curto",
+                          "cabelo liso longo",
+                          "cabelo liso curto",
+                          "cabelo ondulado longo",
+                          "cabelo ondulado curto"
                         ]
                       },
                       "main_color": {
@@ -4157,6 +5100,16 @@
                           "Downturned",
                           "Oval",
                           "Closed"
+                        ],
+                        "enumDescriptions": [
+                          "olhos redondos",
+                          "olhos amendoados",
+                          "olhos com pálpebra caída, cobrindo parte da dobra",
+                          "olhos sem dobra visível na pálpebra",
+                          "olhos puxados para cima nos cantos externos",
+                          "olhos caídos para baixo nos cantos externos",
+                          "olhos ovais",
+                          "olhos fechados"
                         ]
                       },
                       "color": {
@@ -4192,6 +5145,13 @@
                           "ArmsCoveredTorsoBare",
                           "TorsoCoveredArmsBare",
                           "PartiallyCovered"
+                        ],
+                        "enumDescriptions": [
+                          "tronco à mostra, sem cobertura",
+                          "tronco totalmente coberto",
+                          "braços cobertos, tronco à mostra",
+                          "tronco coberto, braços à mostra",
+                          "tronco parcialmente coberto"
                         ]
                       }
                     },

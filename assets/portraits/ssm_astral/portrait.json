@@ -20,7 +20,7 @@
         "description": "dark purple-violet ornate armor with bronze and gold trim, purple star-shaped mineral gem embedded in chest, faceted raw crystal cut with sharp angular multi-pointed star facets, geometric star-cut gemstone with visible facet edges and depth, purple energy veins spreading across the armor from the crystal"
       },
       "extra_prompt": {
-        "positive": "bare head, hair fully visible, face fully visible, full arms and hands visible within frame",
+        "positive": "(no helmet, no hood, no head covering, full head of hair:1.2), face fully visible",
         "negative": "(circular orb, round gem:1.2), sphere gem, ball-shaped gem, glowing orb, magic orb, flat painted symbol, concentric rings, hood, cloak, cape"
       }
     },
@@ -45,8 +45,8 @@
             "body_shape": "Slim"
           },
           "hair": {
-            "style": "Curly",
-            "main_color": "Blonde"
+            "style": "Short Curly",
+            "main_color": "Copper"
           },
           "eyes": {
             "shape": "Oval"
@@ -59,7 +59,7 @@
             "body_shape": "Average"
           },
           "hair": {
-            "style": "Short",
+            "style": "Short Wavy",
             "main_color": "Brown"
           },
           "eyes": {
@@ -129,7 +129,7 @@
             "body_shape": "Slim"
           },
           "hair": {
-            "style": "Braided",
+            "style": "Long Wavy",
             "main_color": "Lavender"
           },
           "eyes": {
@@ -241,8 +241,8 @@
             "body_shape": "Muscular"
           },
           "hair": {
-            "style": "Long",
-            "main_color": "Lavender"
+            "style": "Long Wavy",
+            "main_color": "Red"
           },
           "eyes": {
             "shape": "Upturned"
@@ -297,8 +297,8 @@
             "body_shape": "Athletic"
           },
           "hair": {
-            "style": "Undercut",
-            "main_color": "Lavender"
+            "style": "Dreadlocks",
+            "main_color": "Brown"
           },
           "eyes": {
             "shape": "Hooded"
@@ -339,7 +339,7 @@
             "body_shape": "Athletic"
           },
           "hair": {
-            "style": "Straight",
+            "style": "Long Straight",
             "main_color": "Blonde"
           },
           "eyes": {
@@ -381,8 +381,8 @@
             "body_shape": "Slim"
           },
           "hair": {
-            "style": "Braided",
-            "main_color": "Red"
+            "style": "Long Curly",
+            "main_color": "Navy"
           },
           "eyes": {
             "shape": "Hooded"
