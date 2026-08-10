@@ -1,11 +1,29 @@
-# Criar um rig de retrato do zero: mesh e animação autorais
+# Animação do rig compartilhado: clipes herdados e como construir do zero
+
+Pré-requisito de leitura: `docs/rig.md` (formato binário, anatomia do rig herdado, ferramental Blender) — este
+arquivo não repete aquilo, só aplica ao tema específico de animação.
+
+## Os clipes herdados
+
+- 4 clipes (`happy`, `happy_2`, `sad`, `sad_2`), ~180 frames @ ~30 fps, byte-idênticos entre `sl_shared` e
+  `ssm_shared`. **Nunca tiveram defeito** — a "distorção" que uma sessão inteira investigou era o skinning do
+  plano 2 (não o plano 4 mantido) exposto por arte cheia.
+- Os "picos de rotação de 1 frame" detectados numa análise binária às cegas (saltos de ~90-100° periódicos, fase
+  própria por osso) são quase certamente **sign flips de quatérnio** (q e −q são a mesma rotação 3D — métricas
+  ingênuas de ângulo acusam salto onde não há movimento). A "correção" que interpolava sobre eles **destruiu
+  dados reais** e rasgou o retrato in-game. Nunca "conserte" picos de quatérnio sem validação visual — normalize
+  o sinal antes de acusar anomalia.
+- O movimento herdado é grande em ossos sem peso no plano mantido (ex.: `Character5_LeftHand` percorre ~7
+  unidades no `happy` — ~35% da largura do mesh) — irrelevante pro plano 4, que quase não sente as mãos.
+
+## Criar um rig de retrato do zero: mesh e animação autorais
 
 Guia de partida pra construir um rig de retrato animado **completo e autoral** — mesh, esqueleto, skinning e
 `.anim` — sem herdar nada do Stellar Legion Mod, usando tudo que a saga do `ssm_shared` ensinou. Pré-requisito
-de leitura: `ssm-shared-referencia-tecnica.md` (formato binário, anatomia do rig herdado, ferramental) — este
-guia não repete aquilo, só aplica.
+de leitura: `docs/rig.md` (formato binário, anatomia do rig herdado, ferramental) — este guia não repete
+aquilo, só aplica.
 
-## Por que do zero (e por que agora dá)
+### Por que do zero (e por que agora dá)
 
 O `ssm_shared` atual é um *derivado*: um plano recortado de um rig alheio, com esqueleto de 46 ossos desenhado
 pra um corpo 3D, skinning difuso que ninguém autorou pra este uso, e proporção de canvas ditada pela geometria
@@ -24,7 +42,7 @@ E dá pra fazer porque a saga já entregou: o formato binário é conhecido e va
 `io_pdx_mesh` importa/exporta mesh e anim no Blender, o loop de validação (Blender → scanner → xadrez in-game)
 está rodado, e o contrato de registro (`.asset`/`.gfx`/portrait `.txt`) está mapeado.
 
-## O que é fixo (contrato com o jogo) e o que é livre
+### O que é fixo (contrato com o jogo) e o que é livre
 
 **Fixo — o jogo dita:**
 
@@ -51,7 +69,7 @@ está rodado, e o contrato de registro (`.asset`/`.gfx`/portrait `.txt`) está m
 - Skinning: pesos por região, pintados no Blender com a arte de referência visível.
 - Clipes: quantos, duração, fps, conteúdo.
 
-## Esqueleto proposto (ponto de partida, não dogma)
+### Esqueleto proposto (ponto de partida, não dogma)
 
 Uma dúzia de ossos com papel claro, posicionados sobre as regiões do canvas (use
 `assets/portraits/ssm_shared_reference.png` e a arte de teste como guia visual):
@@ -71,7 +89,7 @@ Lições da saga aplicadas: **bordas do canvas com peso 1.0 no `root`** (cantos 
 foram a causa do retrato "nadar"); peso de cada osso **localizado** na sua região com falloff suave; nenhum
 osso que você não pretende animar.
 
-## Fluxo recomendado
+### Fluxo recomendado
 
 1. **Decidir canvas e proporção** (ver "Livre" acima). Atualizar/planejar a entrada em `RIGS`
    (`scripts/generate-portraits/types.ts`) pro rig novo (entity + resolução).
@@ -82,7 +100,7 @@ osso que você não pretende animar.
    regiões do canvas); pesos pintados no Blender (weight paint é julgamento visual — essa parte é manual mesmo)
    ou gerados por falloff paramétrico se preferir tudo determinístico.
 4. **Validar deformação antes de animar**: pose manual exagerada em cada osso + a métrica de strain de aresta
-   (referência técnica, 3.2) pra conferir que cada osso arrasta só a sua região.
+   (`docs/rig.md`, seção 3.2) pra conferir que cada osso arrasta só a sua região.
 5. **Animação**: Action por script `bpy` (senos/pulsos paramétricos, loop fechado — primeiro e último frame
    idênticos), ~30 fps, ~180 frames. Orçamento de strain: mediana ≤ 0.3% / máx ≤ 10% (o baseline comprovado
    estável do plano 4).
@@ -92,7 +110,7 @@ osso que você não pretende animar.
    `samples` do `.anim` batendo com `frames × canal × ossos`. Re-importar num Blender limpo (round-trip) — o
    caminho de export do addon foi pouco exercitado até aqui, confiança se constrói aí.
 7. **Integrar**: os arquivos exportados são **fonte** (versionados em `assets/`, ex.: `assets/rig/`), e um
-   pipeline `scripts/generate-<rig-novo>/` (padrão do CLAUDE.md: pasta própria, `index.ts` como entry point)
+   pipeline `scripts/generate-<rig-novo>/` (padrão do `CLAUDE.md`: pasta própria, `index.ts` como entry point)
    copia pro `mod/.../gfx/models/portraits/<rig>/` e gera os `.asset`/`.gfx` a partir de templates — mesmo
    desenho do `generate-shared-rig`, sem os patches binários (não há mais nada pra corrigir: o mesh já nasce
    certo).
@@ -101,10 +119,10 @@ osso que você não pretende animar.
    da câmera — se o volume do mesh precisar de ajuste fino, é um parâmetro do script do passo 2, não edição
    manual). Depois arte real. O jogo é o oráculo final (shader/render/enquadramento).
 
-## Armadilhas conhecidas
+### Armadilhas conhecidas
 
 - **Não invente o volume do mesh**: a câmera é fixa e desconhecida — comece do bounding box comprovado e
-  calibre com o xadrez. Um plano bonito no lugar errado é um quadro vazio ou cortado (saga, bugs 3 e 4).
+  calibre com o xadrez. Um plano bonito no lugar errado é um quadro vazio ou cortado.
 - **Bordas sem âncora**: todo vértice de borda com peso total 1.0 no `root` parado — senão o quadro inteiro
   respira junto.
 - **Exportador menos maduro que o importador**: valide binário + round-trip antes do jogo; se o export de mesh

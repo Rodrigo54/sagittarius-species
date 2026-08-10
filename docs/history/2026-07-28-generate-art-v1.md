@@ -3,7 +3,7 @@
 > **Nota:** o pipeline descrito aqui (SDXL via checkpoint/LoRA/ControlNet, pacote `ComfyUI-OOP` pra compor o
 > prompt — nodes `OOPStyleNode`, `OOPClothingNode`, etc. — e um `geracaoArt.base.extra` de string única) foi
 > **apagado do repositório**: primeiro teve a dependência do `ComfyUI-OOP` abolida numa sessão posterior (schema
-> `zod` próprio em TypeScript — ver `generate-art-migracao-schema-proprio.md`), depois foi substituído de vez
+> `zod` próprio em TypeScript — ver `docs/history/2026-08-08-generate-art-schema-proprio.md`), depois foi substituído de vez
 > pelo pipeline atual (Flux.2 Klein, sem checkpoint/LoRA/ControlNet configurável) e removido. Este relato fica
 > como está, como registro histórico da sessão que criou o pipeline original; não reflete o schema/formato nem
 > o código atual do `portrait.json`/`bun run generate-art`.

@@ -9,7 +9,7 @@
 Sagittarius Species is a Stellaris mod that adds AI-assisted portrait art for **18 species**, each plugged into
 the game's `species_classes` / `portrait_categories` / `portrait_sets` data chain (see `CLAUDE.md` for the full
 model). Most species share one of two animated rigs (`sl_shared` or `ssm_shared`) rather than shipping unique
-meshes — see `portraits.md` and the "`sl_shared` vs. `ssm_shared`" section of `CLAUDE.md` for why.
+meshes — see `docs/pipeline-portraits.md` and the "`sl_shared` vs. `ssm_shared`" section of `CLAUDE.md` for why.
 
 This repository is a content/asset pipeline, not an application: `mod/sagittarius-species/` is the Clausewitz-script
 mod itself (published to the Steam Workshop), and `scripts/` (Bun/TypeScript) converts source art in `assets/`
@@ -38,9 +38,9 @@ into the textures and `.txt`/`.yml` files inside `mod/`.
 | Mercenaries | `ssm_mercenary` | HUM |
 | Star Knight | `ssm_knight` | HUM |
 
-`ssm_mermaids` and `ssm_astral` currently use the legacy `sl_shared` rig — a migration to `ssm_shared` was
-attempted and reverted after in-game testing found framing issues (see `future-plans.md`). Every other species
-above uses `ssm_shared`.
+`ssm_mermaids` still uses the legacy `sl_shared` rig — a migration to `ssm_shared` was attempted and reverted
+after in-game testing found framing issues (see `docs/future-plans.md`). `ssm_astral` was migrated (and re-migrated)
+to `ssm_shared` and no longer has that problem. Every other species above uses `ssm_shared`.
 
 ## Recommended tools
 
@@ -58,7 +58,7 @@ optional depending on what you're touching:
   animated rig itself (mesh/skeleton/animations, `.mesh`/`.anim` files). Not required for the normal portrait
   pipeline.
 - **VS Code + [cwtools](https://marketplace.visualstudio.com/items?itemName=tboby.cwtools-vscode)** — Clausewitz
-  script validation/lint. Open `sagittarius-species.code-workspace`, not the raw folder — see `cwtools.md`.
+  script validation/lint. Open `sagittarius-species.code-workspace`, not the raw folder — see `docs/cwtools.md`.
 - **Affinity Designer/Photo or Photoshop** — editing the source `.psd` reference/art layers in `assets/`.
 - **[StabilityMatrix](https://github.com/LykosAI/StabilityMatrix)** (ComfyUI) — AI-assisted portrait art
   generation for new species.

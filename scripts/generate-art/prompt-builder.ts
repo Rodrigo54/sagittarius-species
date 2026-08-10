@@ -11,11 +11,11 @@ import type { BaseFixo } from './base';
  * uma frase curta (`comPeso`, ver abaixo); `person.ethnicity` é uma frase
  * descritiva combinando a palavra crua da etnia com traços de pele/rosto
  * (`TEXTO_ETNIA`, texto completo já com peso embutido). Peso moderado
- * (1.1–1.3 — acima disso já vazou pra atributo vizinho em testes reais, ver
- * histórico). Pra "distorção" (algo que o checkpoint insiste em gerar
- * errado, tipo tronco exposto ou aparência andrógina), o peso vai no
- * **negativo** (o oposto do que se quer, reforçado), não empilhando peso em
- * cima de uma frase positiva longa — ver `generate-art-migracao-schema-proprio.md`
+ * (1.1–1.3 — acima disso já vazou pra atributo vizinho em testes reais).
+ * Pra "distorção" (algo que o checkpoint insiste em gerar errado, tipo
+ * tronco exposto ou aparência andrógina), o peso vai no **negativo** (o
+ * oposto do que se quer, reforçado), não empilhando peso em cima de uma
+ * frase positiva longa — ver `docs/history/2026-08-08-generate-art-schema-proprio.md`
  * pro caso real que motivou essa mudança de estratégia. */
 
 /** Peso de ênfase — faixa 1.1–1.3, nunca fora dela. Usado tanto nas duas

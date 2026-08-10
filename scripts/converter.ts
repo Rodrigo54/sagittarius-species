@@ -12,7 +12,7 @@ export const PASTA_MOD = join(PASTA_RAIZ, 'mod/sagittarius-species');
 
 const TEXCONV = join(__DIRNAME, '../bin/texconv/texconv.exe');
 
-// Só os formatos usados pelo pipeline (linear/UNORM — o Stellaris não suporta as variantes sRGB, ver image.md)
+// Só os formatos usados pelo pipeline (linear/UNORM — o Stellaris não suporta as variantes sRGB, ver docs/pipeline-texturas.md)
 const FORMATOS = {
   bc3: 'BC3_UNORM',
   bc1: 'BC1_UNORM',

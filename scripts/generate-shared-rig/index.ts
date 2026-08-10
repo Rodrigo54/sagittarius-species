@@ -32,7 +32,7 @@ const ARQUIVOS_ANIM = [
  *    permanece no mesh; os outros 5 subtrees são removidos do binário.
  *    Sem isso, a UV unificada faz as 6 camadas de profundidade do rig
  *    exibirem o retrato inteiro ao mesmo tempo, criando um "fantasma"/gêmeo
- *    atrás do personagem — ver `ssm-shared-historico-da-sessao.md` pro
+ *    atrás do personagem — ver `docs/history/2026-07-23-ssm-shared-rig.md` pro
  *    relato completo (o que foi tentado antes, por que falhou, e por que a
  *    remoção estrutural venceu a degeneração de triângulos: o importador do
  *    Blender crasha com faces degeneradas, e validação visual no Blender é
@@ -43,7 +43,7 @@ const ARQUIVOS_ANIM = [
  *    camada de cabelo/roupa (shaders que não renderizam arte comum —
  *    in-game aparece um quadro vazio).
  * 3. `corrigirUvDoMesh` — a UV do plano restante passa a usar o canvas
- *    inteiro em vez de metade (ver `future-plans.md` e `portraits.md`).
+ *    inteiro em vez de metade (ver `docs/rig.md`, seção 2.1).
  * 4. `recortarPlanoAcima` — remove as linhas de vértices do topo do plano que
  *    a câmera de retrato nunca captura. Medição in-game (ver
  *    `scripts/measure-framing/ancora.json`) situa o topo do sprite em

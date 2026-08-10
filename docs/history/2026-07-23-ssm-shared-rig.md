@@ -1,10 +1,10 @@
 # Histórico da sessão: correção de UV do `ssm_shared` e a caça ao bug do "fantasma"
 
 Relato detalhado de uma sessão longa que começou como "corrigir o desperdício de UV do `sl_humanoid_01_entity`"
-(veja `future-plans.md`) e terminou revertida de propósito depois de expor uma cadeia de bugs cada vez mais
+(veja `docs/future-plans.md`) e terminou revertida de propósito depois de expor uma cadeia de bugs cada vez mais
 sutis — o último dos quais nunca foi resolvido com confiança. Este arquivo existe pra uma conversa nova poder
 retomar o trabalho sem precisar redescobrir tudo isso do zero. Não é um documento de referência permanente do
-projeto (como `CLAUDE.md`/`portraits.md`) — é um relatório pontual desta sessão específica; pode ser resumido,
+projeto (como `CLAUDE.md`/`docs/pipeline-portraits.md`) — é um relatório pontual desta sessão específica; pode ser resumido,
 arquivado ou apagado quando o assunto for resolvido de verdade.
 
 ## Como chegar no estado em que a sessão terminou
@@ -30,15 +30,16 @@ Depois de tudo revertido, o estado do código era:
 Tudo o resto que não é sobre o bug do fantasma/distorção continua como estava (e não precisa ser revertido):
 `RIGS`/canvas 1024×976 em `scripts/generate-portraits/types.ts`, o campo `rig` no `portrait.json`, a validação de
 dimensão por rig, `assets/portraits/ssm_shared_reference.png`, `assets/portraits/ssm_test_rig/`, o registro do
-`ssm_test_rig` em `ssm_species_classes.txt`/`ssm_portrait_sets.txt`, e as seções correspondentes de `CLAUDE.md`.
+`ssm_test_rig` em `ssm_species_classes.txt`/`ssm_portrait_sets.txt`, e as seções correspondentes de
+`docs/pipeline-portraits.md`/`docs/rig.md`.
 
 ## Linha do tempo
 
 ### 1. Pedido original e decisões (via `/questione-me`)
 
-Pedido: corrigir o desperdício de UV do `sl_humanoid_01_entity` descrito em `future-plans.md`, criando um
+Pedido: corrigir o desperdício de UV do `sl_humanoid_01_entity` descrito em `docs/future-plans.md`, criando um
 `sl_shared` → `ssm_shared` próprio. Uma entrevista estruturada (skill `questione-me`) levou às decisões abaixo,
-todas registradas com mais detalhe em `CLAUDE.md` (seção "`sl_shared` vs. `ssm_shared`"):
+todas registradas com mais detalhe em `docs/rig.md` (seção "`sl_shared` vs. `ssm_shared`"):
 
 - **Escopo**: `ssm_shared` como entity irmã isolada — `sl_shared` nunca seria modificado, as 15+ espécies
   publicadas continuariam intocadas. Só espécies novas, opt-in via `"rig": "ssm_shared"` no `portrait.json`,
@@ -441,7 +442,7 @@ cintura) estão resolvidos e confirmados no jogo. O `ssm_shared` está funcional
    (ou aceitar testar direto no jogo, mais lento) antes de tentar de novo. **E o Blender não substitui o teste
    in-game**: ele ignora o shader da Clausewitz — o quadro vazio do shader de cabelo (seção 14) renderizava
    perfeitamente no Blender. Blender valida geometria/UV/skinning/animação; shader e render final, só o jogo.
-5. **Animação nova** (veja "Animações novas no rig compartilhado" no topo de `future-plans.md`) deixou de ser
+5. **Animação nova** (veja "Animações novas no rig compartilhado" no topo de `docs/future-plans.md`) deixou de ser
    necessária como *correção* (a distorção foi resolvida na seção 14 sem tocar nos `.anim`), mas continua na mesa
    como melhoria: com o `pPlaneShape6` quase rígido, o retrato tem movimento sutil — um `.anim` autoral poderia
    dar mais vida (respiração, piscada) já que o ferramental de validação visual está pronto.

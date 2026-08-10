@@ -1,7 +1,8 @@
 /** Templates dos três arquivos de script que acompanham o `.mesh` do
  * `ssm_shared` — mesma estrutura do `sl_shared` original, só com os
  * identificadores renomeados pro prefixo `ssm_` (ver CLAUDE.md) e sem a
- * entity `spider` (não usada por nenhuma espécie hoje — ver future-plans.md). */
+ * entity `spider` (`sl_spider_01_entity` no `sl_shared` original — não usada
+ * por nenhuma espécie deste mod). */
 
 export const ENTITIES_ASSET = `
 @humanscale = 0.8

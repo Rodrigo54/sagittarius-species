@@ -32,14 +32,11 @@ const GENEROS_ALVO = ['male', 'female', 'flat'] as const;
  * IntelliSense do editor ao validar/editar um `portrait.json`.
  *
  * Todo objeto é `.strict()` — chave desconhecida é ERRO, não descartada
- * silenciosamente (comportamento padrão do zod). Isso importa em especial
- * durante a migração do schema antigo (OOP: `pose`/`view`/`style`/`clothing`/
- * `extra` de string) pro novo (`tipo`/`torso`/`extra_prompt`): sem
- * `.strict()`, um `portrait.json` ainda não migrado "passaria" na validação
- * silenciosamente, com o conteúdo antigo todo descartado (confirmado
- * testando contra os arquivos reais de ssm_default/ssm_astral antes desta
- * mudança) — com `.strict()`, ele falha alto e claro, apontando exatamente
- * a chave que não existe mais. */
+ * silenciosamente (comportamento padrão do zod). Isso importa porque um
+ * `geracaoArt` escrito contra um formato de campo antigo (renomeado ou
+ * removido numa mudança de schema) passaria na validação silenciosamente
+ * sem `.strict()`, com o conteúdo antigo todo descartado — com `.strict()`,
+ * falha alto e claro, apontando exatamente a chave que não existe mais. */
 
 const zTipo = z
   .object({
@@ -136,14 +133,14 @@ const CHAVE_VARIANTE = /^\d{3}$/;
  * checkpoint SDXL clássico porque boa parte desses campos não tem
  * equivalente aqui: `checkpoint`/`lora`/`loraStrength` não existem porque
  * hoje só existe um arquivo de UNET/CLIP/VAE instalado (ver
- * `handoff-comfyui-image-models-2026-08-08.md`) — expor isso por espécie
+ * `docs/pipeline-generate-art.md`) — expor isso por espécie
  * seria configurabilidade sem uso real; `sampler_name`/`scheduler` não
  * existem porque o grafo do Flux2 usa `KSamplerSelect` fixo em "euler" +
  * `Flux2Scheduler` (não um scheduler nomeado configurável tipo
  * `sgm_uniform`); `denoise`/`controlNetStrength` não existem porque o node
  * `ReferenceLatent` (mecanismo de consistência deste pipeline, no lugar do
  * ControlNet do pipeline SDXL anterior — ver
- * `generate-art-v1-historico-da-sessao.md`) não tem parâmetro de força — é
+ * `docs/history/2026-07-28-generate-art-v1.md`) não tem parâmetro de força — é
  * presença/ausência binária, não um dial. */
 const VARIANTES_MODELO = ['base', 'distilled'] as const;
 

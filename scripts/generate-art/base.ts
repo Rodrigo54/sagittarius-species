@@ -9,7 +9,7 @@ import { z } from 'zod';
  * com Flux2 revelam o que funciona (o pipeline anterior, SDXL/ComfyUI-OOP,
  * usava convenção de prompt diferente — "masterpiece"/"best quality" etc. —
  * que não necessariamente tem o mesmo efeito aqui; ver
- * `generate-art-v1-historico-da-sessao.md` pro que valia lá). */
+ * `docs/history/2026-07-28-generate-art-v1.md` pro que valia lá). */
 const zBaseFixo = z
   .object({
     style: z.string().describe('Estilo de arte, sempre igual em toda espécie hoje (3D render de jogo, não fotorrealista).'),

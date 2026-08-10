@@ -21,11 +21,11 @@ arte/pipeline separado, fora do escopo (ver "Fora de escopo" no fim).
 
 **O pipeline gera via Flux.2 Klein Base, não via checkpoint SDXL** — não existe `checkpoint`/`lora` configurável
 por espécie (só um arquivo de UNET/CLIP/VAE está instalado hoje, ver
-`handoff-comfyui-image-models-2026-08-08.md`), não existe ControlNet/img2img/`denoise` (o mecanismo de
+`docs/pipeline-generate-art.md`), não existe ControlNet/img2img/`denoise` (o mecanismo de
 consistência visual é `ReferenceLatent`, encadeando uma lista de imagens de referência), e a composição do prompt
 (positivo e negativo) é feita inteiramente em TypeScript, não por nodes no grafo do ComfyUI. Isso substituiu um
 pipeline anterior baseado em checkpoint SDXL clássico (`checkpoint`/`lora`/ControlNet OpenPose/img2img), apagado
-do repositório — ver `generate-art-v1-historico-da-sessao.md` e `generate-art-migracao-schema-proprio.md` pro
+do repositório — ver `docs/history/2026-07-28-generate-art-v1.md` e `docs/history/2026-08-08-generate-art-schema-proprio.md` pro
 histórico completo (útil pras lições de composição de prompt que ainda valem, não pro vocabulário de campos, que
 mudou).
 
@@ -44,13 +44,13 @@ Antes de perguntar qualquer coisa, explore:
   precisam bater com o rig `ssm_shared`, e mudar isso reabriria o problema de corte de braço/mão que motivou
   travar) e o negativo compartilhado de qualidade/anatomia. Não pergunte sobre estilo/pose/enquadramento na
   entrevista — não são mais decisão desta skill.
-- **`generate-art-v1-historico-da-sessao.md`** (raiz do repo) — relato da sessão que construiu o pipeline
+- **`docs/history/2026-07-28-generate-art-v1.md`** (raiz do repo) — relato da sessão que construiu o pipeline
   original (SDXL, ComfyUI-OOP) e reworkeou `ssm_default` pela primeira vez: bugs/decisões encontrados (máscara de
   fundo invertida, gênero não respeitado em CFG baixo, LoRA incompatível com checkpoint, `steps` baixo demais
   causando assimetria facial, etnia diluída pela referência, ênfase de peso vazando entre atributos, etc.) — as
   lições sobre **composição de prompt e vieses de geração** continuam válidas mesmo com o motor trocado; as
   lições sobre checkpoint/LoRA/ControlNet não se aplicam mais (esse pipeline foi apagado). Ver
-  `generate-art-migracao-schema-proprio.md` pro que mudou entre o schema antigo e o que a v2 herdou, e a seção
+  `docs/history/2026-08-08-generate-art-schema-proprio.md` pro que mudou entre o schema antigo e o que a v2 herdou, e a seção
   "Armadilhas conhecidas" abaixo pras lições específicas do Flux.2 Klein.
 - **`assets/portraits/ssm_default/portrait.json`** e **`assets/portraits/ssm_astral/portrait.json`** — exemplos
   completos e funcionais de `geracaoArt` já no schema atual (25+25 e 25+25 variantes reais). Use como referência
@@ -158,7 +158,7 @@ repita o resumo atualizado e pergunte de novo. Só depois disso, escreva qualque
     features:1.3)"`) já é gerado automaticamente a partir só de `person.ethnicity` (`TEXTO_ETNIA`). Cobertura de
     tronco segue outro mecanismo: `torso.state` vira texto curto sem peso no positivo, e o **oposto** do estado
     pedido é excluído com peso no negativo (`NEGATIVO_ESTADO_TORSO`) — é lá que o reforço de verdade mora
-    (detalhado em `generate-art-v1-historico-da-sessao.md` — lição do motor anterior que continua valendo, é
+    (detalhado em `docs/history/2026-07-28-generate-art-v1.md` — lição do motor anterior que continua valendo, é
     sobre como o texto compete por atenção, não sobre SDXL em si).
   - **Na variante `"distilled"` (`cfg: 1`), o negativo inteiro é descartado** (o node correspondente vira
     `ConditioningZeroOut`, ver `scripts/generate-art/base.ts`) — a única alavanca contra algo que o modelo insiste
@@ -200,7 +200,7 @@ Só começa a escrever depois do "sim" explícito no portão de confirmação.
   `geracaoArt` de uma espécie específica. Se o usuário pedir uma capacidade que o pipeline atual não tem (ex. um
   campo estruturado novo), isso é trabalho de infraestrutura, fora do escopo aqui.
 - **Instalar/trocar modelo (UNET/CLIP/VAE) no ComfyUI local** — só usa o que já está instalado (ver
-  `handoff-comfyui-image-models-2026-08-08.md`).
+  `docs/pipeline-generate-art.md`).
 - **Rodar o lote completo ou promover automaticamente** — sempre para no teste de 5 imagens e devolve a decisão
   pro usuário (ver "Passo final").
 - **`bun run portrait` / conversão PNG→DDS** — pipeline totalmente separado, não é tocado por esta skill.

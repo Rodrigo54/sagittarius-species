@@ -1,10 +1,22 @@
-# Configuração do cwtools neste repositório
+# Ferramental de script Paradox: cwtools e convenções de arquivo
+
+## Convenções gerais
+
+- Arquivos `.txt`/`.gfx`/`.gui`/`.mod`/`.yml` são script Clausewitz/Jomini, não texto genérico — o
+  `.vscode/settings.json` mapeia todos para o modo de linguagem `paradox` (extensão cwtools do VS Code), para
+  destaque de sintaxe e lint.
+- `.cwtools/` é um conjunto de definições de regras **vendorizado**, consumido pela extensão/linter cwtools —
+  trate como material de referência somente leitura, não algo para editar manualmente ao implementar features.
+- `.editorconfig`: arquivos `.yml` são `utf-8-bom`, largura máxima de 80 colunas; `.txt`/`.gfx`/`.mod`/`.json`
+  usam indentação de 2 espaços.
+
+## Por que a validação do cwtools está configurada do jeito que está
 
 Este documento explica **por que** a validação do cwtools-vscode está configurada do jeito que está neste
 repositório — não é a documentação genérica da ferramenta (essa vive na
 [wiki oficial](https://github.com/cwtools/cwtools-vscode/wiki)).
 
-## O problema: a raiz do mod não é a raiz do repo
+### O problema: a raiz do mod não é a raiz do repo
 
 A extensão [`tboby.cwtools-vscode`](https://marketplace.visualstudio.com/items?itemName=tboby.cwtools-vscode)
 exige que a pasta aberta no VS Code **seja, ela mesma, a raiz do mod** — o lugar onde fica `descriptor.mod` (veja
@@ -16,7 +28,7 @@ Neste repositório, porém, o mod fica em `mod/sagittarius-species/`, não na ra
 `mod/sagittarius-species/` como um mod válido, então a validação simplesmente **não roda** lá dentro (sem erros,
 sem autocomplete, sem nada).
 
-## A solução: workspace multi-root
+### A solução: workspace multi-root
 
 Use o arquivo **`sagittarius-species.code-workspace`** na raiz do repo em vez de abrir a pasta diretamente
 (`File > Open Workspace from File...` no VS Code). Ele declara duas pastas-raiz:
@@ -28,7 +40,7 @@ Isso segue o padrão de ["multi-root workspace"](https://code.visualstudio.com/d
 do próprio VS Code, que é a forma oficialmente recomendada pela extensão de lidar com mais de uma raiz de mod (ou,
 como aqui, uma raiz de mod que não coincide com a raiz do repositório).
 
-### Onde o cache de regras/dados vanilla realmente fica
+#### Onde o cache de regras/dados vanilla realmente fica
 
 Ao contrário do que a documentação genérica sugere para regras customizadas manuais, o cache **automático** usado
 por `cwtools.rules_version = "latest"`/`"stable"` não fica dentro do workspace — ele fica dentro da própria
@@ -44,7 +56,7 @@ cache. Para o Stellaris isso é pesado (chegou a ficar ~30 minutos rodando, ~3,8
 testamos): é esperado, não é travamento. Os logs desse processo aparecem no painel **Output** do VS Code, no canal
 **"Paradox Language Services"** (não "CWTools" — esse é só o nome de exibição da extensão na Marketplace).
 
-## Por que as configurações do cwtools ficam no `.code-workspace`, não num `.vscode/settings.json`
+### Por que as configurações do cwtools ficam no `.code-workspace`, não num `.vscode/settings.json`
 
 Todas as chaves `cwtools.*` relevantes aqui (`errors.ignorefiles`, `ignore_patterns`, `rules_version`,
 `localisation.languages`) são `"scope": "window"` no manifesto da extensão — conferido diretamente no
@@ -57,28 +69,28 @@ colaborador que abrir esse arquivo já herda a configuração certa, sem precisa
 `cwtools.cache.stellaris` (o caminho da instalação vanilla do Stellaris) é diferente: tem `"scope": "application"`,
 é específico de cada máquina, e por isso fica nas configurações globais de usuário — não no repositório.
 
-## O que cada configuração faz
+### O que cada configuração faz
 
 - **`cwtools.ignore_patterns`** inclui `testmod/**` — essa pasta guarda arquivos `.txt` de outros mods usados só
-  para inspeção pontual (veja a seção "Pipeline de listas de nomes" do `CLAUDE.md`), não faz parte do mod
-  publicado, e não deve ser validada como se fosse.
+  para inspeção pontual (veja `docs/pipeline-nomes.md`), não faz parte do mod publicado, e não deve ser validada
+  como se fosse.
 - **`cwtools.rules_version`** fica em `"latest"` (decisão consciente, não um pin manual) — significa que as
   regras de validação (`.cwtools/`) atualizam sozinhas a cada commit novo do
   [`cwtools-stellaris-config`](https://github.com/cwtools/cwtools-stellaris-config), então podem mudar sem aviso.
-  Diferente do `bin/` (veja `CLAUDE.md`), que pina versões manualmente para reprodutibilidade, aqui optou-se por
-  ficar sempre atualizado.
+  Diferente do `bin/` (veja `docs/pipeline-texturas.md`), que pina versões manualmente para reprodutibilidade,
+  aqui optou-se por ficar sempre atualizado.
 - **`cwtools.localisation.languages`** inclui `"Braz_Por"` além do `"English"` padrão da extensão — porque
-  português do Brasil é o idioma fonte-da-verdade deste repositório (veja `CLAUDE.md`), é dali que
-  `scripts/name-lists.ts` gera o `.txt` em Clausewitz. Validar só em inglês (o padrão da extensão) deixaria passar
-  problema de localização justamente no idioma onde o conteúdo nasce.
+  português do Brasil é o idioma fonte-da-verdade deste repositório, é dali que `scripts/name-lists.ts` gera o
+  `.txt` em Clausewitz (veja `docs/pipeline-nomes.md`). Validar só em inglês (o padrão da extensão) deixaria
+  passar problema de localização justamente no idioma onde o conteúdo nasce.
 
-## Cópia para a pasta local de mods (`bun run copy` / `overwrite`)
+### Cópia para a pasta local de mods (`bun run copy` / `overwrite`)
 
 Os scripts `scripts/copy.ps1`, `scripts/overwrite.ps1` e os equivalentes bash
 (`scripts/copy-latest-to-local-mod.sh`, `scripts/overwrite-local-mod-with-latest.sh`) excluem explicitamente
 `.cwtools/` da cópia para `Documents\Paradox Interactive\Stellaris\mod\`. Isso é uma precaução, não uma correção
-de um problema atual: o cache automático de regras **não** vive dentro de `mod/sagittarius-species/` (veja a seção
-acima), então normalmente não há nada ali para excluir. A exclusão só importa se alguém, no futuro, criar uma
-pasta `.cwtools/` manual dentro da pasta do mod para sobrepor regras (uso legítimo documentado pela extensão) — aí
-sim, sem essa exclusão, ela iria parar na pasta de mods locais e, por consequência, arriscar ir para o Steam
-Workshop na hora de publicar.
+de um problema atual: o cache automático de regras **não** vive dentro de `mod/sagittarius-species/` (veja a
+seção acima), então normalmente não há nada ali para excluir. A exclusão só importa se alguém, no futuro, criar
+uma pasta `.cwtools/` manual dentro da pasta do mod para sobrepor regras (uso legítimo documentado pela
+extensão) — aí sim, sem essa exclusão, ela iria parar na pasta de mods locais e, por consequência, arriscar ir
+para o Steam Workshop na hora de publicar.

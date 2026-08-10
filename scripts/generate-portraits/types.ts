@@ -3,8 +3,8 @@ import type { PortraitConfig, RigId } from '../portrait-schema';
 export type { PortraitConfig, RigId };
 
 /** `sl_shared` é o rig original do Stellar Legion Mod (UV desperdiça metade
- * do canvas — ver future-plans.md); `ssm_shared` é o fork com a UV
- * corrigida e um único plano, usado por 16 das 18 espécies. O *valor* aceito
+ * do canvas — ver `docs/rig.md`); `ssm_shared` é o fork com a UV
+ * corrigida e um único plano, usado por 17 das 18 espécies. O *valor* aceito
  * (`RigId`) vem de `portrait-schema` — fonte de verdade única de "quais
  * strings são um rig válido"; o que cada valor *significa* em termos de
  * canvas/geometria é definido aqui embaixo, em `RIGS`. */
@@ -66,10 +66,11 @@ export interface RigInfo {
 export const RIG_PADRAO: RigId = 'sl_shared';
 
 export const RIGS: Record<RigId, RigInfo> = {
-  /** Legado congelado: as duas espécies que restaram aqui (`ssm_mermaids`,
-   * `ssm_astral`) foram revertidas na preparação da 1.8.0 e o enquadramento
-   * delas é a composição original, herdada — não vem de guia nenhum. Sem
-   * `guia`, o pipeline as trata pelo contrato antigo e não as recompõe. */
+  /** Legado congelado: a única espécie que resta aqui (`ssm_mermaids`) foi
+   * revertida na preparação da 1.8.0 e o enquadramento dela é a composição
+   * original, herdada — não vem de guia nenhum. Sem `guia`, o pipeline a
+   * trata pelo contrato antigo e não a recompõe. (`ssm_astral` também foi
+   * revertida na mesma época, mas depois foi remigrada pro `ssm_shared`.) */
   sl_shared: {
     entity: 'sl_humanoid_01_entity',
     canvas: { largura: 825, altura: 1650 },

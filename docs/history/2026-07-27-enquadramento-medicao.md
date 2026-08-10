@@ -2,9 +2,11 @@
 
 Relato da sessão que executou a correção, em 2026-07-27, na branch `feature/portrait-framing` a partir da
 `develop` pós-1.8.0. O documento anterior era um **plano** escrito em 2026-07-25; este é o registro do que de
-fato foi feito, incluindo os pontos em que o plano estava errado. Contexto de fundo: `CLAUDE.md` (seções
-"`sl_shared` vs. `ssm_shared`" e "Enquadramento"), `ssm-shared-referencia-tecnica.md` (seções 2.5 e 2.6) e
-`ssm-shared-historico-da-sessao.md`.
+fato foi feito, incluindo os pontos em que o plano estava errado. Contexto de fundo: `docs/rig.md` (seções
+"`sl_shared` vs. `ssm_shared`" e "Enquadramento", incluindo a derivação técnica e o recorte do topo) e
+`docs/history/2026-07-23-ssm-shared-rig.md`. O rationale vivo de enquadramento por âncora (por que
+`"ancora": "cabeca"` existe, e as candidatas por espécie) que nasceu no fim desta sessão foi migrado pra dentro
+de `docs/rig.md` — não repetido aqui.
 
 ## TL;DR
 
@@ -54,8 +56,8 @@ declarativo**. Cada contexto de UI é um `containerWindowType` com `size` + `cli
 Isso mudou a economia da medição: em vez de fotografar sete contextos e medir cada um, **122 contextos saem dos
 arquivos** e apenas uma âncora precisa do jogo aberto. E a tabela se revalida sozinha a cada patch da Paradox.
 
-Detalhes técnicos, armadilhas e lições de método estão na **seção 2.5 da referência técnica** — é lá que a
-próxima sessão deve olhar, não aqui.
+Detalhes técnicos, armadilhas e lições de método estão em `docs/rig.md` — é lá que a próxima sessão deve olhar,
+não aqui.
 
 ## 3. Decisões, e por quê
 
@@ -101,21 +103,10 @@ O trabalho foi organizado para que cada bloco tivesse um critério de aceitaçã
 
 Com o enquadramento já corrigido e validado in-game, apareceu um caso que ele não resolvia: os
 `ssm_green_elves` têm chifres, e ancorados pelo bounding box os chifres tomavam o topo do guia, empurrando a
-cabeça para baixo — o personagem saía menor e mais baixo que os outros elfos.
-
-Virou um campo novo no `portrait.json` (`"ancora": "cabeca"`), aplicado só a essa espécie. Detalhes técnicos na
-**seção 2.6 da referência técnica**. O que vale registrar aqui é o que a investigação contrariou:
-
-- **A heurística óbvia estava errada.** "Estrutura fina é estreita" é falso para chifres de veado: eles se
-  espalham e ocupam 82% da largura já na primeira linha, mais que a cabeça. Detectar por largura acharia
-  exatamente a linha errada. O que funciona é **densidade** — pouca área dentro de um bounding box largo.
-- **Não é caso isolado.** Metade do acervo (8 de 16) tem estrutura fina acima da cabeça, de 12,7% a 25,2% da
-  altura. Mas aplicar em todas seria repetir o erro da sereia: em algumas espécies o ornamento é a
-  característica, e o `ssm_octopus` (23%, tentáculos) é o candidato óbvio a esse engano.
-- **Detectar por imagem resolveu de graça um problema conhecido.** Como o recuo é medido em cada arte, variantes
-  com ornamentos de tamanhos diferentes ficam com as cabeças alinhadas entre si — nos green elves, machos sobem
-  144 px e fêmeas 110. É exatamente o defeito que fez `ssm_astral` ser revertida ("variantes desalinhadas entre
-  si"), e que um recuo fixo por espécie não corrigiria.
+cabeça para baixo — o personagem saía menor e mais baixo que os outros elfos. Virou um campo novo no
+`portrait.json` (`"ancora": "cabeca"`), aplicado só a essa espécie nesta sessão. O rationale completo do porquê
+(a heurística por largura não funciona, por que não é padrão, as candidatas por espécie) foi incorporado a
+`docs/rig.md` — não repetido aqui.
 
 ## 6. Caminhos descartados (não refazer)
 
@@ -128,37 +119,16 @@ cai em `x_sprite = 45`, ou seja a câmera captura mais largo que a textura. Os p
 não são textura invisível — são ar dentro do quadro. Apertar a UV ali cortaria o enquadramento.
 
 **Embaralhar os índices da codificação de cor.** Soa protetor (afasta faixas vizinhas no espaço de cor), mas
-troca "leu 4, esperava 7" por "leu 323, esperava 3": erro grande, plausível e indetectável. Ver 2.5 da referência
-técnica.
+troca "leu 4, esperava 7" por "leu 323, esperava 3": erro grande, plausível e indetectável. Ver `docs/rig.md`.
 
 **Localizar a calibração nos screenshots por cor.** A tolerância que o BC3 exige faz ~58% dos pixels de uma tela
 qualquer decodificarem por acaso.
 
-## 7. O que ficou em aberto
+## 7. Referências
 
-- **`ssm_mermaids` e `ssm_astral`** seguem no `sl_shared`, congeladas. Refazer a migração delas ficou mais barato
-  depois desta entrega, porque o enquadramento agora é derivado e ajustável em vez de destrutivo — mas os
-  defeitos que motivaram a reversão (cauda fora do quadro, escalas inconsistentes entre variantes) exigem regras
-  novas de enquadramento e julgamento visual, não são consequência do canvas.
-- **Subir a densidade** quando houver arte em resolução maior: multiplicar as duas dimensões do canvas em
-  `RIGS` pelo mesmo fator e rodar `bun run portrait`. Nada mais.
-- **Release.** Nada aqui é visível ao jogador além da centralização; faz sentido publicar junto com a arte nova.
-- **Zona de sacrifício.** A faixa entre o contexto mais generoso e o mais agressivo aparece só em parte dos
-  contextos — é onde pontas de cabelo, chifres e ornamentos podem entrar sabendo que serão cortados às vezes.
-  Os números por contexto estão em `scripts/measure-framing/contextos.json`.
-- **Sete espécies candidatas a `"ancora": "cabeca"`**, listadas por
-  `bun scripts/measure-framing/densidade-da-arte.ts`: `knight` (25,2%), `octopus` (23,0%), `hastur` (19,6%),
-  `necron` (16,7%), `cyborg` (15,7%), `new_order` (14,6%) e `mercenary` (12,7%). Nenhuma foi mexida — a decisão
-  é visual, espécie a espécie, comparando o antes e o depois em `.portraits-framed/`. O `octopus` é o caso a
-  tratar com mais cuidado: se aqueles 23% forem tentáculos, empurrá-los para a faixa de corte repete o erro que
-  reverteu a sereia.
-
-## 8. Referências
-
-- `CLAUDE.md` — "`sl_shared` vs. `ssm_shared`", "Enquadramento", "Pipeline de portraits", "Comandos"
-- `ssm-shared-referencia-tecnica.md` — seção 2.1 (topologia do plano) e **2.5** (enquadramento: derivação,
-  medição e lições de método)
+- `docs/rig.md` — anatomia do mesh, derivação do enquadramento, rationale de âncora por cabeça e candidatas por
+  espécie (tudo que "ficou em aberto" ao fim desta sessão já foi incorporado lá)
+- `docs/pipeline-portraits.md` — pipeline de portraits, "Comandos"
 - `scripts/measure-framing/contextos.json` — os 122 contextos, com a janela visível de cada um
 - `scripts/measure-framing/ancora.json` — a relação sprite↔canvas, com as validações que a sustentam
-- `ssm-shared-historico-da-sessao.md` — por que o `pPlaneShape4` foi escolhido
-- `future-plans.md` — reversão de `ssm_mermaids`/`ssm_astral`
+- `docs/history/2026-07-23-ssm-shared-rig.md` — por que o `pPlaneShape4` foi escolhido

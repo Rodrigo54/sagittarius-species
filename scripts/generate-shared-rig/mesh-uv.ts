@@ -158,10 +158,10 @@ export function acharArraysUv(buf: Buffer): PropriedadeEncontrada[] {
 /** O único plano que permanece no `ssm_shared`. Os outros cinco são
  * removidos por `removerPlanosOcultos` — ver o porquê lá.
  *
- * Por que o 4 (histórico completo em `ssm-shared-historico-da-sessao.md`,
- * seção 14): cada plano do relevo 2.5D tem skinning, shader e geometria
- * diferentes — os 6 formam dois conjuntos corpo/cabelo/roupa do sistema
- * vanilla de camadas de retrato.
+ * Por que o 4 (comparação completa dos 6 planos em `docs/rig.md`, seção 2.1):
+ * cada plano do relevo 2.5D tem skinning, shader e geometria diferentes — os
+ * 6 formam dois conjuntos corpo/cabelo/roupa do sistema vanilla de camadas
+ * de retrato.
  *
  * - `pPlaneShape2` (1ª escolha) era a "camada do braço direito": 83% do peso
  *   de skinning na cadeia do braço, e a gesticulação dos `.anim` esticava
@@ -184,7 +184,7 @@ export const PLANO_MANTIDO = 'pPlaneShape4';
  * corrigida pra usar o canvas todo (`corrigirUvDoMesh`), arte que preenche o
  * canvas revela as 6 camadas como um "fantasma"/gêmeo atrás do personagem —
  * a única correção livre de fantasma em qualquer ângulo é manter um único
- * plano (ver `ssm-shared-historico-da-sessao.md`). Remover a geometria de
+ * plano (ver `docs/history/2026-07-23-ssm-shared-rig.md`). Remover a geometria de
  * vez (em vez de degenerar os triângulos, a técnica anterior) mantém o mesh
  * importável no Blender — o importador do `io_pdx_mesh` crasha com faces
  * degeneradas, e a validação visual via Blender é pré-requisito da

@@ -70,7 +70,7 @@ const PRIMEIRO_ID_DINAMICO = 100;
  *
  * Não existem `checkpoint`/`lora`/`sampler_name`/`scheduler`/`denoise`/
  * `controlNetStrength` pra injetar (diferença marcante em relação ao
- * pipeline SDXL anterior, ver `generate-art-v1-historico-da-sessao.md`) —
+ * pipeline SDXL anterior, ver `docs/history/2026-07-28-generate-art-v1.md`) —
  * decisão da entrevista de planejamento: UNET/CLIP/VAE são fixos por
  * variante (um único arquivo de cada por variante, hoje), o sampler é fixo
  * em "euler", e o `ReferenceLatent` não tem parâmetro de força (é
@@ -121,7 +121,7 @@ export function montarPrompt(
   // personagem — cada ReferenceLatent acrescenta seu latente à lista
   // "reference_latents" da conditioning recebida da anterior, tanto no
   // positivo quanto no negativo (mesmo padrão do template oficial "Image
-  // Edit" do Flux.2 Klein — ver `handoff-comfyui-image-models-2026-08-08.md`).
+  // Edit" do Flux.2 Klein — ver `docs/pipeline-generate-art.md`).
   let conditioningPositivo: [string, number] = [NODE_IDS.positivo, 0];
   let conditioningNegativo: [string, number] = [NODE_IDS.negativo, 0];
 

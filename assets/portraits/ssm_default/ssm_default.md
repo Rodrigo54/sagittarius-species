@@ -69,7 +69,7 @@ Algumas variantes têm `extra_prompt.positive` específico, além do que `base`/
 - **`male/001` e `male/002`**: ambas `"(young boy), flat masculine chest, male chest armor, muscular male
   torso"` — ajuste pontual de gerações específicas (o histórico do reforço de `male/002` era outro, ligado à cor
   de cabelo rosa fazendo o gênero "balançar" pra mais feminino nos testes originais — ver bug #10 em
-  `generate-art-v1-historico-da-sessao.md` — mas o texto atual do campo já não reflete mais esse reforço
+  `docs/history/2026-07-28-generate-art-v1.md` — mas o texto atual do campo já não reflete mais esse reforço
   específico).
 - **Reforço de etnia não é mais manual.** Até pouco tempo atrás, variantes `ethnicity: "African"` precisavam de
   `extra_prompt.positive` manual (`"(dark skin, deep brown skin tone, African facial features:1.3)"`) — etnia é

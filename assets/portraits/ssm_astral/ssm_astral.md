@@ -2,7 +2,8 @@
 
 **Nome exibido:** Astral
 **Species class:** HUM (a confirmar)
-**Rig:** `sl_shared`
+**Rig:** `ssm_shared` (migrada — antes foi revertida pro `sl_shared` na preparação da release 1.8.0 por
+variantes desalinhadas entre si, ver `docs/future-plans.md`; remigrada depois)
 **Gendered:** sim (`male`/`female`, 25/25 variantes)
 
 ## Descrição
@@ -11,9 +12,8 @@ Retrato "astral"/místico do mod: humanoides encapuzados/armadurados com olhos b
 e uma gema/cristal energético no peito, ligado por veias de energia que se espalham pela armadura — estética de
 ordem mística ou entidade cósmica, tons dominantes roxo, violeta e preto com metal escuro/bronze.
 
-`portrait.json` já tem `geracaoArt` configurado (rig continua `sl_shared` — legado congelado — mas a espécie
-ganhou um pipeline de geração via IA em paralelo, ver `bun run generate-art`), no schema/pipeline atual (Flux.2
-Klein — `scripts/portrait-schema/`, `generate-art-migracao-schema-proprio.md`):
+`portrait.json` já tem `geracaoArt` configurado, no schema/pipeline atual (Flux.2 Klein —
+`scripts/portrait-schema/`, `docs/history/2026-08-08-generate-art-schema-proprio.md`):
 
 - `tipo`: `{ value: "Human", description: "mystical order warrior, cosmic sentinel aesthetic, glowing purple
   eyes, no visible pupils" }`.

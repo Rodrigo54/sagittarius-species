@@ -1,14 +1,11 @@
 /** Vocabulário fechado usado pelo schema de `portrait.json` (`schema.ts`).
  *
- * As listas de `person`/`hair`/`eyes` abaixo foram portadas do pacote
- * `ComfyUI-OOP` (`custom_nodes/ComfyUI-OOP`, `0xRavenBlack/ComfyUI-OOP`) —
- * eram extraídas ao vivo do `object_info` do ComfyUI local (ver histórico
- * dessa extração em `generate-art-v1-historico-da-sessao.md`), mas o projeto
- * abandonou a dependência do pacote (`generate-art-migracao-schema-proprio.md`)
- * e essas listas viraram uma **cópia estática**, mantida aqui manualmente —
- * não são mais revalidadas contra uma API ao vivo. Só um valor exatamente
- * igual a um destes é aceito, então digitar errado é pego pelo schema, não
- * silenciosamente aceito e ignorado pelo ComfyUI. */
+ * As listas de `person`/`hair`/`eyes` abaixo são uma **cópia estática**,
+ * mantida aqui manualmente — não são revalidadas contra nenhuma API ao vivo
+ * (histórico de por que era diferente antes: `docs/history/2026-07-28-generate-art-v1.md`
+ * e `docs/history/2026-08-08-generate-art-schema-proprio.md`). Só um valor
+ * exatamente igual a um destes é aceito, então digitar errado é pego pelo
+ * schema, não silenciosamente aceito e ignorado pelo ComfyUI. */
 
 export const FORMAS_CORPO = [
   'Slim', 'Athletic', 'Average', 'Curvy', 'Chubby', 'Hourglass', 'Muscular',
@@ -114,7 +111,7 @@ export const CORES_OLHO = ['Blue', 'Green', 'Brown', 'Hazel', 'Gray', 'Amber', '
  * diferenciação visual entre espécies que compartilham o mesmo `value` é
  * responsabilidade do campo `description` de `Tipo`, não deste enum.
  * Levantamento completo das 18 espécies do pacote em
- * `generate-art-migracao-schema-proprio.md`. */
+ * `docs/history/2026-08-08-generate-art-schema-proprio.md`. */
 export const TIPOS = [
   'Human', 'Elf', 'Mermaid', 'Necroid', 'Furry', 'Molluscoid', 'Eldritch', 'Robot', 'Avian', 'Alien', 'Cyborg',
 ] as const;
@@ -167,7 +164,7 @@ export const ANCORAS_VERTICAIS_DESCRICOES: Record<(typeof ANCORAS_VERTICAIS)[num
  * só texto livre — porque foi exatamente isso ("barriga/peito de fora
  * mesmo pedindo cobertura total") que se perdeu repetidamente no meio de
  * um `extra` longo durante o desenvolvimento do `ssm_astral`, mesmo com
- * reforço de peso (ver `generate-art-migracao-schema-proprio.md`). */
+ * reforço de peso (ver `docs/history/2026-08-08-generate-art-schema-proprio.md`). */
 export const ESTADOS_TORSO = [
   'Bare', 'FullyCovered', 'ArmsCoveredTorsoBare', 'TorsoCoveredArmsBare', 'PartiallyCovered',
 ] as const;

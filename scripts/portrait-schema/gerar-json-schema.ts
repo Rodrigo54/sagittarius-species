@@ -21,7 +21,7 @@ import {
 
 /** Gera `portrait.schema.json` a partir do schema `zod` (`z.toJSONSchema()`
  * nativo do zod v4 — ver rationale de não usar `zod-to-json-schema` em
- * `generate-art-migracao-schema-proprio.md`). O artefato é **derivado**,
+ * `docs/history/2026-08-08-generate-art-schema-proprio.md`). O artefato é **derivado**,
  * nunca editado à mão — rode este script de novo (`bun
  * scripts/portrait-schema/gerar-json-schema.ts`) toda vez que `schema.ts`
  * mudar. Sem entrada no `package.json` de propósito: é um utilitário de

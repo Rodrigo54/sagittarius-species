@@ -2,8 +2,8 @@
 
 Relato da sessão que substituiu a dependência do custom node pack `ComfyUI-OOP` (`0xRavenBlack/ComfyUI-OOP`) por
 composição de prompt inteiramente em TypeScript, e desenhou um schema `zod` próprio pra `portrait.json`. Iniciada
-durante o trabalho de configurar `geracaoArt` pro `ssm_astral` (ver `generate-art-v1-historico-da-sessao.md` pro
-histórico anterior, da sessão que criou o pipeline original baseado em ComfyUI-OOP). Continua sendo o relato de
+durante o trabalho de configurar `geracaoArt` pro `ssm_astral` (ver `docs/history/2026-07-28-generate-art-v1.md`
+pro histórico anterior, da sessão que criou o pipeline original baseado em ComfyUI-OOP). Continua sendo o relato de
 uma sessão, não referência de formato — isso é `CLAUDE.md`.
 
 ## Motivação
