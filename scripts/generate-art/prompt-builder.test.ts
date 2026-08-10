@@ -98,6 +98,38 @@ describe('montarPrompts', () => {
     expect(negative).toBe('NEGATIVO_BASE');
   });
 
+  test('eyes.shape Downturned/Upturned viram frase curta no positivo (canto do olho, olhar continua na câmera, sem citar etnia)', () => {
+    const downturned = montarPrompts({ eyes: { shape: 'Downturned' } }, BASE_TESTE);
+    expect(downturned.positive).toContain('downturned outer eye corners, gaze forward at the viewer');
+    expect(downturned.positive).not.toMatch(/asian|african|caucasian|latino|nordic|pacific|mixed/i);
+
+    const upturned = montarPrompts({ eyes: { shape: 'Upturned' } }, BASE_TESTE);
+    expect(upturned.positive).toContain('upturned outer eye corners, gaze forward at the viewer');
+  });
+
+  test('eyes.shape Downturned/Upturned geram exclusão COM peso no negativo (contra a IA confundir com olhar pra baixo/cima)', () => {
+    const downturned = montarPrompts({ eyes: { shape: 'Downturned' } }, BASE_TESTE);
+    expect(downturned.negative).toBe('NEGATIVO_BASE, (looking down, downcast gaze, head tilted down:1.2)');
+
+    const upturned = montarPrompts({ eyes: { shape: 'Upturned' } }, BASE_TESTE);
+    expect(upturned.negative).toBe('NEGATIVO_BASE, (looking up, gaze rolled upward, head tilted back:1.2)');
+  });
+
+  test('eyes.shape Hooded vira frase sem a palavra "hood" no positivo e gera exclusão COM peso no negativo (contra a IA confundir com a peça de roupa capuz)', () => {
+    const { positive, negative } = montarPrompts({ eyes: { shape: 'Hooded' } }, BASE_TESTE);
+    expect(positive).toContain('droopy eyelids, low eyelid crease');
+    expect(positive).not.toMatch(/hood/i);
+    expect(negative).toBe('NEGATIVO_BASE, (hood, hoodie:1.2)');
+  });
+
+  test('os demais formatos de olho não geram nada no negativo (só Upturned/Downturned/Hooded são ambíguos)', () => {
+    const formas = ['Round', 'Almond', 'Monolid', 'Oval', 'Closed'] as const;
+    for (const shape of formas) {
+      const { negative } = montarPrompts({ eyes: { shape } }, BASE_TESTE);
+      expect(negative).toBe('NEGATIVO_BASE');
+    }
+  });
+
   test('ordem do negativo: baseline → oposto de torso.state → oposto de gênero → extra_prompt.negative', () => {
     const { negative } = montarPrompts(
       { torso: { state: 'FullyCovered' }, person: { gender: 'Male' }, extra_prompt: { negative: 'REFORCO_ESPECIE' } },

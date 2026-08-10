@@ -155,9 +155,46 @@ function textoCabelo(campos: CamposCompostos): string | undefined {
   return texto ? `(${texto})` : undefined;
 }
 
+/** Formato do olho — molde por valor, não mais um template único. `Upturned`/`Downturned` precisam de frase
+ * dedicada: "<forma>-shaped eyes" genérico fazia a IA confundir o canto externo da pálpebra caído/puxado com o
+ * OLHAR pra baixo/cima (sentido comum dessas palavras em inglês), contradizendo a expressão fixa de
+ * `base.json` ("looking directly at the camera"). A frase é curta de propósito (evitar inflar o prompt só por
+ * causa do olho, como as outras âncoras — `eyes.color`, `person.ethnicity`), mas cita "outer eye corners" +
+ * "gaze forward" pra desambiguar. Não cita etnia nenhuma de propósito — `shape` e `ethnicity` são eixos
+ * ortogonais no schema (dá pra combinar qualquer combinação; ex. `ssm_default` female/005 é `Caucasian` +
+ * `Downturned`), amarrar o texto a um grupo étnico geraria contradição nesse tipo de variante. */
+const TEXTO_FORMA_OLHO: Record<NonNullable<CamposCompostos['eyes']>['shape'] & string, string> = {
+  Round: 'round-shaped eyes',
+  Almond: 'almond-shaped eyes',
+  Hooded: 'droopy eyelids, low eyelid crease',
+  Monolid: 'monolid eyes, no visible eyelid crease',
+  Oval: 'oval-shaped eyes',
+  Closed: 'closed eyes',
+  Upturned: 'upturned outer eye corners, gaze forward at the viewer',
+  Downturned: 'downturned outer eye corners, gaze forward at the viewer',
+};
+
 function textoOlhosFormato(campos: CamposCompostos): string | undefined {
   const forma = campos.eyes?.shape;
-  return forma ? `${forma.toLowerCase()}-shaped eyes` : undefined;
+  return forma ? TEXTO_FORMA_OLHO[forma] : undefined;
+}
+
+/** Contraparte negativa de `TEXTO_FORMA_OLHO`, **com peso** — só pros valores ambíguos (`Upturned`/`Downturned`,
+ * confundidos com direção do olhar; `Hooded`, confundido com a peça de roupa "hood"/capuz), mesma lógica de
+ * `NEGATIVO_ESTADO_TORSO`/`NEGATIVO_GENERO`: reforço de verdade no negativo, não empilhando peso numa frase
+ * positiva longa. Central aqui (não só por espécie via `extra_prompt`) pra cobrir qualquer espécie futura que
+ * use `Hooded` sem repetir essa exclusão manualmente. Os outros valores não têm entrada — não há "oposto"
+ * ambíguo pra excluir. */
+const NEGATIVO_FORMA_OLHO: Partial<Record<NonNullable<CamposCompostos['eyes']>['shape'] & string, string>> = {
+  Upturned: 'looking up, gaze rolled upward, head tilted back',
+  Downturned: 'looking down, downcast gaze, head tilted down',
+  Hooded: 'hood, hoodie',
+};
+
+function negativoFormaOlho(campos: CamposCompostos): string | undefined {
+  const forma = campos.eyes?.shape;
+  const texto = forma ? NEGATIVO_FORMA_OLHO[forma] : undefined;
+  return comPeso(texto);
 }
 
 function textoTorsoDescricao(campos: CamposCompostos): string | undefined {
@@ -172,8 +209,9 @@ function textoTorsoDescricao(campos: CamposCompostos): string | undefined {
  * sem peso) → pose/expressão/enquadramento (fixos) → extra_prompt.positive
  * (texto livre, sempre por último). Negativo: baseline compartilhado (fixo)
  * → exclusões estruturadas com peso (oposto de torso.state, oposto de
- * gênero) → extra_prompt.negative (texto livre, por cima — quem escreve
- * decide se usa peso). */
+ * gênero, oposto de eyes.shape quando Upturned/Downturned) →
+ * extra_prompt.negative (texto livre, por cima — quem escreve decide se usa
+ * peso). */
 export function montarPrompts(campos: CamposCompostos, baseFixo: BaseFixo): { positive: string; negative: string } {
   const fragmentosPositivos = [
     baseFixo.style,
@@ -195,6 +233,7 @@ export function montarPrompts(campos: CamposCompostos, baseFixo: BaseFixo): { po
     baseFixo.negative,
     negativoTorsoState(campos),
     negativoGenero(campos),
+    negativoFormaOlho(campos),
     campos.extra_prompt?.negative,
   ].filter((v): v is string => !!v);
 
