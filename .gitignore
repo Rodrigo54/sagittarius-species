@@ -7,3 +7,4 @@ lista_de_arquivos.txt
 .portraits-framed
 .portraits-generated
 *.af~lock~
+.env

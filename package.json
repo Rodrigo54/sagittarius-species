@@ -12,7 +12,8 @@
     "shared-rig": "bun scripts/generate-shared-rig/index.ts",
     "rooms": "bun scripts/generate-rooms/index.ts",
     "names": "bun scripts/generate-names/index.ts",
-    "art": "bun scripts/generate-art/index.ts"
+    "art": "bun scripts/generate-art/index.ts",
+    "publish-workshop": "bun scripts/publish-workshop/index.ts"
   },
   "author": "",
   "license": "ISC",
@@ -28,6 +29,7 @@
   "dependencies": {
     "jomini": "^0.9.1",
     "lodash": "^4.17.21",
+    "marked": "^18.0.9",
     "zod": "^4.4.3"
   }
 }

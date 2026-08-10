@@ -36,6 +36,7 @@ bun run names          # bun scripts/generate-names/index.ts — gera name_lists
 bun run art   # bun scripts/generate-art/index.ts <slug> <male|female|flat> [--variante=NNN,...] [--seed=N] [--promote] [--export-prompt] — gera retratos via IA no ComfyUI local (veja seção abaixo)
 bun run copy           # pwsh scripts/copy.ps1 — copia o mod para a pasta local de mods do Stellaris
 bun run overwrite       # pwsh scripts/overwrite.ps1 — apaga e recopia o mod na pasta local de mods do Stellaris
+bun run publish-workshop -- [--metadata-only]   # bun scripts/publish-workshop/index.ts — publica no Steam Workshop via steamcmd (veja seção "Publicação no Steam Workshop")
 ```
 
 - `copy`/`overwrite` são exclusivos de PowerShell (Windows) e operam sobre a pasta **modificada mais recentemente**
@@ -85,9 +86,13 @@ scripts/generate-portraits/index.ts"`. Ao criar um pipeline novo, siga esse mesm
 ## Binários auxiliares (`bin/`)
 
 `bin/` guarda ferramentas de terceiros usadas pelo pipeline (não versionada, está no `.gitignore` — baixe com
-`bun run setup`): **texconv** (motor de conversão PNG→DDS) e **ImageMagick** (motor de imagem do enquadramento
-de portraits). Versões fixadas manualmente por reprodutibilidade; instalação idempotente (arquivo `.version`
-por subpasta). Detalhes completos (layout de `download-bin.ts`, por que o ImageMagick precisa de `7zip-bin`):
+`bun run setup`): **texconv** (motor de conversão PNG→DDS), **ImageMagick** (motor de imagem do enquadramento
+de portraits) e **steamcmd** (publicação no Steam Workshop — veja "Publicação no Steam Workshop" abaixo).
+`texconv`/`imagemagick` têm versão fixada manualmente por reprodutibilidade, instalação idempotente por
+comparação de versão (arquivo `.version` por subpasta). `steamcmd` é diferente: é um bootstrapper que se
+auto-atualiza sozinho a cada execução, então não tem versão fixável — a instalação só verifica se o executável
+já existe e, nesse caso, nunca reinstala por cima (a pasta também guarda a sessão de login cacheada depois do
+primeiro uso). Detalhes completos (layout de `download-bin.ts`, por que o ImageMagick precisa de `7zip-bin`):
 `docs/pipeline-texturas.md`.
 
 ## Pipeline de conversão de texturas
@@ -191,3 +196,38 @@ cortar uma release: `package.json` (`version`), `mod/sagittarius-species/descrip
 `supported_version` para a versão compatível do jogo Stellaris) e o badge de versão no `README.md`. O texto da
 listagem no Steam Workshop fica em `steam-workshop/description.md` e `steam-workshop/change-notes.md`; o
 `remote_file_id` do `descriptor.mod` é o ID do item no Steam Workshop usado para publicação.
+
+## Publicação no Steam Workshop
+
+`scripts/publish-workshop/` (comando `bun run publish-workshop -- [--metadata-only]`) publica o mod no Steam
+Workshop via `steamcmd`, em dois modos:
+
+- **Normal** (padrão): extrai a seção mais no topo de `steam-workshop/change-notes.md` (formato `## <versão>`,
+  sempre a mais recente por convenção — novas entradas sempre entram no topo) como changenote da build.
+- **`--metadata-only`**: atualiza só `title` (campo `name` do `descriptor.mod`) e `description`
+  (`steam-workshop/description.md` inteiro), sem publicar conteúdo novo nem exigir changenote.
+
+Ambos os arquivos `.md` em `steam-workshop/` são Markdown de verdade (não BBCode) — `md-to-bbcode.ts`
+(`marked` + renderer próprio) converte pro dialeto BBCode da Steam em tempo de publish. O header de cada seção
+de `change-notes.md` ganha automaticamente um timestamp local (`— YYYY-MM-DD HH:mm`) na hora da confirmação —
+metadado só pra correlacionar com o histórico da própria Steam, nunca enviado no texto do changenote (a Steam já
+carimba isso sozinha, e o changenote de uma build já publicada não pode ser editado depois via `steamcmd`).
+
+Antes de chamar o `steamcmd`, o script sempre roda `bun run copy` (sincroniza o mod local de teste) e pede
+confirmação explícita, mostrando o texto final (já convertido) que vai ser publicado. Login usa
+`STEAM_USERNAME` (`.env` local, veja `.env.example`) — senha e Steam Guard são sempre interativos, nunca
+persistidos; a sessão fica cacheada pelo próprio `steamcmd` em `bin/steamcmd/`. Windows-only, como o resto do
+pipeline.
+
+**Limitações conhecidas, de propósito fora do escopo:** sem automação da galeria de screenshots do Workshop
+(`steam-workshop/pictures/screenshot__*.jpg` etc. — o `steamcmd`/VDF não expõe isso, só o painel web da Steam
+gerencia); sem localização de título/descrição por idioma (a API `ISteamUGC`/`SetItemUpdateLanguage` não é
+exposta pelo `steamcmd`, só a versão single-language via VDF); sem sync automático de versão entre
+`package.json`/`descriptor.mod`/`README.md` (continua manual, ver "Metadados de release" acima); sem integração
+com o fluxo GitFlow/release.
+
+`node:util.parseArgs` é o padrão do projeto pra parsing de flags de CLI em scripts novos (em vez de parsing
+manual de `process.argv` ou uma lib externa) — `publish-workshop` é o primeiro a usar.
+
+Detalhes completos (anatomia do VDF, formato exato de `change-notes.md`, escaping do formato Clausewitz-like do
+VDF): `docs/pipeline-publish-workshop.md`.
