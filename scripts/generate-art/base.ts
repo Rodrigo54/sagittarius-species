@@ -2,21 +2,14 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { z } from 'zod';
 
-/** Duplicado de `scripts/generate-art/base.ts` (+ `base.json`) — pose,
- * enquadramento de câmera e estilo travados pra bater sempre com o rig
- * `ssm_shared`/`sl_shared`, e o negativo compartilhado de qualidade/anatomia,
- * exatamente como no v1 (é uma característica do rig/composição, não do
- * motor de difusão por trás — continua valendo em Flux2 igual valia em
- * SDXL). Duplicado (não importado) por `generate-art-v2/` continuar
- * autocontida mesmo se `scripts/generate-art/` for apagada no futuro.
- *
- * Conteúdo herdado tal como estava no v1 nesta duplicação inicial — ajustar
- * o texto (`style`/`negative`, em especial) é esperado durante os testes
- * interativos com Flux2, já que "masterpiece"/"best quality" etc. são
- * convenção de prompt de checkpoints SDXL e podem não ter o mesmo efeito
- * (ou podem até atrapalhar) num modelo com seguimento de texto mais forte.
- * Se este arquivo for ajustado aqui, não precisa refletir no irmão do v1 —
- * os dois são independentes por design (ver decisão de duplicação). */
+/** Pose, enquadramento de câmera e estilo travados pra bater sempre com o
+ * rig `ssm_shared`/`sl_shared`, e o negativo compartilhado de qualidade/
+ * anatomia — característica do rig/composição, não do motor de difusão por
+ * trás. `style`/`negative` seguem em ajuste conforme os testes interativos
+ * com Flux2 revelam o que funciona (o pipeline anterior, SDXL/ComfyUI-OOP,
+ * usava convenção de prompt diferente — "masterpiece"/"best quality" etc. —
+ * que não necessariamente tem o mesmo efeito aqui; ver
+ * `generate-art-v1-historico-da-sessao.md` pro que valia lá). */
 const zBaseFixo = z
   .object({
     style: z.string().describe('Estilo de arte, sempre igual em toda espécie hoje (3D render de jogo, não fotorrealista).'),

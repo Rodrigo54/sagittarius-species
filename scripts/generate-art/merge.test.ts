@@ -1,10 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 import { mesclarCampos } from './merge';
 
-/** Duplicado de `scripts/generate-art/merge.test.ts` — ver o comentário no
- * topo de `merge.ts` sobre por que este arquivo é duplicado em vez de
- * importado do v1. */
-
 describe('mesclarCampos', () => {
   test('seções simples (person/hair/eyes/torso/tipo): último nível declarado vence, mesclado campo a campo', () => {
     const resultado = mesclarCampos(

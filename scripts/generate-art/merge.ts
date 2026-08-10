@@ -1,13 +1,8 @@
 import type { CamposCompostos, ExtraPrompt, Tipo } from '../portrait-schema';
 
-/** Duplicado de `scripts/generate-art/merge.ts` — decisão da entrevista de
- * planejamento da v2: opera só em cima de `CamposCompostos`
- * (`tipo`/`person`/`hair`/`eyes`/`torso`/`extra_prompt`), que é agnóstico de
- * motor de geração (mesmo tipo usado tanto em `geracaoArt`, v1/SDXL, quanto
- * em `geracaoArtV2`, v2/Flux2). Duplicado (não importado) por
- * `generate-art-v2/` continuar autocontida mesmo se `scripts/generate-art/`
- * for apagada no futuro. Se este arquivo for ajustado aqui, considere se o
- * irmão do v1 precisa do mesmo ajuste. */
+/** Opera só em cima de `CamposCompostos`
+ * (`tipo`/`person`/`hair`/`eyes`/`torso`/`extra_prompt`), agnóstico de motor
+ * de geração. */
 
 function mesclarSecao<T extends object>(secoes: (T | undefined)[]): T | undefined {
   const presentes = secoes.filter((secao): secao is T => secao !== undefined);

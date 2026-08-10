@@ -4,36 +4,29 @@ import { PASTA_ASSETS, PASTA_RAIZ } from '../converter';
 import { lerConfig } from '../generate-portraits/discovery';
 import { aguardarConclusao, baixarImagem, enfileirar, enviarImagemDeReferencia } from './comfyui-client';
 import { mesclarCampos } from './merge';
-import type { GeneroAlvo, GeracaoArtV2Modelo } from '../portrait-schema';
+import type { GeneroAlvo, GeracaoArtModelo } from '../portrait-schema';
 import { BASE_FIXO } from './base';
 import { promoverEspecie } from './promote';
 import { montarPrompts } from './prompt-builder';
 import { seedDeterministica } from './seed';
 import { montarPrompt, type PromptComfyUI } from './workflow';
 
-/** Entry point do pipeline v2 (Flux.2 Klein Base) — mesma ergonomia de CLI e
- * mesma orquestração geral do v1 (`generate-art/index.ts`), lendo
- * `geracaoArtV2` em vez de `geracaoArt`. Ver o comentário no topo dos
- * arquivos duplicados (`comfyui-client.ts`, `merge.ts`, etc.) pro porquê de
- * `generate-art-v2/` ser uma pasta autocontida em vez de importar do v1. */
+/** Entry point do pipeline de geração de arte via IA (Flux.2 Klein Base),
+ * lendo `geracaoArt` do `portrait.json` da espécie. */
 
 const PASTA_PORTRAITS_ASSETS = join(PASTA_ASSETS, 'portraits');
 
-/** Mesmo `.portraits-generated/` do v1 (fora do git, ver `.gitignore`) — a
- * mesma pasta serve pros dois pipelines: `promote.ts` só olha pra
+/** Staging fora do git (ver `.gitignore`) — `promote.ts` só olha pra
  * `counts.<gênero>` e pros PNGs numerados que encontrar em
- * `<slug>/<gênero>/`, agnóstico de qual pipeline gerou. Como as duas
- * espécies em uso hoje (`ssm_default`, `ssm_astral`) migraram de vez pro
- * v2, não há conflito prático de duas pipelines escrevendo no mesmo lugar
- * ao mesmo tempo. */
+ * `<slug>/<gênero>/`. */
 const PASTA_STAGING = join(PASTA_RAIZ, '.portraits-generated');
 
 /** Um template por variante — o grafo difere de verdade (node negativo é
  * `CLIPTextEncode` em "base" e `ConditioningZeroOut` em "distilled", ver
  * `workflow.ts`), não é só uma questão de trocar `unet_name`. */
 const CAMINHOS_WORKFLOW: Record<'base' | 'distilled', string> = {
-  base: join(PASTA_RAIZ, 'scripts/comfyui/ssm_species_portrait_workflow_v2.json'),
-  distilled: join(PASTA_RAIZ, 'scripts/comfyui/ssm_species_portrait_workflow_v2_distilled.json'),
+  base: join(PASTA_RAIZ, 'scripts/comfyui/ssm_species_portrait_workflow.json'),
+  distilled: join(PASTA_RAIZ, 'scripts/comfyui/ssm_species_portrait_workflow_distilled.json'),
 };
 
 const GENEROS_VALIDOS: readonly GeneroAlvo[] = ['male', 'female', 'flat'];
@@ -56,7 +49,7 @@ function parseArgs(argv: string[]): Argumentos {
   const [slug, genero, ...resto] = argv;
   if (!slug || !genero) {
     console.error(
-      'Uso: bun run generate-art-v2 <slug> <male|female|flat> [--variante=NNN[,NNN,...]] [--seed=N] [--promote] [--export-prompt]'
+      'Uso: bun run generate-art <slug> <male|female|flat> [--variante=NNN[,NNN,...]] [--seed=N] [--promote] [--export-prompt]'
     );
     process.exit(1);
   }
@@ -119,10 +112,10 @@ async function gerarVariante(
   seed: number,
   template: PromptComfyUI,
   pastaDestino: string,
-  modelo: GeracaoArtV2Modelo | undefined,
+  modelo: GeracaoArtModelo | undefined,
   imagensReferenciaEnviadas: string[] | undefined
 ): Promise<void> {
-  const filenamePrefix = `ssm_${slug.replace(/^ssm_/, '')}_${genero}_${chave}_v2`;
+  const filenamePrefix = `ssm_${slug.replace(/^ssm_/, '')}_${genero}_${chave}`;
   const prompt = montarPrompt(template, prompts, { seed, filenamePrefix, modelo, imagensReferenciaEnviadas });
 
   console.log(`[${slug}/${genero}/${chave}] enfileirando no ComfyUI (seed ${seed})...`);
@@ -146,12 +139,12 @@ async function main(): Promise<void> {
   // invocação de CLI: o gênero pedido pode legitimamente não existir pra
   // esta espécie (nem toda espécie declara os três).
   const config = await lerConfig(pastaEspecieAssets);
-  if (!config.geracaoArtV2) {
-    console.error(`${slug}: portrait.json não declara "geracaoArtV2" — nada a gerar (bun run generate-art-v2).`);
+  if (!config.geracaoArt) {
+    console.error(`${slug}: portrait.json não declara "geracaoArt" — nada a gerar (bun run generate-art).`);
     process.exit(1);
   }
-  if (!config.geracaoArtV2[genero]) {
-    console.error(`${slug}: portrait.json não declara "geracaoArtV2.${genero}".`);
+  if (!config.geracaoArt[genero]) {
+    console.error(`${slug}: portrait.json não declara "geracaoArt.${genero}".`);
     process.exit(1);
   }
 
@@ -166,13 +159,13 @@ async function main(): Promise<void> {
     return;
   }
 
-  const bloco = config.geracaoArtV2![genero]!;
+  const bloco = config.geracaoArt![genero]!;
   const chaves =
     variantesPedidas ?? Object.keys(bloco.variantes).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 
   const inexistentes = chaves.filter((chave) => !bloco.variantes[chave]);
   if (inexistentes.length > 0) {
-    console.error(`${inexistentes.join(', ')} não existe(m) em geracaoArtV2.${genero}.variantes de ${slug}.`);
+    console.error(`${inexistentes.join(', ')} não existe(m) em geracaoArt.${genero}.variantes de ${slug}.`);
     process.exit(1);
   }
 
@@ -181,16 +174,16 @@ async function main(): Promise<void> {
     // carregar o template, sem enviar referência, sem gastar GPU).
     for (const chave of chaves) {
       const camposVariante = bloco.variantes[chave]!;
-      const campos = mesclarCampos(config.geracaoArtV2!.base, bloco, camposVariante);
+      const campos = mesclarCampos(config.geracaoArt!.base, bloco, camposVariante);
       const { positive, negative } = montarPrompts(campos, BASE_FIXO);
-      console.log(`\n=== ${slug}/${genero}/${chave} (v2) ===`);
+      console.log(`\n=== ${slug}/${genero}/${chave} ===`);
       console.log(`POSITIVO (${positive.length} chars):\n${positive}`);
       console.log(`NEGATIVO (${negative.length} chars):\n${negative}`);
     }
     return;
   }
 
-  const modelo = config.geracaoArtV2!.modelo;
+  const modelo = config.geracaoArt!.modelo;
   const variant = modelo?.variant ?? 'base';
   const template = JSON.parse(await Bun.file(CAMINHOS_WORKFLOW[variant]).text()) as PromptComfyUI;
   console.log(`Variante do modelo: ${variant}.`);
@@ -198,8 +191,8 @@ async function main(): Promise<void> {
   // Cada entrada de referenceImage é um indivíduo/conceito diferente da
   // espécie (não ângulos do mesmo personagem) — todas são enviadas ao
   // ComfyUI uma vez só, fora do loop de variantes, e reaproveitadas pra
-  // todas as chaves geradas nesta invocação (mesma ideia do v1, que também
-  // envia a referência uma vez por gênero, não uma vez por variante).
+  // todas as chaves geradas nesta invocação (uma referência por gênero, não
+  // uma por variante).
   const caminhosReferencia = bloco.referenceImage ?? [];
   const imagensReferenciaEnviadas: string[] = [];
   for (const [indice, caminhoRelativo] of caminhosReferencia.entries()) {
@@ -212,7 +205,7 @@ async function main(): Promise<void> {
 
   for (const chave of chaves) {
     const camposVariante = bloco.variantes[chave]!;
-    const campos = mesclarCampos(config.geracaoArtV2!.base, bloco, camposVariante);
+    const campos = mesclarCampos(config.geracaoArt!.base, bloco, camposVariante);
     const prompts = montarPrompts(campos, BASE_FIXO);
     const seedFinal = seed ?? seedDeterministica(slug, genero, chave);
     await gerarVariante(

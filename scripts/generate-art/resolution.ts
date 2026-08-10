@@ -1,9 +1,10 @@
-/** Deriva `width`/`height` a partir de `geracaoArtV2.modelo.aspectRatio`
+/** Deriva `width`/`height` a partir de `geracaoArt.modelo.aspectRatio`
  * ("W:H" livre, ex.: "2:3", "4:5", "1:1") — decisão tomada durante a
  * entrevista de planejamento: em vez de travar `width`/`height` crus por
- * espécie (como o v1 faz), a v2 só declara a *proporção*, e a resolução
- * efetiva é sempre calculada preservando a contagem de megapixels do
- * quadrado `1024×1024` (o padrão do template oficial do Flux.2 Klein — ver
+ * espécie (como o pipeline anterior, SDXL, fazia), este pipeline só declara
+ * a *proporção*, e a resolução efetiva é sempre calculada preservando a
+ * contagem de megapixels do quadrado `1024×1024` (o padrão do template
+ * oficial do Flux.2 Klein — ver
  * `EmptyFlux2LatentImage`/`Flux2Scheduler` no dump do workflow oficial).
  * Isso mantém o custo de VRAM/tempo de geração parecido não importa a
  * proporção escolhida, e evita uma tabela de resoluções mágicas por

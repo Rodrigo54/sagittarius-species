@@ -1,18 +1,16 @@
-import type { GeracaoArtV2Modelo } from '../portrait-schema';
+import type { GeracaoArtModelo } from '../portrait-schema';
 import { ASPECT_RATIO_PADRAO, resolverAspectRatio } from './resolution';
 
-/** IDs dos nodes fixos em
- * `scripts/comfyui/ssm_species_portrait_workflow_v2.json` — hardcoded
- * porque o template é um arquivo fixo desta pipeline, não algo gerado
- * dinamicamente (mesmo espírito do v1). Se o workflow for editado e
- * reexportado, estes IDs precisam ser conferidos/atualizados junto.
+/** IDs dos nodes fixos em `scripts/comfyui/ssm_species_portrait_workflow.json`
+ * — hardcoded porque o template é um arquivo fixo desta pipeline, não algo
+ * gerado dinamicamente. Se o workflow for editado e reexportado, estes IDs
+ * precisam ser conferidos/atualizados junto.
  *
  * Só cobre os nodes que sempre existem no template (baseline sem
  * referência). Os nodes da cadeia de `ReferenceLatent` (quando
  * `referenceImage` não está vazio) são criados dinamicamente abaixo, com
  * IDs novos — o número de referências varia por gênero/espécie, então não
- * cabe num template fixo (diferente do ControlNet do v1, que é sempre um
- * node só, ligado ou desligado por `strength`). */
+ * cabe num template fixo. */
 const NODE_IDS = {
   vae: '3',
   positivo: '4',
@@ -32,7 +30,7 @@ export type PromptComfyUI = Record<string, { class_type: string; inputs: Record<
 export interface OpcoesMontagem {
   seed: number;
   filenamePrefix: string;
-  modelo?: GeracaoArtV2Modelo;
+  modelo?: GeracaoArtModelo;
   /** Nomes dos arquivos já enviados ao `input/` do ComfyUI (via
    * `enviarImagemDeReferencia`), na mesma ordem declarada em
    * `referenceImage` — undefined/vazio = sem cadeia de referência nenhuma,
@@ -55,13 +53,13 @@ const MEGAPIXELS_REFERENCIA = 1;
  * template pra descobrir o próximo livre. */
 const PRIMEIRO_ID_DINAMICO = 100;
 
-/** Clona o template (`ssm_species_portrait_workflow_v2.json` pra
- * `modelo.variant` "base", `..._distilled.json` pra "distilled" — a escolha
- * de qual arquivo carregar é responsabilidade de quem chama, ver
+/** Clona o template (`ssm_species_portrait_workflow.json` pra
+ * `modelo.variant` "base", `..._workflow_distilled.json` pra "distilled" —
+ * a escolha de qual arquivo carregar é responsabilidade de quem chama, ver
  * `index.ts`) e injeta o texto já pronto (`prompts.positive`/`.negative`,
  * montado por `prompt-builder.ts#montarPrompts`), a seed, o prefixo de
  * arquivo desta geração específica, `steps`/`cfg`/resolução
- * (`geracaoArtV2.modelo`, se declarada — `aspectRatio` ausente cai no padrão
+ * (`geracaoArt.modelo`, se declarada — `aspectRatio` ausente cai no padrão
  * `1:1`) e a cadeia de `ReferenceLatent` (quando
  * `imagensReferenciaEnviadas` não está vazio). O texto negativo só é
  * escrito quando o template tem um `CLIPTextEncode` de verdade no node
@@ -70,11 +68,12 @@ const PRIMEIRO_ID_DINAMICO = 100;
  * caso (mesmo comportamento do template oficial: CFG=1 zera a guidance
  * negativa de qualquer forma).
  *
- * Diferente do v1 (`generate-art/workflow.ts`), não existem `checkpoint`/
- * `lora`/`sampler_name`/`scheduler`/`denoise`/`controlNetStrength` pra
- * injetar — decisão da entrevista de planejamento: UNET/CLIP/VAE são fixos
- * por variante (um único arquivo de cada por variante, hoje), o sampler é
- * fixo em "euler", e o `ReferenceLatent` não tem parâmetro de força (é
+ * Não existem `checkpoint`/`lora`/`sampler_name`/`scheduler`/`denoise`/
+ * `controlNetStrength` pra injetar (diferença marcante em relação ao
+ * pipeline SDXL anterior, ver `generate-art-v1-historico-da-sessao.md`) —
+ * decisão da entrevista de planejamento: UNET/CLIP/VAE são fixos por
+ * variante (um único arquivo de cada por variante, hoje), o sampler é fixo
+ * em "euler", e o `ReferenceLatent` não tem parâmetro de força (é
  * presença/ausência binária, não um dial). */
 export function montarPrompt(
   template: PromptComfyUI,
@@ -86,7 +85,7 @@ export function montarPrompt(
   workflow[NODE_IDS.positivo]!.inputs.text = prompts.positive;
   // Na variante "distilled" o node NODE_IDS.negativo não é um CLIPTextEncode
   // (é ConditioningZeroOut, alimentado pelo próprio node positivo — ver
-  // ssm_species_portrait_workflow_v2_distilled.json) — não tem input "text"
+  // ssm_species_portrait_workflow_distilled.json) — não tem input "text"
   // pra escrever. Checa o class_type real do template em vez de confiar
   // cegamente em opcoes.modelo?.variant: mais resiliente a um template
   // trocado sem atualizar o campo, e é o mesmo tipo de checagem defensiva
@@ -122,7 +121,7 @@ export function montarPrompt(
   // personagem — cada ReferenceLatent acrescenta seu latente à lista
   // "reference_latents" da conditioning recebida da anterior, tanto no
   // positivo quanto no negativo (mesmo padrão do template oficial "Image
-  // Edit" do Flux.2 Klein — ver dump em generate-art-v2-plano.md/handoff).
+  // Edit" do Flux.2 Klein — ver `handoff-comfyui-image-models-2026-08-08.md`).
   let conditioningPositivo: [string, number] = [NODE_IDS.positivo, 0];
   let conditioningNegativo: [string, number] = [NODE_IDS.negativo, 0];
 

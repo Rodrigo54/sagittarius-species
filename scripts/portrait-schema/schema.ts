@@ -129,32 +129,54 @@ const zCamposCompostos = z
     'Bloco de atributos — usado tanto em "base" quanto em cada variante, sempre como overrides parciais mesclados por seção (nunca o objeto inteiro substituído). Não tem mais pose/view/style/mouth: esses ficaram travados globalmente em base.json, pra bater sempre com o rig ssm_shared.'
   );
 
+const CHAVE_VARIANTE = /^\d{3}$/;
+
+/** Config de sampler/resolução do pipeline de geração de arte via IA
+ * (`bun run generate-art`, Flux.2 Klein Base). Bem mais enxuta que a de um
+ * checkpoint SDXL clássico porque boa parte desses campos não tem
+ * equivalente aqui: `checkpoint`/`lora`/`loraStrength` não existem porque
+ * hoje só existe um arquivo de UNET/CLIP/VAE instalado (ver
+ * `handoff-comfyui-image-models-2026-08-08.md`) — expor isso por espécie
+ * seria configurabilidade sem uso real; `sampler_name`/`scheduler` não
+ * existem porque o grafo do Flux2 usa `KSamplerSelect` fixo em "euler" +
+ * `Flux2Scheduler` (não um scheduler nomeado configurável tipo
+ * `sgm_uniform`); `denoise`/`controlNetStrength` não existem porque o node
+ * `ReferenceLatent` (mecanismo de consistência deste pipeline, no lugar do
+ * ControlNet do pipeline SDXL anterior — ver
+ * `generate-art-v1-historico-da-sessao.md`) não tem parâmetro de força — é
+ * presença/ausência binária, não um dial. */
+const VARIANTES_MODELO = ['base', 'distilled'] as const;
+
 const zModelo = z
   .object({
-    checkpoint: z.string().optional().describe('Nome do arquivo em models/checkpoints/ do ComfyUI local.'),
-    steps: z.number().int().positive().optional().describe('Passos do sampler.'),
-    cfg: z.number().positive().optional().describe('CFG scale do sampler.'),
-    sampler_name: z.string().optional().describe('Nome do sampler (ex.: euler_ancestral).'),
-    scheduler: z.string().optional().describe('Nome do scheduler (ex.: sgm_uniform).'),
-    width: z.number().int().positive().optional().describe('Largura do canvas de geração / redimensionamento da referência.'),
-    height: z.number().int().positive().optional().describe('Altura do canvas de geração / redimensionamento da referência.'),
-    denoise: z.number().min(0).max(1).optional().describe('Força do denoise no img2img (0 a 1; 1 = ignora a referência, equivalente a txt2img).'),
-    controlNetStrength: z.number().min(0).max(10).optional().describe('Força do ControlNet (0 a 10; 1 = padrão do node).'),
-    lora: z.string().optional().describe('Nome do arquivo em models/loras/ do ComfyUI local.'),
-    loraStrength: z.number().optional().describe('Força do LoRA, aplicada em model e clip.'),
+    variant: z
+      .enum(VARIANTES_MODELO)
+      .optional()
+      .describe(
+        '"base" (20 passos, CFG=5, negativo real — padrão) ou "distilled" (4 passos, CFG=1, o negativo é descartado via ConditioningZeroOut — ~5x mais rápido, útil pra iteração rápida de prompt/composição antes de rodar o lote final em "base"). Ausente = "base".'
+      ),
+    steps: z.number().int().positive().optional().describe('Passos do sampler (Flux2Scheduler). Ausente mantém o padrão da variante ("base"=20, "distilled"=4).'),
+    cfg: z.number().positive().optional().describe('CFG scale do CFGGuider. Ausente mantém o padrão da variante ("base"=5, "distilled"=1 — CFG≠1 em "distilled" tende a degradar a qualidade, já que a guidance foi destilada nos pesos).'),
+    aspectRatio: z
+      .string()
+      .regex(/^\d+:\d+$/, 'formato esperado "W:H" (ex.: "2:3", "4:5")')
+      .optional()
+      .describe(
+        'Proporção largura:altura livre (ex.: "2:3", "4:5", "1:1") — width/height são derivados preservando a contagem de megapixels do quadrado 1024x1024 (padrão do Flux.2 Klein), arredondados pro múltiplo de 16 mais próximo. Ausente = "1:1".'
+      ),
   })
   .strict()
-  .describe('Configuração de checkpoint/sampler/img2img/ControlNet/LoRA — campos ausentes mantêm o valor já presente em base.json.');
-
-const CHAVE_VARIANTE = /^\d{3}$/;
+  .describe('Configuração de sampler/resolução do Flux.2 Klein — ver geracaoArt.');
 
 function zBlocoGenero() {
   return zCamposCompostos
     .extend({
       referenceImage: z
-        .string()
+        .array(z.string())
         .optional()
-        .describe('Caminho (relativo à raiz do repo) da imagem de referência deste gênero — usada tanto pro img2img quanto pro ControlNet OpenPose. Uma por gênero, não uma por espécie.'),
+        .describe(
+          'Imagens de referência (conceito visual, ex.: gerado no Midjourney) deste gênero — cada entrada é um indivíduo/conceito diferente da espécie (não ângulos do mesmo personagem), encadeadas via ReferenceLatent pra dar amplitude visual ao resultado. Uma lista só por gênero, sem override por variante. Ausente/vazio = txt2img puro, sem referência.'
+        ),
       variantes: z
         .record(z.string().regex(CHAVE_VARIANTE), zCamposCompostos)
         .describe(
@@ -174,72 +196,8 @@ const zGeracaoArt = z
     flat: zBlocoGenero().optional(),
   })
   .strict()
-  .describe('Configuração completa de geração de arte via IA (bun run generate-art) pra esta espécie — campo opt-in, ausente na maioria das espécies hoje.');
-
-/** Config de sampler/resolução do pipeline v2 (`bun run generate-art-v2`,
- * Flux.2 Klein Base) — bem mais enxuta que `zModelo` (SDXL/v1) porque boa
- * parte dos campos de lá não tem equivalente aqui: `checkpoint`/`lora`/
- * `loraStrength` somem porque hoje só existe um arquivo de UNET/CLIP/VAE
- * instalado (ver handoff de setup do ComfyUI) — expor isso por espécie seria
- * configurabilidade sem uso real; `sampler_name`/`scheduler` somem porque o
- * grafo do Flux2 usa `KSamplerSelect` fixo em "euler" + `Flux2Scheduler`
- * (não um scheduler nomeado configurável tipo `sgm_uniform`); `denoise`/
- * `controlNetStrength` somem porque o node `ReferenceLatent` (mecanismo de
- * consistência do v2, no lugar do ControlNet) não tem parâmetro de força —
- * é presença/ausência binária, não um dial. */
-const VARIANTES_MODELO_V2 = ['base', 'distilled'] as const;
-
-const zModeloV2 = z
-  .object({
-    variant: z
-      .enum(VARIANTES_MODELO_V2)
-      .optional()
-      .describe(
-        '"base" (20 passos, CFG=5, negativo real — padrão) ou "distilled" (4 passos, CFG=1, o negativo é descartado via ConditioningZeroOut — ~5x mais rápido, útil pra iteração rápida de prompt/composição antes de rodar o lote final em "base"). Ausente = "base".'
-      ),
-    steps: z.number().int().positive().optional().describe('Passos do sampler (Flux2Scheduler). Ausente mantém o padrão da variante ("base"=20, "distilled"=4).'),
-    cfg: z.number().positive().optional().describe('CFG scale do CFGGuider. Ausente mantém o padrão da variante ("base"=5, "distilled"=1 — CFG≠1 em "distilled" tende a degradar a qualidade, já que a guidance foi destilada nos pesos).'),
-    aspectRatio: z
-      .string()
-      .regex(/^\d+:\d+$/, 'formato esperado "W:H" (ex.: "2:3", "4:5")')
-      .optional()
-      .describe(
-        'Proporção largura:altura livre (ex.: "2:3", "4:5", "1:1") — width/height são derivados preservando a contagem de megapixels do quadrado 1024x1024 (padrão do Flux.2 Klein), arredondados pro múltiplo de 16 mais próximo. Ausente = "1:1".'
-      ),
-  })
-  .strict()
-  .describe('Configuração de sampler/resolução do Flux.2 Klein (pipeline v2) — ver geracaoArtV2.');
-
-function zBlocoGeneroV2() {
-  return zCamposCompostos
-    .extend({
-      referenceImage: z
-        .array(z.string())
-        .optional()
-        .describe(
-          'Imagens de referência (conceito visual, ex.: gerado no Midjourney) deste gênero — cada entrada é um indivíduo/conceito diferente da espécie (não ângulos do mesmo personagem), encadeadas via ReferenceLatent pra dar amplitude visual ao resultado. Uma lista só por gênero, sem override por variante. Ausente/vazio = txt2img puro, sem referência.'
-        ),
-      variantes: z
-        .record(z.string().regex(CHAVE_VARIANTE), zCamposCompostos)
-        .describe(
-          'Uma variante nomeada por indivíduo — chave é o índice zero-padded a 3 dígitos ("001".."NNN"), mesma convenção de geracaoArt.<gênero>.variantes. A contagem de chaves precisa bater exatamente com counts.<gênero>.'
-        ),
-    })
-    .strict()
-    .describe('Bloco de um gênero (male/female/flat) pro pipeline v2: overrides sobre base, mais uma variante nomeada por indivíduo.');
-}
-
-const zGeracaoArtV2 = z
-  .object({
-    base: zCamposCompostos,
-    modelo: zModeloV2.optional(),
-    male: zBlocoGeneroV2().optional(),
-    female: zBlocoGeneroV2().optional(),
-    flat: zBlocoGeneroV2().optional(),
-  })
-  .strict()
   .describe(
-    'Configuração completa de geração de arte via IA pro pipeline v2 (bun run generate-art-v2, Flux.2 Klein Base) — paralela a geracaoArt (v1, SDXL/ComfyUI clássico), que fica congelada e intocada. Campo opt-in.'
+    'Configuração completa de geração de arte via IA (bun run generate-art, Flux.2 Klein Base) pra esta espécie — campo opt-in, ausente na maioria das espécies hoje.'
   );
 
 const zPortraitConfigBase = z
@@ -258,34 +216,18 @@ const zPortraitConfigBase = z
       .strict()
       .describe('Quantidade de variantes por gênero — precisa bater exato com os PNGs encontrados em assets/portraits/ssm_<name>/.'),
     geracaoArt: zGeracaoArt.optional(),
-    geracaoArtV2: zGeracaoArtV2.optional(),
   })
   .strict()
   .describe('Formato completo de assets/portraits/ssm_<especie>/portrait.json.');
 
-/** Formato mínimo que tanto `GeracaoArt` (v1) quanto `GeracaoArtV2` (v2)
- * satisfazem, o suficiente pra validação cruzada de contagem de variantes —
- * os dois têm a mesma forma de `male`/`female`/`flat.variantes`, só o
- * `modelo` interno diverge (SDXL vs. Flux.2), e essa validação não olha pra
- * `modelo`. */
-interface GeracaoArtValidavel {
-  male?: { variantes: Record<string, unknown> };
-  female?: { variantes: Record<string, unknown> };
-  flat?: { variantes: Record<string, unknown> };
-}
-
-/** Confere que, pra todo gênero em que `<rotulo>.<gênero>` está presente, a
+/** Confere que, pra todo gênero em que `geracaoArt.<gênero>` está presente, a
  * contagem de `variantes` bate exatamente com `counts.<gênero>` e as chaves
  * são sequenciais "001".."NNN", zero-padded, sem buraco — validação cruzada
- * entre `counts` (nível raiz) e `geracaoArt`/`geracaoArtV2` (aninhados),
- * impossível de expressar só com `z.record`/enum isolado. Substitui
- * `validarChavesVariantes` de `generate-art/validation.ts`. Compartilhada
- * entre os dois pipelines (v1 e v2) — `rotulo` só entra no texto do erro e
- * no `path`, pra apontar exatamente qual dos dois blocos está errado. */
+ * entre `counts` (nível raiz) e `geracaoArt` (aninhado), impossível de
+ * expressar só com `z.record`/enum isolado. */
 function validarVariantesDeGeracaoArt(
   ctx: z.RefinementCtx,
-  rotulo: 'geracaoArt' | 'geracaoArtV2',
-  geracaoArt: GeracaoArtValidavel | undefined,
+  geracaoArt: GeracaoArt | undefined,
   counts: { male?: number; female?: number; flat?: number }
 ): void {
   if (!geracaoArt) return;
@@ -299,7 +241,7 @@ function validarVariantesDeGeracaoArt(
       ctx.addIssue({
         code: 'custom',
         path: ['counts', genero],
-        message: `${rotulo}.${genero} está declarado, mas counts.${genero} não — a contagem de variantes precisa vir de algum lugar.`,
+        message: `geracaoArt.${genero} está declarado, mas counts.${genero} não — a contagem de variantes precisa vir de algum lugar.`,
       });
       continue;
     }
@@ -308,8 +250,8 @@ function validarVariantesDeGeracaoArt(
     if (chaves.length !== esperado) {
       ctx.addIssue({
         code: 'custom',
-        path: [rotulo, genero, 'variantes'],
-        message: `contagem declarada em counts.${genero} (${esperado}) não bate com o número de variantes em ${rotulo}.${genero}.variantes (${chaves.length}).`,
+        path: ['geracaoArt', genero, 'variantes'],
+        message: `contagem declarada em counts.${genero} (${esperado}) não bate com o número de variantes em geracaoArt.${genero}.variantes (${chaves.length}).`,
       });
       continue;
     }
@@ -319,7 +261,7 @@ function validarVariantesDeGeracaoArt(
       if (chave !== esperada) {
         ctx.addIssue({
           code: 'custom',
-          path: [rotulo, genero, 'variantes', chave],
+          path: ['geracaoArt', genero, 'variantes', chave],
           message: `esperava a variante "${esperada}" na posição ${index}, encontrou "${chave}" — chaves precisam ser sequenciais e zero-padded a 3 dígitos, sem buracos.`,
         });
       }
@@ -328,8 +270,7 @@ function validarVariantesDeGeracaoArt(
 }
 
 export const zPortraitConfig = zPortraitConfigBase.superRefine((config, ctx) => {
-  validarVariantesDeGeracaoArt(ctx, 'geracaoArt', config.geracaoArt, config.counts);
-  validarVariantesDeGeracaoArt(ctx, 'geracaoArtV2', config.geracaoArtV2, config.counts);
+  validarVariantesDeGeracaoArt(ctx, config.geracaoArt, config.counts);
 });
 
 export type PortraitConfig = z.infer<typeof zPortraitConfig>;
@@ -340,7 +281,4 @@ export type ExtraPrompt = z.infer<typeof zExtraPrompt>;
 export type GeracaoArt = z.infer<typeof zGeracaoArt>;
 export type GeracaoArtGenero = z.infer<ReturnType<typeof zBlocoGenero>>;
 export type GeracaoArtModelo = z.infer<typeof zModelo>;
-export type GeracaoArtV2 = z.infer<typeof zGeracaoArtV2>;
-export type GeracaoArtV2Genero = z.infer<ReturnType<typeof zBlocoGeneroV2>>;
-export type GeracaoArtV2Modelo = z.infer<typeof zModeloV2>;
 export type GeneroAlvo = 'male' | 'female' | 'flat';

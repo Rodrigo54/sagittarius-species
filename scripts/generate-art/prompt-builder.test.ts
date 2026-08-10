@@ -2,10 +2,6 @@ import { describe, expect, test } from 'bun:test';
 import type { BaseFixo } from './base';
 import { montarPrompts } from './prompt-builder';
 
-/** Duplicado de `scripts/generate-art/prompt-builder.test.ts` — ver o
- * comentário no topo de `prompt-builder.ts` sobre por que este arquivo é
- * duplicado em vez de importado do v1. */
-
 /** `base.json` de teste — não usa `BASE_FIXO` real (o arquivo do produto)
  * pra o teste não quebrar toda vez que o texto fixo for ajustado por
  * conteúdo; só a forma / o comportamento do composer importa aqui. */

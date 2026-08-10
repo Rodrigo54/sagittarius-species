@@ -1,7 +1,4 @@
-/** Duplicado de `scripts/generate-art/seed.ts` — hash puro, sem dependência
- * nenhuma, agnóstico de motor de geração. Duplicado (não importado) por
- * `generate-art-v2/` continuar autocontida mesmo se `scripts/generate-art/`
- * for apagada no futuro.
+/** Hash puro, sem dependência nenhuma, agnóstico de motor de geração.
  *
  * Seed determinística (FNV-1a 32-bit) derivada de espécie+gênero+variante —
  * rodar a mesma variante duas vezes produz a mesma imagem, sem guardar

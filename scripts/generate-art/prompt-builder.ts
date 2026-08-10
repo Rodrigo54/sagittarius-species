@@ -1,14 +1,9 @@
 import type { CamposCompostos } from '../portrait-schema';
 import type { BaseFixo } from './base';
 
-/** Duplicado de `scripts/generate-art/prompt-builder.ts` — decisão da
- * entrevista de planejamento da v2: composição de texto (enum→frase +
- * concatenação, pesos de ênfase) é agnóstica de motor de geração — o mesmo
- * `positive`/`negative` resultante vale tanto pro grafo SDXL (v1) quanto
- * pro grafo Flux2 (v2, `CLIPTextEncode` recebe texto pronto igual).
- * Duplicado (não importado) por `generate-art-v2/` continuar autocontida
- * mesmo se `scripts/generate-art/` for apagada no futuro. Se este arquivo
- * for ajustado aqui, considere se o irmão do v1 precisa do mesmo ajuste.
+/** Composição de texto (enum→frase + concatenação, pesos de ênfase) é
+ * agnóstica de motor de geração — o `CLIPTextEncode` do grafo Flux2 recebe
+ * o `positive`/`negative` já pronto, sem compor nada internamente.
  *
  * Ordem fixa e determinística. Peso de ênfase (sintaxe A1111, `(texto:peso)`)
  * é usado com disciplina, não em tudo: **só nos dois atributos mais frágeis**

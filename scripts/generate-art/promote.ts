@@ -2,12 +2,8 @@ import { copyFile, mkdir, readdir, unlink } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { GeneroAlvo, PortraitConfig } from '../portrait-schema';
 
-/** Duplicado de `scripts/generate-art/promote.ts` — opera só em
- * `PortraitConfig.counts`/`GeneroAlvo`, agnóstico de qual seção
- * (`geracaoArt` ou `geracaoArtV2`) gerou o staging. Duplicado (não
- * importado) por `generate-art-v2/` continuar autocontida mesmo se
- * `scripts/generate-art/` for apagada no futuro. Se este arquivo for
- * ajustado aqui, considere se o irmão do v1 precisa do mesmo ajuste. */
+/** Opera só em `PortraitConfig.counts`/`GeneroAlvo`, agnóstico de como o
+ * staging foi gerado. */
 
 /** Nome de PNG numerado na convenção do pipeline (`001.png`..`NNN.png`) — o
  * único formato de arquivo que a limpeza de órfãos abaixo tem permissão de

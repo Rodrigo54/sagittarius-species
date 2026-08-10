@@ -1,12 +1,8 @@
 import type { PromptComfyUI } from './workflow';
 
-/** Duplicado de `scripts/generate-art/comfyui-client.ts` — decisão tomada na
- * entrevista de planejamento da v2: fala com a API REST do ComfyUI, não sabe
- * nada de SDXL/Flux, então é motor-agnóstico. Duplicado (não importado) por
- * `generate-art-v2/` continuar autocontida mesmo se `scripts/generate-art/`
- * (v1) for apagada no futuro — mesmo espírito do padrão "cada pipeline vive
- * na sua pasta" que o resto do repositório já segue. Se este arquivo for
- * ajustado aqui, considere se o irmão do v1 precisa do mesmo ajuste. */
+/** Fala com a API REST do ComfyUI — não sabe nada de SDXL/Flux, é
+ * motor-agnóstico (enfileirar, aguardar conclusão, baixar imagem, enviar
+ * referência). */
 
 /** Endereço da instância local do ComfyUI. Sem variável de ambiente hoje
  * porque só existe uma instância local em uso (StabilityMatrix) — mesmo

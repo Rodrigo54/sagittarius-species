@@ -6,7 +6,7 @@
     "male": 25,
     "female": 25
   },
-  "geracaoArtV2": {
+  "geracaoArt": {
     "base": {
       "tipo": {
         "value": "Human",

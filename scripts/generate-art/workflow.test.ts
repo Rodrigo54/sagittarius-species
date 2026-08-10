@@ -2,8 +2,8 @@ import { describe, expect, test } from 'bun:test';
 import { montarPrompt, type PromptComfyUI } from './workflow';
 
 /** Templates mínimos (só os nodes que `montarPrompt` toca) representando o
- * formato real de `ssm_species_portrait_workflow_v2.json` (base) e
- * `..._distilled.json` — não precisa do grafo inteiro (UNET/CLIP/VAE
+ * formato real de `ssm_species_portrait_workflow.json` (base) e
+ * `..._workflow_distilled.json` — não precisa do grafo inteiro (UNET/CLIP/VAE
  * loaders, remoção de fundo, SaveImage) pra testar a lógica de injeção, só
  * os IDs que `NODE_IDS` referencia. */
 function templateBase(): PromptComfyUI {

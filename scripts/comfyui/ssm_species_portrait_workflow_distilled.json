@@ -2,17 +2,17 @@
   "1": {
     "class_type": "UNETLoader",
     "_meta": {
-      "title": "UNET fixo (único arquivo Base instalado — ver handoff-comfyui-image-models-2026-08-08.md)"
+      "title": "UNET fixo (único arquivo Distilled instalado — ver handoff-comfyui-image-models-2026-08-08.md)"
     },
     "inputs": {
-      "unet_name": "flux-2-klein-base-4b.safetensors",
+      "unet_name": "flux-2-klein-4b.safetensors",
       "weight_dtype": "default"
     }
   },
   "2": {
     "class_type": "CLIPLoader",
     "_meta": {
-      "title": "Text encoder fixo (Qwen 3 4B, único arquivo instalado)"
+      "title": "Text encoder fixo (Qwen 3 4B, único arquivo instalado — mesmo da variante Base)"
     },
     "inputs": {
       "clip_name": "qwen_3_4b_fp4_flux2.safetensors",
@@ -22,7 +22,7 @@
   "3": {
     "class_type": "VAELoader",
     "_meta": {
-      "title": "VAE fixo (único arquivo instalado)"
+      "title": "VAE fixo (único arquivo instalado — mesmo da variante Base)"
     },
     "inputs": {
       "vae_name": "flux2-vae.safetensors"
@@ -31,7 +31,7 @@
   "4": {
     "class_type": "CLIPTextEncode",
     "_meta": {
-      "title": "Positivo (texto pronto, montado em TS por prompt-builder.ts — igual ao v1)"
+      "title": "Positivo (texto pronto, montado em TS por prompt-builder.ts)"
     },
     "inputs": {
       "text": "",
@@ -39,13 +39,12 @@
     }
   },
   "5": {
-    "class_type": "CLIPTextEncode",
+    "class_type": "ConditioningZeroOut",
     "_meta": {
-      "title": "Negativo (texto pronto, montado em TS por prompt-builder.ts — base.json + extra_prompt.negative)"
+      "title": "Distilled não tem negativo real — CFG=1 zera a guidance de qualquer forma (ver template oficial 'Flux.2 Klein 4B Distilled'). Alimentado pelo mesmo CLIPTextEncode positivo (node 4), não por um texto negativo próprio — workflow.ts NÃO escreve .inputs.text aqui (este node não tem esse input)."
     },
     "inputs": {
-      "text": "",
-      "clip": ["2", 0]
+      "conditioning": ["4", 0]
     }
   },
   "6": {
@@ -77,10 +76,10 @@
   "9": {
     "class_type": "Flux2Scheduler",
     "_meta": {
-      "title": "width/height sobrescritos junto com o node 6 (mesmos valores)"
+      "title": "steps=4 (padrão oficial da Distilled) — width/height sobrescritos junto com o node 6"
     },
     "inputs": {
-      "steps": 20,
+      "steps": 4,
       "width": 1024,
       "height": 1024
     }
@@ -88,10 +87,10 @@
   "10": {
     "class_type": "CFGGuider",
     "_meta": {
-      "title": "positive/negative apontam direto pro 4/5 aqui (baseline sem referência); workflow.ts rewire pro último ReferenceLatent da cadeia quando referenceImage não está vazio"
+      "title": "cfg=1 (padrão oficial da Distilled). positive/negative apontam direto pro 4/5 aqui (baseline sem referência); workflow.ts rewire pro último ReferenceLatent da cadeia quando referenceImage não está vazio"
     },
     "inputs": {
-      "cfg": 5,
+      "cfg": 1,
       "model": ["1", 0],
       "positive": ["4", 0],
       "negative": ["5", 0]
@@ -149,7 +148,7 @@
   "17": {
     "class_type": "SaveImage",
     "inputs": {
-      "filename_prefix": "ssm_species_v2",
+      "filename_prefix": "ssm_species_distilled",
       "images": ["16", 0]
     }
   }
