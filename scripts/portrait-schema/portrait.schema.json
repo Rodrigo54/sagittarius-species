@@ -1161,10 +1161,15 @@
                     },
                     "additionalProperties": false,
                     "description": "Texto livre pra cobrir o que os campos estruturados não expressam — substitui o antigo campo extra (que só existia pro lado positivo)."
+                  },
+                  "seed": {
+                    "description": "Override manual da seed de geração desta variante (noise_seed do ComfyUI) — fixa permanentemente uma seed encontrada boa (via seed determinística padrão ou via --seed da CLI), sobrevivendo a reexecuções futuras sem --seed. Ausente = usa a seed determinística (ou a de --seed da CLI, que sempre vence sobre este campo). Preenchido a posteriori, nunca decidido antes de gerar a variante.",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
                   }
                 },
-                "additionalProperties": false,
-                "description": "Bloco de atributos — usado tanto em \"base\" quanto em cada variante, sempre como overrides parciais mesclados por seção (nunca o objeto inteiro substituído). Não tem mais pose/view/style/mouth: esses ficaram travados globalmente em base.json, pra bater sempre com o rig ssm_shared."
+                "additionalProperties": false
               },
               "description": "Uma variante nomeada por indivíduo — chave é o índice zero-padded a 3 dígitos (\"001\"..\"NNN\"), mesma convenção do PNG final. A contagem de chaves precisa bater exatamente com counts.<gênero>."
             }
@@ -1883,10 +1888,15 @@
                     },
                     "additionalProperties": false,
                     "description": "Texto livre pra cobrir o que os campos estruturados não expressam — substitui o antigo campo extra (que só existia pro lado positivo)."
+                  },
+                  "seed": {
+                    "description": "Override manual da seed de geração desta variante (noise_seed do ComfyUI) — fixa permanentemente uma seed encontrada boa (via seed determinística padrão ou via --seed da CLI), sobrevivendo a reexecuções futuras sem --seed. Ausente = usa a seed determinística (ou a de --seed da CLI, que sempre vence sobre este campo). Preenchido a posteriori, nunca decidido antes de gerar a variante.",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
                   }
                 },
-                "additionalProperties": false,
-                "description": "Bloco de atributos — usado tanto em \"base\" quanto em cada variante, sempre como overrides parciais mesclados por seção (nunca o objeto inteiro substituído). Não tem mais pose/view/style/mouth: esses ficaram travados globalmente em base.json, pra bater sempre com o rig ssm_shared."
+                "additionalProperties": false
               },
               "description": "Uma variante nomeada por indivíduo — chave é o índice zero-padded a 3 dígitos (\"001\"..\"NNN\"), mesma convenção do PNG final. A contagem de chaves precisa bater exatamente com counts.<gênero>."
             }
@@ -2605,10 +2615,15 @@
                     },
                     "additionalProperties": false,
                     "description": "Texto livre pra cobrir o que os campos estruturados não expressam — substitui o antigo campo extra (que só existia pro lado positivo)."
+                  },
+                  "seed": {
+                    "description": "Override manual da seed de geração desta variante (noise_seed do ComfyUI) — fixa permanentemente uma seed encontrada boa (via seed determinística padrão ou via --seed da CLI), sobrevivendo a reexecuções futuras sem --seed. Ausente = usa a seed determinística (ou a de --seed da CLI, que sempre vence sobre este campo). Preenchido a posteriori, nunca decidido antes de gerar a variante.",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
                   }
                 },
-                "additionalProperties": false,
-                "description": "Bloco de atributos — usado tanto em \"base\" quanto em cada variante, sempre como overrides parciais mesclados por seção (nunca o objeto inteiro substituído). Não tem mais pose/view/style/mouth: esses ficaram travados globalmente em base.json, pra bater sempre com o rig ssm_shared."
+                "additionalProperties": false
               },
               "description": "Uma variante nomeada por indivíduo — chave é o índice zero-padded a 3 dígitos (\"001\"..\"NNN\"), mesma convenção do PNG final. A contagem de chaves precisa bater exatamente com counts.<gênero>."
             }

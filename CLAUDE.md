@@ -303,7 +303,12 @@ enfileirar geração de verdade no ComfyUI é decisão do Rodrigo, executada por
   espécie, `extra_prompt`), `modelo` (`variant`: `"base"` ou `"distilled"`; `steps`/`cfg`/`aspectRatio` — sem
   checkpoint/LoRA/sampler, ver `scripts/portrait-schema/schema.ts`), `male`/`female`/`flat` (`referenceImage`
   como **lista** de imagens de referência/conceito por gênero + `variantes` nomeadas `"001"`..`"NNN"`, uma por
-  indivíduo, contagem batendo exato com `counts.<gênero>` — conferido pelo schema via `.superRefine`).
+  indivíduo, contagem batendo exato com `counts.<gênero>` — conferido pelo schema via `.superRefine`). Cada
+  variante aceita ainda um `seed` opcional (`noise_seed` do ComfyUI) — override manual, preenchido a posteriori
+  (nunca decidido a priori) depois de gostar de um resultado gerado, pra fixá-lo permanentemente em vez de
+  depender de lembrar `--seed` a cada execução. Precedência em `generate-art/index.ts` (`resolverSeed`,
+  `generate-art/seed.ts`): `--seed` da CLI → `seed` da variante no `portrait.json` → seed determinística
+  (`seedDeterministica`, hash de espécie+gênero+variante, o piso padrão quando nenhum dos dois está presente).
 - **`--export-prompt`** — monta e imprime o prompt (positivo + negativo) de uma ou mais variantes sem enfileirar
   nada no ComfyUI, ciclo de debug instantâneo sem custo de GPU.
 - Skill dedicada pra preencher `geracaoArt` de uma espécie via entrevista: `.claude/skills/gerar-geracao-arte/`

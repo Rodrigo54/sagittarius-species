@@ -168,6 +168,30 @@ const zModelo = z
   .strict()
   .describe('Configuração de sampler/resolução do Flux.2 Klein — ver geracaoArt.');
 
+/** Variante individual dentro de `variantes` — os mesmos campos compostos
+ * (tipo/person/hair/eyes/torso/extra_prompt), mais `seed`: um override
+ * manual, opcional, da seed de geração desta variante específica. Não
+ * participa do merge de `mesclarCampos` (não é um "campo composto" de
+ * prompt, é um parâmetro de geração) — é lido direto de
+ * `bloco.variantes[chave].seed` em `generate-art/index.ts`, com precedência
+ * `--seed` da CLI → este campo → hash determinístico (`seedDeterministica`,
+ * ver `generate-art/seed.ts`). Não existe pra ser preenchido a priori: fica
+ * vazio até alguém gerar a variante, gostar do resultado (seed determinística
+ * ou testada via `--seed`) e colar o número aqui manualmente pra fixá-lo —
+ * sem isso, toda regeneração futura volta pro hash determinístico. */
+const zVariante = zCamposCompostos
+  .extend({
+    seed: z
+      .number()
+      .int()
+      .nonnegative()
+      .optional()
+      .describe(
+        'Override manual da seed de geração desta variante (noise_seed do ComfyUI) — fixa permanentemente uma seed encontrada boa (via seed determinística padrão ou via --seed da CLI), sobrevivendo a reexecuções futuras sem --seed. Ausente = usa a seed determinística (ou a de --seed da CLI, que sempre vence sobre este campo). Preenchido a posteriori, nunca decidido antes de gerar a variante.'
+      ),
+  })
+  .strict();
+
 function zBlocoGenero() {
   return zCamposCompostos
     .extend({
@@ -178,7 +202,7 @@ function zBlocoGenero() {
           'Imagens de referência (conceito visual, ex.: gerado no Midjourney) deste gênero — cada entrada é um indivíduo/conceito diferente da espécie (não ângulos do mesmo personagem), encadeadas via ReferenceLatent pra dar amplitude visual ao resultado. Uma lista só por gênero, sem override por variante. Ausente/vazio = txt2img puro, sem referência.'
         ),
       variantes: z
-        .record(z.string().regex(CHAVE_VARIANTE), zCamposCompostos)
+        .record(z.string().regex(CHAVE_VARIANTE), zVariante)
         .describe(
           'Uma variante nomeada por indivíduo — chave é o índice zero-padded a 3 dígitos ("001".."NNN"), mesma convenção do PNG final. A contagem de chaves precisa bater exatamente com counts.<gênero>.'
         ),
@@ -275,6 +299,7 @@ export const zPortraitConfig = zPortraitConfigBase.superRefine((config, ctx) => 
 
 export type PortraitConfig = z.infer<typeof zPortraitConfig>;
 export type CamposCompostos = z.infer<typeof zCamposCompostos>;
+export type Variante = z.infer<typeof zVariante>;
 export type Tipo = z.infer<typeof zTipo>;
 export type Torso = z.infer<typeof zTorso>;
 export type ExtraPrompt = z.infer<typeof zExtraPrompt>;

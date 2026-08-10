@@ -8,7 +8,7 @@ import type { GeneroAlvo, GeracaoArtModelo } from '../portrait-schema';
 import { BASE_FIXO } from './base';
 import { promoverEspecie } from './promote';
 import { montarPrompts } from './prompt-builder';
-import { seedDeterministica } from './seed';
+import { resolverSeed, seedDeterministica, type OrigemSeed } from './seed';
 import { montarPrompt, type PromptComfyUI } from './workflow';
 
 /** Entry point do pipeline de geração de arte via IA (Flux.2 Klein Base),
@@ -88,7 +88,7 @@ function parseArgs(argv: string[]): Argumentos {
 
   if (seed !== undefined && variantes?.length !== 1) {
     console.error(
-      '--seed só faz sentido junto com --variante=NNN de uma única variante — sobrescreve a seed determinística dela.'
+      '--seed só faz sentido junto com --variante=NNN de uma única variante — sobrescreve, só nesta execução, a seed dela (customizada no portrait.json ou determinística).'
     );
     process.exit(1);
   }
@@ -104,12 +104,21 @@ function parseArgs(argv: string[]): Argumentos {
   return { slug, genero: genero as GeneroAlvo, variantes, seed, promote, exportPrompt };
 }
 
+/** Rótulo de log pra cada origem possível de `resolverSeed` — só cosmético,
+ * sem efeito na geração em si. */
+const ROTULO_ORIGEM_SEED: Record<OrigemSeed, string> = {
+  cli: '--seed',
+  config: 'customizada',
+  deterministica: 'determinística',
+};
+
 async function gerarVariante(
   slug: string,
   genero: GeneroAlvo,
   chave: string,
   prompts: { positive: string; negative: string },
   seed: number,
+  origemSeed: OrigemSeed,
   template: PromptComfyUI,
   pastaDestino: string,
   modelo: GeracaoArtModelo | undefined,
@@ -118,7 +127,7 @@ async function gerarVariante(
   const filenamePrefix = `ssm_${slug.replace(/^ssm_/, '')}_${genero}_${chave}`;
   const prompt = montarPrompt(template, prompts, { seed, filenamePrefix, modelo, imagensReferenciaEnviadas });
 
-  console.log(`[${slug}/${genero}/${chave}] enfileirando no ComfyUI (seed ${seed})...`);
+  console.log(`[${slug}/${genero}/${chave}] enfileirando no ComfyUI (seed ${seed}, ${ROTULO_ORIGEM_SEED[origemSeed]})...`);
   const promptId = await enfileirar(prompt);
   const imagem = await aguardarConclusao(promptId);
   const bytes = await baixarImagem(imagem);
@@ -207,13 +216,14 @@ async function main(): Promise<void> {
     const camposVariante = bloco.variantes[chave]!;
     const campos = mesclarCampos(config.geracaoArt!.base, bloco, camposVariante);
     const prompts = montarPrompts(campos, BASE_FIXO);
-    const seedFinal = seed ?? seedDeterministica(slug, genero, chave);
+    const { seed: seedFinal, origem: origemSeed } = resolverSeed(seed, camposVariante.seed, seedDeterministica(slug, genero, chave));
     await gerarVariante(
       slug,
       genero,
       chave,
       prompts,
       seedFinal,
+      origemSeed,
       template,
       pastaStagingGenero,
       modelo,
