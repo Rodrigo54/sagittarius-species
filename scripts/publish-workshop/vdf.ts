@@ -1,24 +1,16 @@
-/** Configuração do `workshopitem` do VDF que o `steamcmd +workshop_build_item` consome. Dois
- * modos possíveis: publicar conteúdo novo (com changenote) ou só metadados (título/descrição,
- * sem changenote) — nunca os dois juntos, ver `docs/pipeline-publish-workshop.md`. */
-export type ConteudoVdfPublicacao =
-  | {
-      modo: 'conteudo';
-      appid: string;
-      publishedFileId: string;
-      contentFolder: string;
-      previewFile: string;
-      changenote: string;
-    }
-  | {
-      modo: 'metadata';
-      appid: string;
-      publishedFileId: string;
-      contentFolder: string;
-      previewFile: string;
-      title: string;
-      description: string;
-    };
+/** Configuração do `workshopitem` do VDF que o `steamcmd +workshop_build_item` consome.
+ * `title`/`description` são sempre enviados (todo publish mantém a descrição da Steam em sincronia
+ * com `description.md`); `changenote` é opcional — presente na publicação de conteúdo, ausente no
+ * modo `--metadata-only` (só título/descrição, sem build nova). Ver `docs/pipeline-publish-workshop.md`. */
+export type ConteudoVdfPublicacao = {
+  appid: string;
+  publishedFileId: string;
+  contentFolder: string;
+  previewFile: string;
+  title: string;
+  description: string;
+  changenote?: string;
+};
 
 /** Escapa um valor pro formato VDF (KeyValues): barra invertida e aspas duplas são os únicos
  * caracteres especiais dentro de uma string entre aspas. Quebras de linha literais são aceitas
@@ -37,13 +29,12 @@ export function montarVdf(config: ConteudoVdfPublicacao): string {
     par('publishedfileid', config.publishedFileId),
     par('contentfolder', config.contentFolder),
     par('previewfile', config.previewFile),
+    par('title', config.title),
+    par('description', config.description),
   ];
 
-  if (config.modo === 'conteudo') {
+  if (config.changenote !== undefined) {
     linhas.push(par('changenote', config.changenote));
-  } else {
-    linhas.push(par('title', config.title));
-    linhas.push(par('description', config.description));
   }
 
   return ['"workshopitem"', '{', ...linhas, '}'].join('\n') + '\n';

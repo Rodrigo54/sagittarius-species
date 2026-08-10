@@ -202,12 +202,15 @@ para publicação.
 ## Publicação no Steam Workshop
 
 `scripts/publish-workshop/` (comando `bun run publish-workshop -- [--metadata-only]`) publica o mod no Steam
-Workshop via `steamcmd`, em dois modos:
+Workshop via `steamcmd`. `title` (campo `name` do `descriptor.mod`) e `description`
+(`steam-workshop/description.md` inteiro) são **sempre** enviados, em qualquer modo — todo publish mantém a
+descrição da Steam em sincronia com o arquivo, não só um modo dedicado. Dois modos:
 
-- **Normal** (padrão): extrai a seção mais no topo de `steam-workshop/change-notes.md` (formato `## <versão>`,
-  sempre a mais recente por convenção — novas entradas sempre entram no topo) como changenote da build.
-- **`--metadata-only`**: atualiza só `title` (campo `name` do `descriptor.mod`) e `description`
-  (`steam-workshop/description.md` inteiro), sem publicar conteúdo novo nem exigir changenote.
+- **Normal** (padrão): além de title/description, extrai a seção mais no topo de
+  `steam-workshop/change-notes.md` (formato `## <versão>`, sempre a mais recente por convenção — novas entradas
+  sempre entram no topo) como changenote da build, e publica o conteúdo do mod.
+- **`--metadata-only`**: só title/description, sem publicar conteúdo novo nem exigir changenote — atalho pra
+  quando só a descrição mudou.
 
 Ambos os arquivos `.md` em `steam-workshop/` são Markdown de verdade (não BBCode) — `md-to-bbcode.ts`
 (`marked` + renderer próprio) converte pro dialeto BBCode da Steam em tempo de publish. O header de cada seção

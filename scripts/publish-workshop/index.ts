@@ -96,48 +96,30 @@ async function main() {
   }
 
   const descriptor = parseDescriptorMod(await readFile(CAMINHO_DESCRIPTOR, 'utf-8'));
+  // title/description são sempre enviados — todo publish (conteúdo ou metadata-only) mantém a
+  // descrição da Steam em sincronia com description.md, não só o modo dedicado.
+  const descricaoBbcode = markdownParaBBCode(await readFile(CAMINHO_DESCRIPTION, 'utf-8'));
 
-  let vdfTexto: string;
+  let changenoteBbcode: string | undefined;
   let resumoModo: string;
   let gravarChangeNotes: (() => Promise<void>) | null = null;
 
   if (modoMetadataOnly) {
-    const descricaoBbcode = markdownParaBBCode(await readFile(CAMINHO_DESCRIPTION, 'utf-8'));
-
-    vdfTexto = montarVdf({
-      modo: 'metadata',
-      appid: APPID_STELLARIS,
-      publishedFileId: descriptor.remoteFileId,
-      contentFolder: PASTA_MOD,
-      previewFile: CAMINHO_THUMBNAIL,
-      title: descriptor.name,
-      description: descricaoBbcode,
-    });
-
     resumoModo = [
-      'Modo: metadata-only (só título/descrição, sem changenote)',
+      'Modo: metadata-only (só título/descrição, sem publicar conteúdo novo)',
       `Título: ${descriptor.name}`,
       '',
-      'Descrição (BBCode a ser enviado):',
+      'Descrição (BBCode a ser enviada):',
       descricaoBbcode,
     ].join('\n');
   } else {
     const conteudoChangeNotes = await readFile(CAMINHO_CHANGE_NOTES, 'utf-8');
     const secao = extrairPrimeiraSecao(conteudoChangeNotes);
     const novaLinhaHeading = comTimestamp(secao, new Date());
-    const changenoteBbcode = markdownParaBBCode(secao.corpo);
-
-    vdfTexto = montarVdf({
-      modo: 'conteudo',
-      appid: APPID_STELLARIS,
-      publishedFileId: descriptor.remoteFileId,
-      contentFolder: PASTA_MOD,
-      previewFile: CAMINHO_THUMBNAIL,
-      changenote: changenoteBbcode,
-    });
+    changenoteBbcode = markdownParaBBCode(secao.corpo);
 
     resumoModo = [
-      'Modo: publicação de conteúdo',
+      'Modo: publicação de conteúdo (a descrição também é sincronizada com description.md)',
       `Versão do changelog: ${secao.versao}`,
       `Header será gravado como: ${novaLinhaHeading}`,
       '',
@@ -148,6 +130,16 @@ async function main() {
     gravarChangeNotes = () =>
       gravarTimestamp(CAMINHO_CHANGE_NOTES, conteudoChangeNotes, secao, novaLinhaHeading);
   }
+
+  const vdfTexto = montarVdf({
+    appid: APPID_STELLARIS,
+    publishedFileId: descriptor.remoteFileId,
+    contentFolder: PASTA_MOD,
+    previewFile: CAMINHO_THUMBNAIL,
+    title: descriptor.name,
+    description: descricaoBbcode,
+    changenote: changenoteBbcode,
+  });
 
   console.log('== Resumo do publish no Steam Workshop ==');
   console.log(`Versão do mod (descriptor.mod): ${descriptor.version}`);

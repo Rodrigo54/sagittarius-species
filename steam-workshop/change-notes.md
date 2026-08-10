@@ -7,7 +7,7 @@ For the steam workshop change notes I recommended to use major mod version incre
 > publish time if it isn't there yet (that stamp is local bookkeeping only — it never gets sent
 > to Steam, which already timestamps updates on its own).
 
-## 1.10.0
+## 1.10.0 — 2026-08-10 18:05
 
 * Astral Humans got fresh portrait art (new female/male variants) and were migrated back to the corrected shared portrait rig, fixing the framing issue that kept them on the legacy rig since 1.8.0.
 * Default Humans got updated portrait textures too.

@@ -25,8 +25,9 @@ uma reinstalação destruiria esse cache e obrigaria a fazer login (com senha + 
 ## Os dois arquivos `.md` em `steam-workshop/`
 
 - **`description.md`** — a descrição do item na página do Workshop. Markdown válido (headings, `**negrito**`,
-  links, imagens — inclusive o padrão `[![alt](imgurl)](linkurl)` pra um banner clicável). Usado inteiro no modo
-  `--metadata-only`.
+  links, imagens — inclusive o padrão `[![alt](imgurl)](linkurl)` pra um banner clicável). Usado inteiro em
+  **todo publish** (não só `--metadata-only`) — `title`/`description` sempre vão no VDF, então a descrição da
+  Steam nunca fica desatualizada em relação ao arquivo.
 - **`change-notes.md`** — histórico de mudanças, mantido à mão. Cada versão é uma seção `## <versão>` (ex.:
   `## 1.9.0`); **novas entradas sempre entram no topo do arquivo** (abaixo do parágrafo introdutório, acima da
   seção anterior) — é assim que o script sabe qual é "a versão mais recente": pega sempre a primeira seção `##`
@@ -83,8 +84,10 @@ enviada.
 ## VDF (`vdf.ts`)
 
 `montarVdf` gera o bloco `"workshopitem" { ... }` que o `steamcmd +workshop_build_item <arquivo>` espera —
-formato KeyValues (Clausewitz-like, mas não é o mesmo dialeto do resto do mod, não usa `jomini`). Dois modos,
-mutuamente exclusivos (nunca `changenote` e `title`/`description` juntos):
+formato KeyValues (Clausewitz-like, mas não é o mesmo dialeto do resto do mod, não usa `jomini`). `title`/
+`description` são sempre incluídos; `changenote` é opcional (presente no modo normal, ausente em
+`--metadata-only` — nada impede combinar os três no mesmo VDF, a Valve documenta isso como incluir "the
+key/value pairs that should be updated"):
 
 ```
 "workshopitem"
@@ -93,7 +96,9 @@ mutuamente exclusivos (nunca `changenote` e `title`/`description` juntos):
 	"publishedfileid"	"<remote_file_id do descriptor.mod>"
 	"contentfolder"	"<caminho absoluto de mod/sagittarius-species/>"
 	"previewfile"	"<caminho absoluto de mod/sagittarius-species/thumbnail.png>"
-	"changenote"	"<corpo da seção, convertido pra BBCode>"
+	"title"	"<name do descriptor.mod>"
+	"description"	"<description.md inteiro, convertido pra BBCode>"
+	"changenote"	"<corpo da seção de change-notes.md, convertido pra BBCode — ausente em --metadata-only>"
 }
 ```
 
