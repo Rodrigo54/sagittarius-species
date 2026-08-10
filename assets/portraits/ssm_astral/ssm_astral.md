@@ -12,30 +12,45 @@ e uma gema/cristal energético no peito, ligado por veias de energia que se espa
 ordem mística ou entidade cósmica, tons dominantes roxo, violeta e preto com metal escuro/bronze.
 
 `portrait.json` já tem `geracaoArt` configurado (rig continua `sl_shared` — legado congelado — mas a espécie
-ganhou um pipeline de geração via IA em paralelo, ver `bun run generate-art`), migrado pro schema atual
-(`scripts/portrait-schema/`, ver `generate-art-migracao-schema-proprio.md`):
+ganhou um pipeline de geração via IA em paralelo, ver `bun run generate-art`), no schema/pipeline atual (Flux.2
+Klein — `scripts/portrait-schema/`, `generate-art-migracao-schema-proprio.md`):
 
 - `tipo`: `{ value: "Human", description: "mystical order warrior, cosmic sentinel aesthetic, glowing purple
   eyes, no visible pupils" }`.
 - `eyes.color`: `"Violet"` (fixo — é o traço de identidade mais reconhecível da espécie, por isso vive como campo
   estruturado dedicado, não só texto).
 - `torso`: `{ state: "FullyCovered", description: "dark purple-violet ornate armor with bronze and gold trim,
-  purple star-shaped mineral gem embedded in chest, faceted raw crystal cut like a multi-pointed star, not a
-  circular orb, not a round gem, not concentric rings, gemstone texture not a flat painted symbol, purple energy
-  veins spreading across the armor from the crystal" }`.
-- `extra_prompt.positive` (nível `base`): `"no hood, no cloak, no cape, bare head, hair fully visible, face fully
-  visible, full arms and hands visible within frame, no part of the body cropped by frame edges"`.
+  purple star-shaped mineral gem embedded in chest, faceted raw crystal cut with sharp angular multi-pointed star
+  facets, geometric star-cut gemstone with visible facet edges and depth, purple energy veins spreading across
+  the armor from the crystal" }`.
+- `extra_prompt` (nível `base`): positivo `"(no helmet, no hood, no head covering, full head of hair:1.2), face
+  fully visible"`; negativo `"(circular orb, round gem:1.2), sphere gem, ball-shaped gem, glowing orb, magic orb,
+  flat painted symbol, concentric rings, hood, cloak, cape"` (exclui explicitamente as leituras erradas de gema
+  que apareceram em testes).
 - `extra_prompt.positive` (nível `male`): `"strong masculine face, square jawline, defined brow ridge, broad
-  shoulders, visibly male, not feminine"`.
+  shoulders"`.
+- `modelo`: `{ variant: "distilled", steps: 4, cfg: 1, aspectRatio: "4:5" }` — canvas de geração efetivo 912×1152
+  (ver `scripts/generate-art/resolution.ts`); variante "distilled" quer dizer que o negativo acima é **descartado**
+  pelo grafo (CFG=1 zera a guidance negativa via `ConditioningZeroOut` — ver "Armadilhas conhecidas" na skill
+  `gerar-geracao-arte`), então quem carrega peso de verdade é o positivo.
 
-Os prompts abaixo documentam as referências de img2img/ControlNet (`reference_male.png`/`reference_female.png`)
-usadas por esse `geracaoArt` — cada mudança de prompt aqui deveria ser espelhada no `geracaoArt` acima (e
+Os prompts abaixo documentam as imagens de referência/conceito (`reference_male_1.png`, `reference_male_2.png`,
+`reference_female.png`) usadas por esse `geracaoArt` — cada uma entra numa cadeia de `ReferenceLatent` (não
+ControlNet/img2img: sem exigência de pose esquelética visível, sem denoise, sem crop pro canvas de geração — a
+referência é só escalada independentemente pra ~1 megapixel via `ImageScaleToTotalPixels`, ver
+`scripts/generate-art/workflow.ts`). Cada mudança de prompt aqui deveria ser espelhada no `geracaoArt` acima (e
 vice-versa) pra documentação e configuração não divergirem. Use `bun run generate-art ssm_astral male
 --variante=001 --export-prompt` (ou `female`) pra conferir o texto composto de verdade sem gastar GPU.
 
 ## Prompt de referência (Midjourney) — Male
 
-Descreve `reference_male.png`: homem branco, barba ruiva rala, cabelo ruivo curto, olhos brilhantes roxos sem
+`male.referenceImage` hoje é uma **lista de duas imagens** (`reference_male_1.png`, `reference_male_2.png`),
+encadeadas via `ReferenceLatent` pra dar mais amplitude visual ao resultado — decisão tomada na migração pro
+pipeline atual (antes era uma referência única). Só `reference_male_1.png` (a imagem original, renomeada nessa
+migração) tem o prompt de geração documentado abaixo; **`reference_male_2.png` não tem prompt registrado neste
+arquivo** — se for regenerada/substituída, documente o prompt usado aqui.
+
+Descreve `reference_male_1.png`: homem branco, barba ruiva rala, cabelo ruivo curto, olhos brilhantes roxos sem
 pupila, expressão séria, armadura roxo-escura com detalhes dourados/bronze, sem capuz/capa (cabeça e cabelo
 totalmente visíveis), ombreiras com emblema de runas, estrela mineral facetada (como um cristal bruto lapidado)
 brilhando roxo, embutida no peito, cinto com fivela circular com símbolo de estrela. **Braços precisam caber
@@ -55,11 +70,12 @@ inteiros dentro do quadro**, sem cortar nas bordas — enquadramento mais aberto
   palavra-chave. Trocado pra **`--ar 4:5`** (menos alongado, mais largura relativa) pra dar espaço lateral à pose
   sem precisar fechar os braços — se ainda cortar, o próximo passo é `--ar 1:1` ou fechar a pose (`arms close to
   torso, elbows tucked in, no hands on hips`) em vez de abrir mais o quadro.
-- O pipeline (`generate-art`/`ImageScale` do workflow) faz *center-crop* da referência pro canvas de img2img
-  (832×1216, proporção ~0.68) — uma referência mais larga (`4:5` ≈ 0.8) perde um pouco de topo/base nesse recorte,
-  não de lateral, então não reintroduz o corte de braço.
+- O pipeline atual (`ImageScaleToTotalPixels` do workflow, ver `scripts/generate-art/workflow.ts`) **não recorta**
+  a referência pro canvas de geração — só escala pra ~1 megapixel preservando a proporção original, então o corte
+  de braço só depende do enquadramento da própria referência, não de um center-crop pra um canvas fixo (diferente
+  do pipeline SDXL anterior, que usava a referência como base de img2img num canvas fixo).
 - **Cristal como mineral, não símbolo:** reforçado como gema facetada/lapidada (textura de cristal bruto), não um
-  desenho plano de estrela — é essa leitura que a nova `reference_male.png` fixa como padrão da espécie.
+  desenho plano de estrela — é essa leitura que `reference_male_1.png` fixa como padrão da espécie.
 
 ## Prompt de referência (Midjourney) — Female
 
@@ -83,5 +99,6 @@ bordas — mesmo ajuste feito no prompt masculino.
 - **`--ar 4:5`** pelo mesmo motivo do prompt masculino (2:3 cortava os braços num "medium shot" com pose larga) —
   ver nota detalhada lá em cima.
 - **Atenção:** `reference_female.png` agora é uma geração própria e dedicada (960×1200, `--ar 4:5`), **não** mais
-  o trim de `female/019.png` que era usado antes — `geracaoArt.female.referenceImage` já aponta pra ela
-  (antes apontava pra `reference_male.png`, decisão revertida quando essa referência feminina ficou disponível).
+  o trim de `female/019.png` que era usado antes — `geracaoArt.female.referenceImage` já aponta pra ela (antes
+  apontava pra `reference_male.png`/`reference_male_1.png`, decisão revertida quando essa referência feminina
+  ficou disponível).
