@@ -306,7 +306,7 @@ enfileirar geração de verdade no ComfyUI é decisão do Rodrigo, executada por
   (`/gerar-geracao-arte`).
 
 Relato completo de como esse pipeline foi criado (bugs, decisões, configuração testada): primeiro
-`generate-art-historico-da-sessao.md` (sessão que criou o pipeline original, baseado em `ComfyUI-OOP` — formato
+`generate-art-v1-historico-da-sessao.md` (sessão que criou o pipeline original, baseado em `ComfyUI-OOP` — formato
 desatualizado, não reflete o schema atual), depois `generate-art-migracao-schema-proprio.md` (sessão que aboliu
 essa dependência e desenhou o schema `zod` atual — este é o que reflete o formato de hoje).
 

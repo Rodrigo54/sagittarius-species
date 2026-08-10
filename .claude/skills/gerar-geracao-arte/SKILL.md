@@ -38,7 +38,7 @@ Antes de perguntar qualquer coisa, explore:
   precisam bater com o rig `ssm_shared`, e mudar isso reabriria o problema de corte de braço/mão que motivou
   travar) e o negativo compartilhado de qualidade/anatomia. Não pergunte sobre estilo/pose/enquadramento na
   entrevista — não são mais decisão desta skill.
-- **`generate-art-historico-da-sessao.md`** (raiz do repo) — relato da sessão que construiu o pipeline original
+- **`generate-art-v1-historico-da-sessao.md`** (raiz do repo) — relato da sessão que construiu o pipeline original
   (baseado em ComfyUI-OOP) e reworkeou `ssm_default` pela primeira vez: bugs/decisões encontrados (máscara de
   fundo invertida, gênero não respeitado em CFG baixo, LoRA incompatível com checkpoint, `steps` baixo demais
   causando assimetria facial, etnia diluída pela referência, ênfase de peso vazando entre atributos, etc.) — as
@@ -153,7 +153,7 @@ qualquer coisa.
   <gênero> --variante=001 --export-prompt` monta e imprime o prompt final (positivo + negativo) sem enfileirar
   nada no ComfyUI — ciclo de debug instantâneo. Sempre vale rodar isso antes do teste de 5 imagens de verdade,
   pra confirmar visualmente (lendo o texto) que os campos-âncora estão presentes e na ordem certa.
-- **Armadilhas conhecidas** (detalhadas em `generate-art-historico-da-sessao.md` e
+- **Armadilhas conhecidas** (detalhadas em `generate-art-v1-historico-da-sessao.md` e
   `generate-art-migracao-schema-proprio.md`, não repita os erros):
   - Área pequena do rosto (cor de olho, etnia) e cobertura de tronco perdem mais fácil pra referência de
     img2img/viés do checkpoint do que atributo de área grande (cor de cabelo). É exatamente pra isso que

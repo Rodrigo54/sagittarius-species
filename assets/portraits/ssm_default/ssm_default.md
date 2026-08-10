@@ -66,7 +66,7 @@ Algumas variantes têm `extra_prompt.positive` específico, além do que `base`/
 - **`male/002`**: `"(pink hair:0.8), flat masculine chest, male chest armor, muscular male torso"` — a ênfase de
   peso na cor de cabelo (rosa) fez o gênero "balançar" pra mais feminino nos testes originais; esse reforço
   fecha os três atributos (cabelo, peito masculino, torso musculoso) ao mesmo tempo (ver bug #10 em
-  `generate-art-historico-da-sessao.md`).
+  `generate-art-v1-historico-da-sessao.md`).
 - **Variantes com `ethnicity: "African"`** (`male`: `008`, `013`, `016`, `017`, `019`, `024`, `025`; `female`:
   `008`, `015`, `020`, `024`): `"(dark skin, deep brown skin tone, African facial features:1.3)"` — etnia é
   atributo de área pequena do rosto, perde fácil pra referência via img2img/ControlNet sem esse reforço com peso

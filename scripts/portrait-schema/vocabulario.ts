@@ -3,7 +3,7 @@
  * As listas de `person`/`hair`/`eyes` abaixo foram portadas do pacote
  * `ComfyUI-OOP` (`custom_nodes/ComfyUI-OOP`, `0xRavenBlack/ComfyUI-OOP`) —
  * eram extraídas ao vivo do `object_info` do ComfyUI local (ver histórico
- * dessa extração em `generate-art-historico-da-sessao.md`), mas o projeto
+ * dessa extração em `generate-art-v1-historico-da-sessao.md`), mas o projeto
  * abandonou a dependência do pacote (`generate-art-migracao-schema-proprio.md`)
  * e essas listas viraram uma **cópia estática**, mantida aqui manualmente —
  * não são mais revalidadas contra uma API ao vivo. Só um valor exatamente
