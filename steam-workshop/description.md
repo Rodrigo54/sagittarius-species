@@ -1,4 +1,4 @@
-🌌🖖 Greetings, fellow xenophile!
+# 🌌🖖 Greetings, fellow xenophile  
 
 Sagittarius Species is the portrait pack for anyone who's ever wanted their Stellaris empire to look like it walked straight out of a con hall, a tabletop splatbook, and a late-night sci-fi marathon all at once. AI-assisted art, a shared animated rig, and a genuine excuse to roleplay as a race of sapient furries who also happen to run the galaxy — what's not to love?
 

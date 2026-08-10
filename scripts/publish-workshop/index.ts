@@ -34,6 +34,44 @@ async function confirmar(pergunta: string): Promise<boolean> {
   }
 }
 
+// Frase fixa que o steamcmd imprime quando o workshop_build_item é commitado com sucesso — é o
+// único sinal confiável de sucesso pra esse comando. O código de saída do steamcmd NÃO é: é um bug
+// antigo e bem documentado da ferramenta terminar com código não-zero (ex.: 7) mesmo em publishes
+// bem-sucedidos. Por isso o exit code só é usado aqui como sinal secundário/diagnóstico.
+const REGEX_SUCESSO_STEAMCMD = /Committing update\.\.\.\s*Success\./;
+
+/** Roda o steamcmd repassando stdin pro terminal de verdade (senha/Steam Guard continuam
+ * interativos), mas capturando stdout/stderr — encaminhando cada pedaço pro terminal em tempo
+ * real (o usuário vê o progresso igual antes) e acumulando pra procurar o sinal de sucesso depois
+ * que o processo terminar. */
+async function executarSteamcmd(args: string[]): Promise<{ codigoSaida: number; publicado: boolean }> {
+  const processo = Bun.spawn([CAMINHO_STEAMCMD, ...args], {
+    stdin: 'inherit',
+    stdout: 'pipe',
+    stderr: 'pipe',
+    cwd: PASTA_RAIZ,
+  });
+
+  const decoder = new TextDecoder();
+  let saidaCompleta = '';
+
+  const encaminhar = async (stream: ReadableStream<Uint8Array>, destino: NodeJS.WriteStream) => {
+    for await (const pedaco of stream) {
+      const texto = decoder.decode(pedaco, { stream: true });
+      saidaCompleta += texto;
+      destino.write(texto);
+    }
+  };
+
+  await Promise.all([
+    encaminhar(processo.stdout as ReadableStream<Uint8Array>, process.stdout),
+    encaminhar(processo.stderr as ReadableStream<Uint8Array>, process.stderr),
+  ]);
+
+  const codigoSaida = await processo.exited;
+  return { codigoSaida, publicado: REGEX_SUCESSO_STEAMCMD.test(saidaCompleta) };
+}
+
 async function main() {
   if (process.platform !== 'win32') {
     throw new Error('publish-workshop só roda no Windows (depende do steamcmd.exe baixado por "bun run setup").');
@@ -137,13 +175,24 @@ async function main() {
   await writeFile(CAMINHO_VDF, vdfTexto, 'utf-8');
 
   console.log('→ publicando no Steam Workshop via steamcmd (pode pedir senha / código do Steam Guard)...');
-  const processo = Bun.spawn(
-    [CAMINHO_STEAMCMD, '+login', usuarioSteam, '+workshop_build_item', CAMINHO_VDF, '+quit'],
-    { stdio: ['inherit', 'inherit', 'inherit'], cwd: PASTA_RAIZ }
-  );
-  const codigoSaida = await processo.exited;
+  const { codigoSaida, publicado } = await executarSteamcmd([
+    '+login',
+    usuarioSteam,
+    '+workshop_build_item',
+    CAMINHO_VDF,
+    '+quit',
+  ]);
+
+  if (!publicado) {
+    throw new Error(
+      `steamcmd terminou com código de saída ${codigoSaida} e não encontrei "Committing update...Success." na saída — o publish provavelmente falhou de verdade. Confira o log em bin/steamcmd/logs/.`
+    );
+  }
+
   if (codigoSaida !== 0) {
-    throw new Error(`steamcmd terminou com código de saída ${codigoSaida}`);
+    console.log(
+      `⚠ steamcmd terminou com código de saída ${codigoSaida}, mas a saída confirma "Committing update...Success." — isso é uma manha conhecida do steamcmd nesse comando, não indica falha.`
+    );
   }
 
   console.log('✓ publicado com sucesso.');

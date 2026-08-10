@@ -120,6 +120,18 @@ Quebras de linha literais dentro do valor não precisam de escape. Gerado em run
 `node:util.parseArgs` faz o parsing da única flag (`--metadata-only`) — é o padrão do projeto pra CLIs novas
 daqui pra frente, não só deste script.
 
+### Detecção de sucesso: exit code do steamcmd não é confiável
+
+`steamcmd` tem uma manha antiga e bem documentada: depois de `workshop_build_item`, ele frequentemente termina
+com código de saída não-zero (ex.: `7`) mesmo quando a atualização foi commitada com sucesso — validado na
+prática (publish real, 2026-08-10): saída trazia `Committing update...Success.` e o processo mesmo assim saiu
+com `7`. Por isso `executarSteamcmd` (`index.ts`) não usa o exit code como sinal de sucesso; ele captura
+stdout/stderr (repassando cada pedaço pro terminal em tempo real, então a experiência interativa — incluindo o
+prompt de senha/Steam Guard, que continua lendo do stdin real — não muda) e procura a frase literal
+`Committing update...Success.` na saída acumulada. Só essa frase decide sucesso; o exit code vira só informação
+secundária (uma mensagem de aviso quando não-zero mas a frase apareceu, ou parte do erro quando a frase não
+apareceu).
+
 ## `STEAM_USERNAME` / `.env`
 
 Login sempre passa o usuário explicitamente (`+login <usuário>`), mesmo com sessão cacheada — o `steamcmd` não
