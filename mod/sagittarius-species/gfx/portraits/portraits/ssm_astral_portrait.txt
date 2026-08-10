@@ -1,6 +1,6 @@
 portraits = {
   ssm_astral_male_01 = {
-    entity = "sl_humanoid_01_entity"
+    entity = "ssm_humanoid_01_entity"
     clothes_selector = "no_texture"
     attachment_selector = "no_texture"
     greeting_sound = "human_male_greetings_01"
@@ -31,11 +31,10 @@ portraits = {
       "gfx/models/portraits/ssm_astral/male/023.dds"
       "gfx/models/portraits/ssm_astral/male/024.dds"
       "gfx/models/portraits/ssm_astral/male/025.dds"
-      "gfx/models/portraits/ssm_astral/male/026.dds"
     }
   }
   ssm_astral_female_01 = {
-    entity = "sl_humanoid_01_entity"
+    entity = "ssm_humanoid_01_entity"
     clothes_selector = "no_texture"
     attachment_selector = "no_texture"
     greeting_sound = "human_female_greetings_01"
@@ -60,6 +59,12 @@ portraits = {
       "gfx/models/portraits/ssm_astral/female/017.dds"
       "gfx/models/portraits/ssm_astral/female/018.dds"
       "gfx/models/portraits/ssm_astral/female/019.dds"
+      "gfx/models/portraits/ssm_astral/female/020.dds"
+      "gfx/models/portraits/ssm_astral/female/021.dds"
+      "gfx/models/portraits/ssm_astral/female/022.dds"
+      "gfx/models/portraits/ssm_astral/female/023.dds"
+      "gfx/models/portraits/ssm_astral/female/024.dds"
+      "gfx/models/portraits/ssm_astral/female/025.dds"
     }
   }
 }
