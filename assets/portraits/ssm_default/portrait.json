@@ -526,8 +526,8 @@
             "body_shape": "Average"
           },
           "hair": {
-            "style": "Ponytail",
-            "main_color": "Silver"
+            "style": "Long Wavy",
+            "main_color": "Mustard"
           },
           "eyes": {
             "shape": "Round",
@@ -541,15 +541,12 @@
             "body_shape": "Slim"
           },
           "hair": {
-            "style": "Braided",
-            "main_color": "Brown"
+            "style": "Dreadlocks",
+            "main_color": "Blonde"
           },
           "eyes": {
             "shape": "Oval",
             "color": "Amber"
-          },
-          "extra_prompt": {
-            "positive": "(blonde hair:1.3)"
           }
         },
         "009": {
@@ -559,8 +556,9 @@
             "body_shape": "Curvy"
           },
           "hair": {
-            "style": "Wavy",
-            "main_color": "Teal"
+            "style": "Long Wavy",
+            "optional_color": "Olive",
+            "main_color": "Bronze"
           },
           "eyes": {
             "shape": "Almond",
@@ -570,12 +568,12 @@
         "010": {
           "person": {
             "age": 20,
-            "ethnicity": "Asian",
+            "ethnicity": "Nordic",
             "body_shape": "Curvy"
           },
           "hair": {
-            "style": "Braided",
-            "main_color": "Brown"
+            "style": "Long Wavy",
+            "main_color": "Red"
           },
           "eyes": {
             "shape": "Upturned",
@@ -698,8 +696,8 @@
             "main_color": "Blonde"
           },
           "eyes": {
-            "shape": "Downturned",
-            "color": "Violet"
+            "shape": "Upturned",
+            "color": "Green"
           }
         },
         "019": {
@@ -725,7 +723,8 @@
           },
           "hair": {
             "style": "Curly",
-            "main_color": "White"
+            "optional_color": "Silver",
+            "main_color": "Charcoal"
           },
           "eyes": {
             "shape": "Monolid",
@@ -765,12 +764,12 @@
         "023": {
           "person": {
             "age": 20,
-            "ethnicity": "Asian",
+            "ethnicity": "African",
             "body_shape": "Hourglass"
           },
           "hair": {
             "style": "Curly",
-            "main_color": "Brown"
+            "main_color": "Mustard"
           },
           "eyes": {
             "shape": "Almond",
@@ -780,7 +779,7 @@
         "024": {
           "person": {
             "age": 21,
-            "ethnicity": "African",
+            "ethnicity": "Mixed",
             "body_shape": "Slim"
           },
           "hair": {
@@ -799,8 +798,9 @@
             "body_shape": "Slim"
           },
           "hair": {
-            "style": "Spiky",
-            "main_color": "Gray"
+            "style": "Short Wavy",
+            "optional_color": "Gray",
+            "main_color": "Blonde"
           },
           "eyes": {
             "shape": "Almond",
