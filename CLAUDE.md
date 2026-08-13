@@ -36,7 +36,7 @@ bun run names          # bun scripts/generate-names/index.ts — gera name_lists
 bun run art   # bun scripts/generate-art/index.ts <slug> <male|female|flat> [-n NNN,...] [-s [N]] [-p] [-e] — gera retratos via IA no ComfyUI local; `-s` sem valor sorteia a seed e grava no portrait.json (veja seção abaixo)
 bun run copy           # pwsh scripts/copy.ps1 — copia o mod para a pasta local de mods do Stellaris
 bun run overwrite       # pwsh scripts/overwrite.ps1 — apaga e recopia o mod na pasta local de mods do Stellaris
-bun run publish-workshop -- [--metadata-only]   # bun scripts/publish-workshop/index.ts — publica no Steam Workshop via steamcmd (veja seção "Publicação no Steam Workshop")
+bun run publish-workshop -- [-m|--metadata-only]   # bun scripts/publish-workshop/index.ts — publica no Steam Workshop via steamcmd (veja seção "Publicação no Steam Workshop")
 ```
 
 - `copy`/`overwrite` são exclusivos de PowerShell (Windows) e operam sobre a pasta **modificada mais recentemente**
@@ -201,7 +201,7 @@ para publicação.
 
 ## Publicação no Steam Workshop
 
-`scripts/publish-workshop/` (comando `bun run publish-workshop -- [--metadata-only]`) publica o mod no Steam
+`scripts/publish-workshop/` (comando `bun run publish-workshop -- [-m|--metadata-only]`) publica o mod no Steam
 Workshop via `steamcmd`. `title` (campo `name` do `descriptor.mod`) e `description`
 (`steam-workshop/description.md` inteiro) são **sempre** enviados, em qualquer modo — todo publish mantém a
 descrição da Steam em sincronia com o arquivo, não só um modo dedicado. Dois modos:
@@ -209,7 +209,7 @@ descrição da Steam em sincronia com o arquivo, não só um modo dedicado. Dois
 - **Normal** (padrão): além de title/description, extrai a seção mais no topo de
   `steam-workshop/change-notes.md` (formato `## <versão>`, sempre a mais recente por convenção — novas entradas
   sempre entram no topo) como changenote da build, e publica o conteúdo do mod.
-- **`--metadata-only`**: só title/description, sem publicar conteúdo novo nem exigir changenote — atalho pra
+- **`-m` / `--metadata-only`**: só title/description, sem publicar conteúdo novo nem exigir changenote — atalho pra
   quando só a descrição mudou.
 
 Ambos os arquivos `.md` em `steam-workshop/` são Markdown de verdade (não BBCode) — `md-to-bbcode.ts`
@@ -231,8 +231,11 @@ exposta pelo `steamcmd`, só a versão single-language via VDF); sem sync autom�
 `package.json`/`descriptor.mod`/`README.md` (continua manual, ver "Metadados de release" acima); sem integração
 com o fluxo GitFlow/release.
 
-`node:util.parseArgs` é o padrão do projeto pra parsing de flags de CLI em scripts novos (em vez de parsing
-manual de `process.argv` ou uma lib externa) — `publish-workshop` é o primeiro a usar.
+**`commander` é o padrão do projeto pra CLI** (em vez de parsing manual de `process.argv` ou de
+`node:util.parseArgs`) — usado por `generate-art` e `publish-workshop`. Entrega de graça o que era código à mão:
+`--help`, `.choices()` validando posicional, `.conflicts()` declarando combinações inválidas de flags, e valor
+opcional (`-s [N]`, que o `parseArgs` não sabe fazer e foi o gatilho da troca). Convenção do help: cabeçalhos
+como o commander emite (inglês), descrições das flags em português.
 
 Detalhes completos (anatomia do VDF, formato exato de `change-notes.md`, escaping do formato Clausewitz-like do
 VDF): `docs/pipeline-publish-workshop.md`.

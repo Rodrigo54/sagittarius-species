@@ -1,10 +1,10 @@
 import { $ } from 'bun';
+import { Command } from 'commander';
 import { existsSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import { createInterface } from 'node:readline/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseArgs } from 'node:util';
 import { comTimestamp, extrairPrimeiraSecao, gravarTimestamp } from './change-notes';
 import { parseDescriptorMod } from './descriptor';
 import { markdownParaBBCode } from './md-to-bbcode';
@@ -77,12 +77,18 @@ async function main() {
     throw new Error('publish-workshop só roda no Windows (depende do steamcmd.exe baixado por "bun run setup").');
   }
 
-  const { values } = parseArgs({
-    options: {
-      'metadata-only': { type: 'boolean', default: false },
-    },
-  });
-  const modoMetadataOnly = values['metadata-only'] === true;
+  const opcoes = new Command()
+    .name('bun run publish-workshop --')
+    .description(
+      'Publica o mod no Steam Workshop via steamcmd. Título e descrição são sempre sincronizados com steam-workshop/description.md.'
+    )
+    .option(
+      '-m, --metadata-only',
+      'Só título/descrição: não publica conteúdo novo nem exige changenote em change-notes.md.'
+    )
+    .parse()
+    .opts();
+  const modoMetadataOnly = opcoes.metadataOnly === true;
 
   if (!existsSync(CAMINHO_STEAMCMD)) {
     throw new Error(`steamcmd não encontrado em ${CAMINHO_STEAMCMD}. Rode "bun run setup" primeiro.`);
