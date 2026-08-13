@@ -14,7 +14,7 @@
       },
       "torso": {
         "state": "CroppedSleeved",
-        "template": "cropped lightweight fish-scale armor top in <torso.primary_color>, flexible scale-mail construction, overlapping fish scales linked like chainmail rather than rigid plates, long <torso.primary_color> fish-scale sleeves covering the chest, shoulders and arms, small starfish-shaped ornament centered on the chest, bare toned midriff with visible abs, high-waisted fish-scale waistband in <torso.secondary_color> sitting high on the torso, waistband visible within frame"
+        "template": "cropped lightweight <torso.primary_color>-colored fish-scale top, thin flexible scale mesh hugging the body, small closely overlapping iridescent fish scales like real fish skin, soft and pliable rather than rigid plates, long <torso.primary_color>-colored fish-scale sleeves flush with the shoulders, covering the chest, shoulders and arms, small starfish-shaped ornament centered on the chest, bare toned midriff with visible abs, high-waisted pale gold fish-scale waistband, wide band of overlapping scales dipping to a downward point at the center of the waist in a V shape, below the waistband a <torso.secondary_color>-colored scaled fish tail, waistband visible within frame"
       }
     },
     "modelo": {
@@ -23,14 +23,18 @@
     },
     "male": {
       "person": {
-        "gender": "Male"
+        "gender": "Male",
+        "extra": "flat masculine chest, broad flat pectoral muscles, square male torso"
+      },
+      "torso": {
+        "extra": "the scale top lying flat across the chest, following the flat plane of the pectorals"
       },
       "referenceImage": [
         "assets/portraits/ssm_mermaids/reference_male_3.png"
       ],
       "variantes": {
         "001": {
-          "seed": 84221515155,
+          "seed": 2665609646,
           "person": {
             "age": 18,
             "ethnicity": "Caucasian",
@@ -66,7 +70,8 @@
           "torso": {
             "primary_color": "Orange",
             "secondary_color": "Emerald"
-          }
+          },
+          "seed": 1593413918
         },
         "003": {
           "person": {
@@ -260,8 +265,7 @@
           "torso": {
             "primary_color": "Ruby",
             "secondary_color": "Orange"
-          },
-          "seed": 2199342068
+          }
         },
         "013": {
           "person": {
