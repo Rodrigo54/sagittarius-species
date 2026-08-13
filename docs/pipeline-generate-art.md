@@ -11,6 +11,28 @@ pode travar a máquina no meio de outra coisa. Claude pode editar `portrait.json
 `--export-prompt` (não toca a GPU) e validações pontuais já combinadas explicitamente na conversa — mas
 enfileirar geração de verdade no ComfyUI é decisão do Rodrigo, executada por ele.
 
+## Interface de linha de comando
+
+```
+bun run art <slug> <male|female|flat> [options]
+
+  -n, --variante <NNN>   variante(s) a gerar; repetível e aceita lista por vírgula
+                         (`-n 001,004 -n 007`). Padrão: todas as declaradas
+  -s, --seed [N]         seed desta execução; **sem valor, sorteia uma e grava** no portrait.json
+  -p, --promote          promove o lote do gênero de staging pra assets/portraits/<slug>/
+  -e, --export-prompt    imprime os prompts sem enfileirar nada no ComfyUI (não gasta GPU)
+  -h, --help             mostra a ajuda
+```
+
+O parsing usa **`commander`** (padrão de CLI do repositório): os posicionais são declarados com `.argument()`,
+o gênero é validado por `.choices()`, e as combinações inválidas de flags são declaradas com `.conflicts()` —
+`--promote` com `--variante`, `--promote` com `--export-prompt`, `--seed` com `--export-prompt`. A única
+validação que sobra em código é "`--seed` exige exatamente uma variante em `--variante`", porque depende da
+quantidade, não da presença das flags. `-v` fica deliberadamente livre pra um futuro `--verbose`/`--version`.
+
+`--variante` acumula por repetição em vez de ser variádico (`<NNN...>`) de propósito: variádico engoliria os
+posicionais escritos depois da flag.
+
 ## Peças do pipeline
 
 - **`scripts/portrait-schema/`** — schema `zod` (`schema.ts`) que descreve o `portrait.json` **inteiro**
@@ -39,18 +61,34 @@ enfileirar geração de verdade no ComfyUI é decisão do Rodrigo, executada por
   imagem de `referenceImage` (consistência visual, sem ControlNet/img2img/denoise), remoção de fundo com canal
   alfa. `scripts/generate-art/workflow.ts` clona o template e injeta o texto pronto, seed, `steps`/`cfg`/
   resolução e a cadeia de referência — os dois `CLIPTextEncode` não compõem nada internamente.
+  **A ordem de `referenceImage` importa** (`workflow.ts`, montagem da cadeia): cada imagem gera um node
+  `ReferenceLatent` novo que recebe a *conditioning já processada pela anterior* como entrada (`ReferenceLatent(N)`
+  → `conditioning: ReferenceLatent(N-1)`), empilhando na lista `reference_latents` — não é uma mistura simétrica
+  das N imagens, é uma cadeia onde a **primeira imagem entra mais cedo e observadamente domina mais** o
+  resultado que as seguintes (confirmado em teste real com `ssm_mermaids`, duas referências de paleta bem
+  diferente — a primeira da lista puxou mais o resultado). Mesma dinâmica de "o que vem primeiro pesa mais" que
+  já vale pra texto (`docs/history/2026-08-08-generate-art-schema-proprio.md`), só que aplicada a imagem: ao
+  declarar mais de uma referência por gênero, a ordem é decisão de peso relativo, não uma lista arbitrária —
+  coloque a referência que deve dominar em primeiro lugar.
 - **`geracaoArt` no `portrait.json`**: `base` (`tipo`, `torso`, `eyes`/`hair`/`person` quando fixos pra toda
   espécie, `extra_prompt`), `modelo` (`variant`: `"base"` ou `"distilled"`; `steps`/`cfg`/`aspectRatio` — sem
   checkpoint/LoRA/sampler, ver `scripts/portrait-schema/schema.ts`), `male`/`female`/`flat` (`referenceImage`
   como **lista** de imagens de referência/conceito por gênero + `variantes` nomeadas `"001"`..`"NNN"`, uma por
   indivíduo, contagem batendo exato com `counts.<gênero>` — conferido pelo schema via `.superRefine`). Cada
-  variante aceita ainda um `seed` opcional (`noise_seed` do ComfyUI) — override manual, preenchido a posteriori
-  (nunca decidido a priori) depois de gostar de um resultado gerado, pra fixá-lo permanentemente em vez de
-  depender de lembrar `--seed` a cada execução. Precedência em `generate-art/index.ts` (`resolverSeed`,
+  variante aceita ainda um `seed` opcional (`noise_seed` do ComfyUI): a **última seed usada** naquela variante,
+  gravada automaticamente por `--seed` sem valor (ver abaixo) ou colada à mão. Gravar é fixar — dali em diante,
+  toda execução sem `--seed` reproduz aquela imagem. Precedência em `generate-art/index.ts` (`resolverSeed`,
   `generate-art/seed.ts`): `--seed` da CLI → `seed` da variante no `portrait.json` → seed determinística
   (`seedDeterministica`, hash de espécie+gênero+variante, o piso padrão quando nenhum dos dois está presente).
+- **`--seed` sem valor** — sorteia uma seed (mesma faixa de 32 bits da determinística), gera a imagem e grava o
+  número em `variantes.NNN.seed` **depois** de o PNG existir em staging: se o ComfyUI falhar ou a execução for
+  interrompida, o `portrait.json` não é tocado. Rodar de novo é o *reroll* da variante. A escrita parte do texto
+  cru do arquivo (`generate-art/persistir-seed.ts`), nunca do objeto validado pelo zod — que reconstrói as chaves
+  na ordem do *schema* e reordenaria o `portrait.json` inteiro; o diff sai com duas ou três linhas.
+  Como `--seed` exige exatamente uma variante em `--variante`, cada execução grava no máximo uma seed.
 - **`--export-prompt`** — monta e imprime o prompt (positivo + negativo) de uma ou mais variantes sem enfileirar
-  nada no ComfyUI, ciclo de debug instantâneo sem custo de GPU.
+  nada no ComfyUI, ciclo de debug instantâneo sem custo de GPU. Incompatível com `--seed` (nada é gerado, então
+  não há seed a registrar) e com `--promote`.
 - Skill dedicada pra preencher `geracaoArt` de uma espécie via entrevista: `.claude/skills/gerar-geracao-arte/`
   (`/gerar-geracao-arte`).
 

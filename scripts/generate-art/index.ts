@@ -1,3 +1,4 @@
+import { Argument, Command, InvalidArgumentError, Option } from 'commander';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { PASTA_ASSETS, PASTA_RAIZ } from '../converter';
@@ -6,6 +7,7 @@ import { aguardarConclusao, baixarImagem, enfileirar, enviarImagemDeReferencia }
 import { mesclarCampos } from './merge';
 import type { GeneroAlvo, GeracaoArtModelo } from '../portrait-schema';
 import { BASE_FIXO } from './base';
+import { gravarSeed } from './persistir-seed';
 import { promoverEspecie } from './promote';
 import { montarPrompts } from './prompt-builder';
 import { resolverSeed, seedDeterministica, type OrigemSeed } from './seed';
@@ -34,10 +36,12 @@ const GENEROS_VALIDOS: readonly GeneroAlvo[] = ['male', 'female', 'flat'];
 interface Argumentos {
   slug: string;
   genero: GeneroAlvo;
-  /** Lista de índices explícitos (`--variante=001,004,007`) — undefined =
+  /** Lista de índices explícitos (`--variante 001,004,007`) — undefined =
    * todas as variantes declaradas. */
   variantes?: string[];
-  seed?: number;
+  /** `'random'` quando `--seed` vem sem valor: sorteia uma seed e a grava no
+   * `portrait.json` da variante depois de gerar. */
+  seed?: number | 'random';
   promote: boolean;
   /** Monta e imprime o prompt (positivo + negativo) de cada variante pedida,
    * sem enfileirar nada no ComfyUI — ciclo de debug instantâneo pra
@@ -45,69 +49,96 @@ interface Argumentos {
   exportPrompt: boolean;
 }
 
-function parseArgs(argv: string[]): Argumentos {
-  const [slug, genero, ...resto] = argv;
-  if (!slug || !genero) {
-    console.error(
-      'Uso: bun run generate-art <slug> <male|female|flat> [--variante=NNN[,NNN,...]] [--seed=N] [--promote] [--export-prompt]'
-    );
-    process.exit(1);
+/** Acumula os índices de `--variante` de todas as ocorrências da flag,
+ * aceitando lista por vírgula em cada uma (`-n 001,004 -n 007`). Repetição em
+ * vez de variádico (`<NNN...>`) de propósito: variádico engoliria os
+ * posicionais que viessem depois da flag. */
+function coletarVariantes(valor: string, acumulado: string[] = []): string[] {
+  const itens = valor
+    .split(',')
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0);
+  if (itens.length === 0) {
+    throw new InvalidArgumentError('esperava pelo menos um índice de variante (ex.: 001).');
   }
-  if (!GENEROS_VALIDOS.includes(genero as GeneroAlvo)) {
-    console.error(`Gênero "${genero}" inválido — use male, female ou flat.`);
-    process.exit(1);
+  for (const item of itens) {
+    if (!/^\d+$/.test(item)) {
+      throw new InvalidArgumentError(`"${item}" não é um índice numérico de variante.`);
+    }
+  }
+  return [...acumulado, ...itens.map((item) => item.padStart(3, '0'))];
+}
+
+function parseArgumentos(): Argumentos {
+  const programa = new Command()
+    .name('bun run art')
+    .description(
+      'Gera retratos de espécie via IA no ComfyUI local (Flux.2 Klein), a partir da receita "geracaoArt" do portrait.json.'
+    )
+    .addArgument(new Argument('<slug>', 'Espécie a gerar (nome da pasta em assets/portraits/).'))
+    .addArgument(new Argument('<genero>', 'Bloco de gênero do geracaoArt a usar.').choices([...GENEROS_VALIDOS]))
+    .option(
+      '-n, --variante <NNN>',
+      'Variante(s) a gerar; repetível e aceita lista por vírgula. Padrão: todas as declaradas.',
+      coletarVariantes
+    )
+    .addOption(
+      new Option(
+        '-s, --seed [N]',
+        'Seed desta execução; sem valor, sorteia uma e grava no portrait.json da variante.'
+      ).conflicts('exportPrompt')
+    )
+    .addOption(
+      new Option('-p, --promote', 'Promove o lote do gênero de staging para assets/portraits/<slug>/.').conflicts([
+        'variante',
+        'exportPrompt',
+      ])
+    )
+    .option('-e, --export-prompt', 'Imprime os prompts sem enfileirar nada no ComfyUI (não gasta GPU).')
+    .parse();
+
+  const [slug, genero] = programa.processedArgs as [string, GeneroAlvo];
+  const opcoes = programa.opts();
+  const variantes: string[] | undefined = opcoes.variante;
+
+  // `--seed` sem valor chega como `true` (a opção declara valor opcional) — é
+  // o pedido de sorteio; com valor, só dígitos servem pro noise_seed.
+  let seed: number | 'random' | undefined;
+  if (opcoes.seed === true) {
+    seed = 'random';
+  } else if (opcoes.seed !== undefined) {
+    // `Number.isSafeInteger` além do regex: dígitos demais passariam por
+    // "número válido" e chegariam ao ComfyUI já arredondados.
+    const numero = Number(opcoes.seed);
+    if (!/^\d+$/.test(String(opcoes.seed)) || !Number.isSafeInteger(numero)) {
+      programa.error(`error: --seed aceita um inteiro não-negativo ou nenhum valor (recebido "${opcoes.seed}").`);
+    }
+    seed = numero;
   }
 
-  let variantes: string[] | undefined;
-  let seed: number | undefined;
-  let promote = false;
-  let exportPrompt = false;
-
-  for (const arg of resto) {
-    if (arg === '--promote') {
-      promote = true;
-      continue;
-    }
-    if (arg === '--export-prompt') {
-      exportPrompt = true;
-      continue;
-    }
-    const casaVariante = arg.match(/^--variante=([\d,]+)$/);
-    if (casaVariante) {
-      variantes = casaVariante[1]!.split(',').map((n) => n.padStart(3, '0'));
-      continue;
-    }
-    const casaSeed = arg.match(/^--seed=(\d+)$/);
-    if (casaSeed) {
-      seed = Number(casaSeed[1]);
-      continue;
-    }
-    console.error(`Argumento desconhecido: "${arg}"`);
-    process.exit(1);
-  }
-
+  // As demais combinações inválidas são declaradas em `.conflicts()` acima;
+  // esta depende da quantidade de variantes, não só da presença das flags.
   if (seed !== undefined && variantes?.length !== 1) {
-    console.error(
-      '--seed só faz sentido junto com --variante=NNN de uma única variante — sobrescreve, só nesta execução, a seed dela (customizada no portrait.json ou determinística).'
+    programa.error(
+      'error: --seed só faz sentido junto com --variante de uma única variante — sobrescreve, só nesta execução, a seed dela (customizada no portrait.json ou determinística).'
     );
-    process.exit(1);
-  }
-  if (promote && variantes !== undefined) {
-    console.error('--promote não aceita --variante junto — promove sempre o lote inteiro do gênero.');
-    process.exit(1);
-  }
-  if (promote && exportPrompt) {
-    console.error('--promote e --export-prompt não fazem sentido juntos — promote não monta prompt nenhum.');
-    process.exit(1);
   }
 
-  return { slug, genero: genero as GeneroAlvo, variantes, seed, promote, exportPrompt };
+  return {
+    slug,
+    genero,
+    variantes,
+    seed,
+    promote: opcoes.promote === true,
+    exportPrompt: opcoes.exportPrompt === true,
+  };
 }
 
 /** Rótulo de log pra cada origem possível de `resolverSeed` — só cosmético,
  * sem efeito na geração em si. */
 const ROTULO_ORIGEM_SEED: Record<OrigemSeed, string> = {
   cli: '--seed',
+  aleatoria: 'sorteada',
   config: 'customizada',
   deterministica: 'determinística',
 };
@@ -139,7 +170,7 @@ async function gerarVariante(
 }
 
 async function main(): Promise<void> {
-  const { slug, genero, variantes: variantesPedidas, seed, promote, exportPrompt } = parseArgs(process.argv.slice(2));
+  const { slug, genero, variantes: variantesPedidas, seed, promote, exportPrompt } = parseArgumentos();
 
   const pastaEspecieAssets = join(PASTA_PORTRAITS_ASSETS, slug);
   // A FORMA de portrait.json já foi validada pelo zod dentro de lerConfig —
@@ -149,7 +180,7 @@ async function main(): Promise<void> {
   // esta espécie (nem toda espécie declara os três).
   const config = await lerConfig(pastaEspecieAssets);
   if (!config.geracaoArt) {
-    console.error(`${slug}: portrait.json não declara "geracaoArt" — nada a gerar (bun run generate-art).`);
+    console.error(`${slug}: portrait.json não declara "geracaoArt" — nada a gerar (bun run art).`);
     process.exit(1);
   }
   if (!config.geracaoArt[genero]) {
@@ -229,6 +260,14 @@ async function main(): Promise<void> {
       modelo,
       imagensReferenciaEnviadas.length > 0 ? imagensReferenciaEnviadas : undefined
     );
+
+    // Só depois de o PNG existir em disco: se o ComfyUI falhar no meio (ou o
+    // usuário interromper), o portrait.json não é tocado e não sobra seed
+    // apontando pra imagem nenhuma.
+    if (origemSeed === 'aleatoria') {
+      await gravarSeed(pastaEspecieAssets, genero, chave, seedFinal);
+      console.log(`[${slug}/${genero}/${chave}] seed sorteada: ${seedFinal} → gravada em portrait.json`);
+    }
   }
 
   console.log(`Concluído: ${chaves.length} imagem(ns) gerada(s) em ${pastaStagingGenero}`);

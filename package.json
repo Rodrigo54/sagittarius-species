@@ -27,6 +27,7 @@
     "typescript": "^7.0.2"
   },
   "dependencies": {
+    "commander": "^15.0.0",
     "jomini": "^0.9.1",
     "lodash": "^4.17.21",
     "marked": "^18.0.9",

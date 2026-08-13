@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { resolverSeed, seedDeterministica } from './seed';
+import { resolverSeed, seedDeterministica, sortearSeed } from './seed';
 
 describe('seedDeterministica', () => {
   test('é estável pra mesma espécie+gênero+variante', () => {
@@ -35,5 +35,33 @@ describe('resolverSeed', () => {
 
   test('--seed da CLI e seed customizada presentes ao mesmo tempo: --seed da CLI sempre vence', () => {
     expect(resolverSeed(999, 12345, 42)).toEqual({ seed: 999, origem: 'cli' });
+  });
+
+  test('--seed sem valor: sorteia e marca a origem que dispara a gravação', () => {
+    const { seed, origem } = resolverSeed('random', undefined, 42);
+    expect(origem).toBe('aleatoria');
+    expect(seed).not.toBe(42);
+  });
+
+  test('--seed sem valor vence a seed customizada (é o reroll da variante)', () => {
+    const { seed, origem } = resolverSeed('random', 12345, 42);
+    expect(origem).toBe('aleatoria');
+    expect(seed).not.toBe(12345);
+  });
+});
+
+describe('sortearSeed', () => {
+  test('sempre produz um uint32, a mesma faixa da determinística', () => {
+    for (let i = 0; i < 1000; i++) {
+      const seed = sortearSeed();
+      expect(Number.isInteger(seed)).toBe(true);
+      expect(seed).toBeGreaterThanOrEqual(0);
+      expect(seed).toBeLessThanOrEqual(0xffffffff);
+    }
+  });
+
+  test('não repete o mesmo número a cada chamada', () => {
+    const sorteios = new Set(Array.from({ length: 100 }, () => sortearSeed()));
+    expect(sorteios.size).toBeGreaterThan(90);
   });
 });
