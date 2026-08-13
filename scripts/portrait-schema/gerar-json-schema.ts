@@ -15,8 +15,8 @@ import {
   FORMAS_OLHO_DESCRICOES,
   MODOS_ENQUADRAMENTO,
   MODOS_ENQUADRAMENTO_DESCRICOES,
-  TIPOS,
-  TIPOS_DESCRICOES,
+  ARQUETIPOS,
+  ARQUETIPOS_DESCRICOES,
 } from './vocabulario';
 
 /** Gera `portrait.schema.json` a partir do schema `zod` (`z.toJSONSchema()`
@@ -34,7 +34,7 @@ const CAMINHO_SAIDA = join(import.meta.dir, 'portrait.schema.json');
 const VOCABULARIOS_COM_DESCRICAO: ReadonlyArray<{ valores: readonly string[]; descricoes: Record<string, string> }> = [
   { valores: ESTILOS_CABELO, descricoes: ESTILOS_CABELO_DESCRICOES },
   { valores: FORMAS_OLHO, descricoes: FORMAS_OLHO_DESCRICOES },
-  { valores: TIPOS, descricoes: TIPOS_DESCRICOES },
+  { valores: ARQUETIPOS, descricoes: ARQUETIPOS_DESCRICOES },
   { valores: ESTADOS_TORSO, descricoes: ESTADOS_TORSO_DESCRICOES },
   { valores: FORMAS_CORPO, descricoes: FORMAS_CORPO_DESCRICOES },
   { valores: ANCORAS_VERTICAIS, descricoes: ANCORAS_VERTICAIS_DESCRICOES },

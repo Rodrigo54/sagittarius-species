@@ -15,32 +15,32 @@ ordem mística ou entidade cósmica, tons dominantes roxo, violeta e preto com m
 `portrait.json` já tem `geracaoArt` configurado, no schema/pipeline atual (Flux.2 Klein —
 `scripts/portrait-schema/`, `docs/history/2026-08-08-generate-art-schema-proprio.md`):
 
-- `tipo`: `{ value: "Human", description: "mystical order warrior, cosmic sentinel aesthetic, glowing purple
-  eyes, no visible pupils" }`.
+- `species`: `{ archetype: "Human", template: "<species.archetype>, mystical order warrior, cosmic sentinel
+  aesthetic, glowing purple eyes, no visible pupils" }`.
 - `eyes.color`: `"Violet"` (fixo — é o traço de identidade mais reconhecível da espécie, por isso vive como campo
   estruturado dedicado, não só texto).
-- `torso`: `{ state: "FullyCovered", description: "dark purple-violet ornate armor with bronze and gold trim,
+- `torso`: `{ state: "FullyCovered", template: "dark purple-violet ornate armor with bronze and gold trim,
   purple star-shaped mineral gem embedded in chest, faceted raw crystal cut with sharp angular multi-pointed star
   facets, geometric star-cut gemstone with visible facet edges and depth, purple energy veins spreading across
-  the armor from the crystal" }`.
-- `extra_prompt` (nível `base`): positivo `"(no helmet, no hood, no head covering, full head of hair:1.2), face
-  fully visible"`; negativo `"(circular orb, round gem:1.2), sphere gem, ball-shaped gem, glowing orb, magic orb,
-  flat painted symbol, concentric rings, hood, cloak, cape"` (exclui explicitamente as leituras erradas de gema
-  que apareceram em testes).
-- `extra_prompt.positive` (nível `male`): `"strong masculine face, square jawline, defined brow ridge, broad
-  shoulders"`.
+  the armor from the crystal" }`. Template **literal**, sem placeholder: a armadura é identidade fixa da espécie,
+  nenhuma cor varia por indivíduo aqui.
+- `hair.extra` (nível `base`): `"(no helmet, no hood, no head covering, full head of hair:1.2), face fully
+  visible"`.
+- `person.extra` (nível `male`): `"strong masculine face, square jawline, defined brow ridge, broad shoulders"`.
+- O negativo específico da espécie (leituras erradas da gema, capuz/capa) não vive mais no `portrait.json` — ver
+  "Exclusões negativas afinadas para esta espécie", no fim deste arquivo.
 - `modelo`: `{ variant: "distilled", steps: 4, cfg: 1, aspectRatio: "4:5" }` — canvas de geração efetivo 912×1152
-  (ver `scripts/generate-art/resolution.ts`); variante "distilled" quer dizer que o negativo acima é **descartado**
-  pelo grafo (CFG=1 zera a guidance negativa via `ConditioningZeroOut` — ver "Armadilhas conhecidas" na skill
-  `gerar-geracao-arte`), então quem carrega peso de verdade é o positivo.
+  (ver `scripts/generate-art/resolution.ts`); "distilled" (o padrão do pipeline) quer dizer que o negativo é
+  **descartado** pelo grafo (CFG=1 zera a guidance negativa via `ConditioningZeroOut` — ver "Armadilhas
+  conhecidas" na skill `gerar-geracao-arte`), então quem carrega peso de verdade é o positivo.
 
 Os prompts abaixo documentam as imagens de referência/conceito (`reference_male_1.png`, `reference_male_2.png`,
 `reference_female.png`) usadas por esse `geracaoArt` — cada uma entra numa cadeia de `ReferenceLatent` (não
 ControlNet/img2img: sem exigência de pose esquelética visível, sem denoise, sem crop pro canvas de geração — a
 referência é só escalada independentemente pra ~1 megapixel via `ImageScaleToTotalPixels`, ver
 `scripts/generate-art/workflow.ts`). Cada mudança de prompt aqui deveria ser espelhada no `geracaoArt` acima (e
-vice-versa) pra documentação e configuração não divergirem. Use `bun run generate-art ssm_astral male
---variante=001 --export-prompt` (ou `female`) pra conferir o texto composto de verdade sem gastar GPU.
+vice-versa) pra documentação e configuração não divergirem. Use `bun run art ssm_astral male
+-n 001 -e` (ou `female`) pra conferir o texto composto de verdade sem gastar GPU.
 
 ## Prompt de referência (Midjourney) — Male
 
@@ -102,3 +102,17 @@ bordas — mesmo ajuste feito no prompt masculino.
   o trim de `female/019.png` que era usado antes — `geracaoArt.female.referenceImage` já aponta pra ela (antes
   apontava pra `reference_male.png`/`reference_male_1.png`, decisão revertida quando essa referência feminina
   ficou disponível).
+
+## Exclusões negativas afinadas para esta espécie
+
+Texto de prompt **negativo** que foi afinado durante o desenvolvimento da espécie e resolveu problemas reais de
+geração (a gema estrelada saindo esférica, o capuz/capa aparecendo por cima da armadura):
+
+```prompt
+(circular orb, round gem:1.2), sphere gem, ball-shaped gem, glowing orb, magic orb, flat painted symbol, concentric rings, hood, cloak, cape
+```
+
+Não fica no `portrait.json`: negativo por espécie não existe mais no schema, porque o padrão do pipeline é a
+variante `distilled` do modelo, onde todo negativo é descartado por `ConditioningZeroOut` antes de chegar ao grafo
+(CFG=1 zera a guidance negativa de qualquer forma). O texto está registrado aqui para não se perder — se algum dia
+esta espécie voltar a rodar em `variant: "base"` e o problema reaparecer, é daqui que ele volta.

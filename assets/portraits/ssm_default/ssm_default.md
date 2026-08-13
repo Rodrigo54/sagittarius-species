@@ -14,11 +14,12 @@ contraponto visual às espécies mais estilizadas/fantásticas (elfos, moluscos,
 
 `geracaoArt` no `portrait.json` (pipeline atual, Flux.2 Klein — ver `scripts/portrait-schema/`):
 
-- `tipo`: `{ value: "Human", description: "futuristic sci-fi space marine" }`.
-- `torso`: `{ state: "FullyCovered", description: "navy blue metallic plating, science fiction astronaut
-  uniform, space marine armor, smooth flat white chest armor plate, gold metallic trim details, gold accents" }`.
-- `extra_prompt.positive` (nível `base`): `"(no helmet, no hood, no head covering, full head of hair:1.2), face
-  fully visible"`.
+- `species`: `{ archetype: "Human", template: "<species.archetype>, futuristic sci-fi space marine" }`.
+- `torso`: `{ state: "FullyCovered", template: "navy blue metallic plating, science fiction astronaut
+  uniform, space marine armor, smooth flat white chest armor plate, gold metallic trim details, gold accents" }`
+  — template literal, sem placeholder: as cores da armadura são identidade fixa da espécie.
+- `hair.extra` (nível `base`): `"(no helmet, no hood, no head covering, full head of hair:1.2), face fully
+  visible"`.
 - `modelo`: `{ variant: "distilled", steps: 4, cfg: 1, aspectRatio: "2:3" }` — canvas de geração efetivo
   832×1248 (ver `scripts/generate-art/resolution.ts`); variante "distilled" descarta o negativo inteiro (CFG=1
   zera a guidance negativa via `ConditioningZeroOut`), então praticamente todo o controle fino mora no positivo.
@@ -56,27 +57,27 @@ Prompt para gerar `reference_female.png`, com base na variante `female.001` do `
 - Mesmos parâmetros de estilo/luz/fundo do prompt masculino, pelos mesmos motivos (fidelidade ao `--style raw`,
   imagem vira o `referenceImage` de todo o bloco `female`).
 
-## `--export-prompt`: conferir o texto composto sem gastar GPU
+## `-e/--export-prompt`: conferir o texto composto sem gastar GPU
 
-`bun run generate-art ssm_default male --variante=001 --export-prompt` (ou `female`) monta e imprime o prompt
+`bun run art ssm_default male -n 001 -e` (ou `female`) monta e imprime o prompt
 final (positivo + negativo) exatamente como vai pro ComfyUI, sem enfileirar nada — útil pra conferir que
-`tipo`/`torso`/`extra_prompt` estão compondo do jeito esperado antes de rodar um teste de verdade.
+`species`/`torso`/`extra` estão compondo do jeito esperado antes de rodar um teste de verdade.
 
 ## Reforços conhecidos por variante
 
-Algumas variantes têm `extra_prompt.positive` específico, além do que `base`/`male`/`female` já declaram:
+Algumas variantes têm `extra` de seção específico, além do que `base`/`male`/`female` já declaram (`extra`
+concatena entre os níveis, não substitui):
 
-- **`male/001` e `male/002`**: ambas `"(young boy), flat masculine chest, male chest armor, muscular male
-  torso"` — ajuste pontual de gerações específicas (o histórico do reforço de `male/002` era outro, ligado à cor
+- **`male/001` e `male/002`**: `person.extra: "(young boy)"` + `torso.extra: "flat masculine chest, male chest
+  armor, muscular male torso"` — ajuste pontual de gerações específicas (o histórico do reforço de `male/002`
+  era outro, ligado à cor
   de cabelo rosa fazendo o gênero "balançar" pra mais feminino nos testes originais — ver bug #10 em
   `docs/history/2026-07-28-generate-art-v1.md` — mas o texto atual do campo já não reflete mais esse reforço
   específico).
-- **Reforço de etnia não é mais manual.** Até pouco tempo atrás, variantes `ethnicity: "African"` precisavam de
-  `extra_prompt.positive` manual (`"(dark skin, deep brown skin tone, African facial features:1.3)"`) — etnia é
-  atributo de área pequena do rosto, perde fácil sem reforço com peso, e ninguém tinha adicionado isso pras
-  outras etnias (`Asian`/`Pacific` saíam com traço fraco/nenhum). Agora o reforço é **automático**, gerado a
-  partir só de `person.ethnicity` (`TEXTO_ETNIA` em `scripts/generate-art/prompt-builder.ts`, cobre as 7 etnias
-  do vocabulário) — os `extra_prompt` manuais que só existiam pra isso foram removidos do `portrait.json`
+- **Reforço de etnia não é manual.** Etnia é atributo de área pequena do rosto e perde fácil sem reforço com
+  peso; o reforço é **automático**, gerado a partir só de `person.ethnicity` (entrada `person.ethnicity` em
+  `vocabulary`, no `scripts/generate-art/base.json`, cobrindo as 7 etnias do vocabulário) e posicionado cedo no
+  prompt pela `order` — os reforços manuais que só existiam pra isso foram removidos do `portrait.json`
   (`female/008` manteve só `"(blonde hair:1.3)"`, não relacionado a etnia). `male/017`, que antes era uma
   exceção documentada (`African` sem o reforço manual), deixou de ser exceção — toda variante `African` recebe o
   mesmo reforço agora, sem precisar de nada extra no JSON.

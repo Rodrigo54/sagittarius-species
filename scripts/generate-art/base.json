@@ -1,7 +1,106 @@
 {
-  "style": "(masterpiece), (extremely intricate:1.1), best quality, highly detailed, (AAA sci-fi video game character render, semi-stylized 3D CGI character art, sci-fi strategy game concept art:1.4), painterly digital CGI rendering, clean detailed sci-fi character render, realistic proportions, digital painting, (not photorealistic, not a real photograph, not realistic skin texture:1.2), not anime, not cartoon, not chibi",
-  "view": "medium close-up portrait shot, head and upper torso visible, waist-up framing, subject positioned close to the camera and filling most of the frame vertically, eye-level camera angle, plain solid white background, pure white backdrop, sharp focus, (flat even lighting, shadowless, minimal shading, soft diffused front lighting, no shadows on face or body:1.4), evenly lit from the front, no dramatic lighting, no rim light, no harsh shadows",
-  "pose": "confident stance, shoulders squared to the camera, arms relaxed at the sides, facing the camera",
-  "expression": "calm neutral expression, relaxed face, soft friendly gaze, closed-mouth expression, no smile, neutral mouth, approachable, looking directly at the camera",
-  "negative": "lowres, worst quality, low quality, normal quality, jpeg artifacts, blurry, deformed, disfigured, mutated, bad anatomy, malformed limbs, extra limbs, extra arms, extra legs, missing arms, missing legs, extra fingers, fewer digits, missing fingers, fused fingers, too many fingers, mutated hands, poorly drawn hands, poorly drawn feet, bad hands, bad feet, long neck, gross proportions, bad proportions, floating limbs, disconnected limbs, amputation, cloned face, extra digit, poorly drawn face, ugly face, cross-eyed, asymmetric eyes, deformed eyes, bad eyes, marks on face, skin spots, acnes, skin blemishes, out of frame, body out of frame, tilted head, facing away, multiple people, multiple heads, duplicate, helmet, full-face helmet, visor, motorcycle helmet, face covering, mask covering face, hat, cat ears, wings, repeating hair, beard, facial hair, tattoo, open mouth, big smile, wide smile, toothy grin, exaggerated smile, teeth showing, laughing, grinning, black and white, monochrome, grayscale, weird colors, glossy, dark, shadows, sketches, video game, photoshop, tiling, busy background, cluttered background, nsfw, nipples, text, signature, watermark, error, hands in shot, (photorealistic, photograph, photo, realistic photography, real person, real human skin, skin pores, DSLR, film grain:1.3), nipple armor, nipple plate, chest armor bumps, protruding chest armor, anatomically shaped breast armor, chest cups, NASA logo, real world logo, real flag, national flag, country flag, real world insignia, real military insignia, brand logo, trademark, real organization emblem, meatball logo, full body, full length shot, legs visible, feet visible, shoes visible, wide shot, long shot, distant view, small subject, subject far from camera"
+  "fixed": {
+    "style": "(masterpiece), (extremely intricate:1.1), best quality, highly detailed, (AAA sci-fi video game character render, semi-stylized 3D CGI character art, sci-fi strategy game concept art:1.4), painterly digital CGI rendering, clean detailed sci-fi character render, realistic proportions, digital painting, (not photorealistic, not a real photograph, not realistic skin texture:1.2), not anime, not cartoon, not chibi",
+    "view": "medium close-up portrait shot, head and upper torso visible, waist-up framing, subject positioned close to the camera and filling most of the frame vertically, eye-level camera angle, plain solid white background, pure white backdrop, sharp focus, (flat even lighting, shadowless, minimal shading, soft diffused front lighting, no shadows on face or body:1.4), evenly lit from the front, no dramatic lighting, no rim light, no harsh shadows",
+    "pose": "confident stance, shoulders squared to the camera, arms relaxed at the sides, facing the camera",
+    "expression": "calm neutral expression, relaxed face, soft friendly gaze, closed-mouth expression, no smile, neutral mouth, approachable, looking directly at the camera",
+    "negative": "lowres, worst quality, low quality, normal quality, jpeg artifacts, blurry, deformed, disfigured, mutated, bad anatomy, malformed limbs, extra limbs, extra arms, extra legs, missing arms, missing legs, extra fingers, fewer digits, missing fingers, fused fingers, too many fingers, mutated hands, poorly drawn hands, poorly drawn feet, bad hands, bad feet, long neck, gross proportions, bad proportions, floating limbs, disconnected limbs, amputation, cloned face, extra digit, poorly drawn face, ugly face, cross-eyed, asymmetric eyes, deformed eyes, bad eyes, marks on face, skin spots, acnes, skin blemishes, out of frame, body out of frame, tilted head, facing away, multiple people, multiple heads, duplicate, helmet, full-face helmet, visor, motorcycle helmet, face covering, mask covering face, hat, cat ears, wings, repeating hair, beard, facial hair, tattoo, open mouth, big smile, wide smile, toothy grin, exaggerated smile, teeth showing, laughing, grinning, black and white, monochrome, grayscale, weird colors, glossy, dark, shadows, sketches, video game, photoshop, tiling, busy background, cluttered background, nsfw, nipples, text, signature, watermark, error, hands in shot, (photorealistic, photograph, photo, realistic photography, real person, real human skin, skin pores, DSLR, film grain:1.3), nipple armor, nipple plate, chest armor bumps, protruding chest armor, anatomically shaped breast armor, chest cups, NASA logo, real world logo, real flag, national flag, country flag, real world insignia, real military insignia, brand logo, trademark, real organization emblem, meatball logo, full body, full length shot, legs visible, feet visible, shoes visible, wide shot, long shot, distant view, small subject, subject far from camera"
+  },
+
+  "templates": {
+    "species": "<species.archetype>",
+    "person": "[<person.age>-year-old ][<person.gender>, ][<person.body_shape> build]",
+    "hair": "([<hair.primary_color> ][<hair.style> ]hair[ with <hair.secondary_color> highlights])",
+    "eyes": "[(<eyes.color> eyes:1.2)]",
+    "torso": "[<torso.primary_color>[ and <torso.secondary_color>]]"
+  },
+
+  "vocabulary": {
+    "torso.state": {
+      "Bare": {
+        "positive": "bare torso, no armor covering the chest or stomach",
+        "negative": "(chest armor, covered torso:1.2)"
+      },
+      "FullyCovered": {
+        "positive": "torso fully covered by armor",
+        "negative": "(bare stomach, bare midriff, exposed abs, shirtless:1.2)"
+      },
+      "ArmsCoveredTorsoBare": {
+        "positive": "arms covered by armor, chest and stomach bare",
+        "negative": "(covered stomach, bare arms:1.2)"
+      },
+      "TorsoCoveredArmsBare": {
+        "positive": "chest and stomach covered by armor, arms bare",
+        "negative": "(bare stomach, covered arms:1.2)"
+      },
+      "PartiallyCovered": {
+        "positive": "torso partially covered"
+      },
+      "CroppedSleeved": {
+        "positive": "chest and arms covered, stomach bare",
+        "negative": "(bare chest, bare shoulders, bare arms, covered stomach, full-length skirt:1.2)"
+      }
+    },
+
+    "eyes.shape": {
+      "Round": { "positive": "round-shaped eyes" },
+      "Almond": { "positive": "almond-shaped eyes" },
+      "Hooded": {
+        "positive": "droopy eyelids, low eyelid crease",
+        "negative": "(hood, hoodie:1.2)"
+      },
+      "Monolid": { "positive": "monolid eyes, no visible eyelid crease" },
+      "Oval": { "positive": "oval-shaped eyes" },
+      "Closed": { "positive": "closed eyes" },
+      "Upturned": {
+        "positive": "upturned outer eye corners, gaze forward at the viewer",
+        "negative": "(looking up, gaze rolled upward, head tilted back:1.2)"
+      },
+      "Downturned": {
+        "positive": "downturned outer eye corners, gaze forward at the viewer",
+        "negative": "(looking down, downcast gaze, head tilted down:1.2)"
+      }
+    },
+
+    "person.ethnicity": {
+      "African": { "positive": "(African, dark skin, deep brown skin tone, African facial features:1.3)" },
+      "Asian": { "positive": "(Asian, light skin tone, East Asian facial features:1.3)" },
+      "Pacific": { "positive": "(Pacific, Pacific Islander or Southeast Asian facial features, tan skin tone:1.3)" },
+      "Mixed": {
+        "positive": "(Mixed, European and Indigenous Brazilian ancestry or European and African Brazilian ancestry, brown skin tone:1.3)"
+      },
+      "Caucasian": { "positive": "(Caucasian, fair skin tone, European facial features:1.2)" },
+      "Latino": { "positive": "(Latino, olive/tan skin tone, Latin American facial features:1.2)" },
+      "Nordic": { "positive": "(Nordic, fair skin tone, Scandinavian facial features:1.2)" }
+    },
+
+    "person.gender": {
+      "Male": { "positive": "man", "negative": "(androgynous, feminine:1.2)" },
+      "Female": { "positive": "woman", "negative": "(androgynous, masculine:1.2)" },
+      "Androgynous": { "positive": "androgynous person" }
+    }
+  },
+
+  "order": {
+    "positive": [
+      "fixed.style",
+      "eyes.template",
+      "person.ethnicity",
+      "species.template",
+      "species.extra",
+      "person.template",
+      "person.extra",
+      "hair.template",
+      "hair.extra",
+      "eyes.shape",
+      "eyes.extra",
+      "torso.state",
+      "torso.template",
+      "torso.extra",
+      "fixed.expression",
+      "fixed.pose",
+      "fixed.view"
+    ],
+    "negative": ["fixed.negative", "torso.state", "person.gender", "eyes.shape"]
+  }
 }

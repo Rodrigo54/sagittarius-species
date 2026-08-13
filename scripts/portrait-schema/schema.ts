@@ -1,27 +1,14 @@
 import { z } from 'zod';
-import {
-  ANCORAS_VERTICAIS,
-  CORES_CABELO,
-  CORES_OLHO,
-  ESTADOS_TORSO,
-  ESTILOS_CABELO,
-  ETNIAS,
-  FORMAS_CORPO,
-  FORMAS_OLHO,
-  GENEROS_PESSOA,
-  MODOS_ENQUADRAMENTO,
-  RIGS_VALIDOS,
-  TIPOS,
-} from './vocabulario';
+import { CAMPOS_EYES, CAMPOS_HAIR, CAMPOS_PERSON, CAMPOS_SPECIES, CAMPOS_TORSO } from './campos';
+import { validarSintaxeDeTemplate } from './templates';
+import { ANCORAS_VERTICAIS, MODOS_ENQUADRAMENTO, RIGS_VALIDOS } from './vocabulario';
 
 const GENEROS_ALVO = ['male', 'female', 'flat'] as const;
 
 /** Fonte de verdade do formato de `assets/portraits/ssm_<especie>/portrait.json`
  * — schema `zod`, com tipos TS inferidos automaticamente (`z.infer`, no fim
- * do arquivo). Substitui a validação manual que existia em
- * `generate-art/validation.ts` e `generate-portraits/validation.ts` (as duas
- * validavam pedaços do mesmo arquivo, cada uma com sua própria lógica
- * imperativa) — agora é um schema só, usado pelos dois pipelines.
+ * do arquivo). Um schema só, usado pelos dois pipelines que leem o arquivo
+ * (`generate-portraits` e `generate-art`).
  *
  * O JSON Schema (`.json`, gerado via `z.toJSONSchema()` nativo do zod v4 —
  * ver `gerar-json-schema.ts`) é um **artefato derivado** deste arquivo, pro
@@ -36,113 +23,105 @@ const GENEROS_ALVO = ['male', 'female', 'flat'] as const;
  * `geracaoArt` escrito contra um formato de campo antigo (renomeado ou
  * removido numa mudança de schema) passaria na validação silenciosamente
  * sem `.strict()`, com o conteúdo antigo todo descartado — com `.strict()`,
- * falha alto e claro, apontando exatamente a chave que não existe mais. */
+ * falha alto e claro, apontando exatamente a chave que não existe mais.
+ *
+ * **Templates.** O texto de prompt de cada seção mora em `template`, escrito
+ * na sintaxe de interpolação (`<secao.campo>`, `[trecho opcional]`) —
+ * ver `scripts/generate-art/interpolacao.ts`. Cada `template`/`extra` passa
+ * por `validarSintaxeDeTemplate` aqui mesmo, então um colchete sem par ou um
+ * `<caminho>` que não existe no schema falha já na leitura do arquivo,
+ * inclusive em `bun run portrait`. Sem `template`, a seção cai no template
+ * default de `scripts/generate-art/base.json`. */
 
-const zTipo = z
-  .object({
-    value: z.enum(TIPOS).describe('Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: "Human" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary).'),
-    description: z
-      .string()
-      .optional()
-      .describe(
-        'Texto livre que diferencia o sabor dentro do mesmo "value" (ex.: "cute Pixar-style robot" vs. "war machine aesthetic", ambos Robot) ou detalha um arquétipo raro/não-recorrente (Mermaid, Eldritch). Tratado como âncora: emitido cedo no prompt, com peso, junto de "value" — não é a mesma coisa que colocar essa nuance em extra_prompt.positive, que fica mais pro fim.'
-      ),
-  })
+/** Um `template`/`extra` é validado só na FORMA (sintaxe + caminho existente)
+ * — se o campo citado está de fato declarado em alguma variante é validação
+ * cruzada, feita no `generate-art`, que é quem conhece os templates default
+ * do `base.json`. */
+const zTextoDeTemplate = z.string().superRefine((texto, ctx) => {
+  const erro = validarSintaxeDeTemplate(texto);
+  if (erro) ctx.addIssue({ code: 'custom', message: erro });
+});
+
+const zTemplateDaSecao = zTextoDeTemplate
+  .optional()
+  .describe(
+    'Texto desta seção no prompt, na sintaxe de interpolação: "<secao.campo>" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), "[trecho]" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.'
+  );
+
+const zExtraDaSecao = zTextoDeTemplate
+  .optional()
+  .describe(
+    'Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é "o último vence"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.'
+  );
+
+const zSpecies = z
+  .object({ ...CAMPOS_SPECIES, template: zTemplateDaSecao, extra: zExtraDaSecao })
   .strict()
-  .describe('Arquétipo visual da espécie/indivíduo pro prompt de geração de arte via IA.');
+  .describe(
+    'O que esta ESPÉCIE é — arquétipo visual e o texto que a diferencia das outras que compartilham o mesmo arquétipo. Só pode ser declarada em geracaoArt.base: descreve a espécie inteira, não o indivíduo (o que varia por indivíduo é person/hair/eyes/torso).'
+  );
 
 const zPessoa = z
-  .object({
-    age: z.number().positive().optional().describe('Idade aparente do indivíduo.'),
-    ethnicity: z.enum(ETNIAS).optional().describe('Etnia.'),
-    body_shape: z.enum(FORMAS_CORPO).optional().describe('Tipo físico/corpo.'),
-    gender: z
-      .enum(GENEROS_PESSOA)
-      .optional()
-      .describe(
-        'Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem "Androgynous").'
-      ),
-  })
+  .object({ ...CAMPOS_PERSON, template: zTemplateDaSecao, extra: zExtraDaSecao })
   .strict()
   .describe('Atributos da pessoa/indivíduo.');
 
 const zCabelo = z
-  .object({
-    style: z.enum(ESTILOS_CABELO).optional().describe('Estilo/corte de cabelo.'),
-    main_color: z.enum(CORES_CABELO).optional().describe('Cor principal do cabelo.'),
-    optional_color: z.enum(CORES_CABELO).optional().describe('Cor secundária do cabelo (mechas, dip-dye, etc.).'),
-  })
+  .object({ ...CAMPOS_HAIR, template: zTemplateDaSecao, extra: zExtraDaSecao })
   .strict()
   .describe('Cabelo.');
 
 const zOlhos = z
-  .object({
-    shape: z.enum(FORMAS_OLHO).optional().describe('Formato dos olhos.'),
-    color: z.enum(CORES_OLHO).optional().describe('Cor dos olhos.'),
-  })
+  .object({ ...CAMPOS_EYES, template: zTemplateDaSecao, extra: zExtraDaSecao })
   .strict()
   .describe('Olhos.');
 
 const zTorso = z
-  .object({
-    description: z
-      .string()
-      .optional()
-      .describe('Descrição livre do que está sobre o tronco: tema/material/cor (armadura, escama, pele nua, pelagem, roupa comum — o que fizer sentido pra espécie).'),
-    state: z
-      .enum(ESTADOS_TORSO)
-      .optional()
-      .describe(
-        'Estado estruturado do tronco (âncora: prioridade alta, peso automático no prompt). Neutro — não julga "mais coberto é melhor" (escama à mostra é um estado tão correto quanto armadura completa, dependendo da espécie).'
-      ),
-  })
+  .object({ ...CAMPOS_TORSO, template: zTemplateDaSecao, extra: zExtraDaSecao })
   .strict()
   .describe(
-    'O que está sobre o tronco do indivíduo — substitui o antigo campo clothing (vocabulário de roupa civil, sem opção pra armadura/escama/pele nua).'
+    'O que está sobre o tronco do indivíduo — armadura, escama, pele nua, pelagem, roupa comum, o que fizer sentido pra espécie. O template é onde cada cor é posicionada na peça certa ("...top in <torso.primary_color>, ...waistband in <torso.secondary_color>"), em vez de as cores saírem soltas e a IA decidir onde aplicá-las.'
   );
 
-const zExtraPrompt = z
+/** Seções que descrevem o INDIVÍDUO — variam entre variantes, então podem ser
+ * declaradas em qualquer nível (`base`, gênero, variante) e são mescladas
+ * raso, seção a seção. */
+const zCamposDoIndividuo = z
   .object({
-    positive: z.string().optional().describe('Texto livre concatenado ao prompt positivo (base→gênero→variante, sempre por cima, nunca substitui os níveis acima).'),
-    negative: z
-      .string()
-      .optional()
-      .describe('Texto livre concatenado ao prompt negativo, por cima do negativo compartilhado de base.json (base→gênero→variante, sempre por cima, nunca substitui).'),
-  })
-  .strict()
-  .describe('Texto livre pra cobrir o que os campos estruturados não expressam — substitui o antigo campo extra (que só existia pro lado positivo).');
-
-const zCamposCompostos = z
-  .object({
-    tipo: zTipo.optional(),
     person: zPessoa.optional(),
     hair: zCabelo.optional(),
     eyes: zOlhos.optional(),
     torso: zTorso.optional(),
-    extra_prompt: zExtraPrompt.optional(),
   })
   .strict()
   .describe(
-    'Bloco de atributos — usado tanto em "base" quanto em cada variante, sempre como overrides parciais mesclados por seção (nunca o objeto inteiro substituído). Não tem mais pose/view/style/mouth: esses ficaram travados globalmente em base.json, pra bater sempre com o rig ssm_shared.'
+    'Atributos do indivíduo — usados em "base", no bloco de gênero e em cada variante, sempre como overrides parciais mesclados por seção (nunca o objeto inteiro substituído).'
   );
+
+/** `base` é o único nível que aceita `species`: gênero e variante descrevem
+ * indivíduos, e a espécie é a mesma pros dois. Declarar `species` fora daqui
+ * é erro de `.strict()`, com a chave nomeada. */
+const zCamposCompostos = zCamposDoIndividuo
+  .extend({ species: zSpecies.optional() })
+  .strict()
+  .describe('Atributos da espécie (species) mais os do indivíduo — forma do bloco "base" e do objeto mesclado que alimenta o prompt.');
 
 const CHAVE_VARIANTE = /^\d{3}$/;
 
 /** Config de sampler/resolução do pipeline de geração de arte via IA
- * (`bun run generate-art`, Flux.2 Klein Base). Bem mais enxuta que a de um
- * checkpoint SDXL clássico porque boa parte desses campos não tem
- * equivalente aqui: `checkpoint`/`lora`/`loraStrength` não existem porque
- * hoje só existe um arquivo de UNET/CLIP/VAE instalado (ver
- * `docs/pipeline-generate-art.md`) — expor isso por espécie
- * seria configurabilidade sem uso real; `sampler_name`/`scheduler` não
- * existem porque o grafo do Flux2 usa `KSamplerSelect` fixo em "euler" +
- * `Flux2Scheduler` (não um scheduler nomeado configurável tipo
- * `sgm_uniform`); `denoise`/`controlNetStrength` não existem porque o node
- * `ReferenceLatent` (mecanismo de consistência deste pipeline, no lugar do
- * ControlNet do pipeline SDXL anterior — ver
+ * (`bun run art`, Flux.2 Klein). Bem mais enxuta que a de um checkpoint SDXL
+ * clássico porque boa parte desses campos não tem equivalente aqui:
+ * `checkpoint`/`lora`/`loraStrength` não existem porque hoje só existe um
+ * arquivo de UNET/CLIP/VAE instalado (ver `docs/pipeline-generate-art.md`) —
+ * expor isso por espécie seria configurabilidade sem uso real;
+ * `sampler_name`/`scheduler` não existem porque o grafo do Flux2 usa
+ * `KSamplerSelect` fixo em "euler" + `Flux2Scheduler` (não um scheduler
+ * nomeado configurável tipo `sgm_uniform`); `denoise`/`controlNetStrength`
+ * não existem porque o node `ReferenceLatent` (mecanismo de consistência
+ * deste pipeline, no lugar do ControlNet do pipeline SDXL anterior — ver
  * `docs/history/2026-07-28-generate-art-v1.md`) não tem parâmetro de força — é
  * presença/ausência binária, não um dial. */
-const VARIANTES_MODELO = ['base', 'distilled'] as const;
+const VARIANTES_MODELO = ['distilled', 'base'] as const;
 
 const zModelo = z
   .object({
@@ -150,10 +129,10 @@ const zModelo = z
       .enum(VARIANTES_MODELO)
       .optional()
       .describe(
-        '"base" (20 passos, CFG=5, negativo real — padrão) ou "distilled" (4 passos, CFG=1, o negativo é descartado via ConditioningZeroOut — ~5x mais rápido, útil pra iteração rápida de prompt/composição antes de rodar o lote final em "base"). Ausente = "base".'
+        '"distilled" (4 passos, CFG=1, o negativo é descartado via ConditioningZeroOut — padrão) ou "base" (20 passos, CFG=5, negativo real; ~5x mais lento, para o lote final quando a qualidade extra compensar). Ausente = "distilled".'
       ),
-    steps: z.number().int().positive().optional().describe('Passos do sampler (Flux2Scheduler). Ausente mantém o padrão da variante ("base"=20, "distilled"=4).'),
-    cfg: z.number().positive().optional().describe('CFG scale do CFGGuider. Ausente mantém o padrão da variante ("base"=5, "distilled"=1 — CFG≠1 em "distilled" tende a degradar a qualidade, já que a guidance foi destilada nos pesos).'),
+    steps: z.number().int().positive().optional().describe('Passos do sampler (Flux2Scheduler). Ausente mantém o padrão da variante ("distilled"=4, "base"=20).'),
+    cfg: z.number().positive().optional().describe('CFG scale do CFGGuider. Ausente mantém o padrão da variante ("distilled"=1 — CFG≠1 nessa variante tende a degradar a qualidade, já que a guidance foi destilada nos pesos —, "base"=5).'),
     aspectRatio: z
       .string()
       .regex(/^\d+:\d+$/, 'formato esperado "W:H" (ex.: "2:3", "4:5")')
@@ -165,18 +144,20 @@ const zModelo = z
   .strict()
   .describe('Configuração de sampler/resolução do Flux.2 Klein — ver geracaoArt.');
 
-/** Variante individual dentro de `variantes` — os mesmos campos compostos
- * (tipo/person/hair/eyes/torso/extra_prompt), mais `seed`: um override
- * manual, opcional, da seed de geração desta variante específica. Não
- * participa do merge de `mesclarCampos` (não é um "campo composto" de
+/** Variante individual dentro de `variantes` — os campos do indivíduo
+ * (person/hair/eyes/torso), mais `seed`: a seed de geração desta variante
+ * específica. Não participa do merge de `mesclarCampos` (não é um campo de
  * prompt, é um parâmetro de geração) — é lido direto de
  * `bloco.variantes[chave].seed` em `generate-art/index.ts`, com precedência
  * `--seed` da CLI → este campo → hash determinístico (`seedDeterministica`,
- * ver `generate-art/seed.ts`). Não existe pra ser preenchido a priori: fica
- * vazio até alguém gerar a variante, gostar do resultado (seed determinística
- * ou testada via `--seed`) e colar o número aqui manualmente pra fixá-lo —
- * sem isso, toda regeneração futura volta pro hash determinístico. */
-const zVariante = zCamposCompostos
+ * ver `generate-art/seed.ts`).
+ *
+ * Guarda a última seed usada na variante: `bun run art --seed` (sem valor)
+ * sorteia uma, gera a imagem e grava o número aqui. Gravar é fixar — dali em
+ * diante, toda execução sem `--seed` reproduz aquela imagem, e sortear de novo
+ * é o reroll. Colar um número à mão continua valendo; ausente, a variante cai
+ * no hash determinístico. */
+const zVariante = zCamposDoIndividuo
   .extend({
     seed: z
       .number()
@@ -184,13 +165,13 @@ const zVariante = zCamposCompostos
       .nonnegative()
       .optional()
       .describe(
-        'Override manual da seed de geração desta variante (noise_seed do ComfyUI) — fixa permanentemente uma seed encontrada boa (via seed determinística padrão ou via --seed da CLI), sobrevivendo a reexecuções futuras sem --seed. Ausente = usa a seed determinística (ou a de --seed da CLI, que sempre vence sobre este campo). Preenchido a posteriori, nunca decidido antes de gerar a variante.'
+        'Seed de geração desta variante (noise_seed do ComfyUI) — a última usada, gravada automaticamente por "bun run art --seed" sem valor (que sorteia uma) ou colada à mão. Fixa a imagem: reexecuções sem --seed reproduzem esta seed. Ausente = usa a seed determinística (ou a de --seed da CLI, que sempre vence sobre este campo).'
       ),
   })
   .strict();
 
 function zBlocoGenero() {
-  return zCamposCompostos
+  return zCamposDoIndividuo
     .extend({
       referenceImage: z
         .array(z.string())
@@ -218,7 +199,7 @@ const zGeracaoArt = z
   })
   .strict()
   .describe(
-    'Configuração completa de geração de arte via IA (bun run generate-art, Flux.2 Klein Base) pra esta espécie — campo opt-in, ausente na maioria das espécies hoje.'
+    'Configuração completa de geração de arte via IA (bun run art, Flux.2 Klein) pra esta espécie — campo opt-in, ausente na maioria das espécies hoje.'
   );
 
 const zPortraitConfigBase = z
@@ -296,10 +277,10 @@ export const zPortraitConfig = zPortraitConfigBase.superRefine((config, ctx) => 
 
 export type PortraitConfig = z.infer<typeof zPortraitConfig>;
 export type CamposCompostos = z.infer<typeof zCamposCompostos>;
+export type CamposDoIndividuo = z.infer<typeof zCamposDoIndividuo>;
 export type Variante = z.infer<typeof zVariante>;
-export type Tipo = z.infer<typeof zTipo>;
+export type Species = z.infer<typeof zSpecies>;
 export type Torso = z.infer<typeof zTorso>;
-export type ExtraPrompt = z.infer<typeof zExtraPrompt>;
 export type GeracaoArt = z.infer<typeof zGeracaoArt>;
 export type GeracaoArtGenero = z.infer<ReturnType<typeof zBlocoGenero>>;
 export type GeracaoArtModelo = z.infer<typeof zModelo>;

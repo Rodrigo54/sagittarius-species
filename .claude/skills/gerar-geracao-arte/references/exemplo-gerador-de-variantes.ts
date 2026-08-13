@@ -10,11 +10,18 @@
 // diferentes: uma espécie de moluscos não tem "hair", uma espécie flat não
 // tem "gender" por variante, etc.).
 //
-// A forma de saída por variante (`{ person, hair, eyes }`) não mudou entre o
-// schema antigo (OOP) e o atual (scripts/portrait-schema/) — só campos como
-// `tipo`/`torso`/`extra_prompt` mudaram de forma, e esses normalmente vivem
-// em `geracaoArt.base` (uma vez por espécie), não por indivíduo, então este
-// gerador não precisa tocar neles.
+// A forma de saída por variante é `{ person, hair, eyes }` — e `torso` quando a
+// cor da vestimenta varia por indivíduo (sorteie `primary_color`/
+// `secondary_color` como qualquer outro pool). `species` e o texto das seções
+// (`template`) vivem em `geracaoArt.base`, uma vez por espécie, então este
+// gerador não toca neles: ele produz só os VALORES que o template da base vai
+// posicionar no prompt.
+//
+// Uma cor sorteada aqui precisa estar citada por algum template — a validação
+// reprova campo declarado que nenhum template referencia. Se a espécie sorteia
+// `torso.secondary_color`, o template da base tem que ter um
+// `<torso.secondary_color>` (dentro de colchetes, se nem toda variante o
+// receber).
 
 const ETNIAS = ['Caucasian', 'African', 'Asian', 'Latino', 'Pacific'] as const; // ou só ['Alien'] pra espécie não-humana
 const ESTILOS_CABELO = ['Short', 'Long', 'Wavy', 'Curly', 'Straight', 'Ponytail', 'Braided', 'Bun', 'Spiky', 'Undercut'] as const; // sem 'Bald' se a espécie não deve ter careca
@@ -60,7 +67,7 @@ function gerarVariantes(genero: 'male' | 'female', seedBase: number, quantidade:
 
     variantes[String(i).padStart(3, '0')] = {
       person: { age: idade, ethnicity: etnia, body_shape: corpo },
-      hair: { style: estiloCabelo, main_color: corCabelo },
+      hair: { style: estiloCabelo, primary_color: corCabelo },
       eyes: { shape: formaOlho, color: corOlho },
     };
   }

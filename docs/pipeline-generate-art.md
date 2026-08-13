@@ -37,26 +37,44 @@ posicionais escritos depois da flag.
 
 - **`scripts/portrait-schema/`** — schema `zod` (`schema.ts`) que descreve o `portrait.json` **inteiro**
   (`name`/`gendered`/`rig`/`counts`/`modo`/`ancora` + `geracaoArt`), fonte de verdade única usada tanto por
-  `generate-portraits` quanto por `generate-art` (substituiu validação manual duplicada nos dois). `.strict()`
-  em todo objeto — chave desconhecida é erro, não é ignorada em silêncio. `vocabulario.ts` guarda os enums
-  aceitos (etnia, cabelo, olho, corpo — cópia estática, não mais extraída ao vivo do ComfyUI; e dois vocabulários
-  novos, exclusivos deste schema: `TIPOS`, o arquétipo visual da espécie, sem relação com `species_class` do
-  jogo; e `ESTADOS_TORSO`, o que cobre o tronco). `gerar-json-schema.ts` gera `portrait.schema.json` (via
+  `generate-portraits` quanto por `generate-art`. `.strict()` em todo objeto — chave desconhecida é erro, não é
+  ignorada em silêncio. `campos.ts` isola os campos de **dado** de cada seção (sem `template`/`extra`): é deles
+  que sai o conjunto de caminhos interpoláveis, sem lista paralela. `vocabulario.ts` guarda os enums aceitos
+  (etnia, cabelo, olho, corpo — cópia estática, não extraída ao vivo do ComfyUI; mais `ARQUETIPOS`, o arquétipo
+  visual da espécie, sem relação com `species_class` do jogo, e `ESTADOS_TORSO`, o que cobre o tronco).
+  `interpolacao.ts` é o motor de template (ver "Sintaxe de template" abaixo) e `templates.ts` valida a sintaxe
+  de todo `template`/`extra` já na leitura do arquivo. `gerar-json-schema.ts` gera `portrait.schema.json` (via
   `z.toJSONSchema()` nativo do zod v4) — artefato derivado, associado em `.vscode/settings.json` pra
   autocomplete/validação do `portrait.json` direto no editor; rode de novo se `schema.ts` mudar.
-- **`scripts/generate-art/base.json`** — tudo que é fixo/global na geração (não configurável por espécie):
-  estilo de arte, pose, enquadramento de câmera e expressão facial (travados pra sempre bater com o rig
-  `ssm_shared`, evitando corte de braço/cabeça), e o negativo compartilhado de qualidade/anatomia.
-- **`scripts/generate-art/prompt-builder.ts`** — compõe os prompts final (positivo e negativo) inteiramente em
-  TypeScript a partir dos campos de `geracaoArt` + `base.json`, com ordem fixa e peso automático nos campos-âncora
-  (`tipo`, `torso.state`, `eyes.color` — os que mais se perdem quando são só texto solto). Não depende de nenhum
-  custom node externo pra isso — o texto pronto é injetado direto nos dois `CLIPTextEncode` do grafo (ver
-  `scripts/generate-art/workflow.ts`).
+- **`scripts/generate-art/base.json`** — **a fonte única de todo texto de prompt**. Nenhuma frase de prompt mora
+  em TypeScript. Quatro seções: `fixed` (estilo de arte, pose, enquadramento de câmera, expressão facial —
+  travados pra bater com o rig `ssm_shared`, evitando corte de braço/cabeça — e o negativo compartilhado de
+  qualidade/anatomia), `templates` (o template default de cada seção), `vocabulary` (o texto de cada valor de
+  enum, com os dois lados: `positive` e, quando há oposto claro, `negative`) e `order` (quais fragmentos entram
+  no prompt e em que posição). Reposicionar um fragmento ou reescrever uma frase é editar JSON.
+- **`scripts/generate-art/base.ts`** — schema `zod` do `base.json`, construído a partir dos vocabulários de
+  `portrait-schema`: cada enum exige **uma entrada por valor** e `.strict()` recusa entrada sobrando. É o que
+  garante que um valor novo em `ESTADOS_TORSO` não passe sem texto (a garantia que os `Record` não-`Partial`
+  davam em build time), agora falhando em `bun test` e em toda execução — inclusive `-e`, que não toca a GPU.
+  Também confere as duas pontas da `order`: nenhuma entrada apontando pro vazio, nenhum texto órfão fora dela.
+- **`scripts/generate-art/prompt-builder.ts`** — **motor**, sem texto de prompt: percorre `order` e resolve cada
+  entrada (fixo, template de seção, `extra` de seção, ou texto de vocabulário do valor declarado). O peso de
+  ênfase é escrito no próprio texto do `base.json`, com disciplina — só nas âncoras historicamente frágeis
+  (`eyes.color`, `person.ethnicity`, posicionadas cedo pela `order`) e nas exclusões do negativo. Não depende de
+  custom node externo — o texto pronto é injetado direto nos dois `CLIPTextEncode` do grafo (ver `workflow.ts`).
 - **`scripts/generate-art/merge.ts`** — mescla `base` → override de gênero → override de variante, raso por
-  seção; `extra_prompt.positive`/`.negative` concatenam entre níveis (nunca "o último vence").
-- **`scripts/comfyui/ssm_species_portrait_workflow.json`** (variante "base", padrão) e
-  **`ssm_species_portrait_workflow_distilled.json`** (variante "distilled", ~5x mais rápida, útil pra iteração
-  de prompt) — templates do workflow ComfyUI (formato API): UNET/CLIP/VAE do Flux.2 Klein fixos (um único
+  seção; `extra` de cada seção concatena entre níveis (nunca "o último vence"), pra uma variante acrescentar um
+  detalhe sem reescrever o texto da base.
+- **`scripts/generate-art/validacao.ts`** — validação cruzada `portrait.json` × `base.json`, sobre **todas** as
+  variantes de todos os gêneros declarados, mesmo quando a invocação pediu uma só (`-n 001`), e antes de
+  enfileirar qualquer coisa. Duas regras: **cobertura** (todo campo declarado precisa ser referenciado por algum
+  template/extra ativo ou posicionado como vocabulário na `order` — declarar `torso.secondary_color` sem que
+  nada cite `<torso.secondary_color>` é erro, não uma cor que some em silêncio) e **obrigatoriedade**
+  (placeholder fora de colchetes sem valor).
+- **`scripts/comfyui/ssm_species_portrait_workflow_distilled.json`** (variante "distilled", **padrão** — 4
+  passos, CFG=1, negativo descartado por `ConditioningZeroOut`) e **`ssm_species_portrait_workflow.json`**
+  (variante "base" — 20 passos, CFG=5, negativo real, ~5x mais lenta, para o lote final quando a qualidade extra
+  compensar) — templates do workflow ComfyUI (formato API): UNET/CLIP/VAE do Flux.2 Klein fixos (um único
   arquivo de cada instalado hoje, sem checkpoint/LoRA configurável por espécie), `ReferenceLatent` encadeado por
   imagem de `referenceImage` (consistência visual, sem ControlNet/img2img/denoise), remoção de fundo com canal
   alfa. `scripts/generate-art/workflow.ts` clona o template e injeta o texto pronto, seed, `steps`/`cfg`/
@@ -70,9 +88,10 @@ posicionais escritos depois da flag.
   já vale pra texto (`docs/history/2026-08-08-generate-art-schema-proprio.md`), só que aplicada a imagem: ao
   declarar mais de uma referência por gênero, a ordem é decisão de peso relativo, não uma lista arbitrária —
   coloque a referência que deve dominar em primeiro lugar.
-- **`geracaoArt` no `portrait.json`**: `base` (`tipo`, `torso`, `eyes`/`hair`/`person` quando fixos pra toda
-  espécie, `extra_prompt`), `modelo` (`variant`: `"base"` ou `"distilled"`; `steps`/`cfg`/`aspectRatio` — sem
-  checkpoint/LoRA/sampler, ver `scripts/portrait-schema/schema.ts`), `male`/`female`/`flat` (`referenceImage`
+- **`geracaoArt` no `portrait.json`**: `base` (`species` — só aqui, ver abaixo —, `torso`, `eyes`/`hair`/`person`
+  quando fixos pra toda espécie), `modelo` (`variant`: `"distilled"` (padrão) ou `"base"`;
+  `steps`/`cfg`/`aspectRatio` — sem checkpoint/LoRA/sampler, ver `scripts/portrait-schema/schema.ts`),
+  `male`/`female`/`flat` (`referenceImage`
   como **lista** de imagens de referência/conceito por gênero + `variantes` nomeadas `"001"`..`"NNN"`, uma por
   indivíduo, contagem batendo exato com `counts.<gênero>` — conferido pelo schema via `.superRefine`). Cada
   variante aceita ainda um `seed` opcional (`noise_seed` do ComfyUI): a **última seed usada** naquela variante,
@@ -91,6 +110,58 @@ posicionais escritos depois da flag.
   não há seed a registrar) e com `--promote`.
 - Skill dedicada pra preencher `geracaoArt` de uma espécie via entrevista: `.claude/skills/gerar-geracao-arte/`
   (`/gerar-geracao-arte`).
+
+## Sintaxe de template
+
+O texto de cada seção do prompt é um **template**: um texto com buracos que o valor da variante preenche. É o
+que faz `torso.primary_color: "Salmon"` virar *"top de escamas em salmon"* em vez de um `"salmon"` solto no meio
+do prompt, largando pra IA decidir o que é salmon.
+
+```jsonc
+"torso": {
+  "state": "CroppedSleeved",
+  "template": "cropped fish-scale armor top in <torso.primary_color>, high-waisted waistband in <torso.secondary_color>"
+}
+```
+
+Duas construções, só:
+
+- **`<secao.campo>`** — injeta o valor daquele campo do objeto **já mesclado** (`base` → gênero → variante), o
+  que permite o template morar na `base` e a cor vir da variante. Resolve em duas camadas: se o campo tem texto
+  de vocabulário no `base.json`, sai o texto (`<person.gender>` com `"Male"` → `"man"`); senão sai o valor cru
+  em minúsculas (`<hair.primary_color>` com `"Salmon"` → `"salmon"`). **Fora de colchetes o campo é
+  obrigatório**: não estar declarado é erro nomeando a variante, não um prompt silenciosamente incompleto.
+- **`[trecho]`** — segmento opcional, **aninhável**. Só entra se todos os placeholders diretos dele resolverem;
+  senão some inteiro, preposição e tudo — `"[ with <hair.secondary_color> highlights]"` não deixa
+  *"with  highlights"* pra trás. Cada segmento carrega a pontuação que o liga ao vizinho; sobra de vírgula nas
+  **bordas** do texto é limpa, mas não existe limpeza no meio (é justamente o que os colchetes resolvem).
+
+Não há sintaxe de escape: `<` e `[` soltos são erro de sintaxe. Nenhum texto do pipeline os usa literalmente.
+
+Sem `template`, a seção usa o **default** de `base.json` — é assim que uma espécie que não precisa de texto
+próprio ainda ganha cabelo, olhos e físico no prompt. Com `template`, o default daquela seção é substituído: o
+que a espécie escreve é o que sai, então um template de `species` que queira manter o arquétipo precisa citar
+`<species.archetype>` (é literalmente o que o default faz).
+
+Além do `template`, toda seção aceita um **`extra`**: texto acrescentado logo depois do template daquela seção,
+mesma sintaxe, com ou sem placeholder. Diferente do `template` (onde o nível mais específico vence), o `extra`
+**concatena** entre `base` → gênero → variante — a base declara o traço da espécie e a variante acrescenta o
+seu, sem reescrever o texto inteiro.
+
+### `species` só existe na `base`
+
+`species` descreve a **espécie inteira** (arquétipo visual + o texto que a diferencia das outras que
+compartilham o mesmo arquétipo); `person`/`hair`/`eyes`/`torso` descrevem o **indivíduo** e variam por variante.
+Por isso `species` só é aceita em `geracaoArt.base` — declará-la num bloco de gênero ou numa variante é erro de
+`.strict()`, com a chave nomeada.
+
+### Onde cada validação mora
+
+| validação | onde | quando |
+| --- | --- | --- |
+| sintaxe do template, caminho existente | schema `zod` (`portrait-schema/templates.ts`) | leitura de qualquer `portrait.json`, inclusive `bun run portrait` |
+| cobertura de enum, `order` sem órfão | schema do `base.json` (`generate-art/base.ts`) | `bun test` e toda execução de `bun run art` |
+| cobertura de campo, obrigatoriedade | `generate-art/validacao.ts` | antes de enfileirar, sobre todas as variantes de todos os gêneros |
 
 Este pipeline (Flux.2 Klein) substituiu de vez um pipeline anterior baseado em SDXL clássico (checkpoint/LoRA/
 ControlNet OpenPose/img2img), apagado do repositório. Relato completo de como o pipeline original foi criado e

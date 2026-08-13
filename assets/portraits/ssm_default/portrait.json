@@ -8,16 +8,16 @@
   },
   "geracaoArt": {
     "base": {
-      "tipo": {
-        "value": "Human",
-        "description": "futuristic sci-fi space marine"
+      "species": {
+        "archetype": "Human",
+        "template": "<species.archetype>, futuristic sci-fi space marine"
+      },
+      "hair": {
+        "extra": "(no helmet, no hood, no head covering, full head of hair:1.2), face fully visible"
       },
       "torso": {
         "state": "FullyCovered",
-        "description": "navy blue metallic plating, science fiction astronaut uniform, space marine armor, smooth flat white chest armor plate, gold metallic trim details, gold accents"
-      },
-      "extra_prompt": {
-        "positive": "(no helmet, no hood, no head covering, full head of hair:1.2), face fully visible"
+        "template": "navy blue metallic plating, science fiction astronaut uniform, space marine armor, smooth flat white chest armor plate, gold metallic trim details, gold accents"
       }
     },
     "modelo": {
@@ -28,47 +28,50 @@
     },
     "male": {
       "person": {
-        "gender": "Male"
+        "gender": "Male",
+        "extra": "(teenager:1.2)"
       },
-      "extra_prompt": {
-        "positive": "(teenager:1.2), (male chest armor, muscular male torso)"
+      "torso": {
+        "extra": "(male chest armor, muscular male torso)"
       },
       "variantes": {
         "001": {
           "person": {
             "age": 20,
             "ethnicity": "Caucasian",
-            "body_shape": "Athletic"
+            "body_shape": "Athletic",
+            "extra": "(young boy)"
           },
           "hair": {
             "style": "Wavy",
-            "main_color": "Blonde"
+            "primary_color": "Blonde"
           },
           "eyes": {
             "shape": "Round",
             "color": "Blue"
           },
-          "extra_prompt": {
-            "positive": "(young boy), flat masculine chest, male chest armor, muscular male torso"
+          "torso": {
+            "extra": "flat masculine chest, male chest armor, muscular male torso"
           }
         },
         "002": {
           "person": {
             "age": 17,
             "ethnicity": "Caucasian",
-            "body_shape": "Slim"
+            "body_shape": "Slim",
+            "extra": "(young boy)"
           },
           "hair": {
-            "style": "Short Wavy",            
-            "main_color": "Pink",
-            "optional_color": "Purple"
+            "style": "Short Wavy",
+            "primary_color": "Pink",
+            "secondary_color": "Purple"
           },
           "eyes": {
             "shape": "Monolid",
             "color": "Blue"
           },
-          "extra_prompt": {
-            "positive": "(young boy), flat masculine chest, male chest armor, muscular male torso"
+          "torso": {
+            "extra": "flat masculine chest, male chest armor, muscular male torso"
           }
         },
         "003": {
@@ -79,8 +82,8 @@
           },
           "hair": {
             "style": "Long Wavy",
-            "main_color": "Brown",
-            "optional_color": "Mustard"
+            "primary_color": "Brown",
+            "secondary_color": "Mustard"
           },
           "eyes": {
             "shape": "Almond",
@@ -95,7 +98,7 @@
           },
           "hair": {
             "style": "Undercut",
-            "main_color": "Silver"
+            "primary_color": "Silver"
           },
           "eyes": {
             "shape": "Upturned",
@@ -110,7 +113,7 @@
           },
           "hair": {
             "style": "Spiky",
-            "main_color": "Copper"
+            "primary_color": "Copper"
           },
           "eyes": {
             "shape": "Hooded",
@@ -125,7 +128,7 @@
           },
           "hair": {
             "style": "Long Straight",
-            "main_color": "Blonde"
+            "primary_color": "Blonde"
           },
           "eyes": {
             "shape": "Upturned",
@@ -140,7 +143,7 @@
           },
           "hair": {
             "style": "Curly",
-            "main_color": "Charcoal"
+            "primary_color": "Charcoal"
           },
           "eyes": {
             "shape": "Hooded",
@@ -155,7 +158,7 @@
           },
           "hair": {
             "style": "Undercut",
-            "main_color": "Blonde"
+            "primary_color": "Blonde"
           },
           "eyes": {
             "shape": "Almond",
@@ -170,7 +173,7 @@
           },
           "hair": {
             "style": "Wavy",
-            "main_color": "Charcoal"
+            "primary_color": "Charcoal"
           },
           "eyes": {
             "shape": "Almond",
@@ -185,8 +188,8 @@
           },
           "hair": {
             "style": "Spiky",
-            "main_color": "Peach",
-            "optional_color": "Blonde"
+            "primary_color": "Peach",
+            "secondary_color": "Blonde"
           },
           "eyes": {
             "shape": "Hooded",
@@ -201,7 +204,7 @@
           },
           "hair": {
             "style": "Curly",
-            "main_color": "Red"
+            "primary_color": "Red"
           },
           "eyes": {
             "shape": "Almond",
@@ -216,7 +219,7 @@
           },
           "hair": {
             "style": "Short Curly",
-            "main_color": "Mustard"
+            "primary_color": "Mustard"
           },
           "eyes": {
             "shape": "Almond",
@@ -231,7 +234,7 @@
           },
           "hair": {
             "style": "Dreadlocks",
-            "main_color": "Silver"
+            "primary_color": "Silver"
           },
           "eyes": {
             "shape": "Almond",
@@ -246,7 +249,7 @@
           },
           "hair": {
             "style": "Wavy",
-            "main_color": "Blue"
+            "primary_color": "Blue"
           },
           "eyes": {
             "shape": "Upturned",
@@ -261,7 +264,7 @@
           },
           "hair": {
             "style": "Short Wavy",
-            "main_color": "Burgundy"
+            "primary_color": "Burgundy"
           },
           "eyes": {
             "shape": "Round",
@@ -276,7 +279,7 @@
           },
           "hair": {
             "style": "Afro",
-            "main_color": "Black"
+            "primary_color": "Black"
           },
           "eyes": {
             "shape": "Round",
@@ -291,7 +294,7 @@
           },
           "hair": {
             "style": "Undercut",
-            "main_color": "Maroon"
+            "primary_color": "Maroon"
           },
           "eyes": {
             "shape": "Round",
@@ -306,7 +309,7 @@
           },
           "hair": {
             "style": "Ponytail",
-            "main_color": "Brown"
+            "primary_color": "Brown"
           },
           "eyes": {
             "shape": "Oval",
@@ -321,7 +324,7 @@
           },
           "hair": {
             "style": "Long Wavy",
-            "main_color": "Brown"
+            "primary_color": "Brown"
           },
           "eyes": {
             "shape": "Upturned",
@@ -336,7 +339,7 @@
           },
           "hair": {
             "style": "Wavy",
-            "main_color": "Copper"
+            "primary_color": "Copper"
           },
           "eyes": {
             "shape": "Upturned",
@@ -351,7 +354,7 @@
           },
           "hair": {
             "style": "Long",
-            "main_color": "Charcoal"
+            "primary_color": "Charcoal"
           },
           "eyes": {
             "shape": "Upturned",
@@ -366,7 +369,7 @@
           },
           "hair": {
             "style": "Long Straight",
-            "main_color": "Brown"
+            "primary_color": "Brown"
           },
           "eyes": {
             "shape": "Monolid",
@@ -381,7 +384,7 @@
           },
           "hair": {
             "style": "Straight",
-            "main_color": "Bronze"
+            "primary_color": "Bronze"
           },
           "eyes": {
             "shape": "Upturned",
@@ -396,7 +399,7 @@
           },
           "hair": {
             "style": "Dreadlocks",
-            "main_color": "Mustard"
+            "primary_color": "Mustard"
           },
           "eyes": {
             "shape": "Oval",
@@ -411,8 +414,8 @@
           },
           "hair": {
             "style": "Long Wavy",
-            "main_color": "Brown",
-            "optional_color": "Blonde"
+            "primary_color": "Brown",
+            "secondary_color": "Blonde"
           },
           "eyes": {
             "shape": "Monolid",
@@ -437,7 +440,7 @@
           },
           "hair": {
             "style": "Undercut",
-            "main_color": "Blue"
+            "primary_color": "Blue"
           },
           "eyes": {
             "shape": "Almond",
@@ -452,7 +455,7 @@
           },
           "hair": {
             "style": "Short",
-            "main_color": "Teal"
+            "primary_color": "Teal"
           },
           "eyes": {
             "shape": "Monolid",
@@ -467,7 +470,7 @@
           },
           "hair": {
             "style": "Bun",
-            "main_color": "Brown"
+            "primary_color": "Brown"
           },
           "eyes": {
             "shape": "Upturned",
@@ -482,7 +485,7 @@
           },
           "hair": {
             "style": "Long",
-            "main_color": "Blonde"
+            "primary_color": "Blonde"
           },
           "eyes": {
             "shape": "Round",
@@ -497,7 +500,7 @@
           },
           "hair": {
             "style": "Undercut",
-            "main_color": "Pink"
+            "primary_color": "Pink"
           },
           "eyes": {
             "shape": "Downturned",
@@ -512,7 +515,7 @@
           },
           "hair": {
             "style": "Curly",
-            "main_color": "Charcoal"
+            "primary_color": "Charcoal"
           },
           "eyes": {
             "shape": "Round",
@@ -527,7 +530,7 @@
           },
           "hair": {
             "style": "Long Wavy",
-            "main_color": "Mustard"
+            "primary_color": "Mustard"
           },
           "eyes": {
             "shape": "Round",
@@ -542,7 +545,7 @@
           },
           "hair": {
             "style": "Dreadlocks",
-            "main_color": "Blonde"
+            "primary_color": "Blonde"
           },
           "eyes": {
             "shape": "Oval",
@@ -557,8 +560,8 @@
           },
           "hair": {
             "style": "Long Wavy",
-            "optional_color": "Olive",
-            "main_color": "Bronze"
+            "secondary_color": "Olive",
+            "primary_color": "Bronze"
           },
           "eyes": {
             "shape": "Almond",
@@ -573,7 +576,7 @@
           },
           "hair": {
             "style": "Long Wavy",
-            "main_color": "Red"
+            "primary_color": "Red"
           },
           "eyes": {
             "shape": "Upturned",
@@ -588,7 +591,7 @@
           },
           "hair": {
             "style": "Long",
-            "main_color": "Black"
+            "primary_color": "Black"
           },
           "eyes": {
             "shape": "Monolid",
@@ -603,7 +606,7 @@
           },
           "hair": {
             "style": "Ponytail",
-            "main_color": "White"
+            "primary_color": "White"
           },
           "eyes": {
             "shape": "Almond",
@@ -618,7 +621,7 @@
           },
           "hair": {
             "style": "Long",
-            "main_color": "Brown"
+            "primary_color": "Brown"
           },
           "eyes": {
             "shape": "Monolid",
@@ -633,7 +636,7 @@
           },
           "hair": {
             "style": "Undercut",
-            "main_color": "Gray"
+            "primary_color": "Gray"
           },
           "eyes": {
             "shape": "Hooded",
@@ -648,7 +651,7 @@
           },
           "hair": {
             "style": "Ponytail",
-            "main_color": "Charcoal"
+            "primary_color": "Charcoal"
           },
           "eyes": {
             "shape": "Hooded",
@@ -663,7 +666,7 @@
           },
           "hair": {
             "style": "Ponytail",
-            "main_color": "Brown"
+            "primary_color": "Brown"
           },
           "eyes": {
             "shape": "Round",
@@ -678,7 +681,7 @@
           },
           "hair": {
             "style": "Short",
-            "main_color": "Copper"
+            "primary_color": "Copper"
           },
           "eyes": {
             "shape": "Hooded",
@@ -693,7 +696,7 @@
           },
           "hair": {
             "style": "Braided",
-            "main_color": "Blonde"
+            "primary_color": "Blonde"
           },
           "eyes": {
             "shape": "Upturned",
@@ -708,7 +711,7 @@
           },
           "hair": {
             "style": "Braided",
-            "main_color": "Brown"
+            "primary_color": "Brown"
           },
           "eyes": {
             "shape": "Monolid",
@@ -723,8 +726,8 @@
           },
           "hair": {
             "style": "Curly",
-            "optional_color": "Silver",
-            "main_color": "Charcoal"
+            "secondary_color": "Silver",
+            "primary_color": "Charcoal"
           },
           "eyes": {
             "shape": "Monolid",
@@ -739,7 +742,7 @@
           },
           "hair": {
             "style": "Curly",
-            "main_color": "Charcoal"
+            "primary_color": "Charcoal"
           },
           "eyes": {
             "shape": "Almond",
@@ -754,7 +757,7 @@
           },
           "hair": {
             "style": "Straight",
-            "main_color": "Black"
+            "primary_color": "Black"
           },
           "eyes": {
             "shape": "Monolid",
@@ -769,7 +772,7 @@
           },
           "hair": {
             "style": "Curly",
-            "main_color": "Mustard"
+            "primary_color": "Mustard"
           },
           "eyes": {
             "shape": "Almond",
@@ -784,7 +787,7 @@
           },
           "hair": {
             "style": "Short",
-            "main_color": "Blonde"
+            "primary_color": "Blonde"
           },
           "eyes": {
             "shape": "Upturned",
@@ -799,8 +802,8 @@
           },
           "hair": {
             "style": "Short Wavy",
-            "optional_color": "Gray",
-            "main_color": "Blonde"
+            "secondary_color": "Gray",
+            "primary_color": "Blonde"
           },
           "eyes": {
             "shape": "Almond",

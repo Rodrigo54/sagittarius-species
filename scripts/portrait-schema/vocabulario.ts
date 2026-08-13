@@ -20,7 +20,7 @@ export const FORMAS_CORPO = [
  * string>` (não `Partial`) de propósito: o TypeScript trava a build se um
  * valor novo entrar no array acima sem ganhar descrição aqui. Escopo
  * deliberadamente limitado aos enums não autoexplicáveis — não existe mapa
- * equivalente pra `CORES_CABELO`/`CORES_OLHO`, cujos valores já são óbvios
+ * equivalente pra `CORES`/`CORES_OLHO`, cujos valores já são óbvios
  * em inglês ("Blue", "Black"...). */
 export const FORMAS_CORPO_DESCRICOES: Record<(typeof FORMAS_CORPO)[number], string> = {
   Slim: 'corpo magro',
@@ -32,10 +32,10 @@ export const FORMAS_CORPO_DESCRICOES: Record<(typeof FORMAS_CORPO)[number], stri
   Muscular: 'corpo musculoso',
 };
 
-/** Cada valor tem um texto de reforço correspondente em `prompt-builder.ts`
- * (`TEXTO_ETNIA`) — se um valor novo entrar aqui, o TypeScript trava a build
- * até ganhar entrada lá também (mesmo mecanismo de `FORMAS_CORPO_DESCRICOES`
- * etc., `Record` não-`Partial`). */
+/** Cada valor tem um texto de reforço correspondente em `vocabulary` do
+ * `scripts/generate-art/base.json` — o schema daquele arquivo é derivado
+ * deste array e exige uma entrada por valor, então um valor novo aqui trava
+ * a geração (e `bun test`) até ganhar texto lá. */
 export const ETNIAS = ['African', 'Asian', 'Caucasian', 'Latino', 'Pacific', 'Mixed', 'Nordic'] as const;
 
 export const GENEROS_PESSOA = ['Female', 'Male', 'Androgynous'] as const;
@@ -51,7 +51,7 @@ export const ESTILOS_CABELO = [
  * único valor — os dois eixos são independentes em `style`, então antes
  * dessa adição não dava pra escolher os dois ao mesmo tempo. Convenção de
  * nome: duas palavras, Title Case, com espaço — mesmo precedente já usado
- * em `CORES_CABELO` (`"Sky Blue"`); funciona sem tocar em `schema.ts`/
+ * em `CORES` (`"Sky Blue"`); funciona sem tocar em `schema.ts`/
  * `prompt-builder.ts`, já que `hair.style.toLowerCase()` concatena a string
  * inteira no prompt ("long curly hair"). Os valores standalone (`Curly`,
  * `Straight`, `Wavy`, `Long`, `Short`) continuam disponíveis pra quem não
@@ -78,12 +78,21 @@ export const ESTILOS_CABELO_DESCRICOES: Record<(typeof ESTILOS_CABELO)[number], 
   'Short Wavy': 'cabelo ondulado curto',
 };
 
-export const CORES_CABELO = [
-  ' ', 'Black', 'Brown', 'Blonde', 'Red', 'White', 'Gray', 'Blue', 'Green', 'Pink', 'Purple', 'Orange',
+/** Vocabulário de cor genérico, não só de cabelo: `hair.primary_color`/
+ * `secondary_color` e `torso.primary_color`/`secondary_color` reaproveitam a
+ * mesma lista (cor de armadura/vestimenta varia por indivíduo sem duplicar a
+ * frase inteira — o template da seção posiciona cada cor na peça certa).
+ *
+ * Não existe valor "nenhuma cor" aqui: ausência se expressa **omitindo a
+ * chave** (todo campo de cor é `.optional()` no schema), e o template marca o
+ * trecho correspondente como opcional (`[ with <hair.secondary_color>
+ * highlights]`). */
+export const CORES = [
+  'Black', 'Brown', 'Blonde', 'Red', 'White', 'Gray', 'Blue', 'Green', 'Pink', 'Purple', 'Orange',
   'Yellow', 'Teal', 'Cyan', 'Magenta', 'Maroon', 'Turquoise', 'Lavender', 'Beige', 'Gold', 'Silver',
   'Bronze', 'Copper', 'Indigo', 'Violet', 'Lilac', 'Burgundy', 'Olive', 'Peach', 'Coral', 'Mint', 'Azure',
   'Amber', 'Charcoal', 'Navy', 'Sky Blue', 'Lime', 'Mustard', 'Rose', 'Periwinkle', 'Salmon', 'Emerald',
-  'Sapphire', 'Ruby', 'Platinum',
+  'Sapphire', 'Ruby', 'Platinum', 'Amethyst', 'Pearl',
 ] as const;
 
 export const FORMAS_OLHO = [
@@ -105,19 +114,19 @@ export const FORMAS_OLHO_DESCRICOES: Record<(typeof FORMAS_OLHO)[number], string
 export const CORES_OLHO = ['Blue', 'Green', 'Brown', 'Hazel', 'Gray', 'Amber', 'Violet'] as const;
 
 /** Arquétipo visual pro prompt de geração de arte via IA — vocabulário
- * **novo**, exclusivo deste schema. Categoria ampla e reaproveitável entre
- * espécies (ex.: `Human` cobre `ssm_default`, `ssm_knight`, `ssm_astral` e
+ * exclusivo deste schema. Categoria ampla e reaproveitável entre espécies
+ * (ex.: `Human` cobre `ssm_default`, `ssm_knight`, `ssm_astral` e
  * `ssm_mercenary`, todas visualmente bem diferentes entre si) — a
- * diferenciação visual entre espécies que compartilham o mesmo `value` é
- * responsabilidade do campo `description` de `Tipo`, não deste enum.
+ * diferenciação visual entre espécies que compartilham o mesmo arquétipo é
+ * responsabilidade do `template` da seção `species`, não deste enum.
  * Levantamento completo das 18 espécies do pacote em
  * `docs/history/2026-08-08-generate-art-schema-proprio.md`. */
-export const TIPOS = [
+export const ARQUETIPOS = [
   'Human', 'Elf', 'Mermaid', 'Necroid', 'Furry', 'Molluscoid', 'Eldritch', 'Robot', 'Avian', 'Alien', 'Cyborg',
 ] as const;
 
 /** Ver rationale completo no comentário de `FORMAS_CORPO_DESCRICOES` acima. */
-export const TIPOS_DESCRICOES: Record<(typeof TIPOS)[number], string> = {
+export const ARQUETIPOS_DESCRICOES: Record<(typeof ARQUETIPOS)[number], string> = {
   Human: 'humano',
   Elf: 'élfico',
   Mermaid: 'sereia/tritão',
@@ -161,12 +170,14 @@ export const ANCORAS_VERTICAIS_DESCRICOES: Record<(typeof ANCORAS_VERTICAIS)[num
  * **sem julgar** "mais coberto é melhor" (`ssm_mermaids` com escama à
  * mostra no tronco é um estado tão correto quanto `ssm_astral` com
  * armadura completa). Existe como campo estruturado dedicado — em vez de
- * só texto livre — porque foi exatamente isso ("barriga/peito de fora
- * mesmo pedindo cobertura total") que se perdeu repetidamente no meio de
- * um `extra` longo durante o desenvolvimento do `ssm_astral`, mesmo com
- * reforço de peso (ver `docs/history/2026-08-08-generate-art-schema-proprio.md`). */
+ * só texto livre — porque é isso ("barriga/peito de fora mesmo pedindo
+ * cobertura total") que se perde no meio de um texto longo, mesmo com
+ * reforço de peso (ver `docs/history/2026-08-08-generate-art-schema-proprio.md`).
+ * Cada valor tem entrada em `vocabulary` do `base.json`, com os dois lados
+ * (positivo e, quando há oposto claro, negativo). */
 export const ESTADOS_TORSO = [
   'Bare', 'FullyCovered', 'ArmsCoveredTorsoBare', 'TorsoCoveredArmsBare', 'PartiallyCovered',
+  'CroppedSleeved',
 ] as const;
 
 /** Ver rationale completo no comentário de `FORMAS_CORPO_DESCRICOES` acima. */
@@ -176,4 +187,5 @@ export const ESTADOS_TORSO_DESCRICOES: Record<(typeof ESTADOS_TORSO)[number], st
   ArmsCoveredTorsoBare: 'braços cobertos, tronco à mostra',
   TorsoCoveredArmsBare: 'tronco coberto, braços à mostra',
   PartiallyCovered: 'tronco parcialmente coberto',
+  CroppedSleeved: 'peito e braços cobertos (top cropped com manga comprida), barriga à mostra',
 };

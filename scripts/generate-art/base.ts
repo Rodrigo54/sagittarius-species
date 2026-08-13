@@ -1,54 +1,150 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { z } from 'zod';
+import {
+  CAMPOS_POR_SECAO,
+  ESTADOS_TORSO,
+  ETNIAS,
+  FORMAS_OLHO,
+  GENEROS_PESSOA,
+  validarSintaxeDeTemplate,
+  type NomeDeSecao,
+} from '../portrait-schema';
 
-/** Pose, enquadramento de câmera e estilo travados pra bater sempre com o
- * rig `ssm_shared`/`sl_shared`, e o negativo compartilhado de qualidade/
- * anatomia — característica do rig/composição, não do motor de difusão por
- * trás. `style`/`negative` seguem em ajuste conforme os testes interativos
- * com Flux2 revelam o que funciona (o pipeline anterior, SDXL/ComfyUI-OOP,
- * usava convenção de prompt diferente — "masterpiece"/"best quality" etc. —
- * que não necessariamente tem o mesmo efeito aqui; ver
- * `docs/history/2026-07-28-generate-art-v1.md` pro que valia lá). */
-const zBaseFixo = z
+/** Schema de `base.json` — o arquivo é a fonte ÚNICA de texto de prompt do
+ * pipeline: os fixos (estilo/pose/enquadramento/negativo), o template default
+ * de cada seção, o vocabulário (texto de cada valor de enum, nos dois lados)
+ * e a ordem em que tudo entra no prompt. Nenhuma frase de prompt mora em
+ * TypeScript; `prompt-builder.ts` é só o motor que junta isso.
+ *
+ * O schema é construído a partir dos vocabulários de `portrait-schema`, e não
+ * escrito à mão: cada enum exige **uma entrada por valor**, e `.strict()`
+ * recusa entrada sobrando. Um valor novo em `ESTADOS_TORSO` (ou um valor
+ * removido cujo texto ficou órfão) falha aqui, alto e claro, nomeando a
+ * chave — em `bun test` e em toda execução de `bun run art`, inclusive
+ * `-e/--export-prompt`, que nem toca na GPU. */
+
+const zEntradaDeVocabulario = z
   .object({
-    style: z.string().describe('Estilo de arte, sempre igual em toda espécie hoje (3D render de jogo, não fotorrealista).'),
-    view: z.string().describe('Enquadramento de câmera fixo — plano, ângulo, fundo, iluminação. Travado junto com pose pra não reabrir o corte de braço/cabeça.'),
-    pose: z.string().describe('Pose fixa, calibrada pra caber inteira no canvas do rig ssm_shared sem cortar braço/mão/cabeça.'),
-    expression: z.string().describe('Expressão facial fixa — substitui o antigo campo mouth (variação de boca por indivíduo não vale o risco de sair de um enquadramento sério/consistente).'),
-    negative: z.string().describe('Negativo compartilhado por toda espécie/variante — baseline de qualidade/anatomia + exclusões já testadas (capacete, logo real, armadura com bico). Concatenado com extra_prompt.negative de cada nível (base→gênero→variante).'),
+    positive: z.string().min(1),
+    /** Opcional porque nem todo valor tem oposto claro pra excluir:
+     * `PartiallyCovered` é ambíguo de propósito, `Androgynous` é ambíguo por
+     * natureza. */
+    negative: z.string().min(1).optional(),
   })
-  .describe('Valores fixos/globais da geração de arte via IA — nunca variam por espécie.');
+  .strict();
 
-export type BaseFixo = z.infer<typeof zBaseFixo>;
+/** Uma chave obrigatória por valor do enum — é isto que substitui o
+ * `Record<(typeof ENUM)[number], string>` não-`Partial` que antes travava a
+ * build quando um valor novo entrava sem texto. */
+function zVocabularioCompleto(valores: readonly string[]) {
+  return z
+    .object(Object.fromEntries(valores.map((valor) => [valor, zEntradaDeVocabulario])))
+    .strict() as z.ZodType<Record<string, z.infer<typeof zEntradaDeVocabulario>>>;
+}
 
-/** Lição real (`ssm_default`, variante "distilled"/`cfg: 1`): nessa
- * combinação o node negativo do template é `ConditioningZeroOut`, não
- * `CLIPTextEncode` (ver `workflow.ts`) — `negative` (deste arquivo e de todo
- * `extra_prompt.negative`) é descartado antes de chegar no grafo, CFG=1 zera
- * a guidance negativa de qualquer jeito. Pra espécie nessa variante, a única
- * alavanca contra algo que o checkpoint insiste em gerar errado é o
- * **positivo**, e duas armadilhas já morderam aqui:
- * 1. Negação simples ("no helmet") é fraca sem CFG negativo pra contrastar —
- *    o token do conceito negado ainda entra na condicional. Preferir
- *    exclusão explícita do objeto ("no hood, no head covering") reforçada
- *    por uma afirmação do estado desejado ("full head of hair"), não só a
- *    negação sozinha.
- * 2. "bare head"/"uncovered head" é ambíguo com calvície nas legendas de
- *    treino do modelo — pra excluir capuz/capacete, isso pode sair como
- *    careca em vez de "sem capuz" (caso real: `ssm_default` macho 001 saiu
- *    careco depois de um `extra_prompt.positive` com essa frase). Evitar
- *    "bare"/"uncovered" perto de "head"; usar termos de peça de roupa (hood,
- *    helmet, covering), não de pele/couro cabeludo.
- * Bônus, não específico da variante: `extra_prompt` concatena entre níveis
- * (base→gênero→variante, nunca o último vencendo — ver `merge.ts`), então a
- * mesma instrução repetida em dois níveis soma peso/repetição sem querer.
- * Declarar uma instrução de cabeça/cabelo uma única vez (o nível mais amplo
- * que já baste, tipicamente `base`), não duplicar em `male`/`female`. */
+/** Caminhos cujo texto de prompt é TRADUÇÃO do valor, não o valor em si
+ * (`"Male"` → `"man"`), e por isso exigem vocabulário completo. Os demais
+ * campos (cores, idade, arquétipo) entram no prompt pelo próprio valor, em
+ * minúsculas, e não têm entrada aqui. */
+const VOCABULARIOS_OBRIGATORIOS = {
+  'torso.state': ESTADOS_TORSO,
+  'eyes.shape': FORMAS_OLHO,
+  'person.ethnicity': ETNIAS,
+  'person.gender': GENEROS_PESSOA,
+} as const satisfies Record<string, readonly string[]>;
+
+const CHAVES_FIXAS = ['style', 'view', 'pose', 'expression', 'negative'] as const;
+
+const zTemplateValido = z.string().superRefine((texto, ctx) => {
+  const erro = validarSintaxeDeTemplate(texto);
+  if (erro) ctx.addIssue({ code: 'custom', message: erro });
+});
+
+const NOMES_DE_SECAO = Object.keys(CAMPOS_POR_SECAO) as NomeDeSecao[];
+
+const zBaseArtBase = z
+  .object({
+    fixed: z.object(Object.fromEntries(CHAVES_FIXAS.map((chave) => [chave, z.string().min(1)]))).strict(),
+    /** Um template default por seção — o que a espécie usa quando não declara
+     * `template` própria naquela seção. */
+    templates: z.object(Object.fromEntries(NOMES_DE_SECAO.map((secao) => [secao, zTemplateValido]))).strict(),
+    vocabulary: z
+      .object(
+        Object.fromEntries(
+          Object.entries(VOCABULARIOS_OBRIGATORIOS).map(([caminho, valores]) => [caminho, zVocabularioCompleto(valores)])
+        )
+      )
+      .strict(),
+    order: z
+      .object({
+        positive: z.array(z.string().min(1)),
+        negative: z.array(z.string().min(1)),
+      })
+      .strict(),
+  })
+  .strict();
+
+/** Toda entrada de `order` precisa apontar pra um texto que existe, e todo
+ * texto declarado precisa aparecer em `order` — sem as duas pontas, um texto
+ * afinado pode ficar órfão (nunca entra no prompt) ou uma posição pode
+ * apontar pro vazio, os dois em silêncio. */
+function validarOrdem(config: z.infer<typeof zBaseArtBase>, ctx: z.RefinementCtx): void {
+  const entradasValidas = new Set<string>([
+    ...CHAVES_FIXAS.map((chave) => `fixed.${chave}`),
+    ...NOMES_DE_SECAO.flatMap((secao) => [`${secao}.template`, `${secao}.extra`]),
+    ...Object.keys(config.vocabulary),
+  ]);
+
+  const declaradas = [...config.order.positive, ...config.order.negative];
+
+  for (const entrada of declaradas) {
+    if (!entradasValidas.has(entrada)) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['order'],
+        message: `"${entrada}" não corresponde a nenhum texto de base.json. Válidos: ${[...entradasValidas].sort().join(', ')}.`,
+      });
+    }
+  }
+
+  // Template e extra são texto positivo por construção — o negativo é uma
+  // lista de exclusões, sem posição nem composição. Aceitá-los aqui daria a
+  // falsa impressão de que dá pra escrever um template negativo por espécie.
+  for (const entrada of config.order.negative) {
+    if (entrada.endsWith('.template') || entrada.endsWith('.extra')) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['order', 'negative'],
+        message: `"${entrada}" não pode entrar no negativo — template/extra são texto positivo. O negativo aceita fixed.* e caminhos de vocabulário.`,
+      });
+    }
+  }
+
+  const posicionadas = new Set(declaradas);
+  for (const entrada of entradasValidas) {
+    if (!posicionadas.has(entrada)) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['order'],
+        message: `"${entrada}" tem texto declarado mas não aparece em order — ficaria órfão, sem nunca entrar no prompt.`,
+      });
+    }
+  }
+}
+
+export const zBaseArt = zBaseArtBase.superRefine(validarOrdem);
+
+export type BaseArt = z.infer<typeof zBaseArt>;
+export type NomeDeFragmento = string;
 
 const CAMINHO_BASE_JSON = join(import.meta.dir, 'base.json');
 
-/** Lê e valida `base.json` uma vez, na primeira importação — falha rápido
- * (erro descritivo do zod) se o arquivo estiver malformado, em vez de deixar
- * um `undefined` silencioso vazar pro meio de um prompt composto depois. */
-export const BASE_FIXO: BaseFixo = zBaseFixo.parse(JSON.parse(readFileSync(CAMINHO_BASE_JSON, 'utf8')));
+export function lerBaseArt(caminho: string = CAMINHO_BASE_JSON): BaseArt {
+  return zBaseArt.parse(JSON.parse(readFileSync(caminho, 'utf8')));
+}
+
+/** Lido e validado uma vez, na primeira importação — falha rápido (erro
+ * descritivo do zod) se o arquivo estiver malformado, em vez de deixar um
+ * `undefined` silencioso vazar pro meio de um prompt composto depois. */
+export const BASE_ART: BaseArt = lerBaseArt();

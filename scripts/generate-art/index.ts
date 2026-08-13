@@ -6,11 +6,12 @@ import { lerConfig } from '../generate-portraits/discovery';
 import { aguardarConclusao, baixarImagem, enfileirar, enviarImagemDeReferencia } from './comfyui-client';
 import { mesclarCampos } from './merge';
 import type { GeneroAlvo, GeracaoArtModelo } from '../portrait-schema';
-import { BASE_FIXO } from './base';
+import { BASE_ART } from './base';
 import { gravarSeed } from './persistir-seed';
 import { promoverEspecie } from './promote';
 import { montarPrompts } from './prompt-builder';
 import { resolverSeed, seedDeterministica, type OrigemSeed } from './seed';
+import { validarEspecie } from './validacao';
 import { montarPrompt, type PromptComfyUI } from './workflow';
 
 /** Entry point do pipeline de geração de arte via IA (Flux.2 Klein Base),
@@ -199,6 +200,12 @@ async function main(): Promise<void> {
     return;
   }
 
+  // Validação cruzada portrait.json × base.json, sobre TODAS as variantes de
+  // todos os gêneros — mesmo quando esta invocação vai gerar só uma (`-n`).
+  // Não custa GPU e evita descobrir na variante 017 que o lote está quebrado.
+  const conferidas = validarEspecie(config, slug, BASE_ART);
+  console.log(`Validado: ${conferidas} variante(s) de ${slug} (todos os gêneros declarados).`);
+
   const bloco = config.geracaoArt![genero]!;
   const chaves =
     variantesPedidas ?? Object.keys(bloco.variantes).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
@@ -215,7 +222,7 @@ async function main(): Promise<void> {
     for (const chave of chaves) {
       const camposVariante = bloco.variantes[chave]!;
       const campos = mesclarCampos(config.geracaoArt!.base, bloco, camposVariante);
-      const { positive, negative } = montarPrompts(campos, BASE_FIXO);
+      const { positive, negative } = montarPrompts(campos, BASE_ART, `${slug}/${genero}/${chave}`);
       console.log(`\n=== ${slug}/${genero}/${chave} ===`);
       console.log(`POSITIVO (${positive.length} chars):\n${positive}`);
       console.log(`NEGATIVO (${negative.length} chars):\n${negative}`);
@@ -224,7 +231,7 @@ async function main(): Promise<void> {
   }
 
   const modelo = config.geracaoArt!.modelo;
-  const variant = modelo?.variant ?? 'base';
+  const variant = modelo?.variant ?? 'distilled';
   const template = JSON.parse(await Bun.file(CAMINHOS_WORKFLOW[variant]).text()) as PromptComfyUI;
   console.log(`Variante do modelo: ${variant}.`);
 
@@ -246,7 +253,7 @@ async function main(): Promise<void> {
   for (const chave of chaves) {
     const camposVariante = bloco.variantes[chave]!;
     const campos = mesclarCampos(config.geracaoArt!.base, bloco, camposVariante);
-    const prompts = montarPrompts(campos, BASE_FIXO);
+    const prompts = montarPrompts(campos, BASE_ART, `${slug}/${genero}/${chave}`);
     const { seed: seedFinal, origem: origemSeed } = resolverSeed(seed, camposVariante.seed, seedDeterministica(slug, genero, chave));
     await gerarVariante(
       slug,

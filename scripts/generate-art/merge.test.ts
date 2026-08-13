@@ -2,7 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import { mesclarCampos } from './merge';
 
 describe('mesclarCampos', () => {
-  test('seções simples (person/hair/eyes/torso/tipo): último nível declarado vence, mesclado campo a campo', () => {
+  test('seções (person/hair/eyes/torso): último nível declarado vence, mesclado campo a campo', () => {
     const resultado = mesclarCampos(
       { person: { ethnicity: 'African', body_shape: 'Slim' } },
       { person: { body_shape: 'Muscular' } }, // não redeclara ethnicity
@@ -11,58 +11,77 @@ describe('mesclarCampos', () => {
     expect(resultado.person).toEqual({ ethnicity: 'African', body_shape: 'Muscular', age: 25 });
   });
 
-  test('extra_prompt.positive concatena base→gênero→variante, em vez do último vencer', () => {
+  test('template segue a regra normal: o nível mais específico que declarar vence', () => {
     const resultado = mesclarCampos(
-      { extra_prompt: { positive: 'estilo base' } },
-      { extra_prompt: { positive: 'reforço de gênero' } },
-      { extra_prompt: { positive: 'reforço da variante' } }
+      { torso: { template: 'template da base', state: 'FullyCovered' } },
+      { torso: { template: 'template do gênero' } }
     );
-    expect(resultado.extra_prompt?.positive).toBe('estilo base, reforço de gênero, reforço da variante');
+    expect(resultado.torso).toEqual({ template: 'template do gênero', state: 'FullyCovered' });
   });
 
-  test('extra_prompt.negative concatena independente do positive (os dois lados concatenam, mas não se misturam)', () => {
+  test('extra concatena base→gênero→variante, em vez do último vencer', () => {
     const resultado = mesclarCampos(
-      { extra_prompt: { positive: 'pos base', negative: 'neg base' } },
-      { extra_prompt: { positive: 'pos variante', negative: 'neg variante' } }
+      { hair: { extra: 'wet hair' } },
+      { hair: { extra: 'damp strands' } },
+      { hair: { extra: 'seaweed woven in' } }
     );
-    expect(resultado.extra_prompt).toEqual({
-      positive: 'pos base, pos variante',
-      negative: 'neg base, neg variante',
-    });
+    expect(resultado.hair?.extra).toBe('wet hair, damp strands, seaweed woven in');
   });
 
-  test('nível sem extra_prompt.negative não introduz string vazia na concatenação', () => {
+  test('extra concatena por seção, sem misturar seções diferentes', () => {
     const resultado = mesclarCampos(
-      { extra_prompt: { positive: 'a' } },
-      { extra_prompt: { positive: 'b', negative: 'só a variante tem negativo' } }
+      { hair: { extra: 'cabelo base' }, torso: { extra: 'torso base' } },
+      { hair: { extra: 'cabelo variante' } }
     );
-    expect(resultado.extra_prompt).toEqual({
-      positive: 'a, b',
-      negative: 'só a variante tem negativo',
-    });
+    expect(resultado.hair?.extra).toBe('cabelo base, cabelo variante');
+    expect(resultado.torso?.extra).toBe('torso base');
   });
 
-  test('nenhum nível com extra_prompt não gera a chave (evita objeto {} espúrio)', () => {
+  test('nível sem extra não introduz string vazia na concatenação', () => {
+    const resultado = mesclarCampos(
+      { person: { extra: 'só a base tem extra' } },
+      { person: { age: 30 } },
+      { person: { body_shape: 'Slim' } }
+    );
+    expect(resultado.person).toEqual({ extra: 'só a base tem extra', age: 30, body_shape: 'Slim' });
+  });
+
+  test('seção declarada em nenhum nível não gera a chave (evita objeto {} espúrio)', () => {
     const resultado = mesclarCampos({ person: { age: 20 } }, {});
-    expect(resultado.extra_prompt).toBeUndefined();
+    expect(resultado.hair).toBeUndefined();
+    expect(resultado.torso).toBeUndefined();
+    expect(Object.keys(resultado)).toEqual(['person']);
   });
 
-  test('tipo não mescla campo a campo — o nível mais específico que declarar vence por inteiro', () => {
+  test('species vem da base e atravessa o merge intacta (só a base pode declará-la)', () => {
     const resultado = mesclarCampos(
-      { tipo: { value: 'Human', description: 'descrição da base' } },
-      { tipo: { value: 'Robot' } } // sem description — não deve herdar a description da base
+      { species: { archetype: 'Mermaid', template: 'aquatic humanoid' } },
+      { person: { gender: 'Male' } },
+      { hair: { primary_color: 'Blonde' } }
     );
-    expect(resultado.tipo).toEqual({ value: 'Robot' });
+    expect(resultado.species).toEqual({ archetype: 'Mermaid', template: 'aquatic humanoid' });
   });
 
-  test('regressão do bug documentado no histórico: reforço de etnia numa variante não apaga o extra da base (concatenação, não substituição)', () => {
+  test('caso ssm_mermaids: template na base, cores na variante — o merge junta os dois níveis', () => {
     const resultado = mesclarCampos(
-      { extra_prompt: { positive: '3D render, no helmet, sci-fi space suit' } },
+      { torso: { state: 'CroppedSleeved', template: 'fish-scale top in <torso.primary_color>' } },
+      { person: { gender: 'Male' } },
+      { torso: { primary_color: 'Salmon', secondary_color: 'Turquoise' } }
+    );
+    expect(resultado.torso).toEqual({
+      state: 'CroppedSleeved',
+      template: 'fish-scale top in <torso.primary_color>',
+      primary_color: 'Salmon',
+      secondary_color: 'Turquoise',
+    });
+  });
+
+  test('regressão: reforço numa variante não apaga o extra da base (concatenação, não substituição)', () => {
+    const resultado = mesclarCampos(
+      { hair: { extra: 'no hood, no head covering, full head of hair' } },
       {},
-      { extra_prompt: { positive: 'dark skin, deep brown skin tone, African facial features' } }
+      { hair: { extra: 'wind-blown strands' } }
     );
-    expect(resultado.extra_prompt?.positive).toBe(
-      '3D render, no helmet, sci-fi space suit, dark skin, deep brown skin tone, African facial features'
-    );
+    expect(resultado.hair?.extra).toBe('no hood, no head covering, full head of hair, wind-blown strands');
   });
 });

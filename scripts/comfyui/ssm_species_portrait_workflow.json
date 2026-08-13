@@ -41,7 +41,7 @@
   "5": {
     "class_type": "CLIPTextEncode",
     "_meta": {
-      "title": "Negativo (texto pronto, montado em TS por prompt-builder.ts — base.json + extra_prompt.negative)"
+      "title": "Negativo (texto pronto, montado por prompt-builder.ts a partir de base.json: fixed.negative + vocabulário)"
     },
     "inputs": {
       "text": "",
