@@ -154,7 +154,9 @@ export const MODOS_ENQUADRAMENTO = ['largura', 'altura'] as const;
 /** Ver rationale completo no comentário de `FORMAS_CORPO_DESCRICOES` acima. */
 export const MODOS_ENQUADRAMENTO_DESCRICOES: Record<(typeof MODOS_ENQUADRAMENTO)[number], string> = {
   largura: 'escala a arte pela largura do guia (padrão)',
-  altura: 'escala a arte pela altura mínima do guia (composições atipicamente largas)',
+  altura:
+    'escala a arte pela altura mínima do guia (composições largas demais pro guia, ' +
+    'ou que precisam mostrar algo abaixo do busto)',
 };
 
 /** Ver `AncoraVertical` em `generate-portraits/types.ts`. */

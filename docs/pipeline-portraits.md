@@ -53,7 +53,7 @@ de prefixo que existia antes entre arte-fonte e mod publicado.
      roda a cada `bun run portrait`, em `framing.ts`, escrevendo em `.portraits-framed/` (fora do git — é o
      enquadramento final em PNG, conferível a olho sem abrir um DDS). O guia é expresso em **fração do canvas**,
      o que torna o canvas do rig uma constante trocável sem recalibrar nada. `modo` escolhe entre escalar pela
-     largura do guia (padrão) ou pela altura mínima (`altura`, pra composições atipicamente largas). `ancora`
+     largura do guia (padrão) ou pela altura mínima (`altura`) — veja "Escolher o `modo`" abaixo. `ancora`
      escolhe o que encosta no topo do guia: o bounding box da arte (padrão) ou a **cabeça**
      (`"ancora": "cabeca"`). Rationale completo e candidatas por espécie: `docs/rig.md`.
    - **`sl_shared` — legado congelado.** O PNG em `assets/` já vem enquadrado e é usado como está, exigindo o
@@ -81,6 +81,36 @@ de prefixo que existia antes entre arte-fonte e mod publicado.
    gênero (`human_male_greetings_01` / `human_female_greetings_01`, sempre macho pras espécies flat); cada
    espécie tem sempre um único grupo de retrato por gênero (sufixo `_01`); o bloco `portrait_groups` segue o
    boilerplate padrão (`game_setup`, `species`, `pop`, `leader`, `ruler`) idêntico ao que já existia manualmente.
+
+### Escolher o `modo` de enquadramento
+
+No canvas do `ssm_shared` (980×780) o guia resolve em largura 600, topo y=144, base y=780.
+
+**`largura` (padrão)** escala a arte pros 600 px do guia e corta na borda inferior o que passar de 780. A arte
+sai do **mesmo tamanho em toda espécie**, porque a largura é fixa — é isso que faz os retratos parecerem um
+conjunto. É o modo certo pra composição de busto, onde nada abaixo do peito precisa aparecer.
+
+**`altura`** escala pra que a base toque exatamente y=780, e deriva a largura da proporção do PNG. Dois casos
+pedem esse modo:
+
+1. **A composição é larga demais pro guia** — proporção `altura/largura` do conteúdo abaixo de ~1,06 (isto é,
+   `alturaMinima / largura` do guia). Escalada pros 600 px do guia, a arte fica curta demais pra alcançar a
+   base e o busto flutuaria. Aqui `largura` é **erro de validação**, com mensagem própria.
+2. **A arte tem abaixo do busto um elemento que precisa aparecer** — a cintura, um cinto, a transição pra uma
+   anatomia não-humana. Escalando pela largura, esse pedaço cai muito além de y=780 e nunca chega à tela.
+   Aqui `largura` **valida sem reclamar** e simplesmente some com o elemento: nenhum erro avisa, a decisão é
+   visual.
+
+O preço do caso 2 é tamanho, e é real: a largura resultante fica bem abaixo dos 600 do guia (numa arte de
+proporção 1,4 dá ~455 px), então a espécie sai menor que as que usam `largura`, e **varia entre variantes da
+mesma espécie**, porque cada PNG enquadra uma quantidade diferente de corpo. Não existe ajuste que dê as duas
+coisas: da cabeça à cintura são ~3 alturas de cabeça, e isso não cabe entre y=144 e y=780 com a cabeça no
+tamanho que o guia dá. Escolher `altura` é aceitar o personagem menor em troca do elemento visível.
+
+Vale conferir contra a janela real de UI antes de decidir: dos 122 contextos medidos por
+`scripts/measure-framing/`, só **36% mostram até a borda inferior** do canvas — a base visível mediana é
+y≈725. Um elemento que o `modo` traz pra y≈690 aparece em 94% dos contextos; um que fica em y=780 aparece em
+pouco mais de um terço.
 
 ## Portraits e Portrait Groups (mecânica vanilla)
 

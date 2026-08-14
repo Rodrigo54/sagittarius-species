@@ -11,12 +11,30 @@ export type { PortraitConfig, RigId };
 
 /** `largura` (padrão): escala a arte pra largura do guia, topo no topo do
  * guia — regra padrão pra composições "busto alto e estreito". O excesso de
- * altura é cortado pela borda inferior do canvas.
+ * altura é cortado pela borda inferior do canvas, e o personagem sai do mesmo
+ * tamanho em toda espécie, porque a largura é fixa.
+ *
  * `altura`: escala pra altura mínima (garante que a base sempre toque a borda
  * do canvas), permitindo que a largura resultante ultrapasse o guia (nunca o
- * canvas) — pra composições atipicamente largas (ombros largos, capuz), onde
- * preencher a largura do guia deixaria a arte curta demais pra alcançar a
- * base. Declarado por espécie no `portrait.json`. Valor aceito também vem de
+ * canvas). Dois casos pedem esse modo, e o segundo é o mais comum:
+ *
+ * 1. **Composição larga demais** (ombros largos, capuz, armadura): preencher a
+ *    largura do guia deixaria a arte curta demais pra alcançar a base, e o
+ *    busto flutuaria. Aqui `altura` é obrigatório — `largura` é erro de
+ *    validação.
+ * 2. **A arte tem abaixo do busto algo que precisa aparecer**: escalar pela
+ *    largura joga o pedaço de baixo além da borda do canvas, onde ele nunca
+ *    chega à tela. Aqui `largura` valida sem reclamar e só some com o
+ *    elemento — a escolha é visual, espécie a espécie.
+ *
+ * O preço, no caso 2, é tamanho: a largura passa a ser derivada da proporção
+ * de cada PNG, então a arte fica menor que a das espécies em `largura` e
+ * **varia entre variantes da mesma espécie** conforme quanto corpo entrou no
+ * enquadramento de cada uma. Não há como ter as duas coisas: a distância
+ * cabeça→cintura é ~3 alturas de cabeça, e ela não cabe no canvas com a cabeça
+ * no tamanho que o guia dá.
+ *
+ * Declarado por espécie no `portrait.json`. Valor aceito também vem de
  * `portrait-schema` (`MODOS_ENQUADRAMENTO`); o tipo aqui é só pra manter o
  * nome em português já usado neste arquivo. */
 export type ModoEnquadramento = NonNullable<PortraitConfig['modo']>;
