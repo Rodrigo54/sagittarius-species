@@ -14,7 +14,7 @@
       },
       "torso": {
         "state": "CroppedSleeved",
-        "template": "cropped lightweight <torso.primary_color>-colored fish-scale top, thin flexible scale mesh hugging the body, small closely overlapping iridescent fish scales like real fish skin, soft and pliable rather than rigid plates, long <torso.primary_color>-colored fish-scale sleeves flush with the shoulders, covering the chest, shoulders and arms, small starfish-shaped ornament centered on the chest, bare toned midriff with visible abs, high-waisted pale gold fish-scale waistband, wide band of overlapping scales dipping to a downward point at the center of the waist in a V shape, below the waistband a <torso.secondary_color>-colored scaled fish tail, waistband visible within frame"
+        "template": "cropped lightweight <torso.primary_color>-colored fish-scale top, thin flexible scale mesh lying smooth and loose over the torso, small closely overlapping iridescent fish scales like real fish skin, soft and pliable rather than rigid plates, long <torso.primary_color>-colored fish-scale sleeves flush with the shoulders, covering the chest, shoulders and arms, small flat starfish-shaped ornament set flush into the scale mesh at the center of the chest, bare toned midriff with visible abs, high-waisted pale gold fish-scale waistband, wide band of overlapping scales dipping to a downward point at the center of the waist in a V shape, below the waistband a <torso.secondary_color>-colored scaled fish tail, waistband visible within frame"
       }
     },
     "modelo": {
@@ -24,17 +24,16 @@
     "male": {
       "person": {
         "gender": "Male",
-        "extra": "flat masculine chest, broad flat pectoral muscles, square male torso"
+        "extra": "flat masculine chest, broad flat pectoral muscles that read as one wide slab rather than two round full masses, square male torso, wide shoulders tapering to the waist"
       },
       "torso": {
-        "extra": "the scale top lying flat across the chest, following the flat plane of the pectorals"
+        "extra": "the scale mesh lying flat over a broad flat male chest, the scale surface reading as one wide plane across both pectorals with soft continuous shading, no dark shadow line under the pectorals, no vertical crease or seam between them, lit head-on so the light crosses the whole chest without a break, the pectoral muscle still readable through soft gradient alone"
       },
       "referenceImage": [
         "assets/portraits/ssm_mermaids/reference_male_3.png"
       ],
       "variantes": {
         "001": {
-          "seed": 2665609646,
           "person": {
             "age": 18,
             "ethnicity": "Caucasian",
@@ -49,9 +48,10 @@
             "color": "Blue"
           },
           "torso": {
-            "primary_color": "Salmon",
+            "primary_color": "Gold",
             "secondary_color": "Turquoise"
-          }
+          },
+          "seed": 2018191872
         },
         "002": {
           "person": {
@@ -61,7 +61,7 @@
           },
           "hair": {
             "style": "Undercut",
-            "primary_color": "Sky Blue"
+            "primary_color": "Turquoise"
           },
           "eyes": {
             "shape": "Hooded",
@@ -70,8 +70,7 @@
           "torso": {
             "primary_color": "Orange",
             "secondary_color": "Emerald"
-          },
-          "seed": 1593413918
+          }
         },
         "003": {
           "person": {
@@ -126,7 +125,7 @@
             "color": "Blue"
           },
           "torso": {
-            "primary_color": "Emerald",
+            "primary_color": "Mint",
             "secondary_color": "Platinum"
           }
         },
@@ -147,7 +146,8 @@
           "torso": {
             "primary_color": "Salmon",
             "secondary_color": "Peach"
-          }
+          },
+          "seed": 3653069595
         },
         "007": {
           "seed": 4545565480,
@@ -171,21 +171,21 @@
         },
         "008": {
           "person": {
-            "age": 25,
-            "ethnicity": "Latino",
+            "age": 20,
+            "ethnicity": "Nordic",
             "body_shape": "Slim"
           },
           "hair": {
-            "style": "Long Wavy",
-            "primary_color": "Maroon"
+            "style": "Short Wavy",
+            "primary_color": "Ruby"
           },
           "eyes": {
             "shape": "Upturned",
             "color": "Blue"
           },
           "torso": {
-            "primary_color": "Mustard",
-            "secondary_color": "Beige"
+            "primary_color": "Emerald",
+            "secondary_color": "Coral"
           },
           "seed": 573910151
         },
@@ -212,7 +212,7 @@
           "person": {
             "age": 24,
             "ethnicity": "Asian",
-            "body_shape": "Muscular"
+            "body_shape": "Athletic"
           },
           "hair": {
             "style": "Spiky",
@@ -226,7 +226,7 @@
             "primary_color": "Pink",
             "secondary_color": "Gold"
           },
-          "seed": 4027886307
+          "seed": 688156923
         },
         "011": {
           "person": {
@@ -246,26 +246,27 @@
             "primary_color": "Blue",
             "secondary_color": "Turquoise"
           },
-          "seed": 2193342067
+          "seed": 3649191175
         },
         "012": {
           "person": {
-            "age": 24,
+            "age": 22,
             "ethnicity": "Nordic",
-            "body_shape": "Muscular"
+            "body_shape": "Slim"
           },
           "hair": {
             "style": "Short Curly",
             "primary_color": "Red"
           },
           "eyes": {
-            "shape": "Upturned",
+            "shape": "Oval",
             "color": "Gray"
           },
           "torso": {
-            "primary_color": "Ruby",
-            "secondary_color": "Orange"
-          }
+            "primary_color": "Magenta",
+            "secondary_color": "Teal"
+          },
+          "seed": 749155618
         },
         "013": {
           "person": {
@@ -290,7 +291,7 @@
           "person": {
             "age": 21,
             "ethnicity": "Asian",
-            "body_shape": "Muscular"
+            "body_shape": "Athletic"
           },
           "hair": {
             "style": "Short Curly",
@@ -301,7 +302,7 @@
             "color": "Blue"
           },
           "torso": {
-            "primary_color": "Teal",
+            "primary_color": "Green",
             "secondary_color": "Copper"
           }
         },
@@ -309,7 +310,7 @@
           "person": {
             "age": 23,
             "ethnicity": "Nordic",
-            "body_shape": "Muscular"
+            "body_shape": "Athletic"
           },
           "hair": {
             "style": "Spiky",
@@ -326,21 +327,21 @@
         },
         "016": {
           "person": {
-            "age": 26,
+            "age": 22,
             "ethnicity": "Latino",
-            "body_shape": "Muscular"
+            "body_shape": "Athletic"
           },
           "hair": {
             "style": "Undercut",
-            "primary_color": "Mint"
+            "primary_color": "Turquoise"
           },
           "eyes": {
             "shape": "Almond",
             "color": "Hazel"
           },
           "torso": {
-            "primary_color": "Silver",
-            "secondary_color": "Turquoise"
+            "primary_color": "Mint",
+            "secondary_color": "Mustard"
           }
         },
         "017": {
@@ -351,22 +352,23 @@
           },
           "hair": {
             "style": "Curly",
-            "primary_color": "Teal"
+            "primary_color": "Blonde"
           },
           "eyes": {
             "shape": "Hooded",
             "color": "Gray"
           },
           "torso": {
-            "primary_color": "Azure",
-            "secondary_color": "Pearl"
-          }
+            "primary_color": "Indigo",
+            "secondary_color": "White"
+          },
+          "seed": 875703907
         },
         "018": {
           "person": {
             "age": 19,
             "ethnicity": "Asian",
-            "body_shape": "Muscular"
+            "body_shape": "Athletic"
           },
           "hair": {
             "style": "Wavy",
@@ -388,7 +390,7 @@
             "body_shape": "Athletic"
           },
           "hair": {
-            "style": "Curly",
+            "style": "Short Wavy",
             "primary_color": "Silver"
           },
           "eyes": {
@@ -396,9 +398,10 @@
             "color": "Gray"
           },
           "torso": {
-            "primary_color": "Teal",
-            "secondary_color": "Copper"
-          }
+            "primary_color": "Charcoal",
+            "secondary_color": "Navy"
+          },
+          "seed": 1049159755
         },
         "020": {
           "person": {
@@ -415,66 +418,70 @@
             "color": "Gray"
           },
           "torso": {
-            "primary_color": "Coral",
-            "secondary_color": "Gold"
-          }
+            "primary_color": "Rose",
+            "secondary_color": "Copper"
+          },
+          "seed": 1378445909
         },
         "021": {
           "person": {
             "age": 18,
             "ethnicity": "Nordic",
-            "body_shape": "Muscular"
+            "body_shape": "Athletic"
           },
           "hair": {
             "style": "Short Curly",
-            "primary_color": "Platinum"
+            "primary_color": "Red"
           },
           "eyes": {
             "shape": "Oval",
             "color": "Green"
           },
           "torso": {
-            "primary_color": "Sapphire",
-            "secondary_color": "Platinum"
-          }
+            "primary_color": "Amber",
+            "secondary_color": "Cyan"
+          },
+          "seed": 2595370369
         },
         "022": {
           "person": {
             "age": 20,
             "ethnicity": "Latino",
-            "body_shape": "Muscular"
+            "body_shape": "Athletic"
           },
           "hair": {
             "style": "Long Wavy",
-            "primary_color": "Bronze"
+            "primary_color": "Brown"
           },
           "eyes": {
             "shape": "Monolid",
             "color": "Green"
           },
           "torso": {
-            "primary_color": "Silver",
-            "secondary_color": "Turquoise"
-          }
+            "primary_color": "Turquoise",
+            "secondary_color": "Salmon"
+          },
+          "seed": 1639486843
         },
         "023": {
           "person": {
             "age": 29,
             "ethnicity": "African",
-            "body_shape": "Muscular"
+            "body_shape": "Athletic"
           },
           "hair": {
-            "style": "Wavy",
-            "primary_color": "Blonde"
+            "style": "Afro",
+            "primary_color": "Brown"
           },
           "eyes": {
             "shape": "Almond",
             "color": "Blue"
           },
           "torso": {
-            "primary_color": "Silver",
-            "secondary_color": "Turquoise"
-          }
+            "primary_color": "Pearl",
+            "secondary_color": "Silver"
+          },
+          "seed": 1161030764
         },
         "024": {
           "person": {
@@ -502,16 +509,16 @@
             "body_shape": "Average"
           },
           "hair": {
-            "style": "Straight",
-            "primary_color": "Platinum"
+            "style": "Long Straight",
+            "primary_color": "Bronze"
           },
           "eyes": {
             "shape": "Round",
             "color": "Gray"
           },
           "torso": {
-            "primary_color": "Gold",
-            "secondary_color": "Emerald"
+            "primary_color": "Beige",
+            "secondary_color": "Salmon"
           }
         }
       }
