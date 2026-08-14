@@ -33,9 +33,16 @@ A documentação deste repositório é dividida por tempo verbal, e a divisão �
   por assunto, no formato `YYYY-MM-DD-<assunto>.md`. É onde vive o "por que mudou", incluindo os caminhos que
   não deram certo.
 
-**Toda mudança grande no projeto atualiza suas docs em `docs/` *e* registra um novo arquivo em `docs/history/`
-com os motivos que levaram à mudança.** Um sem o outro deixa a documentação mentindo (se só o history for
-escrito) ou apaga a razão de ser da decisão (se só o `docs/` for atualizado).
+**Mudança enorme atualiza suas docs em `docs/` *e* registra um novo arquivo em `docs/history/` com os motivos
+que levaram à mudança.** Um sem o outro deixa a documentação mentindo (se só o history for escrito) ou apaga a
+razão de ser da decisão (se só o `docs/` for atualizado).
+
+Enorme é o que muda como o projeto funciona ou por quê: um pipeline novo, a troca de um formato ou de uma
+ferramenta, uma regra do enquadramento, uma decisão de conteúdo que valha explicar depois. **Todo o resto não
+pede nada disso** — corrigir um typo, ajustar um valor, adicionar uma variante, renomear um arquivo. O teste é
+esse: se daqui a seis meses alguém for olhar o resultado e perguntar "por que está assim?", escreva o history;
+se a resposta estiver óbvia no próprio arquivo, não escreva. Na dúvida, a mensagem de commit já é registro
+suficiente.
 
 ## Comandos
 
