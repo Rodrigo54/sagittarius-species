@@ -40,9 +40,11 @@ interface Argumentos {
   /** Lista de índices explícitos (`--variante 001,004,007`) — undefined =
    * todas as variantes declaradas. */
   variantes?: string[];
-  /** `'random'` quando `--seed` vem sem valor: sorteia uma seed e a grava no
-   * `portrait.json` da variante depois de gerar. */
-  seed?: number | 'random';
+  /** Toda forma de `--seed` é persistida no `portrait.json` da variante
+   * depois de gerar: um número fixa aquela seed, `'random'` (a flag sem
+   * valor) sorteia uma, e `'default'` apaga a seed gravada, devolvendo a
+   * variante à determinística. */
+  seed?: number | 'random' | 'default';
   promote: boolean;
   /** Monta e imprime o prompt (positivo + negativo) de cada variante pedida,
    * sem enfileirar nada no ComfyUI — ciclo de debug instantâneo pra
@@ -86,7 +88,7 @@ function parseArgumentos(): Argumentos {
     .addOption(
       new Option(
         '-s, --seed [N]',
-        'Seed desta execução; sem valor, sorteia uma e grava no portrait.json da variante.'
+        'Fixa a seed da variante: um inteiro fixa aquele valor, "default" volta pra determinística, sem valor sorteia uma. Sempre grava o resultado no portrait.json.'
       ).conflicts('exportPrompt')
     )
     .addOption(
@@ -103,25 +105,33 @@ function parseArgumentos(): Argumentos {
   const variantes: string[] | undefined = opcoes.variante;
 
   // `--seed` sem valor chega como `true` (a opção declara valor opcional) — é
-  // o pedido de sorteio; com valor, só dígitos servem pro noise_seed.
-  let seed: number | 'random' | undefined;
+  // o pedido de sorteio; "default" é o literal que devolve a variante à seed
+  // determinística; com valor, só dígitos servem pro noise_seed.
+  let seed: number | 'random' | 'default' | undefined;
   if (opcoes.seed === true) {
     seed = 'random';
   } else if (opcoes.seed !== undefined) {
-    // `Number.isSafeInteger` além do regex: dígitos demais passariam por
-    // "número válido" e chegariam ao ComfyUI já arredondados.
-    const numero = Number(opcoes.seed);
-    if (!/^\d+$/.test(String(opcoes.seed)) || !Number.isSafeInteger(numero)) {
-      programa.error(`error: --seed aceita um inteiro não-negativo ou nenhum valor (recebido "${opcoes.seed}").`);
+    const texto = String(opcoes.seed);
+    if (texto.toLowerCase() === 'default') {
+      seed = 'default';
+    } else {
+      // `Number.isSafeInteger` além do regex: dígitos demais passariam por
+      // "número válido" e chegariam ao ComfyUI já arredondados.
+      const numero = Number(texto);
+      if (!/^\d+$/.test(texto) || !Number.isSafeInteger(numero)) {
+        programa.error(
+          `error: --seed aceita um inteiro não-negativo, "default", ou nenhum valor (recebido "${opcoes.seed}").`
+        );
+      }
+      seed = numero;
     }
-    seed = numero;
   }
 
   // As demais combinações inválidas são declaradas em `.conflicts()` acima;
   // esta depende da quantidade de variantes, não só da presença das flags.
   if (seed !== undefined && variantes?.length !== 1) {
     programa.error(
-      'error: --seed só faz sentido junto com --variante de uma única variante — sobrescreve, só nesta execução, a seed dela (customizada no portrait.json ou determinística).'
+      'error: --seed só faz sentido junto com --variante de uma única variante — grava a seed dela no portrait.json, e uma seed só descreve uma imagem.'
     );
   }
 
@@ -140,6 +150,7 @@ function parseArgumentos(): Argumentos {
 const ROTULO_ORIGEM_SEED: Record<OrigemSeed, string> = {
   cli: '--seed',
   aleatoria: 'sorteada',
+  padrao: '--seed default',
   config: 'customizada',
   deterministica: 'determinística',
 };
@@ -270,10 +281,14 @@ async function main(): Promise<void> {
 
     // Só depois de o PNG existir em disco: se o ComfyUI falhar no meio (ou o
     // usuário interromper), o portrait.json não é tocado e não sobra seed
-    // apontando pra imagem nenhuma.
-    if (origemSeed === 'aleatoria') {
+    // divergindo da imagem que está lá.
+    if (origemSeed === 'padrao') {
+      await gravarSeed(pastaEspecieAssets, genero, chave, undefined);
+      console.log(`[${slug}/${genero}/${chave}] seed removida do portrait.json → volta à determinística (${seedFinal})`);
+    } else if (origemSeed === 'cli' || origemSeed === 'aleatoria') {
       await gravarSeed(pastaEspecieAssets, genero, chave, seedFinal);
-      console.log(`[${slug}/${genero}/${chave}] seed sorteada: ${seedFinal} → gravada em portrait.json`);
+      const comoVeio = origemSeed === 'aleatoria' ? 'sorteada' : 'fixada';
+      console.log(`[${slug}/${genero}/${chave}] seed ${comoVeio}: ${seedFinal} → gravada em portrait.json`);
     }
   }
 

@@ -72,4 +72,45 @@ describe('aplicarSeed', () => {
     expect(() => aplicarSeed(PORTRAIT_JSON, 'male', '099', 1)).toThrow('geracaoArt.male.variantes.099');
     expect(() => aplicarSeed(PORTRAIT_JSON, 'female', '001', 1)).toThrow('geracaoArt.female.variantes.001');
   });
+
+  test('seed undefined apaga a chave da variante', () => {
+    const resultado = JSON.parse(aplicarSeed(PORTRAIT_JSON, 'male', '001', undefined));
+    expect(resultado.geracaoArt.male.variantes['001']).not.toHaveProperty('seed');
+  });
+
+  test('a remoção mexe só no bloco da variante, e o resto do texto sai idêntico', () => {
+    // Byte a byte de propósito: garante que o diff se limita à seed e ao
+    // fechamento do `person` (que perde a vírgula, já que a seed era a última
+    // chave da variante) — nenhuma outra linha do arquivo se move.
+    const esperado = PORTRAIT_JSON.replace(
+      `          "person": {
+            "age": 30
+          },
+          "seed": 111
+`,
+      `          "person": {
+            "age": 30
+          }
+`
+    );
+    expect(aplicarSeed(PORTRAIT_JSON, 'male', '001', undefined)).toBe(esperado);
+  });
+
+  test('remover de uma variante não encosta na seed das outras', () => {
+    const comDuas = aplicarSeed(PORTRAIT_JSON, 'male', '002', 222);
+    const resultado = JSON.parse(aplicarSeed(comDuas, 'male', '001', undefined));
+    expect(resultado.geracaoArt.male.variantes['001']).not.toHaveProperty('seed');
+    expect(resultado.geracaoArt.male.variantes['002'].seed).toBe(222);
+  });
+
+  test('remover de uma variante que já não tem seed é um round-trip limpo, não um erro', () => {
+    // A idempotência de `--seed default` mora em `resolverSeed` (que nem
+    // chega a chamar isto quando não há o que remover); aqui só se garante
+    // que o caminho não explode nem suja o arquivo.
+    expect(aplicarSeed(PORTRAIT_JSON, 'male', '002', undefined)).toBe(PORTRAIT_JSON);
+  });
+
+  test('remover de uma variante inexistente falha igual ao caminho de escrita', () => {
+    expect(() => aplicarSeed(PORTRAIT_JSON, 'male', '099', undefined)).toThrow('geracaoArt.male.variantes.099');
+  });
 });

@@ -37,6 +37,22 @@ describe('resolverSeed', () => {
     expect(resolverSeed(999, 12345, 42)).toEqual({ seed: 999, origem: 'cli' });
   });
 
+  test('--seed default com seed gravada: volta pra determinística e marca a remoção', () => {
+    expect(resolverSeed('default', 12345, 42)).toEqual({ seed: 42, origem: 'padrao' });
+  });
+
+  test('--seed default ignora o VALOR da seed gravada, não só a origem', () => {
+    // O ponto do comando é justamente descartar a customizada: se ela
+    // vazasse pro campo `seed`, a imagem gerada seria a antiga.
+    const { seed } = resolverSeed('default', 12345, 42);
+    expect(seed).toBe(42);
+    expect(seed).not.toBe(12345);
+  });
+
+  test('--seed default sem seed gravada: colapsa em determinística, pra não reescrever o arquivo à toa', () => {
+    expect(resolverSeed('default', undefined, 42)).toEqual({ seed: 42, origem: 'deterministica' });
+  });
+
   test('--seed sem valor: sorteia e marca a origem que dispara a gravação', () => {
     const { seed, origem } = resolverSeed('random', undefined, 42);
     expect(origem).toBe('aleatoria');

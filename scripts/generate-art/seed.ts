@@ -3,8 +3,8 @@
  * Seed determinística (FNV-1a 32-bit) derivada de espécie+gênero+variante —
  * rodar a mesma variante duas vezes produz a mesma imagem, sem guardar
  * estado em lugar nenhum. É o piso padrão, usado quando nem `--seed` da CLI
- * nem `variantes.NNN.seed` do `portrait.json` estão presentes (ver
- * `resolverSeed` abaixo). */
+ * nem `variantes.NNN.seed` do `portrait.json` estão presentes, e é também
+ * pra onde `--seed default` devolve a variante (ver `resolverSeed` abaixo). */
 export function seedDeterministica(slug: string, genero: string, variante: string): number {
   const texto = `${slug}:${genero}:${variante}`;
   let hash = 0x811c9dc5;
@@ -27,9 +27,17 @@ export function sortearSeed(): number {
   return Math.floor(Math.random() * FAIXA_SEED);
 }
 
-/** De onde a seed final veio — rotula o log de `index.ts` e, no caso de
- * `'aleatoria'`, sinaliza que ela precisa ser gravada no `portrait.json`. */
-export type OrigemSeed = 'cli' | 'aleatoria' | 'config' | 'deterministica';
+/** De onde a seed final veio e, junto, o que isso implica pro
+ * `portrait.json` — `index.ts` decide gravar/remover/não-tocar olhando só
+ * pra este rótulo, sem reconsultar a config:
+ *
+ * - `'cli'` — `--seed N`: grava `N` na variante.
+ * - `'aleatoria'` — `--seed` sem valor: grava o número sorteado.
+ * - `'padrao'` — `--seed default` numa variante que TINHA seed gravada:
+ *   remove a chave.
+ * - `'config'` / `'deterministica'` — nada a escrever; o arquivo já descreve
+ *   a imagem que vai sair. */
+export type OrigemSeed = 'cli' | 'aleatoria' | 'padrao' | 'config' | 'deterministica';
 
 export interface SeedResolvida {
   seed: number;
@@ -39,25 +47,30 @@ export interface SeedResolvida {
 /** Resolve qual seed usar pra uma variante, entre as fontes possíveis, na
  * ordem em que a mais explícita vence:
  *
- * 1. `--seed N` da CLI — override pontual desta execução, pra testar uma seed
- *    nova sem editar o `portrait.json` (regenerar uma imagem rejeitada na
- *    revisão). Sempre vence, mesmo que a variante já tenha `seed` fixada.
- * 2. `--seed` sem valor (`'random'`) — sorteia aqui e devolve origem
- *    `'aleatoria'`, o sinal de que `index.ts` grava esse número em
- *    `variantes.NNN.seed` depois que a imagem fica pronta.
- * 3. `variantes.NNN.seed` do `portrait.json` — a última seed usada nesta
- *    variante, gravada por um `--seed` sem valor ou colada à mão. Vale pra
- *    todas as execuções seguintes que não passem `--seed`.
- * 4. `seedDeterministica` — piso padrão, sem intervenção nenhuma.
+ * 1. `--seed N` da CLI — fixa `N` nesta variante: gera com ela e a grava,
+ *    ainda que a variante já tivesse outra `seed`.
+ * 2. `--seed` sem valor (`'random'`) — sorteia aqui e grava o sorteio.
+ * 3. `--seed default` — devolve a variante ao piso determinístico e apaga a
+ *    `seed` gravada. Sem seed gravada não há o que apagar, então a origem
+ *    colapsa em `'deterministica'`: o comando vira no-op no arquivo, e rodá-lo
+ *    duas vezes não produz diff na segunda.
+ * 4. `variantes.NNN.seed` do `portrait.json` — a seed da imagem que está em
+ *    disco. Vale pra toda execução que não passe `--seed`.
+ * 5. `seedDeterministica` — piso padrão, sem intervenção nenhuma.
  *
- * A escrita em si mora em `index.ts`/`aplicarSeed`: esta função decide qual
- * seed vale nesta execução e, pela origem, se ela merece ser persistida. */
+ * Toda forma de `--seed` é uma declaração persistente: o campo `seed` do
+ * `portrait.json` descreve a seed da imagem em disco, não a última coisa
+ * digitada na CLI. A escrita em si mora em `index.ts`/`gravarSeed`, e só
+ * acontece depois que o PNG existe. */
 export function resolverSeed(
-  cliSeed: number | 'random' | undefined,
+  cliSeed: number | 'random' | 'default' | undefined,
   seedConfig: number | undefined,
   seedDeterministicaValor: number
 ): SeedResolvida {
   if (cliSeed === 'random') return { seed: sortearSeed(), origem: 'aleatoria' };
+  if (cliSeed === 'default') {
+    return { seed: seedDeterministicaValor, origem: seedConfig !== undefined ? 'padrao' : 'deterministica' };
+  }
   if (cliSeed !== undefined) return { seed: cliSeed, origem: 'cli' };
   if (seedConfig !== undefined) return { seed: seedConfig, origem: 'config' };
   return { seed: seedDeterministicaValor, origem: 'deterministica' };
