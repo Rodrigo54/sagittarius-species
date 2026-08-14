@@ -32,7 +32,7 @@ ordem mística ou entidade cósmica, tons dominantes roxo, violeta e preto com m
 - `modelo`: `{ variant: "distilled", steps: 4, cfg: 1, aspectRatio: "4:5" }` — canvas de geração efetivo 912×1152
   (ver `scripts/generate-art/resolution.ts`); "distilled" (o padrão do pipeline) quer dizer que o negativo é
   **descartado** pelo grafo (CFG=1 zera a guidance negativa via `ConditioningZeroOut` — ver "Armadilhas
-  conhecidas" na skill `gerar-geracao-arte`), então quem carrega peso de verdade é o positivo.
+  conhecidas" na skill `gerar-art-portrait`), então quem carrega peso de verdade é o positivo.
 
 Os prompts abaixo documentam as imagens de referência/conceito (`reference_male_1.png`, `reference_male_2.png`,
 `reference_female.png`) usadas por esse `geracaoArt` — cada uma entra numa cadeia de `ReferenceLatent` (não

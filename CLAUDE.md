@@ -153,8 +153,8 @@ Um schema `zod` único (`scripts/portrait-schema/`) valida o `portrait.json` **i
 desconhecida é erro), usado tanto por `generate-portraits` quanto por `generate-art`. Os prompts (positivo e
 negativo) são compostos inteiramente em TypeScript a partir de `geracaoArt` + `base.json`
 (`scripts/generate-art/prompt-builder.ts`), sem depender de nenhum custom node externo do ComfyUI. Skill
-dedicada pra preencher `geracaoArt` de uma espécie via entrevista: `.claude/skills/gerar-geracao-arte/`
-(`/gerar-geracao-arte`).
+dedicada pra preencher/ajustar `geracaoArt` de uma espécie via entrevista: `.claude/skills/gerar-art-portrait/`
+(`/gerar-art-portrait`).
 
 Este pipeline (Flux.2 Klein) substituiu de vez um pipeline anterior baseado em SDXL clássico (checkpoint/LoRA/
 ControlNet OpenPose/img2img), apagado do repositório — relato completo de como o pipeline original foi criado

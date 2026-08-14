@@ -125,8 +125,8 @@ posicionais escritos depois da flag.
 - **`--export-prompt`** — monta e imprime o prompt (positivo + negativo) de uma ou mais variantes sem enfileirar
   nada no ComfyUI, ciclo de debug instantâneo sem custo de GPU. Incompatível com `--seed` (nada é gerado, então
   não há seed a registrar) e com `--promote`.
-- Skill dedicada pra preencher `geracaoArt` de uma espécie via entrevista: `.claude/skills/gerar-geracao-arte/`
-  (`/gerar-geracao-arte`).
+- Skill dedicada pra preencher/ajustar `geracaoArt` de uma espécie via entrevista:
+  `.claude/skills/gerar-art-portrait/` (`/gerar-art-portrait`).
 
 ## Sintaxe de template
 
@@ -266,9 +266,9 @@ Snapshot do que mais está instalado localmente (`GET /object_info/CheckpointLoa
 e disponíveis caso um trabalho futuro precise de outro modelo. Pra atualizar esta lista, rode as mesmas duas
 chamadas de novo e reescreva as seções abaixo; não há script dedicado pra isso.
 
-Separado em "uso geral" e "ignorados por padrão" seguindo a mesma convenção da skill `gerar-geracao-arte`
-(`.claude/skills/gerar-geracao-arte/SKILL.md`): checkpoints/LoRAs com nome claramente de conteúdo adulto ou de
-likeness de celebridade só entram numa configuração se o usuário pedir explicitamente.
+Separado em "uso geral" e "ignorados por padrão" por uma convenção deste documento: checkpoints/LoRAs com nome
+claramente de conteúdo adulto ou de likeness de celebridade só entram numa configuração se o usuário pedir
+explicitamente.
 
 **Checkpoints (`models/checkpoints/`) — uso geral:** `ProtoGen_X3.4.safetensors`, `aresMix_v02.safetensors`,
 `dungeonsAndDiffusion_v3.safetensors`, `flux_schnell.safetensors`, `icbinpICantBelieveIts_mid2024.safetensors`,
