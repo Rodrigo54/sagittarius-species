@@ -1448,7 +1448,7 @@
                     "description": "O que está sobre o tronco do indivíduo — armadura, escama, pele nua, pelagem, roupa comum, o que fizer sentido pra espécie. O template é onde cada cor é posicionada na peça certa (\"...top in <torso.primary_color>, ...waistband in <torso.secondary_color>\"), em vez de as cores saírem soltas e a IA decidir onde aplicá-las."
                   },
                   "seed": {
-                    "description": "Seed de geração desta variante (noise_seed do ComfyUI) — a última usada, gravada automaticamente por \"bun run art --seed\" sem valor (que sorteia uma) ou colada à mão. Fixa a imagem: reexecuções sem --seed reproduzem esta seed. Ausente = usa a seed determinística (ou a de --seed da CLI, que sempre vence sobre este campo).",
+                    "description": "Seed de geração desta variante (noise_seed do ComfyUI) — a seed da imagem em disco, gravada automaticamente por qualquer forma de \"bun run art --seed\" (um inteiro fixa aquele valor; sem valor sorteia um) ou colada à mão. Fixa a imagem: reexecuções sem --seed reproduzem esta seed. Ausente = usa a seed determinística; \"--seed default\" apaga esta chave e devolve a variante a ela.",
                     "type": "integer",
                     "minimum": 0,
                     "maximum": 9007199254740991
@@ -2333,7 +2333,7 @@
                     "description": "O que está sobre o tronco do indivíduo — armadura, escama, pele nua, pelagem, roupa comum, o que fizer sentido pra espécie. O template é onde cada cor é posicionada na peça certa (\"...top in <torso.primary_color>, ...waistband in <torso.secondary_color>\"), em vez de as cores saírem soltas e a IA decidir onde aplicá-las."
                   },
                   "seed": {
-                    "description": "Seed de geração desta variante (noise_seed do ComfyUI) — a última usada, gravada automaticamente por \"bun run art --seed\" sem valor (que sorteia uma) ou colada à mão. Fixa a imagem: reexecuções sem --seed reproduzem esta seed. Ausente = usa a seed determinística (ou a de --seed da CLI, que sempre vence sobre este campo).",
+                    "description": "Seed de geração desta variante (noise_seed do ComfyUI) — a seed da imagem em disco, gravada automaticamente por qualquer forma de \"bun run art --seed\" (um inteiro fixa aquele valor; sem valor sorteia um) ou colada à mão. Fixa a imagem: reexecuções sem --seed reproduzem esta seed. Ausente = usa a seed determinística; \"--seed default\" apaga esta chave e devolve a variante a ela.",
                     "type": "integer",
                     "minimum": 0,
                     "maximum": 9007199254740991
@@ -3218,7 +3218,7 @@
                     "description": "O que está sobre o tronco do indivíduo — armadura, escama, pele nua, pelagem, roupa comum, o que fizer sentido pra espécie. O template é onde cada cor é posicionada na peça certa (\"...top in <torso.primary_color>, ...waistband in <torso.secondary_color>\"), em vez de as cores saírem soltas e a IA decidir onde aplicá-las."
                   },
                   "seed": {
-                    "description": "Seed de geração desta variante (noise_seed do ComfyUI) — a última usada, gravada automaticamente por \"bun run art --seed\" sem valor (que sorteia uma) ou colada à mão. Fixa a imagem: reexecuções sem --seed reproduzem esta seed. Ausente = usa a seed determinística (ou a de --seed da CLI, que sempre vence sobre este campo).",
+                    "description": "Seed de geração desta variante (noise_seed do ComfyUI) — a seed da imagem em disco, gravada automaticamente por qualquer forma de \"bun run art --seed\" (um inteiro fixa aquele valor; sem valor sorteia um) ou colada à mão. Fixa a imagem: reexecuções sem --seed reproduzem esta seed. Ausente = usa a seed determinística; \"--seed default\" apaga esta chave e devolve a variante a ela.",
                     "type": "integer",
                     "minimum": 0,
                     "maximum": 9007199254740991

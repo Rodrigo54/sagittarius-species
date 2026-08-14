@@ -152,11 +152,12 @@ const zModelo = z
  * `--seed` da CLI → este campo → hash determinístico (`seedDeterministica`,
  * ver `generate-art/seed.ts`).
  *
- * Guarda a última seed usada na variante: `bun run art --seed` (sem valor)
- * sorteia uma, gera a imagem e grava o número aqui. Gravar é fixar — dali em
- * diante, toda execução sem `--seed` reproduz aquela imagem, e sortear de novo
- * é o reroll. Colar um número à mão continua valendo; ausente, a variante cai
- * no hash determinístico. */
+ * Descreve a seed da imagem que está em disco, e é o `bun run art` quem o
+ * mantém assim: toda forma de `--seed` grava o resultado aqui depois de
+ * gerar o PNG — `--seed N` fixa `N`, `--seed` sem valor sorteia (o reroll da
+ * variante), e `--seed default` apaga a chave, devolvendo a variante ao hash
+ * determinístico. Colar um número à mão continua valendo; ausente, a variante
+ * cai no hash determinístico. */
 const zVariante = zCamposDoIndividuo
   .extend({
     seed: z
@@ -165,7 +166,7 @@ const zVariante = zCamposDoIndividuo
       .nonnegative()
       .optional()
       .describe(
-        'Seed de geração desta variante (noise_seed do ComfyUI) — a última usada, gravada automaticamente por "bun run art --seed" sem valor (que sorteia uma) ou colada à mão. Fixa a imagem: reexecuções sem --seed reproduzem esta seed. Ausente = usa a seed determinística (ou a de --seed da CLI, que sempre vence sobre este campo).'
+        'Seed de geração desta variante (noise_seed do ComfyUI) — a seed da imagem em disco, gravada automaticamente por qualquer forma de "bun run art --seed" (um inteiro fixa aquele valor; sem valor sorteia um) ou colada à mão. Fixa a imagem: reexecuções sem --seed reproduzem esta seed. Ausente = usa a seed determinística; "--seed default" apaga esta chave e devolve a variante a ela.'
       ),
   })
   .strict();
