@@ -22,6 +22,21 @@ que existem são:
 2. **Scripts em Bun/TypeScript** (`scripts/`) que convertem a arte-fonte em `assets/` (`.psd`/`.png`) nas texturas
    `.dds` e nos arquivos `.txt`/`.yml` em Clausewitz que ficam dentro de `mod/sagittarius-species/`.
 
+## Documentação
+
+A documentação deste repositório é dividida por tempo verbal, e a divisão é obrigatória:
+
+- **`docs/` e os comentários no código descrevem o que existe hoje.** Estado atual, no presente. Nada de "antes
+  era X, agora é Y", "isto substituiu Y" ou "removemos Z" — a explicação de uma coisa não deve depender de
+  conhecer a coisa que ela substituiu.
+- **`docs/history/` guarda o passado**: o relato datado de sessões, decisões e scripts descartados, um arquivo
+  por assunto, no formato `YYYY-MM-DD-<assunto>.md`. É onde vive o "por que mudou", incluindo os caminhos que
+  não deram certo.
+
+**Toda mudança grande no projeto atualiza suas docs em `docs/` *e* registra um novo arquivo em `docs/history/`
+com os motivos que levaram à mudança.** Um sem o outro deixa a documentação mentindo (se só o history for
+escrito) ou apaga a razão de ser da decisão (se só o `docs/` for atualizado).
+
 ## Comandos
 
 O runtime é o **Bun** (veja `bun.lockb`) — rode os scripts com `bun scripts/xxx.ts`, não `node`/`npm`.
@@ -34,15 +49,15 @@ bun run shared-rig   # bun scripts/generate-shared-rig/index.ts — deriva gfx/.
 bun run rooms         # bun scripts/generate-rooms/index.ts — sincroniza assets/city_sets/ com mod/ (DDS + .txt), direto no mod/
 bun run names          # bun scripts/generate-names/index.ts — gera name_lists + species_names (veja seção abaixo)
 bun run art   # bun scripts/generate-art/index.ts <slug> <male|female|flat> [-n NNN,...] [-s [N]] [-p] [-e] — gera retratos via IA no ComfyUI local; `-s` sempre grava a seed no portrait.json (valor fixa, sem valor sorteia, `default` volta pra determinística e apaga a chave) (veja seção abaixo)
-bun run copy           # pwsh scripts/copy.ps1 — copia o mod para a pasta local de mods do Stellaris
-bun run overwrite       # pwsh scripts/overwrite.ps1 — apaga e recopia o mod na pasta local de mods do Stellaris
+bun run copy           # pwsh scripts/copy.ps1 — sincroniza o mod na pasta local de mods do Stellaris (apaga e recopia, reportando a variação de tamanho)
 bun run publish-workshop -- [-m|--metadata-only]   # bun scripts/publish-workshop/index.ts — publica no Steam Workshop via steamcmd (veja seção "Publicação no Steam Workshop")
 ```
 
-- `copy`/`overwrite` são exclusivos de PowerShell (Windows) e operam sobre a pasta **modificada mais recentemente**
-  dentro de `mod/`, copiando-a para `%USERPROFILE%\Documents\Paradox Interactive\Stellaris\mod\`. Existem
-  equivalentes em bash (`scripts/copy-latest-to-local-mod.sh`, `scripts/overwrite-local-mod-with-latest.sh`) para
-  uso fora do Windows.
+- `copy` é exclusivo de PowerShell (Windows, usa `robocopy`) e opera sobre `mod/sagittarius-species`, apagando e
+  recopiando a pasta de mesmo nome dentro de `Documents\Paradox Interactive\Stellaris\mod\` (o caminho de
+  `Documents` vem de `[Environment]::GetFolderPath('MyDocuments')`, não de `%USERPROFILE%`, pra acompanhar
+  redirecionamento de pasta conhecida). Roda com `-NoProfile`: sem isso o `pwsh` carrega o perfil do usuário
+  antes do script, e um `Clear-Host` lá dentro apaga o scrollback do terminal que chamou.
 - `scripts/txt-to-json.ts` é um utilitário avulso (sem entrada no package.json), rodado diretamente com
   `bun scripts/txt-to-json.ts`.
 - Trocar o rig de uma espécie é editar o campo `rig` do `portrait.json` e rodar `bun run portrait` — o

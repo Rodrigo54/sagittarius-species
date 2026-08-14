@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "setup": "bun scripts/download-bin.ts",
-    "copy": "pwsh scripts/copy.ps1",
-    "overwrite": "pwsh scripts/overwrite.ps1",
+    "copy": "pwsh -NoProfile -File scripts/copy.ps1",
     "converter": "bun run portrait && bun run rooms",
     "portrait": "bun scripts/generate-portraits/index.ts",
     "shared-rig": "bun scripts/generate-shared-rig/index.ts",

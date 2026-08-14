@@ -83,14 +83,3 @@ colaborador que abrir esse arquivo já herda a configuração certa, sem precisa
   português do Brasil é o idioma fonte-da-verdade deste repositório, é dali que `scripts/name-lists.ts` gera o
   `.txt` em Clausewitz (veja `docs/pipeline-nomes.md`). Validar só em inglês (o padrão da extensão) deixaria
   passar problema de localização justamente no idioma onde o conteúdo nasce.
-
-### Cópia para a pasta local de mods (`bun run copy` / `overwrite`)
-
-Os scripts `scripts/copy.ps1`, `scripts/overwrite.ps1` e os equivalentes bash
-(`scripts/copy-latest-to-local-mod.sh`, `scripts/overwrite-local-mod-with-latest.sh`) excluem explicitamente
-`.cwtools/` da cópia para `Documents\Paradox Interactive\Stellaris\mod\`. Isso é uma precaução, não uma correção
-de um problema atual: o cache automático de regras **não** vive dentro de `mod/sagittarius-species/` (veja a
-seção acima), então normalmente não há nada ali para excluir. A exclusão só importa se alguém, no futuro, criar
-uma pasta `.cwtools/` manual dentro da pasta do mod para sobrepor regras (uso legítimo documentado pela
-extensão) — aí sim, sem essa exclusão, ela iria parar na pasta de mods locais e, por consequência, arriscar ir
-para o Steam Workshop na hora de publicar.

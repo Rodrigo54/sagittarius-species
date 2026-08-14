@@ -48,8 +48,7 @@ The pipeline needs these to run end to end; everything after the runtime/OS pair
 optional depending on what you're touching:
 
 - **[Bun](https://bun.sh)** — runtime for every script in `scripts/` (`bun scripts/xxx.ts` or `bun run <task>`).
-- **PowerShell** — required for `bun run copy`/`bun run overwrite` (Windows-only; bash equivalents exist for the
-  rest of the pipeline).
+- **PowerShell** — required for `bun run copy`, which uses `robocopy` (Windows-only).
 - **[texconv](https://github.com/microsoft/DirectXTex)** (`bin/texconv/`) — PNG→DDS conversion engine.
   Auto-downloaded by `bun run setup`.
 - **[ImageMagick](https://imagemagick.org)** (`bin/imagemagick/`) — image manipulation (trim/resize/composite)
@@ -71,7 +70,7 @@ bun run portrait     # sync assets/portraits/ -> mod/ (textures + .txt)
 bun run rooms         # sync assets/city_sets/ -> mod/ (textures + .txt)
 bun run names          # generate name_lists + localisation + species_names
 bun run shared-rig    # derive gfx/.../ssm_shared/ from sl_shared/
-bun run copy           # copy the mod into the local Stellaris mods folder (Windows/PowerShell only)
+bun run copy           # sync the mod into the local Stellaris mods folder (Windows/PowerShell only)
 ```
 
 See `CLAUDE.md` for the full command reference, the asset→mod pipeline details, and the data model connecting

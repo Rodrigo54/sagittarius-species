@@ -46,7 +46,8 @@ function agruparPorPastaDestino(
 }
 
 /** Agrupa os arquivos por pasta de destino e invoca o texconv uma vez por
- * pasta (só aceita um -o por invocação, ao contrário do nvtt antigo). */
+ * pasta — ele aceita vários arquivos de entrada, mas só um `-o` por
+ * invocação, então o agrupamento é o que define quantas chamadas acontecem. */
 export async function converter(arquivos: string[], options: ConverterOptions) {
   const formato = FORMATOS[options.format];
   const grupos = agruparPorPastaDestino(

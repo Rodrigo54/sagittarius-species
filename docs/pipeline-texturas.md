@@ -38,8 +38,7 @@ Na prática, este mod só usa as duas variantes comprimidas UNORM: `bun run room
 (está no `.gitignore`) — rode `bun run setup` (`scripts/download-bin.ts`) pra baixá-las:
 
 - **`bin/texconv/texconv.exe`** — [texconv](https://github.com/microsoft/DirectXTex) (Microsoft DirectXTex, MIT,
-  código aberto). É o motor de conversão de texturas do pipeline (veja abaixo) — substituiu o
-  `nvtt_export.exe`, que não é mais usado em lugar nenhum do repositório.
+  código aberto). É o motor de conversão de texturas do pipeline (veja abaixo).
 - **`bin/imagemagick/magick.exe`** (+ DLLs e arquivos de suporte) — [ImageMagick](https://imagemagick.org)
   portátil, pra manipulação de imagem via linha de comando (resize, crop, conversão de formato, composição) sem
   depender do Photoshop. É o motor de imagem do enquadramento em `scripts/generate-portraits/framing.ts`
