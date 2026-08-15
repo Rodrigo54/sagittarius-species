@@ -91,7 +91,7 @@ const mediana = (valores: number[]) => {
 
 /** Acha as regiões de calibração de um eixo, agrupando linhas/colunas vizinhas
  * com geometria parecida. */
-export function acharRegioes(img: Imagem, eixo: 'y' | 'x'): Regiao[] {
+function acharRegioes(img: Imagem, eixo: 'y' | 'x'): Regiao[] {
   const nLinhas = eixo === 'y' ? img.largura : img.altura;
   const nPontos = eixo === 'y' ? img.altura : img.largura;
 

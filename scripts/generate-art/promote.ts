@@ -1,6 +1,7 @@
 import { copyFile, mkdir, readdir, unlink } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { GeneroAlvo, PortraitConfig } from '../portrait-schema';
+import { pad } from '../utils';
 
 /** Opera só em `PortraitConfig.counts`/`GeneroAlvo`, agnóstico de como o
  * staging foi gerado. */
@@ -30,9 +31,16 @@ export async function promoverEspecie(
   pastaStagingGenero: string,
   pastaAssetsEspecie: string
 ): Promise<{ promovidos: number; removidos: number }> {
-  const esperado = config.counts[genero] ?? -1;
-  const chavesEsperadas = Array.from({ length: Math.max(esperado, 0) }, (_, i) => String(i + 1).padStart(3, '0'));
+  const esperado = config.counts[genero];
+  if (esperado === undefined) {
+    throw new Error(
+      `${slug}: portrait.json não declara "counts.${genero}" — sem isso não há quantas imagens promover. Nada foi promovido.`
+    );
+  }
+  const chavesEsperadas = Array.from({ length: esperado }, (_, i) => pad(i + 1));
 
+  // A pasta de staging não existir é o caso normal de "ainda não gerou nada"
+  // pra este gênero, e cai na mesma mensagem de staging incompleto abaixo.
   let arquivosStaging: string[];
   try {
     arquivosStaging = (await readdir(pastaStagingGenero)).filter((f) => f.endsWith('.png'));
@@ -41,9 +49,9 @@ export async function promoverEspecie(
   }
 
   const faltando = chavesEsperadas.filter((chave) => !arquivosStaging.includes(`${chave}.png`));
-  if (esperado <= 0 || faltando.length > 0) {
+  if (faltando.length > 0) {
     throw new Error(
-      `${slug}/${genero}: staging incompleto em "${pastaStagingGenero}" — faltam ${faltando.length} de ${esperado} imagem(ns)${faltando.length > 0 ? ` (${faltando.join(', ')})` : ''}. Nada foi promovido.`
+      `${slug}/${genero}: staging incompleto em "${pastaStagingGenero}" — faltam ${faltando.length} de ${esperado} imagem(ns) (${faltando.join(', ')}). Nada foi promovido.`
     );
   }
 
@@ -55,12 +63,7 @@ export async function promoverEspecie(
   }
 
   const chavesEsperadasSet = new Set(chavesEsperadas.map((chave) => `${chave}.png`));
-  let arquivosDestino: string[];
-  try {
-    arquivosDestino = await readdir(pastaDestino);
-  } catch {
-    arquivosDestino = [];
-  }
+  const arquivosDestino = await readdir(pastaDestino);
   const orfaos = arquivosDestino.filter(
     (arquivo) => PADRAO_PNG_NUMERADO.test(arquivo) && !chavesEsperadasSet.has(arquivo)
   );

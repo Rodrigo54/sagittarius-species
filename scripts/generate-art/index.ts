@@ -101,12 +101,19 @@ function parseArgumentos(): Argumentos {
     .parse();
 
   const [slug, genero] = programa.processedArgs as [string, GeneroAlvo];
-  const opcoes = programa.opts();
-  const variantes: string[] | undefined = opcoes.variante;
+  // `seed` é `true` quando a flag vem sem valor (a opção declara valor
+  // opcional) e string quando vem com.
+  const opcoes = programa.opts<{
+    variante?: string[];
+    seed?: string | true;
+    promote?: boolean;
+    exportPrompt?: boolean;
+  }>();
+  const variantes = opcoes.variante;
 
-  // `--seed` sem valor chega como `true` (a opção declara valor opcional) — é
-  // o pedido de sorteio; "default" é o literal que devolve a variante à seed
-  // determinística; com valor, só dígitos servem pro noise_seed.
+  // `--seed` sem valor é o pedido de sorteio; "default" é o literal que
+  // devolve a variante à seed determinística; com valor, só dígitos servem
+  // pro noise_seed.
   let seed: number | 'random' | 'default' | undefined;
   if (opcoes.seed === true) {
     seed = 'random';
@@ -140,8 +147,8 @@ function parseArgumentos(): Argumentos {
     genero,
     variantes,
     seed,
-    promote: opcoes.promote === true,
-    exportPrompt: opcoes.exportPrompt === true,
+    promote: opcoes.promote ?? false,
+    exportPrompt: opcoes.exportPrompt ?? false,
   };
 }
 
@@ -217,7 +224,7 @@ async function main(): Promise<void> {
   const conferidas = validarEspecie(config, slug, BASE_ART);
   console.log(`Validado: ${conferidas} variante(s) de ${slug} (todos os gêneros declarados).`);
 
-  const bloco = config.geracaoArt![genero]!;
+  const bloco = config.geracaoArt[genero];
   const chaves =
     variantesPedidas ?? Object.keys(bloco.variantes).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 
@@ -232,7 +239,7 @@ async function main(): Promise<void> {
     // carregar o template, sem enviar referência, sem gastar GPU).
     for (const chave of chaves) {
       const camposVariante = bloco.variantes[chave]!;
-      const campos = mesclarCampos(config.geracaoArt!.base, bloco, camposVariante);
+      const campos = mesclarCampos(config.geracaoArt.base, bloco, camposVariante);
       const { positive, negative } = montarPrompts(campos, BASE_ART, `${slug}/${genero}/${chave}`);
       console.log(`\n=== ${slug}/${genero}/${chave} ===`);
       console.log(`POSITIVO (${positive.length} chars):\n${positive}`);
@@ -241,7 +248,7 @@ async function main(): Promise<void> {
     return;
   }
 
-  const modelo = config.geracaoArt!.modelo;
+  const modelo = config.geracaoArt.modelo;
   const variant = modelo?.variant ?? 'distilled';
   const template = JSON.parse(await Bun.file(CAMINHOS_WORKFLOW[variant]).text()) as PromptComfyUI;
   console.log(`Variante do modelo: ${variant}.`);
@@ -263,7 +270,7 @@ async function main(): Promise<void> {
 
   for (const chave of chaves) {
     const camposVariante = bloco.variantes[chave]!;
-    const campos = mesclarCampos(config.geracaoArt!.base, bloco, camposVariante);
+    const campos = mesclarCampos(config.geracaoArt.base, bloco, camposVariante);
     const prompts = montarPrompts(campos, BASE_ART, `${slug}/${genero}/${chave}`);
     const { seed: seedFinal, origem: origemSeed } = resolverSeed(seed, camposVariante.seed, seedDeterministica(slug, genero, chave));
     await gerarVariante(

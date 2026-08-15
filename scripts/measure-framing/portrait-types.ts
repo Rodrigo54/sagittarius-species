@@ -9,26 +9,19 @@
  *
  * Cada um desses sprites é um **enquadramento de câmera diferente** sobre o
  * mesmo mesh, então cada um precisa da sua própria âncora na calibração — a
- * janela de um `close_up` não é comparável à de um `character` sem isso.
+ * janela de um `close_up` não é comparável à de um `character` sem isso. É por
+ * isso que a saída é a lista de nomes: `coletarContextos` agrupa os contextos
+ * por sprite, e cada grupo é uma câmera a calibrar.
  */
 
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 
-export interface TipoDeRetrato {
-  nome: string;
-  arquivo: string;
-  /** Flags declaradas no bloco que sugerem enquadramento próprio da câmera. */
-  closeUp: boolean;
-  midCloseUp: boolean;
-  large: boolean;
-}
-
 /** O formato dos `.gfx` é Clausewitz, mas aqui basta varrer os blocos
- * `portraitType = { ... }` — parsear a árvore inteira só para ler nome e três
- * flags seria custo sem retorno, e o bloco é plano. */
-export function extrairTiposDeTexto(texto: string, arquivo: string): TipoDeRetrato[] {
-  const tipos: TipoDeRetrato[] = [];
+ * `portraitType = { ... }` — parsear a árvore inteira só para ler um nome
+ * seria custo sem retorno, e o bloco é plano. */
+export function extrairNomesDeRetrato(texto: string): string[] {
+  const nomes: string[] = [];
 
   for (const bloco of texto.matchAll(/portraitType\s*=\s*\{([\s\S]*?)\n\s*\}/g)) {
     const corpo = bloco[1];
@@ -39,25 +32,19 @@ export function extrairTiposDeTexto(texto: string, arquivo: string): TipoDeRetra
       /\btype\s*=\s*character\b/i.test(corpo) || /\bcharacter\s*=\s*yes\b/i.test(corpo);
     if (!ehPersonagem) continue;
 
-    tipos.push({
-      nome,
-      arquivo,
-      closeUp: /\bclose_up\s*=\s*yes\b/i.test(corpo),
-      midCloseUp: /\bmid_close_up\s*=\s*yes\b/i.test(corpo),
-      large: /\blarge\s*=\s*yes\b/i.test(corpo),
-    });
+    nomes.push(nome);
   }
 
-  return tipos;
+  return nomes;
 }
 
-export async function lerTiposDeRetrato(stellarisPath: string): Promise<TipoDeRetrato[]> {
+export async function lerNomesDeRetrato(stellarisPath: string): Promise<string[]> {
   const pastaInterface = join(stellarisPath, 'interface');
   const arquivos = (await readdir(pastaInterface)).filter((f) => f.endsWith('.gfx')).sort();
 
-  const tipos: TipoDeRetrato[] = [];
+  const nomes: string[] = [];
   for (const arquivo of arquivos) {
-    tipos.push(...extrairTiposDeTexto(await readFile(join(pastaInterface, arquivo), 'latin1'), arquivo));
+    nomes.push(...extrairNomesDeRetrato(await readFile(join(pastaInterface, arquivo), 'latin1')));
   }
-  return tipos;
+  return nomes;
 }

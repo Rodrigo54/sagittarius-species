@@ -35,8 +35,6 @@ uma única fonte JSON até o script Clausewitz, todos os `.yml` de idioma, e o a
   só quando o jogo receber patch relevante; o caminho da instalação está hardcoded no topo do script). Essa
   validação existe porque chaves inventadas (`android_defense_army`, `sponsored_coloniser`) não davam erro
   nenhum até o cwtools rodar — agora travam a geração.
-- `scripts/txt-to-json.ts` faz o caminho inverso (Clausewitz `.txt` -> JSON), para inspeção pontual de arquivos
-  em `testmod/`; não faz parte do pipeline regular.
 
 ## `species_names` (botão de aleatório na criação de império)
 

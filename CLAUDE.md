@@ -65,8 +65,6 @@ bun run publish-workshop -- [-m|--metadata-only]   # bun scripts/publish-worksho
   `Documents` vem de `[Environment]::GetFolderPath('MyDocuments')`, não de `%USERPROFILE%`, pra acompanhar
   redirecionamento de pasta conhecida). Roda com `-NoProfile`: sem isso o `pwsh` carrega o perfil do usuário
   antes do script, e um `Clear-Host` lá dentro apaga o scrollback do terminal que chamou.
-- `scripts/txt-to-json.ts` é um utilitário avulso (sem entrada no package.json), rodado diretamente com
-  `bun scripts/txt-to-json.ts`.
 - Trocar o rig de uma espécie é editar o campo `rig` do `portrait.json` e rodar `bun run portrait` — o
   enquadramento é derivado a cada execução (veja "Pipeline de portraits" abaixo).
 - **Ferramental de enquadramento** (sem entrada no package.json, rodados direto). Existem porque o corte superior
@@ -104,6 +102,10 @@ converter/gerar → escrever) e chama `main()` na última linha do arquivo. **N�
 `scripts/` só para chamar a pasta — isso já foi tentado (`processPortraits.ts`, `processRooms.ts`) e removido por
 ser indireção sem propósito. O `package.json` aponta direto pro entry point: `"portrait": "bun
 scripts/generate-portraits/index.ts"`. Ao criar um pipeline novo, siga esse mesmo formato desde o início.
+
+O que vale para mais de um pipeline mora em `scripts/utils.ts` — hoje a numeração zero-padded a 3 dígitos
+(`pad`, `nomesNumerados`) e a ordenação numérica de arquivos (`ordenarNumericamente`), que portraits e rooms
+compartilham. Helper usado por um pipeline só continua dentro da pasta dele.
 
 ## Binários auxiliares (`bin/`)
 

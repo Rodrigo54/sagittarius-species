@@ -1,7 +1,7 @@
 import { $ } from 'bun';
 import { existsSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __DIRNAME = dirname(fileURLToPath(import.meta.url));
@@ -35,7 +35,7 @@ function agruparPorPastaDestino(
   const grupos = new Map<string, string[]>();
 
   for (const arquivo of arquivos) {
-    const caminhoRelativo = arquivo.replace(pastaOrigem, '');
+    const caminhoRelativo = relative(pastaOrigem, arquivo);
     const pastaDestinoArquivo = join(pastaDestino, dirname(caminhoRelativo));
     const grupo = grupos.get(pastaDestinoArquivo) ?? [];
     grupo.push(arquivo);

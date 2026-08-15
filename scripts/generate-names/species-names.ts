@@ -47,14 +47,14 @@ export function resolveSpeciesNames(
       }
       keyOwners.set(entry.key, source.fileName);
 
-      const { value: speciesClass, error } = resolveSpeciesClass(
+      const resolucao = resolveSpeciesClass(
         entry.portrait,
         entry.species_class,
         portraitMap,
         context
       );
-      if (error) {
-        errors.push(error);
+      if (!resolucao.ok) {
+        errors.push(resolucao.error);
         continue;
       }
 
@@ -65,7 +65,7 @@ export function resolveSpeciesNames(
         home_planet: entry.home_planet,
         home_system: entry.home_system,
         name_list: source.fileName,
-        species_class: speciesClass!,
+        species_class: resolucao.value,
       });
     }
   }
@@ -78,14 +78,7 @@ export async function writeSpeciesNamesFile(
   parser: Jomini,
   destino: string
 ) {
-  const byClass = new Map<string, ResolvedSpeciesEntry[]>();
-  for (const entry of entries) {
-    if (!byClass.has(entry.species_class)) {
-      byClass.set(entry.species_class, []);
-    }
-    byClass.get(entry.species_class)!.push(entry);
-  }
-
+  const byClass = Map.groupBy(entries, (entry) => entry.species_class);
   const classesOrdenadas = Array.from(byClass.keys()).sort();
 
   const content = parser.write((writer: Writer) => {

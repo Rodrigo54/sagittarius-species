@@ -1,6 +1,5 @@
+import { pad } from '../utils';
 import { RIGS, RIG_PADRAO, type SpeciesInfo } from './types';
-
-const pad = (n: number) => String(n).padStart(3, '0');
 
 function blocoPortraitEntry(
   groupId: string,

@@ -1,6 +1,5 @@
+import { pad } from '../utils';
 import type { RoomsInfo } from './types';
-
-const pad = (n: number) => String(n).padStart(3, '0');
 
 export function gerarConteudoTxt(info: RoomsInfo): string {
   const entradas = info.arquivos

@@ -34,9 +34,9 @@ const zEntradaDeVocabulario = z
   })
   .strict();
 
-/** Uma chave obrigatória por valor do enum — é isto que substitui o
- * `Record<(typeof ENUM)[number], string>` não-`Partial` que antes travava a
- * build quando um valor novo entrava sem texto. */
+/** Uma chave obrigatória por valor do enum: um valor novo no vocabulário só
+ * passa por aqui depois de ganhar texto, e um texto órfão de valor que não
+ * existe mais é recusado pelo `.strict()`. */
 function zVocabularioCompleto(valores: readonly string[]) {
   return z
     .object(Object.fromEntries(valores.map((valor) => [valor, zEntradaDeVocabulario])))
@@ -136,12 +136,11 @@ function validarOrdem(config: z.infer<typeof zBaseArtBase>, ctx: z.RefinementCtx
 export const zBaseArt = zBaseArtBase.superRefine(validarOrdem);
 
 export type BaseArt = z.infer<typeof zBaseArt>;
-export type NomeDeFragmento = string;
 
 const CAMINHO_BASE_JSON = join(import.meta.dir, 'base.json');
 
-export function lerBaseArt(caminho: string = CAMINHO_BASE_JSON): BaseArt {
-  return zBaseArt.parse(JSON.parse(readFileSync(caminho, 'utf8')));
+export function lerBaseArt(): BaseArt {
+  return zBaseArt.parse(JSON.parse(readFileSync(CAMINHO_BASE_JSON, 'utf8')));
 }
 
 /** Lido e validado uma vez, na primeira importação — falha rápido (erro

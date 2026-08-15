@@ -87,8 +87,8 @@ async function main() {
       'Só título/descrição: não publica conteúdo novo nem exige changenote em change-notes.md.'
     )
     .parse()
-    .opts();
-  const modoMetadataOnly = opcoes.metadataOnly === true;
+    .opts<{ metadataOnly?: boolean }>();
+  const modoMetadataOnly = opcoes.metadataOnly ?? false;
 
   if (!existsSync(CAMINHO_STEAMCMD)) {
     throw new Error(`steamcmd não encontrado em ${CAMINHO_STEAMCMD}. Rode "bun run setup" primeiro.`);

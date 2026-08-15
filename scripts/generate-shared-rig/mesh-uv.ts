@@ -90,7 +90,7 @@ function varrer(buf: Buffer): ResultadoVarredura {
       const { nome, profundidade, pos: novoPos } = lerNomeObjeto(buf, pos);
       pos = novoPos;
 
-      if (!(profundidade > profundidadeAtual)) {
+      if (profundidade <= profundidadeAtual) {
         pilha.length = profundidade - 1;
       }
       objetos.push({ caminho: [...pilha], nome, profundidade, offsetInicio });
@@ -184,11 +184,11 @@ export const PLANO_MANTIDO = 'pPlaneShape4';
  * corrigida pra usar o canvas todo (`corrigirUvDoMesh`), arte que preenche o
  * canvas revela as 6 camadas como um "fantasma"/gêmeo atrás do personagem —
  * a única correção livre de fantasma em qualquer ângulo é manter um único
- * plano (ver `docs/history/2026-07-23-ssm-shared-rig.md`). Remover a geometria de
- * vez (em vez de degenerar os triângulos, a técnica anterior) mantém o mesh
- * importável no Blender — o importador do `io_pdx_mesh` crasha com faces
- * degeneradas, e a validação visual via Blender é pré-requisito da
- * investigação da distorção de animação.
+ * plano (ver `docs/history/2026-07-23-ssm-shared-rig.md`). A remoção é dos
+ * bytes da geometria, e não uma degeneração dos triângulos, porque o mesh
+ * precisa continuar importável no Blender — o importador do `io_pdx_mesh`
+ * crasha com faces degeneradas, e a validação visual via Blender é
+ * pré-requisito da investigação da distorção de animação.
  *
  * A excisão é fechada no formato: o arquivo é um fluxo de tokens sem tabela
  * global de offsets, cada `pPlaneShapeN` é um subtree autocontido (mesh +
@@ -296,11 +296,14 @@ export function corrigirShaderDoMesh(original: Buffer): Buffer {
   const conferencia = escanearPropriedades(resultado).filter(
     (p) => p.nome === 'shader' && p.tipo === 's' && p.caminho.includes(PLANO_MANTIDO)
   );
+  if (conferencia.length !== 1) {
+    throw new Error('patch de shader corrompeu o fluxo de tokens — reparse não bate');
+  }
   const tamanhoNovo = resultado.readInt32LE(conferencia[0].offsetValor);
   const valorNovo = resultado
     .subarray(conferencia[0].offsetValor + 4, conferencia[0].offsetValor + 4 + tamanhoNovo - 1)
     .toString('latin1');
-  if (conferencia.length !== 1 || valorNovo !== SHADER_RETRATO) {
+  if (valorNovo !== SHADER_RETRATO) {
     throw new Error('patch de shader corrompeu o fluxo de tokens — reparse não bate');
   }
 

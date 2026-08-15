@@ -1,7 +1,8 @@
 import { describe, expect, test } from 'bun:test';
 import { deflateSync } from 'node:zlib';
-import { codificar, decodificar } from './generate-calibration/encoding';
+import { decodificar } from './generate-calibration/encoding';
 import { gerarCalibracao } from './generate-calibration/index';
+import { RIGS } from './generate-portraits/types';
 import { codificarPng, criarImagem, decodificarPng, lerPixel, pintar } from './png';
 
 /** Monta um PNG RGBA a partir de scanlines já filtradas, para exercitar a
@@ -130,8 +131,10 @@ describe('PNG', () => {
 });
 
 describe('arte de calibração', () => {
-  const LARGURA = 980;
-  const ALTURA = 976;
+  // O canvas real do rig, não números soltos: a arte é instalada por cima das
+  // texturas dele, e um teste ancorado numa geometria antiga deixaria de
+  // cobrir a que o jogo recebe.
+  const { largura: LARGURA, altura: ALTURA } = RIGS.ssm_shared.canvas;
 
   test('todo pixel é opaco', () => {
     // Borda transparente não revelaria onde o quadro corta — é o motivo de a

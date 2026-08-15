@@ -32,29 +32,35 @@ export async function loadPortraitClassMap(
   return map;
 }
 
+/** Union discriminada em vez de `{ value?, error? }`: quem chama estreita pelo
+ * `ok` e recebe `value` já como `string`, sem precisar afirmar não-nulo. */
+export type ResolucaoSpeciesClass =
+  | { ok: true; value: string }
+  | { ok: false; error: string };
+
 export function resolveSpeciesClass(
   portrait: string,
   override: string | undefined,
   map: PortraitClassMap,
   context: string
-): { value?: string; error?: string } {
+): ResolucaoSpeciesClass {
   const classes = map.get(portrait);
 
   if (!classes || classes.size === 0) {
     return {
+      ok: false,
       error: `[${context}] portrait "${portrait}" não existe em ssm_portrait_sets.txt.`,
     };
   }
 
   if (classes.size === 1) {
-    return { value: [...classes][0] };
+    return { ok: true, value: [...classes][0]! };
   }
 
   if (!override) {
     return {
-      error: `[${context}] portrait "${portrait}" é ambíguo (${[
-        ...classes,
-      ].join(
+      ok: false,
+      error: `[${context}] portrait "${portrait}" é ambíguo (${[...classes].join(
         ', '
       )}) — informe "species_class" explicitamente pra essa entrada.`,
     };
@@ -62,11 +68,12 @@ export function resolveSpeciesClass(
 
   if (!classes.has(override)) {
     return {
+      ok: false,
       error: `[${context}] species_class "${override}" inválido pro portrait "${portrait}" (opções válidas: ${[
         ...classes,
       ].join(', ')}).`,
     };
   }
 
-  return { value: override };
+  return { ok: true, value: override };
 }

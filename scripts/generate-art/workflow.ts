@@ -43,9 +43,8 @@ export interface OpcoesMontagem {
  * o mesmo padrão que ancora `resolverAspectRatio` (ver `resolution.ts`).
  * Independente da resolução de geração: `ReferenceLatent` só acrescenta
  * tokens de referência à conditioning (ver `KV_Attn_Input` no código-fonte
- * do node), não precisa bater pixel a pixel com o latente principal — só
- * testado e confirmado rodando o grafo de ponta a ponta contra o ComfyUI
- * local (Task #4). */
+ * do node), não precisa bater pixel a pixel com o latente principal —
+ * confirmado rodando o grafo de ponta a ponta contra o ComfyUI local. */
 const MEGAPIXELS_REFERENCIA = 1;
 
 /** IDs dos nodes dinâmicos da cadeia de referência começam aqui, bem acima
@@ -68,13 +67,10 @@ const PRIMEIRO_ID_DINAMICO = 100;
  * caso (mesmo comportamento do template oficial: CFG=1 zera a guidance
  * negativa de qualquer forma).
  *
- * Não existem `checkpoint`/`lora`/`sampler_name`/`scheduler`/`denoise`/
- * `controlNetStrength` pra injetar (diferença marcante em relação ao
- * pipeline SDXL anterior, ver `docs/history/2026-07-28-generate-art-v1.md`) —
- * decisão da entrevista de planejamento: UNET/CLIP/VAE são fixos por
- * variante (um único arquivo de cada por variante, hoje), o sampler é fixo
- * em "euler", e o `ReferenceLatent` não tem parâmetro de força (é
- * presença/ausência binária, não um dial). */
+ * Não há `checkpoint`/`lora`/`sampler_name`/`scheduler`/`denoise` pra
+ * injetar: UNET/CLIP/VAE são fixos por variante (um único arquivo de cada,
+ * hoje), o sampler é fixo em "euler", e o `ReferenceLatent` não tem parâmetro
+ * de força (é presença/ausência binária, não um dial). */
 export function montarPrompt(
   template: PromptComfyUI,
   prompts: { positive: string; negative: string },
@@ -139,9 +135,8 @@ export function montarPrompt(
         image: [idLoad, 0],
         upscale_method: 'nearest-exact',
         megapixels: MEGAPIXELS_REFERENCIA,
-        // Exigido pela API mesmo tendo default no node (confirmado na
-        // validação manual da Task #4 — sem isso o ComfyUI recusa com
-        // "required_input_missing").
+        // Exigido pela API mesmo tendo default no node — sem isso o ComfyUI
+        // recusa o grafo com "required_input_missing".
         resolution_steps: 1,
       },
     };

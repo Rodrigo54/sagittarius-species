@@ -21,7 +21,7 @@
  *   bun scripts/install-calibration/index.ts [--eixo y|x|ambos]
  */
 
-import { $ } from 'bun';
+import { Command, Option } from 'commander';
 import { existsSync } from 'node:fs';
 import { copyFile, mkdir, readFile, rm } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
@@ -29,6 +29,8 @@ import { fileURLToPath } from 'node:url';
 import { PASTA_ASSETS, PASTA_MOD, PASTA_RAIZ, converter } from '../converter';
 import { carregarEspecie, listarPastasEspecies } from '../generate-portraits/discovery';
 import { rigDe } from '../generate-portraits/types';
+import type { Contexto } from '../measure-framing/gui-layout';
+import { pad } from '../utils';
 
 const __DIRNAME = dirname(fileURLToPath(import.meta.url));
 
@@ -60,22 +62,20 @@ const TELAS: Record<string, { onde: string; partida: boolean }> = {
   'endscreen.gui': { onde: 'tela de fim de jogo', partida: true },
 };
 
-interface Contexto {
-  arquivo: string;
-  caminho: string[];
-  sprite: string;
-  scale: number;
-  janela: { x0: number; y0: number; x1: number; y1: number } | null;
-  semRecorte: boolean;
-  ressalvas: string[];
-}
-
 async function main() {
-  const argEixo = process.argv.indexOf('--eixo');
-  const eixo = argEixo >= 0 ? process.argv[argEixo + 1] : 'ambos';
-  if (!['y', 'x', 'ambos'].includes(eixo)) {
-    throw new Error(`--eixo aceita y, x ou ambos (recebido "${eixo}")`);
-  }
+  const opcoes = new Command()
+    .name('bun scripts/install-calibration/index.ts')
+    .description(
+      'Instala a arte de calibração por cima das texturas do mod, em todas as espécies do rig ssm_shared, e imprime o roteiro de captura.'
+    )
+    .addOption(
+      new Option('--eixo <eixo>', 'Qual arte instalar. "ambos" alterna Y/X entre slots vizinhos.')
+        .choices(['y', 'x', 'ambos'])
+        .default('ambos')
+    )
+    .parse()
+    .opts();
+  const eixo = opcoes.eixo as 'y' | 'x' | 'ambos';
 
   for (const e of ['y', 'x']) {
     const png = join(PASTA_PORTRAITS_ASSETS, `ssm_shared_calibracao_${e}.png`);
@@ -119,8 +119,8 @@ async function main() {
       for (let i = 1; i <= grupo.n; i++) {
         // Alternando os eixos entre slots vizinhos, qualquer contexto que
         // sorteie um retrato tende a mostrar os dois ao longo da sessão.
-        const desteSlot = eixo === 'ambos' ? (i % 2 === 1 ? 'y' : 'x') : (eixo as 'y' | 'x');
-        const destino = join(pastaEspecie, grupo.sub, `${String(i).padStart(3, '0')}.dds`);
+        const desteSlot = eixo === 'ambos' ? (i % 2 === 1 ? 'y' : 'x') : eixo;
+        const destino = join(pastaEspecie, grupo.sub, `${pad(i)}.dds`);
         if (!existsSync(destino)) continue;
         await copyFile(ddsPorEixo[desteSlot], destino);
         instalados++;

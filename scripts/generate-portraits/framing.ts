@@ -1,10 +1,9 @@
 /** Enquadramento da arte-fonte no canvas do rig.
  *
- * Vive aqui, no pipeline, e não mais num script de migração que reescrevia
- * `assets/portraits/` in place: `assets/` guarda master nativo, e o
- * enquadramento é derivado a cada `bun run portrait`. Consequência prática —
- * trocar o canvas do rig passa a ser mudar uma constante em `types.ts`, em vez
- * de reprocessar (e degradar) a arte-fonte.
+ * `assets/` guarda master nativo e o enquadramento é derivado a cada
+ * `bun run portrait`, aqui no pipeline — a arte-fonte nunca é reescrita.
+ * Consequência prática: trocar o canvas do rig é mudar uma constante em
+ * `types.ts`, sem reprocessar (e degradar) a arte-fonte.
  */
 
 import { $ } from 'bun';
@@ -16,7 +15,7 @@ import type { GuiaEnquadramento, ModoEnquadramento, RigInfo } from './types';
 
 const __DIRNAME = dirname(fileURLToPath(import.meta.url));
 
-export const MAGICK = join(__DIRNAME, '../../bin/imagemagick/magick.exe');
+const MAGICK = join(__DIRNAME, '../../bin/imagemagick/magick.exe');
 
 export interface MedidaTrim {
   arquivo: string;

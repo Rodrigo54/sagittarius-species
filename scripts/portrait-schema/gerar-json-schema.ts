@@ -25,7 +25,7 @@ import {
  * nunca editado à mão — rode este script de novo (`bun
  * scripts/portrait-schema/gerar-json-schema.ts`) toda vez que `schema.ts`
  * mudar. Sem entrada no `package.json` de propósito: é um utilitário de
- * suporte, não um pipeline (mesmo padrão de `scripts/txt-to-json.ts`). */
+ * suporte, não um pipeline. */
 const CAMINHO_SAIDA = join(import.meta.dir, 'portrait.schema.json');
 
 /** Vocabulários com descrição por valor em português (mapas `_DESCRICOES`

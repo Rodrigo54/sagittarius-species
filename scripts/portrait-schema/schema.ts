@@ -109,17 +109,12 @@ const zCamposCompostos = zCamposDoIndividuo
 const CHAVE_VARIANTE = /^\d{3}$/;
 
 /** Config de sampler/resolução do pipeline de geração de arte via IA
- * (`bun run art`, Flux.2 Klein). Bem mais enxuta que a de um checkpoint SDXL
- * clássico porque boa parte desses campos não tem equivalente aqui:
- * `checkpoint`/`lora`/`loraStrength` não existem porque hoje só existe um
- * arquivo de UNET/CLIP/VAE instalado (ver `docs/pipeline-generate-art.md`) —
- * expor isso por espécie seria configurabilidade sem uso real;
- * `sampler_name`/`scheduler` não existem porque o grafo do Flux2 usa
- * `KSamplerSelect` fixo em "euler" + `Flux2Scheduler` (não um scheduler
- * nomeado configurável tipo `sgm_uniform`); `denoise`/`controlNetStrength`
- * não existem porque o node `ReferenceLatent` (mecanismo de consistência
- * deste pipeline, no lugar do ControlNet do pipeline SDXL anterior — ver
- * `docs/history/2026-07-28-generate-art-v1.md`) não tem parâmetro de força — é
+ * (`bun run art`, Flux.2 Klein). São só quatro campos porque o resto do grafo
+ * não tem o que configurar por espécie: existe um único arquivo de
+ * UNET/CLIP/VAE instalado (ver `docs/pipeline-generate-art.md`), o sampler é
+ * `KSamplerSelect` fixo em "euler" com `Flux2Scheduler` (não um scheduler
+ * nomeado tipo `sgm_uniform`), e o `ReferenceLatent` — o mecanismo de
+ * consistência deste pipeline — não tem parâmetro de força: é
  * presença/ausência binária, não um dial. */
 const VARIANTES_MODELO = ['distilled', 'base'] as const;
 
@@ -278,10 +273,7 @@ export const zPortraitConfig = zPortraitConfigBase.superRefine((config, ctx) => 
 
 export type PortraitConfig = z.infer<typeof zPortraitConfig>;
 export type CamposCompostos = z.infer<typeof zCamposCompostos>;
-export type CamposDoIndividuo = z.infer<typeof zCamposDoIndividuo>;
 export type Variante = z.infer<typeof zVariante>;
-export type Species = z.infer<typeof zSpecies>;
-export type Torso = z.infer<typeof zTorso>;
 export type GeracaoArt = z.infer<typeof zGeracaoArt>;
 export type GeracaoArtGenero = z.infer<ReturnType<typeof zBlocoGenero>>;
 export type GeracaoArtModelo = z.infer<typeof zModelo>;

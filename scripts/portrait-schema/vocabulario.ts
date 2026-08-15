@@ -48,14 +48,13 @@ export const ESTILOS_CABELO = [
 /** Ver rationale completo no comentário de `FORMAS_CORPO_DESCRICOES` acima.
  * Os seis valores compostos no fim (`"Long Curly"` etc.) combinam
  * comprimento (`Long`/`Short`) com textura (`Curly`/`Straight`/`Wavy`) num
- * único valor — os dois eixos são independentes em `style`, então antes
- * dessa adição não dava pra escolher os dois ao mesmo tempo. Convenção de
- * nome: duas palavras, Title Case, com espaço — mesmo precedente já usado
- * em `CORES` (`"Sky Blue"`); funciona sem tocar em `schema.ts`/
+ * único valor, porque `style` é um campo só e os dois eixos são
+ * independentes. Convenção de nome: duas palavras, Title Case, com espaço —
+ * mesmo precedente de `CORES` (`"Sky Blue"`); não exige nada de `schema.ts`/
  * `prompt-builder.ts`, já que `hair.style.toLowerCase()` concatena a string
  * inteira no prompt ("long curly hair"). Os valores standalone (`Curly`,
- * `Straight`, `Wavy`, `Long`, `Short`) continuam disponíveis pra quem não
- * quer especificar os dois eixos. */
+ * `Straight`, `Wavy`, `Long`, `Short`) atendem quem não quer especificar os
+ * dois eixos. */
 export const ESTILOS_CABELO_DESCRICOES: Record<(typeof ESTILOS_CABELO)[number], string> = {
   Short: 'cabelo curto',
   Long: 'cabelo longo',
