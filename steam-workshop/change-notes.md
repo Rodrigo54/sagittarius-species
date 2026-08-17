@@ -7,7 +7,7 @@ For the steam workshop change notes I recommended to use major mod version incre
 > publish time if it isn't there yet (that stamp is local bookkeeping only — it never gets sent
 > to Steam, which already timestamps updates on its own).
 
-## 1.11.0
+## 1.11.0 — 2026-08-17 17:45
 
 * **New species: Drakelings** — 30 portraits (15 male, 15 female) of cute little dragon-folk blacksmiths, bronze-plated on one side of the forge and polished silver on the other. That brings the pack to 19 species.
 * Mermaids got fresh portrait art for both genders, plus a fix for portrait entity references that were pointing at the wrong models.
