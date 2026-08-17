@@ -3,6 +3,14 @@
   "gendered": true,
   "rig": "ssm_shared",
   "modo": "altura",
+  "species_classes": [
+    "AQUATIC",
+    "HUM"
+  ],
+  "categories": [
+    "aquatics",
+    "humanoids"
+  ],
   "counts": {
     "male": 25,
     "female": 25

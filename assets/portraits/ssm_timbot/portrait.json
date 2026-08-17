@@ -2,6 +2,14 @@
   "name": "timbot",
   "gendered": false,
   "rig": "ssm_shared",
+  "species_classes": [
+    "MACHINE"
+  ],
+  "categories": [
+    "machines",
+    "synthetics",
+    "cybernetics"
+  ],
   "counts": {
     "flat": 25
   }

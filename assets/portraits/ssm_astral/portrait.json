@@ -2,6 +2,13 @@
   "name": "astral",
   "gendered": true,
   "rig": "ssm_shared",
+  "species_classes": [
+    "HUM"
+  ],
+  "categories": [
+    "humanoids",
+    "psionics"
+  ],
   "counts": {
     "male": 25,
     "female": 25

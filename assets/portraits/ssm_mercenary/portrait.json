@@ -3,6 +3,13 @@
   "gendered": false,
   "rig": "ssm_shared",
   "modo": "altura",
+  "species_classes": [
+    "HUM"
+  ],
+  "categories": [
+    "humanoids",
+    "cybernetics"
+  ],
   "counts": {
     "flat": 19
   }

@@ -2,6 +2,12 @@
   "name": "octopus",
   "gendered": false,
   "rig": "ssm_shared",
+  "species_classes": [
+    "MOL"
+  ],
+  "categories": [
+    "molluscoids"
+  ],
   "counts": {
     "flat": 21
   }
