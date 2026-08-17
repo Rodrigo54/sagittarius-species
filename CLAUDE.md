@@ -136,19 +136,21 @@ sempre em sincronia: cada espécie declara sua forma num `portrait.json` obrigat
 `ssm_<espécie>_portrait.txt` inteiro é regenerado do zero a cada execução. Dois contratos de arte, um por rig:
 `ssm_shared` guarda **master nativo** com enquadramento **derivado** a cada execução (trim → resize →
 composição no canvas do rig, guia expresso em fração do canvas — `modo`/`ancora` ajustam esse enquadramento por
-espécie); `sl_shared` (legado, só `ssm_mermaids` hoje) usa PNG já enquadrado byte a byte, exigindo o canvas
-exato do rig. Cadeia completa de arquivos que conecta um retrato de espécie
+espécie); `sl_shared` (legado, **sem nenhuma espécie hoje**) usa PNG já enquadrado byte a byte, exigindo o
+canvas exato do rig. Cadeia completa de arquivos que conecta um retrato de espécie
 (`species_classes` → `portrait_categories` → `portrait_sets` → `portrait.txt` → `.dds`) e a mecânica vanilla
 por trás (`portrait_groups`, cumprimentos/insultos, `greeting_sound`): `docs/pipeline-portraits.md`.
 
 ### Rig compartilhado (`sl_shared` / `ssm_shared`) e enquadramento
 
 Toda espécie reaproveita um rig (mesh + animações) compartilhado em vez de ter um próprio.
-**`sl_shared/`** é o legado herdado do extinto Stellar Legion Mod — só `ssm_mermaids` ainda o usa, congelada
-por decisão da release 1.8.0 (`ssm_astral` tinha o mesmo status e foi remigrada depois). **`ssm_shared/`** é o
-fork **derivado** (`bun run shared-rig`, sempre regenerado do zero a partir de `sl_shared/`, nunca editado à
-mão) com o mesh reduzido a um único plano (`pPlaneShape4`), UV remapeada pro canvas inteiro e recortado no
-topo — canvas **980×780** (isotrópico), usado por **17 das 18 espécies** e ponto de partida pra espécies novas.
+**`sl_shared/`** é o legado herdado do extinto Stellar Legion Mod — **nenhuma espécie o usa hoje**, mas ele
+continua versionado por dois motivos: é a **fonte de derivação** do `ssm_shared` (`bun run shared-rig` lê o
+mesh dele) e é a única cópia restante desse mesh/animação, já que o mod de origem não existe mais.
+**`ssm_shared/`** é o fork **derivado** (`bun run shared-rig`, sempre regenerado do zero a partir de
+`sl_shared/`, nunca editado à mão) com o mesh reduzido a um único plano (`pPlaneShape4`), UV remapeada pro
+canvas inteiro e recortado no topo — canvas **980×780** (isotrópico), usado por **todas as 18 espécies** e
+ponto de partida pra espécies novas.
 Trocar o rig de uma espécie é só editar `rig` no `portrait.json` e rodar `bun run portrait`, sem passo de
 migração.
 
@@ -165,7 +167,7 @@ construir um rig de retrato animado do zero: `docs/rig-animacoes.md`.
 
 Caminho **alternativo/opt-in** pra produzir os PNGs de origem que `bun run portrait` consome: gera via IA
 (ComfyUI local, modelo **Flux.2 Klein**) a partir de uma receita `geracaoArt` no `portrait.json`. Ausente na
-maioria das espécies hoje; presente em `ssm_default` e `ssm_astral`.
+maioria das espécies hoje; presente em `ssm_default`, `ssm_astral` e `ssm_mermaids`.
 
 **Quem roda `bun run art` (ou qualquer variante futura) é sempre o Rodrigo, nunca o Claude por conta
 própria** — geração de imagem consome GPU local por vários segundos a minutos por variante, e rodar sem avisar

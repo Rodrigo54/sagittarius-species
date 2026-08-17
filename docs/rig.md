@@ -12,16 +12,17 @@ Todo `entity` de todo `ssm_<espécie>_portrait.txt` aponta pra um rig (mesh + an
 espécies ao mesmo tempo, dentro de `gfx/models/portraits/<rig>/` — veja "A técnica usada aqui" em
 `docs/pipeline-portraits.md` pro histórico completo. Hoje existem dois:
 
-- **`sl_shared/`** — o rig original, herdado do extinto Stellar Legion Mod. Usado pela única espécie que ainda
-  não migrou (`ssm_mermaids`, congelada por decisão da release 1.8.0 — `ssm_astral` foi remigrada pro
-  `ssm_shared` depois) e nunca modificado: sua UV desperdiça boa parte do canvas (cada um dos 6 planos do mesh
-  lê só metade vertical da textura — ver seção 2.1), mas mudar isso quebraria a arte já publicada dessa espécie.
+- **`sl_shared/`** — o rig original, herdado do extinto Stellar Legion Mod. **Nenhuma espécie o usa hoje**, e
+  ele nunca é modificado: sua UV desperdiça boa parte do canvas (cada um dos 6 planos do mesh lê só metade
+  vertical da textura — ver seção 2.1). Continua versionado porque é a **entrada** de `bun run shared-rig` (o
+  `ssm_shared` é derivado dele a cada execução) e porque é a única cópia restante desse mesh/animação, já que o
+  mod de origem saiu do ar.
 - **`ssm_shared/`** — fork do `sl_shared` com o mesh reduzido a **um único plano** (`pPlaneShape4`, escolhido
   entre os 6 originais por ser a camada de corpo com a menor distorção durante as animações — comparação
   completa na seção 2.1), UV remapeada pra usar o canvas inteiro, e **recortado no topo**: as linhas de vértice
   que correspondem à faixa que a câmera de retrato nunca captura são removidas do binário (ver seção 2.4).
   Canvas de `character_textures`: **980×780** (isotrópico — qualquer canvas novo precisa preservar essa
-  proporção, e subir densidade é só multiplicar as duas dimensões pelo mesmo fator). É o rig de **17 das 18
+  proporção, e subir densidade é só multiplicar as duas dimensões pelo mesmo fator). É o rig de **todas as 18
   espécies** e o ponto de partida pra espécies novas.
 
 Trocar o rig de uma espécie é editar o campo `rig` do `portrait.json` e rodar `bun run portrait` — o
@@ -257,7 +258,8 @@ scripts/measure-framing/densidade-da-arte.ts`, que reproduz a tabela a qualquer 
 pendente, visual, espécie a espécie): `knight` (25,2%), `octopus` (23,0%), `hastur` (19,6%), `necron` (16,7%),
 `cyborg` (15,7%), `new_order` (14,6%) e `mercenary` (12,7%). O `octopus` é o caso a tratar com mais cuidado: se
 aqueles 23% forem tentáculos (a característica da espécie, não um acessório sacrificável), empurrá-los pra faixa
-de corte repete o erro que reverteu `ssm_mermaids` do `ssm_shared`.
+de corte custa justamente o traço que identifica a espécie — o mesmo risco que `ssm_mermaids` resolve pelo outro
+lado do quadro com `modo: "altura"`, pra não perder a transição pra cauda na borda inferior.
 
 **A detecção é por imagem, e isso é o ponto.** Nos `ssm_green_elves`, os machos sobem os 144 px inteiros até o
 topo do canvas e as fêmeas sobem 110, porque os chifres delas são menores — as cabeças ficam alinhadas entre si.
@@ -385,5 +387,7 @@ resta pra material funcionar sem contorno.
    saiu quando skinning, shader e geometria entraram juntos na mesa (tabela da seção 2.1).
 6. **q ≡ −q.** Sign flip de quatérnio não é defeito. Métrica de "salto angular" entre frames precisa normalizar
    o sinal antes de acusar anomalia (ver `docs/rig-animacoes.md`).
-7. **`sl_shared/` é intocável** — espécies publicadas dependem dele byte a byte. Todo experimento vai pro fork
-   derivado (`bun run shared-rig` regenera `ssm_shared/` do zero; nada lá é editado à mão).
+7. **`sl_shared/` é intocável** — é a entrada da derivação (e a única cópia restante do mesh/animação
+   originais), então qualquer edição nele se propaga pro rig de todas as espécies na próxima regeração. Todo
+   experimento vai pro fork derivado (`bun run shared-rig` regenera `ssm_shared/` do zero; nada lá é editado à
+   mão).

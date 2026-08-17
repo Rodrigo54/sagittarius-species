@@ -2,34 +2,53 @@
 
 **Nome exibido:** Mermaids
 **Species class:** `AQUATIC`
-**Rig:** `sl_shared` (legado — congelado desde a preparação da release 1.8.0 por um defeito de enquadramento
-encontrado ao migrar pro `ssm_shared`: a cauda, o traço mais característico da espécie, saía do quadro; ver
-`docs/future-plans.md`)
+**Rig:** `ssm_shared`, com `modo: "altura"`
 **Gendered:** sim (`male`/`female`, 25/25 variantes)
 
 ## Descrição
 
-Retrato "sereia/tritão" do mod: humanoides de pele clara vestindo uma "roupa" de escama de peixe cropped, com
-mangas compridas cobrindo peito, ombros e braços inteiros, barriga sempre à mostra (nos dois gêneros), e uma
-peça inferior de escama de **cintura alta** que marca a transição pra cauda — cós alto o bastante pra ficar
-visível dentro do enquadramento apertado do portrait (que corta na altura da cintura/quadril). As 25 variantes de
-cada gênero foram criadas em 2024 (`34635d3`, ainda como `gsm_mermaids`), bem antes do pipeline de geração via
-IA deste projeto, e variam livremente a cor da escama (azul, dourado, rosa, verde-água...) e o cabelo por
-indivíduo, sem paleta fixa por espécie. A espécie ainda não tem `geracaoArt` configurado no `portrait.json` —
-segue fora do pipeline `bun run art` (Flux.2 Klein) e do rig `ssm_shared`.
+Retrato "sereia/tritão" do mod: gente comum vivendo debaixo d'água — não guerreiros —, vestindo uma "roupa" de
+escama de peixe cropped, com mangas compridas cobrindo braços e ombros, barriga sempre à mostra (nos dois
+gêneros), e uma peça de **cintura alta** que marca a transição pra cauda. O cós alto existe pra ficar visível
+dentro do enquadramento apertado do portrait, que corta na altura da cintura/quadril.
 
-Os 4 prompts abaixo (Midjourney) foram compostos pra reproduzir 4 variantes legadas específicas escolhidas como
-candidatas a imagem de referência — `male/001.png`, `male/008.png`, `female/001.png`, `female/011.png` — no
-mesmo espírito de `reference_male_1.png`/`reference_male_2.png` do `ssm_astral` (duas referências por gênero em
-vez de uma só, aqui simétrico: 2 macho + 2 fêmea). O objetivo é gerar essas 4 imagens de verdade no Midjourney
-pra eventualmente virarem `geracaoArt.male.referenceImage`/`geracaoArt.female.referenceImage` numa futura
-remigração pro `ssm_shared` (`docs/future-plans.md`) — isso **não** foi aplicado no `portrait.json` ainda, só os
-prompts abaixo.
+**A espécie usa `modo: "altura"` porque só nesse modo a cintura com a base da cauda fica visível.** Escalada
+pela largura do guia, essa faixa da composição cai além da borda inferior do canvas e nunca chega à tela — sem
+erro de validação nenhum, já que `largura` aceita esse caso em silêncio (ver "Escolher o `modo`" em
+`docs/pipeline-portraits.md`). O preço é conhecido e aceito: a sereia sai menor que as espécies que escalam por
+largura, e o tamanho varia um pouco entre variantes, porque cada PNG enquadra uma quantidade diferente de corpo.
 
-Todos os 4 seguem o preâmbulo de estilo/luz/fundo que `ssm_astral`/`ssm_default` já validaram (evita MJ
-estilizar demais a referência e evita sombra "assada" que atrapalharia o reaproveitamento via `ReferenceLatent`),
-mas com dois parâmetros pontuais desta rodada, diferentes dos outros dois arquivos: **`--v 8.2`** (em vez de
-`--v 6.1`) e **`--profile zj9otkx`** (perfil customizado do Midjourney).
+A cor da escama varia livremente
+por indivíduo (`torso.primary_color` no top e nas mangas, `torso.secondary_color` na cauda), sem paleta fixa de
+espécie.
+
+As 25 variantes de cada gênero em `assets/` hoje são **masters nativos gerados pelo pipeline de IA**
+(`bun run art`, Flux.2 Klein), e o `portrait.json` tem `geracaoArt` completo:
+
+- `species`: `{ archetype: "Mermaid", template: "<species.archetype>, aquatic humanoid, ordinary everyday
+  person adapted to life underwater, otherwise just like humans, ... not a warrior or soldier" }` — o
+  `not a warrior` é contrapeso deliberado ao viés de "guerreiro aquático" que as primeiras referências puxaram
+  sozinhas (ver os prompts `Male 1`/`Male 2` mais abaixo).
+- `torso`: `CroppedSleeved` na base/masculino e `PartiallyCovered` no feminino, cada um com template próprio —
+  é a diferença de recorte entre os dois gêneros (gola em V com manga presa ao ombro vs. top strapless com
+  manga separada começando abaixo do ombro nu).
+- `male.torso.extra` carrega um bloco inteiro sobre **como o peito masculino deve ser lido** (uma superfície
+  contínua, sem linha de sombra sob o peitoral): é a correção do defeito em que a malha de escama sobre o
+  tronco masculino renderizava com aparência de busto feminino.
+- `referenceImage` em uso hoje é **uma imagem por gênero**: `reference_male_3.png` e `reference_female_3.png`.
+
+**Sobre os prompts abaixo:** eles são o registro de como as referências foram sendo buscadas, em ordem
+cronológica de tentativa — `Male 1`/`Male 2`/`Female 1`/`Female 2` reproduziam variantes legadas específicas
+(`male/001.png`, `male/008.png`, `female/001.png`, `female/011.png`, da arte de 2024 feita antes deste
+pipeline), e `Male 3`/`Male 4` são as iterações que corrigiram o rumo depois que a direção da espécie mudou
+para "gente comum, não guerreiro". **As duas imagens que o `portrait.json` de fato usa (`reference_male_3.png`,
+`reference_female_3.png`) não têm prompt registrado aqui** — se forem regeradas ou substituídas, documente o
+prompt usado.
+
+Todos seguem o preâmbulo de estilo/luz/fundo que `ssm_astral`/`ssm_default` já validaram (evita MJ estilizar
+demais a referência e evita sombra "assada" que atrapalharia o reaproveitamento via `ReferenceLatent`), mas com
+dois parâmetros pontuais desta rodada, diferentes dos outros dois arquivos: **`--v 8.2`** (em vez de `--v 6.1`)
+e **`--profile zj9otkx`** (perfil customizado do Midjourney).
 
 ## Prompt de referência (Midjourney) — Male 1
 
@@ -147,10 +166,9 @@ estrela geométrica lisa) e a exclusão das braçadeiras pontudas continuam vale
 - Resto igual aos prompts anteriores (`--ar 4:5 --v 8.2 --style raw --profile zj9otkx`, fundo branco, luz frontal
   sem sombra).
 
-## Próximos passos (fora do escopo deste arquivo)
+## Estado atual
 
-Depois de gerar as 4 imagens no Midjourney: escolher a melhor de cada, salvar como `reference_male_1.png`/
-`reference_male_2.png`/`reference_female_1.png`/`reference_female_2.png` (convenção do `ssm_astral`), e só então
-configurar `geracaoArt` no `portrait.json` (`species.archetype: "Mermaid"`, `torso.state`/`torso.template`, etc.) — passo que depende também de
-resolver o item "Remigrar `ssm_mermaids` pro `ssm_shared`" em `docs/future-plans.md`, já que o pipeline
-`bun run art` pressupõe o rig `ssm_shared`.
+A migração pro `ssm_shared` e a regeração completa da arte via IA foram concluídas em 2026-08-14 — relato do
+que travava antes e do que destravou: `docs/history/2026-08-14-mermaids-remigracao.md`. As imagens de
+referência em uso são `reference_male_3.png`/`reference_female_3.png`; os prompts acima documentam as
+tentativas que levaram até elas, não as imagens finais.

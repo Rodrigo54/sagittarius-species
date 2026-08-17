@@ -8,8 +8,8 @@
 
 Sagittarius Species is a Stellaris mod that adds AI-assisted portrait art for **18 species**, each plugged into
 the game's `species_classes` / `portrait_categories` / `portrait_sets` data chain (see `CLAUDE.md` for the full
-model). Most species share one of two animated rigs (`sl_shared` or `ssm_shared`) rather than shipping unique
-meshes — see `docs/pipeline-portraits.md` and the "`sl_shared` vs. `ssm_shared`" section of `CLAUDE.md` for why.
+model). Every species shares the same animated rig (`ssm_shared`) rather than shipping a unique mesh — see
+`docs/pipeline-portraits.md` and the "`sl_shared` vs. `ssm_shared`" section of `CLAUDE.md` for why.
 
 This repository is a content/asset pipeline, not an application: `mod/sagittarius-species/` is the Clausewitz-script
 mod itself (published to the Steam Workshop), and `scripts/` (Bun/TypeScript) converts source art in `assets/`
@@ -38,9 +38,9 @@ into the textures and `.txt`/`.yml` files inside `mod/`.
 | Mercenaries | `ssm_mercenary` | HUM |
 | Star Knight | `ssm_knight` | HUM |
 
-`ssm_mermaids` still uses the legacy `sl_shared` rig — a migration to `ssm_shared` was attempted and reverted
-after in-game testing found framing issues (see `docs/future-plans.md`). `ssm_astral` was migrated (and re-migrated)
-to `ssm_shared` and no longer has that problem. Every other species above uses `ssm_shared`.
+All 18 species above use the `ssm_shared` rig. The legacy `sl_shared` rig is still versioned in the repository,
+but no species points at it: it is the input `bun run shared-rig` derives `ssm_shared` from, and the only
+surviving copy of the original mesh and animations.
 
 ## Recommended tools
 

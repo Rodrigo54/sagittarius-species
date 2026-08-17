@@ -3,7 +3,7 @@
 Caminho **alternativo/opt-in** pra produzir os PNGs de origem que o pipeline de portraits consome (ver
 `docs/pipeline-portraits.md`) — em vez de arte desenhada à mão, gera via IA (ComfyUI local, modelo
 **Flux.2 Klein**) a partir de uma receita declarada em `geracaoArt` no `portrait.json` da espécie. Ausente na
-maioria das espécies hoje; presente em `ssm_default` e `ssm_astral`.
+maioria das espécies hoje; presente em `ssm_default`, `ssm_astral` e `ssm_mermaids`.
 
 **Quem roda `bun run art` (ou qualquer variante futura) é sempre o Rodrigo, nunca o Claude por conta
 própria** — geração de imagem consome GPU local por vários segundos a minutos por variante, e rodar sem avisar

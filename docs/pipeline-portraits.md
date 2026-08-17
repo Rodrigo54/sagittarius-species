@@ -56,9 +56,11 @@ de prefixo que existia antes entre arte-fonte e mod publicado.
      largura do guia (padrão) ou pela altura mínima (`altura`) — veja "Escolher o `modo`" abaixo. `ancora`
      escolhe o que encosta no topo do guia: o bounding box da arte (padrão) ou a **cabeça**
      (`"ancora": "cabeca"`). Rationale completo e candidatas por espécie: `docs/rig.md`.
-   - **`sl_shared` — legado congelado.** O PNG em `assets/` já vem enquadrado e é usado como está, exigindo o
-     canvas exato do rig (825×1650) — cópia byte a byte pro staging. A única espécie que resta aqui
-     (`ssm_mermaids`) é estruturalmente imune a mudanças no enquadramento.
+   - **`sl_shared` — legado, sem nenhuma espécie hoje.** O PNG em `assets/` já vem enquadrado e é usado como
+     está, exigindo o canvas exato do rig (825×1650) — cópia byte a byte pro staging. O contrato continua
+     implementado e é o que `rig` omitido resolve por padrão (`RIG_PADRAO` em
+     `scripts/generate-portraits/types.ts`), mas todo `portrait.json` do repositório declara `ssm_shared`
+     explicitamente.
 3. **Validação antes de qualquer escrita ou remoção** (mesmo padrão de `scripts/generate-names/`): confere que
    `name` bate com o nome da pasta, que a contagem declarada em `counts` bate exatamente com os PNGs
    encontrados, que os arquivos são `001.png`..`NNN.png` sequenciais e zero-padded a 3 dígitos, sem buracos, e —
@@ -99,7 +101,8 @@ pedem esse modo:
 2. **A arte tem abaixo do busto um elemento que precisa aparecer** — a cintura, um cinto, a transição pra uma
    anatomia não-humana. Escalando pela largura, esse pedaço cai muito além de y=780 e nunca chega à tela.
    Aqui `largura` **valida sem reclamar** e simplesmente some com o elemento: nenhum erro avisa, a decisão é
-   visual.
+   visual. O caso canônico é `ssm_mermaids`: só em `altura` a cintura com a base da cauda fica visível — e a
+   cauda é o traço que define a espécie.
 
 O preço do caso 2 é tamanho, e é real: a largura resultante fica bem abaixo dos 600 do guia (numa arte de
 proporção 1,4 dá ~455 px), então a espécie sai menor que as que usam `largura`, e **varia entre variantes da
@@ -191,15 +194,16 @@ recursos pra modelar/riggar do zero: **reaproveitar o mesh e as animações de u
 textura nova (`character_textures`) que é pintada em cima dele.
 
 Concretamente: todo `entity` de todo `ssm_<espécie>_portrait.txt` deste mod aponta para uma entity definida
-dentro de `gfx/models/portraits/sl_shared/` ou `gfx/models/portraits/ssm_shared/` (mesh em
+dentro de `gfx/models/portraits/ssm_shared/` (ou, pelo contrato legado, `gfx/models/portraits/sl_shared/`; mesh em
 `_humanoid_portrait_meshes.gfx`, referenciando `humanoid_01_portrait.mesh`). O prefixo `sl_` vem do **Stellar
 Legion Mod**, um mod hoje **extinto** de quem esse rig foi originalmente herdado — ele não existe mais no Steam
 Workshop, mas o mesh/animação continuam vivos dentro de `sl_shared/`, versionados como parte deste mod. **Não
 existe mais o mod original pra consultar/atualizar essas animações** — `sl_shared/` é a única fonte que resta.
 `ssm_shared/` é um fork próprio deste mod, derivado de `sl_shared/` reduzido a um único plano com UV corrigida
 (canvas de `character_textures` **980×780**, contra 825×1650 do legado) — veja `docs/rig.md` pro porquê e como
-cada espécie escolhe um dos dois via `portrait.json`. **17 das 18 espécies publicadas usam `ssm_shared` hoje**;
-só `ssm_mermaids` segue no legado `sl_shared`.
+cada espécie escolhe um dos dois via `portrait.json`. **Todas as 18 espécies publicadas usam `ssm_shared`
+hoje** — nenhuma segue no legado `sl_shared`, que permanece no repositório como fonte de derivação do fork e
+como única cópia do mesh/animação originais.
 
 Como consequência prática:
 

@@ -2,8 +2,7 @@
 
 **Nome exibido:** Astral
 **Species class:** HUM (a confirmar)
-**Rig:** `ssm_shared` (migrada — antes foi revertida pro `sl_shared` na preparação da release 1.8.0 por
-variantes desalinhadas entre si, ver `docs/future-plans.md`; remigrada depois)
+**Rig:** `ssm_shared`
 **Gendered:** sim (`male`/`female`, 25/25 variantes)
 
 ## Descrição
