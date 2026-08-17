@@ -6,7 +6,14 @@ import { ErroCoberturaDeCampo, validarEspecie } from './validacao';
 /** Fixtures montadas na mão (não lidas de `assets/`) — o teste é sobre as
  * duas regras de validação, não sobre o conteúdo das espécies do produto. */
 function especie(geracaoArt: PortraitConfig['geracaoArt']): PortraitConfig {
-  return { name: 'fixture', gendered: true, counts: { male: 1 }, geracaoArt } as PortraitConfig;
+  return {
+    name: 'fixture',
+    gendered: true,
+    species_classes: ['HUM'],
+    categories: ['humanoids'],
+    counts: { male: 1 },
+    geracaoArt,
+  } as PortraitConfig;
 }
 
 describe('validarEspecie — cobertura', () => {
@@ -109,6 +116,8 @@ describe('validarEspecie — escopo', () => {
     const config = {
       name: 'fixture',
       gendered: true,
+      species_classes: ['HUM'],
+      categories: ['humanoids'],
       counts: { male: 2, female: 1 },
       geracaoArt: {
         base: { species: { archetype: 'Human' }, torso: { state: 'FullyCovered' } },
@@ -126,6 +135,8 @@ describe('validarEspecie — escopo', () => {
     const config = {
       name: 'fixture',
       gendered: true,
+      species_classes: ['HUM'],
+      categories: ['humanoids'],
       counts: { male: 3 },
       geracaoArt: {
         base: { species: { archetype: 'Human' }, torso: { state: 'FullyCovered', template: 'plain armor' } },

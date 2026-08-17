@@ -1,7 +1,16 @@
 import { z } from 'zod';
 import { CAMPOS_EYES, CAMPOS_HAIR, CAMPOS_PERSON, CAMPOS_SPECIES, CAMPOS_TORSO } from './campos';
 import { validarSintaxeDeTemplate } from './templates';
-import { ANCORAS_VERTICAIS, MODOS_ENQUADRAMENTO, RIGS_VALIDOS } from './vocabulario';
+import {
+  ANCORAS_VERTICAIS,
+  CATEGORIAS_VALIDAS,
+  CATEGORIA_DA_CLASSE,
+  MODOS_ENQUADRAMENTO,
+  RIGS_VALIDOS,
+  SPECIES_CLASSES_VALIDAS,
+  type CategoriaId,
+  type SpeciesClassId,
+} from './vocabulario';
 
 const GENEROS_ALVO = ['male', 'female', 'flat'] as const;
 
@@ -205,6 +214,17 @@ const zPortraitConfigBase = z
     rig: z.enum(RIGS_VALIDOS).optional().describe('Rig de retrato compartilhado. Omitido = sl_shared.'),
     modo: z.enum(MODOS_ENQUADRAMENTO).optional().describe('Modo de enquadramento — só faz sentido em rig com guia (ssm_shared). Omitido = largura.'),
     ancora: z.enum(ANCORAS_VERTICAIS).optional().describe('O que encosta no topo do guia — só faz sentido em rig com guia (ssm_shared). Omitido = conteudo.'),
+    species_classes: z
+      .array(z.enum(SPECIES_CLASSES_VALIDAS))
+      .min(1)
+      .describe(
+        'species_class do Stellaris que esta espécie pode ter, em ORDEM DE PREFERÊNCIA. A primeira recebe o gate positivo do DLC dela; as seguintes acumulam as negações, então quem não tem o DLC cai na próxima da lista (ex.: ["AQUATIC","HUM"] = aquática pra quem tem o Aquatics Species Pack, humanoide pros demais). Uma classe só = espécie sem fallback.'
+      ),
+    categories: z
+      .array(z.enum(CATEGORIAS_VALIDAS))
+      .describe(
+        'Categorias (abas do editor de império) onde esta espécie aparece, declaradas por extenso — inclusive as que espelham uma classe declarada em species_classes. "sagittarius" nunca é declarada: toda espécie do mod entra nela automaticamente.'
+      ),
     counts: z
       .object({
         male: z.number().int().positive().optional().describe('Quantidade de variantes masculinas.'),
@@ -267,8 +287,60 @@ function validarVariantesDeGeracaoArt(
   }
 }
 
+function duplicatas(valores: readonly string[]): string[] {
+  const contagem = new Map<string, number>();
+  for (const valor of valores) contagem.set(valor, (contagem.get(valor) ?? 0) + 1);
+  return [...contagem].filter(([, vezes]) => vezes > 1).map(([valor]) => valor);
+}
+
+/** Confere a filiação declarada: nenhuma repetição (a ordem de `species_classes`
+ * é significativa, então uma classe repetida geraria dois gates para a mesma
+ * espécie), e nenhuma categoria **espelhada** sem a classe que ela espelha —
+ * declarar `aquatics` sem `AQUATIC` prometeria a espécie numa aba onde ela
+ * nunca poderia existir.
+ *
+ * O inverso **não** é exigido: uma espécie pode ter uma classe sem declarar a
+ * categoria espelhada dela, e assim aparecer só nas abas temáticas (mais a
+ * guarda-chuva `sagittarius`). */
+function validarFiliacao(
+  ctx: z.RefinementCtx,
+  speciesClasses: SpeciesClassId[],
+  categories: CategoriaId[]
+): void {
+  for (const repetida of duplicatas(speciesClasses)) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['species_classes'],
+      message: `species_class "${repetida}" declarada mais de uma vez — a lista é uma ordem de preferência, sem repetição.`,
+    });
+  }
+
+  for (const repetida of duplicatas(categories)) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['categories'],
+      message: `categoria "${repetida}" declarada mais de uma vez.`,
+    });
+  }
+
+  const classesDeclaradas = new Set<SpeciesClassId>(speciesClasses);
+  for (const categoria of categories) {
+    const classeEspelhada = (Object.keys(CATEGORIA_DA_CLASSE) as SpeciesClassId[]).find(
+      (classe) => CATEGORIA_DA_CLASSE[classe] === categoria
+    );
+    if (classeEspelhada !== undefined && !classesDeclaradas.has(classeEspelhada)) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['categories'],
+        message: `categoria "${categoria}" espelha a species_class "${classeEspelhada}", que não está em species_classes.`,
+      });
+    }
+  }
+}
+
 export const zPortraitConfig = zPortraitConfigBase.superRefine((config, ctx) => {
   validarVariantesDeGeracaoArt(ctx, config.geracaoArt, config.counts);
+  validarFiliacao(ctx, config.species_classes, config.categories);
 });
 
 export type PortraitConfig = z.infer<typeof zPortraitConfig>;

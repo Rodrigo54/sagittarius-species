@@ -5,6 +5,10 @@ import { zPortraitConfig } from './schema';
 import {
   ANCORAS_VERTICAIS,
   ANCORAS_VERTICAIS_DESCRICOES,
+  CATEGORIAS_DESCRICOES,
+  CATEGORIAS_VALIDAS,
+  SPECIES_CLASSES_DESCRICOES,
+  SPECIES_CLASSES_VALIDAS,
   ESTADOS_TORSO,
   ESTADOS_TORSO_DESCRICOES,
   ESTILOS_CABELO,
@@ -39,6 +43,8 @@ const VOCABULARIOS_COM_DESCRICAO: ReadonlyArray<{ valores: readonly string[]; de
   { valores: FORMAS_CORPO, descricoes: FORMAS_CORPO_DESCRICOES },
   { valores: ANCORAS_VERTICAIS, descricoes: ANCORAS_VERTICAIS_DESCRICOES },
   { valores: MODOS_ENQUADRAMENTO, descricoes: MODOS_ENQUADRAMENTO_DESCRICOES },
+  { valores: SPECIES_CLASSES_VALIDAS, descricoes: SPECIES_CLASSES_DESCRICOES },
+  { valores: CATEGORIAS_VALIDAS, descricoes: CATEGORIAS_DESCRICOES },
 ];
 
 /** Percorre recursivamente o JSON Schema gerado e, em todo nó com `enum`

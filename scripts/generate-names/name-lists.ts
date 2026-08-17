@@ -1,6 +1,7 @@
 import type { Jomini, Writer } from 'jomini';
 import { readFile, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { basename, join } from 'node:path';
+import { zNameList } from '../name-list-schema';
 import { listar } from '../utils';
 import {
   comoBloco,
@@ -70,9 +71,23 @@ export async function loadNameListFiles(pasta: string): Promise<string[]> {
   return arquivos;
 }
 
+/** Lê e valida o JSON contra o schema `zod` de `name-list-schema/` — único
+ * ponto de carga desses arquivos, então validar aqui cobre o pipeline inteiro.
+ * Cobre a FORMA (metadados, espécies-flavor, quais seções o corpo tem); o que
+ * depende do vanilla instalado (chaves de ship_size/army/planet_class,
+ * `sequential_name`) fica com `validation.ts`. */
 export async function readNameList(arquivo: string): Promise<ParsedNameList> {
   const fileContent = await readFile(arquivo, 'utf-8');
-  return parseNameListFile(JSON.parse(fileContent) as ArquivoNameList);
+  const resultado = zNameList.safeParse(JSON.parse(fileContent));
+  if (!resultado.success) {
+    const nome = basename(arquivo);
+    throw new Error(
+      resultado.error.issues
+        .map((issue) => `${nome} — ${issue.path.join('.') || '(raiz)'}: ${issue.message}`)
+        .join('\n')
+    );
+  }
+  return parseNameListFile(resultado.data as ArquivoNameList);
 }
 
 export async function loadLocalization(

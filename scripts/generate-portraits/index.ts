@@ -1,6 +1,7 @@
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { PASTA_ASSETS, PASTA_MOD, PASTA_RAIZ, converter } from '../converter';
+import { derivarTaxonomia, escreverTaxonomia } from '../generate-taxonomy/gerar';
 import { carregarEspecie, listarPastasEspecies } from './discovery';
 import { prepararEspecie } from './staging';
 import { limparOrfaos } from './sync';
@@ -49,9 +50,13 @@ async function main() {
 
   // Valida o resto (arquivos no disco: contagem de PNGs, geometria, canal
   // alfa) antes de mexer em qualquer arquivo — erro trava a geração sem
-  // deixar o mod num estado parcialmente limpo/atualizado.
+  // deixar o mod num estado parcialmente limpo/atualizado. A taxonomia entra
+  // aqui pelo mesmo motivo: ela é derivada agora e só escrita no fim, pra que
+  // uma filiação inválida (numa espécie qualquer, mesmo fora do filtro) não
+  // seja descoberta depois de já ter convertido textura.
   const errosPorEspecie = await Promise.all(especies.map((info) => validarEspecie(info)));
-  const erros = [...errosDeCarga, ...errosPorEspecie.flat()];
+  const taxonomia = await derivarTaxonomia();
+  const erros = [...errosDeCarga, ...errosPorEspecie.flat(), ...taxonomia.erros];
   if (erros.length > 0) {
     console.error(
       `${erros.length} erro(s) de validação encontrado(s) — nada foi escrito ou apagado:`
@@ -85,11 +90,19 @@ async function main() {
     await writeFile(join(PASTA_PORTRAIT_TXT, `${info.slug}_portrait.txt`), conteudoTxt);
   }
 
+  // Registro em common/ (portrait_sets + portrait_categories), sempre com
+  // TODAS as espécies — mesmo sob filtro, já que os dois arquivos descrevem o
+  // mod inteiro. Escrito aqui pra que sincronizar a arte de uma espécie nunca
+  // deixe o registro dela para trás; `bun run taxonomy` faz só esta parte,
+  // quando nenhuma textura mudou.
+  await escreverTaxonomia(taxonomia.sets);
+
   console.log(
     filtro !== undefined
       ? `Gerado: só ${filtro} (filtro de linha de comando). ${enquadrados} retrato(s) enquadrado(s).`
       : `Gerado: ${especies.length} espécie(s) de portrait, ${enquadrados} retrato(s) enquadrado(s) a partir de master.`
   );
+  console.log(`Registro: ${taxonomia.sets.length} portrait_set(s) a partir de ${taxonomia.especies} espécie(s).`);
 }
 
 main();

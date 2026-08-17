@@ -6,7 +6,14 @@ function infoBase(rig?: SpeciesInfo['config']['rig']): SpeciesInfo {
   return {
     slug: 'ssm_teste',
     pastaAssets: '',
-    config: { name: 'teste', gendered: false, rig, counts: { flat: 1 } },
+    config: {
+      name: 'teste',
+      gendered: false,
+      rig,
+      species_classes: ['HUM'],
+      categories: ['humanoids'],
+      counts: { flat: 1 },
+    },
     arquivosMale: [],
     arquivosFemale: [],
     arquivosFlat: ['assets/portraits/ssm_teste/001.png'],

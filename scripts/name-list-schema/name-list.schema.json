@@ -1,0 +1,171 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome da cultura como aparece na lista do jogo (ex.: \"Sagittarius - Chromatica\")."
+    },
+    "desc": {
+      "type": "string",
+      "description": "Descrição/preview da cultura, com exemplos por aspecto. Aceita marcação de cor do jogo (§Y...§!) e \\n."
+    },
+    "species_names": {
+      "description": "Espécies-flavor associadas a esta cultura — viram entradas de ssm_species_names.txt.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Identificador da espécie-flavor, único entre TODOS os name_lists (o jogo agrupa por ele)."
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome da espécie no singular (ex.: \"Altmer\")."
+          },
+          "plural": {
+            "type": "string",
+            "description": "Nome da espécie no plural (ex.: \"Altmers\")."
+          },
+          "home_planet": {
+            "description": "Planeta natal sugerido.",
+            "type": "string"
+          },
+          "home_system": {
+            "description": "Sistema natal sugerido.",
+            "type": "string"
+          },
+          "species_class": {
+            "type": "string",
+            "enum": [
+              "HUM",
+              "MAM",
+              "REP",
+              "AVI",
+              "ART",
+              "MOL",
+              "FUN",
+              "PLANT",
+              "LITHOID",
+              "NECROID",
+              "AQUATIC",
+              "TOX",
+              "INF",
+              "MACHINE"
+            ],
+            "description": "species_class sob a qual esta espécie-flavor é agrupada em ssm_species_names.txt — o jogo exige uma classe válida como chave, e é ela que decide em que impérios a entrada pode ser sorteada. Não há vínculo com portrait: ao gerar um império, o jogo sorteia a espécie-flavor e o retrato de forma independente, dentro da classe."
+          }
+        },
+        "required": [
+          "key",
+          "name",
+          "plural",
+          "species_class"
+        ],
+        "additionalProperties": false,
+        "description": "Uma espécie-flavor: o que o botão de aleatório da criação de império pode sortear."
+      }
+    },
+    "_meta": {
+      "description": "Registro de autoria (tema e quantidade-alvo por aspecto), consumido pela skill /gerar-name-list. O gerador ignora e não escreve no .txt."
+    }
+  },
+  "required": [
+    "name",
+    "desc"
+  ],
+  "additionalProperties": {
+    "type": "object",
+    "properties": {
+      "category": {
+        "type": "string",
+        "description": "Categoria exibida na seleção de name_list do jogo (ex.: \"Humanoid\")."
+      },
+      "ship_names": {
+        "description": "Bloco de script Clausewitz desta seção, aninhado à vontade. As chaves internas (ship_size, army, planet_class) são validadas contra o vanilla instalado na hora de gerar, não aqui.",
+        "allOf": [
+          {
+            "$ref": "#/definitions/__schema0"
+          }
+        ]
+      },
+      "ship_class_names": {
+        "description": "Bloco de script Clausewitz desta seção, aninhado à vontade. As chaves internas (ship_size, army, planet_class) são validadas contra o vanilla instalado na hora de gerar, não aqui.",
+        "allOf": [
+          {
+            "$ref": "#/definitions/__schema0"
+          }
+        ]
+      },
+      "fleet_names": {
+        "description": "Bloco de script Clausewitz desta seção, aninhado à vontade. As chaves internas (ship_size, army, planet_class) são validadas contra o vanilla instalado na hora de gerar, não aqui.",
+        "allOf": [
+          {
+            "$ref": "#/definitions/__schema0"
+          }
+        ]
+      },
+      "army_names": {
+        "description": "Bloco de script Clausewitz desta seção, aninhado à vontade. As chaves internas (ship_size, army, planet_class) são validadas contra o vanilla instalado na hora de gerar, não aqui.",
+        "allOf": [
+          {
+            "$ref": "#/definitions/__schema0"
+          }
+        ]
+      },
+      "planet_names": {
+        "description": "Bloco de script Clausewitz desta seção, aninhado à vontade. As chaves internas (ship_size, army, planet_class) são validadas contra o vanilla instalado na hora de gerar, não aqui.",
+        "allOf": [
+          {
+            "$ref": "#/definitions/__schema0"
+          }
+        ]
+      },
+      "character_names": {
+        "description": "Bloco de script Clausewitz desta seção, aninhado à vontade. As chaves internas (ship_size, army, planet_class) são validadas contra o vanilla instalado na hora de gerar, não aqui.",
+        "allOf": [
+          {
+            "$ref": "#/definitions/__schema0"
+          }
+        ]
+      }
+    },
+    "required": [
+      "category"
+    ],
+    "additionalProperties": false,
+    "description": "Corpo do name_list — vira o conteúdo de ssm_<cultura>.txt em common/name_lists/."
+  },
+  "description": "Formato completo de assets/name_lists/<cultura>.json.",
+  "definitions": {
+    "__schema0": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema0"
+          }
+        },
+        {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "$ref": "#/definitions/__schema0"
+          }
+        }
+      ]
+    }
+  }
+}

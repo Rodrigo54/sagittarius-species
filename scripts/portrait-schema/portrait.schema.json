@@ -42,6 +42,91 @@
         "encosta no topo do guia a cabeça, primeira linha densa de pixels opacos"
       ]
     },
+    "species_classes": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "HUM",
+          "MAM",
+          "REP",
+          "AVI",
+          "ART",
+          "MOL",
+          "FUN",
+          "PLANT",
+          "LITHOID",
+          "NECROID",
+          "AQUATIC",
+          "TOX",
+          "INF",
+          "MACHINE"
+        ],
+        "enumDescriptions": [
+          "humanoide",
+          "mamífero",
+          "reptiliano",
+          "aviano",
+          "artrópode",
+          "moluscoide",
+          "fungoide",
+          "plantoide — exige o DLC Plantoids Species Pack",
+          "lithoide — exige o DLC Lithoids Species Pack",
+          "necroide — exige o DLC Necroids Species Pack",
+          "aquático — exige o DLC Aquatics Species Pack",
+          "toxoide — exige o DLC Toxoids Species Pack",
+          "infernal — exige o DLC Infernals Species Pack",
+          "máquina"
+        ]
+      },
+      "description": "species_class do Stellaris que esta espécie pode ter, em ORDEM DE PREFERÊNCIA. A primeira recebe o gate positivo do DLC dela; as seguintes acumulam as negações, então quem não tem o DLC cai na próxima da lista (ex.: [\"AQUATIC\",\"HUM\"] = aquática pra quem tem o Aquatics Species Pack, humanoide pros demais). Uma classe só = espécie sem fallback."
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "humanoids",
+          "mammalians",
+          "reptilians",
+          "avians",
+          "arthropoids",
+          "molluscoids",
+          "fungoids",
+          "plantoids",
+          "lithoids",
+          "necroids",
+          "aquatics",
+          "toxoids",
+          "infernals",
+          "machines",
+          "cybernetics",
+          "synthetics",
+          "psionics"
+        ],
+        "enumDescriptions": [
+          "aba Humanoid — espelha a classe HUM",
+          "aba Mammalian — espelha a classe MAM",
+          "aba Reptilian — espelha a classe REP",
+          "aba Avian — espelha a classe AVI",
+          "aba Arthropoid — espelha a classe ART",
+          "aba Molluscoid — espelha a classe MOL",
+          "aba Fungoid — espelha a classe FUN",
+          "aba Plantoid — espelha a classe PLANT",
+          "aba Lithoid — espelha a classe LITHOID",
+          "aba Necroid — espelha a classe NECROID",
+          "aba Aquatic — espelha a classe AQUATIC",
+          "aba Toxoid — espelha a classe TOX",
+          "aba Infernal — espelha a classe INF",
+          "aba Machine — espelha a classe MACHINE",
+          "aba Cybernetic — temática, transversal a classes",
+          "aba Synthetic — temática, transversal a classes",
+          "aba Psionic — temática, transversal a classes"
+        ]
+      },
+      "description": "Categorias (abas do editor de império) onde esta espécie aparece, declaradas por extenso — inclusive as que espelham uma classe declarada em species_classes. \"sagittarius\" nunca é declarada: toda espécie do mod entra nela automaticamente."
+    },
     "counts": {
       "type": "object",
       "properties": {
@@ -3248,6 +3333,8 @@
   "required": [
     "name",
     "gendered",
+    "species_classes",
+    "categories",
     "counts"
   ],
   "additionalProperties": false,

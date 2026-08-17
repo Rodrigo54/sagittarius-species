@@ -43,6 +43,8 @@ describe('integração com o schema do portrait.json', () => {
     return {
       name: 'fixture',
       gendered: true,
+      species_classes: ['HUM'],
+      categories: ['humanoids'],
       counts: { male: 1 },
       geracaoArt: {
         base: { species: { archetype: 'Mermaid' }, torso: { template } },
