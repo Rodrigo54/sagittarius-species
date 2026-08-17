@@ -2,7 +2,7 @@
 
 Sagittarius Species is the portrait pack for anyone who's ever wanted their Stellaris empire to look like it walked straight out of a con hall, a tabletop splatbook, and a late-night sci-fi marathon all at once. AI-assisted art, a shared animated rig, and a genuine excuse to roleplay as a race of sapient furries who also happen to run the galaxy — what's not to love?
 
-We're currently rolling **18 unique species** into your character creator:
+We're currently rolling **19 unique species** into your character creator:
 
 **Humans (augmented realism):** The baseline build, min-maxed with a few cybernetic upgrades.\
 **Space Elves:** Pointy ears, longer lifespans, and a save-vs-arrogance they usually fail.\
@@ -21,9 +21,10 @@ We're currently rolling **18 unique species** into your character creator:
 **Cyborgs:** Flesh-and-chrome overachievers who upgraded before it was cool.\
 **Timbot:** Small, blocky, and somehow the most beloved unit in your entire fleet.\
 **Mercenaries:** Guns, contracts, and zero interest in your empire's backstory.\
-**Star Knight:** Sworn protectors of the void, lightsaber-adjacent energy strongly implied.
+**Star Knight:** Sworn protectors of the void, lightsaber-adjacent energy strongly implied.\
+**Drakelings:** Pocket-sized dragon-folk who'd rather run the forge than sit on the hoard.
 
-New in this version: most of these species just got a rig overhaul — a corrected UV layout on the shared animated portrait means bigger, better-centered art instead of half the canvas going to waste. Fewer wasted pixels, more face to admire while your pop grows old and dies for the Empire.
+New in this version: the Drakelings arrive — dragon smiths in hammered bronze and polished silver — the Mermaids got a fresh coat of art, and every species in the pack is finally registered the way Stellaris expects. That last one is the quiet fix that matters: AI empires will actually roll these portraits now, and nobody gets stranded in a species class you can't play. Updated for Stellaris 4.5.
 
 Bugs, suggestions, unhinged lore requests — the comment section is open and we read all of it. Come help shape this mod into something even more delightfully extra. Live long, and terraform responsibly. 🖖✨
 
