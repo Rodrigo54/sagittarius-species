@@ -51,7 +51,8 @@ O runtime é o **Bun** (veja `bun.lockb`) — rode os scripts com `bun scripts/x
 ```bash
 bun run setup       # bun scripts/download-bin.ts — baixa os binários auxiliares em bin/ (veja seção abaixo)
 bun run converter   # roda a conversão de portraits + rooms (bun run portrait && bun run rooms)
-bun run portrait     # bun scripts/generate-portraits/index.ts — sincroniza assets/portraits/ com mod/ (DDS + .txt), direto no mod/; aceita um slug opcional (ex.: `bun run portrait ssm_elves`) pra processar uma espécie só
+bun run portrait     # bun scripts/generate-portraits/index.ts — sincroniza assets/portraits/ com mod/ (DDS + .txt), direto no mod/; aceita um slug opcional (ex.: `bun run portrait ssm_elves`) pra processar uma espécie só. Sempre regenera também o registro (portrait_sets/portrait_categories), do mod inteiro, mesmo sob filtro
+bun run taxonomy     # bun scripts/generate-taxonomy/index.ts — regenera só o registro em common/ (portrait_sets + portrait_categories) a partir da filiação declarada nos portrait.json (veja seção abaixo)
 bun run shared-rig   # bun scripts/generate-shared-rig/index.ts — deriva gfx/.../ssm_shared/ a partir de sl_shared/ (veja seção "Rig compartilhado")
 bun run rooms         # bun scripts/generate-rooms/index.ts — sincroniza assets/city_sets/ com mod/ (DDS + .txt), direto no mod/
 bun run names          # bun scripts/generate-names/index.ts — gera name_lists + species_names (veja seção abaixo)
@@ -138,8 +139,24 @@ sempre em sincronia: cada espécie declara sua forma num `portrait.json` obrigat
 composição no canvas do rig, guia expresso em fração do canvas — `modo`/`ancora` ajustam esse enquadramento por
 espécie); `sl_shared` (legado, **sem nenhuma espécie hoje**) usa PNG já enquadrado byte a byte, exigindo o
 canvas exato do rig. Cadeia completa de arquivos que conecta um retrato de espécie
-(`species_classes` → `portrait_categories` → `portrait_sets` → `portrait.txt` → `.dds`) e a mecânica vanilla
-por trás (`portrait_groups`, cumprimentos/insultos, `greeting_sound`): `docs/pipeline-portraits.md`.
+(`portrait_categories` → `portrait_sets` → `portrait.txt` → `.dds`) e a mecânica vanilla por trás
+(`portrait_groups`, cumprimentos/insultos, `greeting_sound`): `docs/pipeline-portraits.md`.
+
+## Pipeline de taxonomia (registro em `common/`)
+
+`scripts/generate-taxonomy/` (comando `bun run taxonomy`, também chamado no fim de `bun run portrait`) gera do
+zero `common/portrait_sets/ssm_portrait_sets.txt` e `common/portrait_categories/ssm_portrait_categories.txt` a
+partir de dois campos que cada `portrait.json` declara: **`species_classes`** (as classes que a espécie pode
+ter, em ordem de preferência) e **`categories`** (as abas do editor de império onde ela aparece). O set não é
+declarado em lugar nenhum — é derivado do agrupamento `(species_class × categorias)`, e o gate de DLC vem de
+uma tabela por classe no script, nunca do JSON.
+
+O mod **não tem `species_classes` próprias**: o campo `portraits` dentro de um bloco `species_class` é rejeitado
+pelo parser do jogo (`Unexpected token: portraits` no `error.log`), e `PSIONIC`/`CYBERNETIC` existem só para o
+ship set (`randomized = { always = no }`), então usá-las tiraria a espécie do sorteio de impérios de IA. Ordem
+de preferência, fallback por DLC (com as duas regras de UI que o moldam: `playable` falso acinzenta em vez de
+esconder, e o jogo deduplica por aba pela primeira ocorrência) e os dois tipos de categoria:
+`docs/pipeline-taxonomy.md`; o porquê de tudo isso: `docs/history/2026-08-17-taxonomia-de-portraits.md`.
 
 ### Rig compartilhado (`sl_shared` / `ssm_shared`) e enquadramento
 
@@ -195,8 +212,11 @@ modelo novo: `docs/pipeline-generate-art.md`.
 
 `scripts/generate-names/` (comando `bun run names`) vai de uma única fonte JSON (`assets/name_lists/*.json`)
 até o script Clausewitz, todos os `.yml` de idioma, e o arquivo agregado de espécies-flavor
-(`ssm_species_names.txt`, agrupado por `species_class` — o que popula o botão de aleatório na criação de
-império). **Regra de localização do projeto: literal por padrão** — strings normais não têm prefixo; o prefixo
+(`ssm_species_names.txt`, agrupado por `species_class`, declarada em cada entrada — o que popula o botão de
+aleatório na criação de império; não há vínculo entre espécie-flavor e retrato, o jogo sorteia os dois de forma
+independente dentro da classe). A forma do JSON de origem é validada por um schema `zod` próprio
+(`scripts/name-list-schema/`, mesmo desenho do `portrait-schema/`). **Regra de localização do projeto: literal
+por padrão** — strings normais não têm prefixo; o prefixo
 `l10n|` é reservado só pra `sequential_name` (requisito funcional do jogo desde o patch 3.6). Português do
 Brasil (`braz_por`) é o idioma "fonte da verdade" deste repositório — só a passada desse locale regenera o
 `.txt` de script. Validação (erro, não warning) trava a geração se `ship_names`/`army_names`/`planet_names`

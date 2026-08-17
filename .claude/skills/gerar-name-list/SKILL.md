@@ -12,10 +12,10 @@ Toda a interação é em **português do Brasil** (CLAUDE.md deste repositório)
 ## Contexto do pipeline (leia antes de perguntar qualquer coisa)
 
 - Fonte da verdade: `assets/name_lists/*.json`. `scripts/generate-names/` (comando `bun run names`) converte isso em `mod/sagittarius-species/common/name_lists/*.txt`, `mod/sagittarius-species/localisation/<idioma>/name_lists/*.yml` (10 idiomas), e agrega a chave `species_names` de **todos** os JSONs num único `mod/sagittarius-species/common/species_names/ssm_species_names.txt`.
-- O comando falha alto (exit 1) se o JSON usar uma chave reservada inválida (`ship_names`/`ship_class_names` fora da lista de `ship_size` do jogo, `army_names` fora da lista de `army`, `planet_names` fora da lista de `planet_class`), se um `sequential_name` não tiver o prefixo `l10n|`, se uma `key` de `species_names` colidir entre arquivos, ou se um `portrait` não existir/for ambíguo sem `species_class`. Gere o conteúdo já respeitando essas regras (detalhadas abaixo) pra não precisar de várias rodadas de correção.
+- O comando falha alto (exit 1) se o JSON usar uma chave reservada inválida (`ship_names`/`ship_class_names` fora da lista de `ship_size` do jogo, `army_names` fora da lista de `army`, `planet_names` fora da lista de `planet_class`), se um `sequential_name` não tiver o prefixo `l10n|`, se uma `key` de `species_names` colidir entre arquivos, ou se uma `species_class` não for uma classe válida do jogo. Gere o conteúdo já respeitando essas regras (detalhadas abaixo) pra não precisar de várias rodadas de correção.
 - **Antes de perguntar qualquer coisa ao usuário**, explore o ambiente:
   - Leia 2-3 JSONs existentes em `assets/name_lists/*.json` (ex.: `altmer.json`, `brazil.json`) pra absorver o formato exato, o estilo de `desc` (`§YLeaders:§!`, `§YShips:§!`, etc.), e os valores de `category` já usados.
-  - Leia `mod/sagittarius-species/common/portrait_sets/ssm_portrait_sets.txt` pra saber quais portraits existem e a que `species_class` cada um pertence. Todo portrait mapeia pra uma única classe, exceto `ssm_necron` (HUM ou NECROID) e `ssm_green_elves` (HUM ou PLANT) — ambíguos, exigem `species_class` explícito na entrada.
+  - Leia `SPECIES_CLASSES_VALIDAS` em `scripts/portrait-schema/vocabulario.ts` pra saber as `species_class` aceitas (as classes vanilla que servem a espécie de império — `PSIONIC`/`CYBERNETIC` ficam de fora de propósito, existem só pro ship set). Espécie-flavor **não** tem vínculo com retrato: o jogo sorteia nome e retrato de forma independente dentro da classe.
   - Leia `scripts/vanilla-keys.json` pra saber as listas válidas de `army`, `shipSize` e `planetClass` (snapshot congelado extraído do jogo).
   - Rode uma checagem simples (grep/leitura) das chaves `species_names[].key` já usadas em todos os JSONs de `assets/name_lists/`, pra garantir que as novas chaves que você vai inventar não colidem (a validação global do script pega isso, mas descobrir antes evita rodadas de correção).
   - Se o pedido for pra **aprimorar/reescrever uma cultura existente**, leia o JSON inteiro dela primeiro (contagens por categoria via um script rápido, tipo `Object.entries(...).map(([k,v]) => [k, v.length])`, em vez de carregar o arquivo gigante inteiro na conversa) pra saber o que já existe, quais categorias estão fracas/vazias, e não repetir pergunta sobre o que o usuário já deixou claro no pedido.
@@ -25,7 +25,7 @@ Toda a interação é em **português do Brasil** (CLAUDE.md deste repositório)
 **Novo (do zero):** siga a entrevista completa abaixo, criando `assets/name_lists/<id>.json` novo.
 
 **Aprimoramento/reescrita de uma cultura existente:** o usuário vai dizer algo como "vamos aprimorar ssm_brazil" ou "quero uma reescrita dos nomes de nave/planeta". Nesse caso:
-- Pule as perguntas de `id`/`category`/portraits (já existem — só leia do JSON atual).
+- Pule as perguntas de `id`/`category`/`species_class` (já existem — só leia do JSON atual).
 - Primeiro, **mapeie o estado atual**: se o JSON já tem `_meta` (ver seção de metadados abaixo), leia de lá o tema e a quantidade-alvo registrados da última vez, por aspecto — é mais confiável que adivinhar tema olhando os nomes. Se não tem `_meta` (arquivo antigo), compare com outra cultura mais desenvolvida do mod (ex.: `altmer.json`) pra achar categorias fracas em volume ou temática. Apresente esse mapeamento ao usuário antes de perguntar qualquer coisa — é informação que embasa a entrevista, não é pergunta, é fato que você descobre sozinho.
 - Depois, pergunte **qual escopo do aprimoramento**: só um aspecto específico (ex.: só `ship_names`), vários, ou tudo? Não assuma — o pedido pode ser bem específico ("quero que science vire nomes de cientista") ou aberto ("aprimora tudo").
 - Pra cada aspecto dentro do escopo, **não presuma que é uma reescrita temática** — pergunte qual tipo de mudança o usuário quer, já que podem ser coisas bem diferentes:
@@ -44,8 +44,8 @@ Uma pergunta de cada vez, aguardando resposta antes da próxima. Se o usuário j
 2. **Identificador do arquivo** (só pra cultura nova). Proponha um `id` curto em inglês/ASCII com base no tema, e confirme com o usuário.
 3. **`category`** (só pra cultura nova). Todos os name_lists existentes hoje usam `"Humanoid"`. Pergunte se esta cultura nova é humanoide também ou outra categoria — não assuma.
 4. **Convenções de nomenclatura por aspecto.** Ver seção dedicada abaixo — é o coração da entrevista.
-5. **Portraits usados pelas espécies-flavor** (só pra cultura nova, ou se o aprimoramento incluir `species_names`). Mostre a lista de portraits disponíveis (de `ssm_portrait_sets.txt`) e pergunte quais fazem sentido pro tema. Uma cultura pode usar 1 ou vários portraits diferentes (o mod já mistura, ex.: Brazil tem espécies `HUM` e `MACHINE` na mesma cultura).
-6. **Quantas espécies-flavor e com que nomes/planetas natais** (mesma condição do item 5). Pra cada portrait escolhido, quantas variantes de espécie gerar. Pode gerar os nomes você mesmo (criativo, temático) e apresentar pro usuário confirmar/ajustar, em vez de pedir pra ele digitar um por um.
+5. **`species_class` das espécies-flavor** (só pra cultura nova, ou se o aprimoramento incluir `species_names`). Mostre as classes aceitas e pergunte quais fazem sentido pro tema. Uma cultura pode usar 1 ou várias (o mod já mistura, ex.: Brazil tem espécies `HUM` e `MACHINE` na mesma cultura).
+6. **Quantas espécies-flavor e com que nomes/planetas natais** (mesma condição do item 5). Pra cada classe escolhida, quantas variantes de espécie gerar. Pode gerar os nomes você mesmo (criativo, temático) e apresentar pro usuário confirmar/ajustar, em vez de pedir pra ele digitar um por um.
 7. **Volume-alvo.** Cultura nova: pergunte a escala. Aprimoramento: já foi decidido por aspecto na seção "Novo vs. aprimoramento" (trocar/ampliar/reduzir) — aqui só confirme o número-alvo final de cada categoria tocada. Referência vanilla (`HUMAN1.txt`): ~300-500 nomes por categoria de nave, ~547 `second_names`.
    - **Enxuta** (~10-50 por categoria de nave, ~50-150 nomes de personagem) — cultura secundária/nicho.
    - **Vanilla** (~300-500 por categoria de nave usada, ~500+ nomes de personagem) — cultura principal, mesmo nível de `HUMAN1.txt`.
@@ -98,7 +98,7 @@ Se o usuário responder "mix"/"várias" pra um aspecto com múltiplas categorias
       "character_names": { "main": { "weight": <número>, "first_names_male": [...], "first_names_female": [...], "second_names": [...] } }
     },
     "species_names": [
-      { "key": "...", "name": "...", "plural": "...", "home_planet": "...", "home_system": "...", "portrait": "ssm_...", "species_class": "..." }
+      { "key": "...", "name": "...", "plural": "...", "home_planet": "...", "home_system": "...", "species_class": "HUM" }
     ],
     "_meta": {
       "ship_names": {
@@ -118,7 +118,7 @@ Se o usuário responder "mix"/"várias" pra um aspecto com múltiplas categorias
 - **`character_names`**: nomeie o bloco cultural de `main` (nunca `default` — colide com uma regra do schema do cwtools) e sempre inclua `weight`.
 - **Chaves reservadas**: use só chaves que existam em `scripts/vanilla-keys.json` (`army`, `shipSize`, `planetClass`). `ship_names`/`ship_class_names` aceitam `generic` livre; `army_names` aceita `generic`/`general` livres; `planet_names` aceita `generic` livre — fora isso, a chave precisa estar na lista.
 - **`species_names[].key`**: identificador único (sem espaço, só letras/números/underscore) — confira que não colide com nenhuma chave já usada em outro JSON de `assets/name_lists/`.
-- **`species_names[].portrait`**: um portrait existente de `ssm_portrait_sets.txt`. Só inclua `species_class` quando o portrait for ambíguo (`ssm_necron` ou `ssm_green_elves`); nos outros casos, omita — é derivado automaticamente.
+- **`species_names[].species_class`**: obrigatória, e precisa estar em `SPECIES_CLASSES_VALIDAS` (`scripts/portrait-schema/vocabulario.ts`) — é a chave sob a qual o jogo agrupa a entrada em `ssm_species_names.txt`.
 - **Sem duplicata dentro da mesma categoria.** Ao montar arrays combinando pools/fatiando listas, confira programaticamente (`v.filter((x,i) => v.indexOf(x) !== i)`) antes de escrever — já rolou bug de duplicata por `slice`/`while` mal calculado numa sessão anterior.
 
 ## Passo final
@@ -127,9 +127,9 @@ Só começa depois do "sim" explícito no portão de confirmação (seção Entr
 
 1. Escreva `assets/name_lists/<id>.json` (indentação de 2 espaços, conforme `.editorconfig`), incluindo `_meta` atualizado pros aspectos tocados.
 2. Rode `bun run names`.
-3. Se falhar, leia os erros (são específicos: chave inválida, `sequential_name` sem `l10n|`, `key` duplicada, portrait ambíguo/inexistente) e corrija o JSON, repetindo até passar.
+3. Se falhar, leia os erros (são específicos: chave inválida, seção desconhecida, `sequential_name` sem `l10n|`, `key` duplicada, `species_class` inválida) e corrija o JSON, repetindo até passar.
 4. Ao passar, informe ao usuário o que foi gerado (contagens por categoria, convenções aplicadas por aspecto, espécies-flavor criadas/alteradas) e que os arquivos do mod (`.txt`/`.yml`) já foram atualizados.
 
 ## Fora de escopo
 
-Esta skill não mexe em `portrait_sets`, `species_classes`, retratos gráficos (`.dds`) ou qualquer coisa fora de `assets/name_lists/` + a geração via `bun run names`. Se o tema pedido precisar de um portrait que ainda não existe no mod, informe o usuário — criar um portrait novo é um trabalho de arte separado, fora do escopo desta skill.
+Esta skill não mexe em `portrait_sets`, `portrait_categories`, retratos gráficos (`.dds`) ou qualquer coisa fora de `assets/name_lists/` + a geração via `bun run names`. Se o tema pedido pedir um retrato que ainda não existe no mod, informe o usuário — criar um portrait novo é um trabalho de arte separado, fora do escopo desta skill (veja `docs/pipeline-taxonomy.md`).

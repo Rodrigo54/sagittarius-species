@@ -8,23 +8,24 @@ tudo (filtrada pro que é relevante aqui — não é documentação genérica de
 
 ## Modelo de dados: como um retrato de espécie é conectado
 
-O sistema de espécies/retratos da Paradox é uma cadeia de arquivos que se referenciam entre si; para adicionar
-ou modificar uma espécie, geralmente é preciso mexer em todos estes, dentro de `mod/sagittarius-species/`:
+O sistema de espécies/retratos da Paradox é uma cadeia de arquivos que se referenciam entre si. Dentro de
+`mod/sagittarius-species/`, **todos são gerados** — adicionar uma espécie é criar a pasta em
+`assets/portraits/` com o `portrait.json` e rodar os pipelines:
 
-1. **`common/species_classes/ssm_species_classes.txt`** — arquétipos de espécies jogáveis de nível mais alto
-   (`ssm_sagittarius` = biológico, `ssm_presapient`, `ssm_robot` = machine). Cada um lista quais entradas de
-   retrato (pelo nome, ex.: `"ssm_elves"`) pertencem àquele arquétipo.
-2. **`common/portrait_categories/ssm_portrait_categories.txt`** — mapeia uma categoria (ex.: `sagittarius`,
-   `humanoids`, `machines`) para os grupos de `portrait_sets` dos quais ela puxa.
-3. **`common/portrait_sets/ssm_portrait_sets.txt`** — mapeia uma `species_class` (`HUM`, `MAM`, `MOL`, `AVI`,
-   `MACHINE`, ...) para as entradas de retrato individuais (ex.: `ssm_elves`, `ssm_cyborg`) que estão dentro dela.
-4. **`gfx/portraits/portraits/ssm_<species>_portrait.txt`** (um arquivo por espécie) — define as entidades de
+1. **`common/portrait_sets/ssm_portrait_sets.txt`** — mapeia uma `species_class` (`HUM`, `MAM`, `MOL`, `AVI`,
+   `REP`, `INF`, `MACHINE`, ...) para as entradas de retrato individuais (ex.: `ssm_elves`, `ssm_cyborg`) que
+   estão dentro dela, com as condições de DLC de cada uma. É o registro que de fato faz um retrato existir no
+   jogo. **Gerado** por `scripts/generate-taxonomy/` — veja `docs/pipeline-taxonomy.md`.
+2. **`common/portrait_categories/ssm_portrait_categories.txt`** — mapeia uma categoria (a aba do editor de
+   império: `sagittarius`, `humanoids`, `machines`) para os `portrait_sets` que ela exibe. **Gerado** pelo mesmo
+   pipeline.
+3. **`gfx/portraits/portraits/ssm_<species>_portrait.txt`** (um arquivo por espécie) — define as entidades de
    retrato (macho/fêmea, ou uma única entidade "flat" pras espécies sem separação de gênero), referenciando
    texturas em `gfx/models/portraits/ssm_<species>/...`, além das regras de `portrait_groups` que definem qual
    retrato aparece em qual gênero/contexto. **Gerado automaticamente** por `scripts/generate-portraits/` a
    partir do `portrait.json` e dos PNGs de `assets/portraits/ssm_<species>/` — não edite esse `.txt`
    manualmente, edite o `portrait.json` e/ou os PNGs de origem e rode `bun run portrait` de novo.
-5. **`gfx/models/portraits/ssm_<species>/{male,female}/NNN.dds`** (espécies `gendered: true`) ou
+4. **`gfx/models/portraits/ssm_<species>/{male,female}/NNN.dds`** (espécies `gendered: true`) ou
    **`gfx/models/portraits/ssm_<species>/NNN.dds`** (espécies "flat", `gendered: false`) — as texturas
    convertidas de fato (veja "Como o gerador funciona" abaixo).
 
@@ -41,7 +42,10 @@ de prefixo que existia antes entre arte-fonte e mod publicado.
 
 1. Cada pasta `assets/portraits/ssm_<espécie>/` tem um **`portrait.json` obrigatório**:
    `{ "name": "<espécie sem prefixo>", "gendered": boolean, "rig"?: "sl_shared" | "ssm_shared", "modo"?: "largura"
-   | "altura", "ancora"?: "conteudo" | "cabeca", "counts": { "male"?, "female"?, "flat"? } }`. Espécies
+   | "altura", "ancora"?: "conteudo" | "cabeca", "species_classes": [...], "categories": [...],
+   "counts": { "male"?, "female"?, "flat"? } }`. `species_classes`/`categories` são a filiação da espécie — o que
+   ela é no jogo e em que abas aparece; quem consome é o `generate-taxonomy` (veja
+   `docs/pipeline-taxonomy.md`). Espécies
    `gendered: true` têm subpastas `male/`/`female/`; `gendered: false` são "flat" (PNGs `NNN.png` direto na raiz
    da pasta da espécie, ex.: `ssm_cyborg`, `ssm_new_order`). O arquivo é a fonte de verdade declarada — não é
    inferido a partir da contagem real de arquivos. `rig` omitido = `"sl_shared"`; `modo` omitido = `"largura"` e
@@ -267,38 +271,35 @@ Passos pra criar um:
 3. Registrar a entrada em `portraits = { }` num `.txt` novo dentro de `gfx/portraits/portraits/`, usando
    `spriteType` (se quiser reaproveitar a entrada `.gfx` em outro lugar da UI) ou `texturefile` direto (mais
    simples, se for só pro retrato).
-4. Registrar o nome do portrait (`ssm_exemplo_static`) na `species_class` correspondente em
-   `common/species_classes/ssm_species_classes.txt`, do mesmo jeito que os retratos animados (veja "Modelo de
-   dados" acima) — sem isso, o portrait não aparece no jogo nem herda cumprimentos/insultos corretos (veja
-   seção abaixo).
+4. Registrar o nome do portrait (`ssm_exemplo_static`) num `portrait_set`, do mesmo jeito que os retratos
+   animados (veja "Modelo de dados" acima) — sem isso, o portrait não aparece no jogo nem herda
+   cumprimentos/insultos corretos (veja seção abaixo).
 
 Diferente do retrato animado, um retrato estático não tem `portrait_groups` com os 6 escopos, nem
 `character_textures`, `clothes_selector`/`attachment_selector` ou `greeting_sound` próprios — é só a imagem.
 
-## Registro em species_classes e cumprimentos/insultos
+## Cumprimentos e insultos
 
-Retratos modados costumam vir com cumprimentos e insultos "errados" (a IA/lore do jogo trata a espécie como
-genérica). A causa raiz está em três arquivos vanilla:
+Cumprimento e insulto vêm da **`species_class`** da espécie, e só dela. As chaves são
+`<SPECIES_CLASS>_insult_01`, `_compliment_01`, `_organ`, `_mouth`, `_ear`... em
+`localisation/<idioma>/name_lists/name_lists_l_*.yml`, e o jogo as resolve por funções internas
+(`GetSpeciesNameInsult`, `GetSpeciesNamePluralCompliment`). Não existe granularidade por retrato nem por
+espécie-flavor.
 
-- **`common/species_classes/00_species_classes.txt`**: `HUM` define quais nomes de portrait contam como
-  "humanoide". Qualquer portrait cujo nome não estiver listado ali (ou na `species_class` equivalente do mod,
-  como a `ssm_sagittarius` deste projeto) não é considerado humanoide pelo resto do jogo.
-- **`common/species_classes/01_base_species_classes.txt`**: lista todos os nomes de Portrait Group que o jogo
-  reconhece. Um Portrait Group cujo nome não aparecer aqui **não aparece no jogo**, e não recebe cumprimentos ou
-  insultos de acordo com sua `species_class`.
-- **`common/scripted_triggers/00_scripted_triggers.txt`**: define os triggers `wears_clothes`,
-  `lithoids_portrait` e `necroids_portrait`, usados para decidir insultos (ex.: nudista vs. vestido).
+Como as espécies deste mod usam classes vanilla (veja `docs/pipeline-taxonomy.md`), elas recebem o flavor
+dessas classes: um reptiliano do mod é xingado de "newt" como qualquer reptiliano do jogo. Ter flavor próprio
+exigiria uma `species_class` própria com um `portrait_set` apontando pra ela — o rationale de não fazer isso
+está em `docs/history/2026-08-17-taxonomia-de-portraits.md`.
 
-O ponto que a wiki simplifica demais: esses três triggers **não** derivam dinamicamente da `species_class` do
-portrait — cada um é uma lista **hardcoded** de nomes específicos de `species_portrait` vanilla (ex.:
-`wears_clothes` verifica `is_human_species` OR `species_portrait = humanoid_02/03/04`; `lithoids_portrait`
-verifica `species_portrait = lith1/lith2/...`; e por aí vai). Como os nomes deste mod (`ssm_elves`,
-`ssm_cyborg`, etc., registrados em `ssm_species_classes.txt`) nunca aparecem nessas listas, **nenhuma espécie
-deste mod é tratada como "veste roupa", "lithoide" ou "necroide" por esses triggers específicos** — elas caem no
-comportamento padrão/genérico. Sobrescrever esses triggers pra incluir os nomes `ssm_` exigiria substituir o
-arquivo inteiro (`scripted_triggers` não faz merge por chave entre mods, ao contrário de
-`portrait_groups`/`room_selector`), o que arrisca conflito com outros mods que também tentem sobrescrevê-lo —
-por isso este mod não faz essa mudança.
+Além disso, os triggers `wears_clothes`, `lithoids_portrait` e `necroids_portrait`
+(`common/scripted_triggers/00_scripted_triggers.txt`), usados pra decidir certos insultos (ex.: nudista vs.
+vestido), **não** derivam da `species_class`: cada um é uma lista **hardcoded** de nomes de `species_portrait`
+vanilla (`wears_clothes` verifica `is_human_species` OR `species_portrait = humanoid_02/03/04`;
+`lithoids_portrait` verifica `species_portrait = lith1/lith2/...`). Como os nomes deste mod nunca aparecem
+nessas listas, **nenhuma espécie daqui é tratada como "veste roupa", "lithoide" ou "necroide" por esses triggers
+específicos** — elas caem no comportamento padrão. Sobrescrevê-los exigiria substituir o arquivo inteiro
+(`scripted_triggers` não faz merge por chave entre mods, ao contrário de `portrait_groups`/`room_selector`), o
+que arrisca conflito com outros mods — por isso este mod não faz essa mudança.
 
 ## `clothes_selector` e `attachment_selector`
 
@@ -342,7 +343,7 @@ A wiki documenta uma técnica pra substituir um Portrait Group **vanilla** condi
 veja a seção
 ["Alternative: Non-intrusive Replacer"](https://stellaris.paradoxwikis.com/Portrait_modding#Alternative:_Non-intrusive_Replacer)
 do artigo original. **Este mod não usa essa técnica hoje** (nenhum `is_species`/`has_country_flag` no
-repositório) — ele adiciona `species_classes`/`portrait_categories` próprios em vez de substituir os do vanilla.
+repositório) — ele adiciona `portrait_sets`/`portrait_categories` próprios em vez de substituir os do vanilla.
 Fica registrado aqui como referência pro caso de precisar compatibilizar com o mod-irmão
 [Galaxar 2.0](https://steamcommunity.com/sharedfiles/filedetails/?id=3320507446) ou com outro mod no futuro.
 
@@ -356,4 +357,6 @@ Fica registrado aqui como referência pro caso de precisar compatibilizar com o 
 - **Stellar Legion Mod** — mod de origem do rig `sl_humanoid_01_entity`/`sl_spider_01_entity` em `sl_shared/`;
   hoje extinto (removido do Steam Workshop), sem link disponível. `sl_shared/` é a única cópia restante desse
   mesh/animação.
+- `docs/pipeline-taxonomy.md` — como a espécie chega às abas do jogo: `portrait_sets`, `portrait_categories`,
+  gates de DLC.
 - `docs/rig.md` — anatomia do mesh compartilhado, derivação do enquadramento, ferramental Blender.

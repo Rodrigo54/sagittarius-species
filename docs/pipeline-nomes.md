@@ -3,9 +3,12 @@
 `scripts/generate-names/` (comando `bun run names`, entrada em `index.ts`) usa a biblioteca `jomini` para ir de
 uma única fonte JSON até o script Clausewitz, todos os `.yml` de idioma, e o arquivo agregado de espécies-flavor.
 É uma pasta (não um arquivo único) porque passou de ~300 linhas: `types.ts` (tipos compartilhados),
-`portrait-map.ts` (lê `species_class` a partir de portrait), `validation.ts` (chaves reservadas + regra de
-`sequential_name`), `name-lists.ts` (geração de `.txt`/`.yml` por name_list) e `species-names.ts` (agregação de
-`species_names.txt`). `scripts/extract-vanilla-keys.ts` é auxiliar, roda à parte (não faz parte do
+`validation.ts` (chaves reservadas + regra de `sequential_name`), `name-lists.ts` (geração de `.txt`/`.yml` por
+name_list) e `species-names.ts` (agregação de `species_names.txt`). A **forma** do JSON de origem é validada por
+um schema `zod` próprio (`scripts/name-list-schema/`), no mesmo desenho do `portrait-schema/`: fonte de verdade
+em TypeScript, JSON Schema derivado pro autocomplete do VS Code (associado por `json.schemas` no
+`.vscode/settings.json`), e `.strict()` — seção escrita errado (`army_name` em vez de `army_names`) é erro na
+leitura, não bloco lixo no `.txt`. `scripts/extract-vanilla-keys.ts` é auxiliar, roda à parte (não faz parte do
 `bun run names`).
 
 - Fonte: `assets/name_lists/*.json` (ex.: `brazil.json`, `altmer.json`). Cada arquivo tem três blocos de nível
@@ -43,12 +46,16 @@ uma única fonte JSON até o script Clausewitz, todos os `.yml` de idioma, e o a
 {...}`, `MACHINE = {...}`, etc.) — é o que o jogo lê pra popular o botão de aleatório na tela de criação de
 império. Cada entrada do array `species_names` de um JSON tem `key` (identificador único — validado globalmente
 entre todos os JSONs, erro se colidir), `name`, `plural`, `home_planet`, `home_system` (todos literais, nunca
-`l10n|`) e `portrait`.
+`l10n|`) e `species_class`.
 
-`species_class` **não** é um campo manual normal: é derivado automaticamente do `portrait` via
-`common/portrait_sets/ssm_portrait_sets.txt` (cada portrait pertence a uma `species_class`). Só é obrigatório
-informar `species_class` explicitamente quando o `portrait` for ambíguo — hoje isso é `ssm_necron` (`HUM` ou
-`NECROID`) e `ssm_green_elves` (`HUM` ou `PLANT`), os únicos dois que aparecem em mais de um `portrait_set`.
+`species_class` é **declarada em cada entrada**, e o valor é validado contra o vocabulário do jogo
+(`SPECIES_CLASSES_VALIDAS`, a mesma lista que valida o `portrait.json`). Ela existe porque o jogo exige uma
+classe válida como chave de agrupamento — uma chave inválida faz o parser desandar e derrubar o arquivo inteiro.
+
+**Não existe vínculo entre espécie-flavor e retrato.** `species_names` não tem campo de portrait em lugar nenhum
+do vanilla: ao gerar um império, o jogo sorteia a espécie-flavor e o retrato de forma independente, dentro da
+classe. O único elo entre os dois é a `species_class` compartilhada — por isso a classe é declarada aqui em vez
+de deduzida de um portrait (relato completo em `docs/history/2026-08-17-taxonomia-de-portraits.md`).
 
 Pra gerar uma cultura nova (name_list + espécies-flavor) inteira via entrevista temática, veja a skill
 `.claude/skills/gerar-name-list/SKILL.md` (`/gerar-name-list`).

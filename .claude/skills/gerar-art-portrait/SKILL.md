@@ -308,9 +308,10 @@ resto ela **entrega como comando pronto pra colar**, com o número de variantes 
 
 ## Fora de escopo
 
-- **Criar a espécie do zero** (pasta `assets/portraits/ssm_<especie>/`, `portrait.json` base, PNGs de origem,
-  registro em `species_classes`/`portrait_categories`/`portrait_sets`) — isso é modelagem de dados/arte separada,
-  não geração de `geracaoArt`. Se a espécie não existir ainda, avise e pare.
+- **Criar a espécie do zero** (pasta `assets/portraits/ssm_<especie>/`, `portrait.json` base com `species_classes`/
+  `categories`, PNGs de origem) — isso é modelagem de dados/arte separada, não geração de `geracaoArt`. Se a
+  espécie não existir ainda, avise e pare. O registro em `common/` é derivado desses dois campos por
+  `bun run taxonomy` (veja `docs/pipeline-taxonomy.md`), nunca escrito à mão.
 - **Editar `scripts/comfyui/ssm_species_portrait_workflow.json`/`..._workflow_distilled.json`** (os workflows
   compartilhados) ou `scripts/generate-art/base.json` (valores fixos/globais) — esta skill só preenche o
   `geracaoArt` de uma espécie específica. Se o usuário pedir uma capacidade que o pipeline atual não tem (ex. um
