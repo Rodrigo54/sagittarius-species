@@ -27,7 +27,7 @@
       ],
       "enumDescriptions": [
         "escala a arte pela largura do guia (padrão)",
-        "escala a arte pela altura mínima do guia (composições atipicamente largas)"
+        "escala a arte pela altura mínima do guia (composições largas demais pro guia, ou que precisam mostrar algo abaixo do busto)"
       ]
     },
     "ancora": {
@@ -512,6 +512,7 @@
                     "Eldritch",
                     "Robot",
                     "Avian",
+                    "Draconic",
                     "Alien",
                     "Cyborg"
                   ],
@@ -526,6 +527,7 @@
                     "eldritch, criatura cósmica/tentacular",
                     "robótico",
                     "aviano, tipo ave",
+                    "dracônico, dragão humanoide",
                     "alienígena genérico",
                     "ciborgue, parte orgânico e parte máquina"
                   ]

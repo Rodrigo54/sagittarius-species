@@ -1,0 +1,185 @@
+{
+  "name": "drakelings",
+  "gendered": false,
+  "rig": "ssm_shared",
+  "counts": {
+    "flat": 30
+  },
+  "geracaoArt": {
+    "base": {
+      "species": {
+        "archetype": "Draconic",
+        "template": "<species.archetype>, cute little dragon person, true dragon head with a short blunt rounded snout, full round cheeks, small blunt horns curving back from the brow, small rounded frills where ears would be, soft smooth scales instead of skin, no fur, no feathers, sturdy rounded humanoid build, gentle harmless creature, (no wings, wingless, nothing on the back:1.2), not a lizard man, not a crocodile, not a dinosaur, not a demon"
+      },
+      "eyes": {
+        "extra": "(vertical slit pupils:1.2), large round eyes with soft rounded lids, gentle friendly gaze"
+      },
+      "torso": {
+        "state": "Bare",
+        "template": "bare scaled body with no clothing at all, small soft scales covering the whole body and face, the scales forming a smooth gradient from <torso.primary_color> across the head, horns, shoulders and outer arms to <torso.secondary_color> down the throat, chest and belly, the two colors blending gradually into one another with no hard edge, paler smoother belly scales, subtle iridescent sheen"
+      }
+    },
+    "modelo": {
+      "variant": "distilled",
+      "aspectRatio": "4:5"
+    },
+    "flat": {
+      "referenceImage": [
+        "assets/portraits/ssm_drakelings/reference_flat_1.png",
+        "assets/portraits/ssm_drakelings/reference_flat_2.png"
+      ],
+      "variantes": {
+        "001": {
+          "person": { "body_shape": "Athletic" },
+          "eyes": { "color": "Amber" },
+          "torso": { "primary_color": "Red", "secondary_color": "Gold" }
+        },
+        "002": {
+          "person": { "body_shape": "Chubby" },
+          "eyes": { "color": "Brown" },
+          "torso": { "primary_color": "Orange", "secondary_color": "Peach" }
+        },
+        "003": {
+          "person": { "body_shape": "Slim" },
+          "eyes": { "color": "Green" },
+          "torso": { "primary_color": "Emerald", "secondary_color": "Mint" }
+        },
+        "004": {
+          "person": { "body_shape": "Average" },
+          "eyes": { "color": "Blue" },
+          "torso": { "primary_color": "Sapphire", "secondary_color": "Cyan" }
+        },
+        "005": {
+          "person": { "body_shape": "Slim" },
+          "eyes": { "color": "Violet" },
+          "torso": { "primary_color": "Violet", "secondary_color": "Lilac" }
+        },
+        "006": {
+          "person": { "body_shape": "Athletic" },
+          "eyes": { "color": "Gray" },
+          "torso": { "primary_color": "Charcoal", "secondary_color": "Silver" }
+        },
+        "007": {
+          "person": { "body_shape": "Average" },
+          "eyes": { "color": "Hazel" },
+          "torso": { "primary_color": "Burgundy", "secondary_color": "Rose" }
+        },
+        "008": {
+          "person": { "body_shape": "Chubby" },
+          "eyes": { "color": "Green" },
+          "torso": { "primary_color": "Teal", "secondary_color": "Turquoise" }
+        },
+        "009": {
+          "person": { "body_shape": "Athletic" },
+          "eyes": { "color": "Amber" },
+          "torso": { "primary_color": "Copper", "secondary_color": "Amber" }
+        },
+        "010": {
+          "person": { "body_shape": "Slim" },
+          "eyes": { "color": "Blue" },
+          "torso": { "primary_color": "Indigo", "secondary_color": "Periwinkle" }
+        },
+        "011": {
+          "person": { "body_shape": "Average" },
+          "eyes": { "color": "Green" },
+          "torso": { "primary_color": "Olive", "secondary_color": "Lime" }
+        },
+        "012": {
+          "person": { "body_shape": "Chubby" },
+          "eyes": { "color": "Violet" },
+          "torso": { "primary_color": "Magenta", "secondary_color": "Pink" }
+        },
+        "013": {
+          "person": { "body_shape": "Athletic" },
+          "eyes": { "color": "Blue" },
+          "torso": { "primary_color": "Navy", "secondary_color": "Sky Blue" }
+        },
+        "014": {
+          "person": { "body_shape": "Average" },
+          "eyes": { "color": "Brown" },
+          "torso": { "primary_color": "Maroon", "secondary_color": "Coral" }
+        },
+        "015": {
+          "person": { "body_shape": "Chubby" },
+          "eyes": { "color": "Hazel" },
+          "torso": { "primary_color": "Bronze", "secondary_color": "Beige" }
+        },
+        "016": {
+          "person": { "body_shape": "Slim" },
+          "eyes": { "color": "Violet" },
+          "torso": { "primary_color": "Purple", "secondary_color": "Lavender" }
+        },
+        "017": {
+          "person": { "body_shape": "Average" },
+          "eyes": { "color": "Amber" },
+          "torso": { "primary_color": "Green", "secondary_color": "Yellow" }
+        },
+        "018": {
+          "person": { "body_shape": "Athletic" },
+          "eyes": { "color": "Brown" },
+          "torso": { "primary_color": "Ruby", "secondary_color": "Salmon" }
+        },
+        "019": {
+          "person": { "body_shape": "Slim" },
+          "eyes": { "color": "Gray" },
+          "torso": { "primary_color": "Azure", "secondary_color": "Pearl" }
+        },
+        "020": {
+          "person": { "body_shape": "Average" },
+          "eyes": { "color": "Violet" },
+          "torso": { "primary_color": "Amethyst", "secondary_color": "White" }
+        },
+        "021": {
+          "person": { "body_shape": "Athletic" },
+          "eyes": { "color": "Amber" },
+          "torso": { "primary_color": "Black", "secondary_color": "Gray" }
+        },
+        "022": {
+          "person": { "body_shape": "Chubby" },
+          "eyes": { "color": "Hazel" },
+          "torso": { "primary_color": "Brown", "secondary_color": "Mustard" }
+        },
+        "023": {
+          "person": { "body_shape": "Average" },
+          "eyes": { "color": "Blue" },
+          "torso": { "primary_color": "Blue", "secondary_color": "Platinum" }
+        },
+        "024": {
+          "person": { "body_shape": "Chubby" },
+          "eyes": { "color": "Brown" },
+          "torso": { "primary_color": "Coral", "secondary_color": "Peach" }
+        },
+        "025": {
+          "person": { "body_shape": "Slim" },
+          "eyes": { "color": "Green" },
+          "torso": { "primary_color": "Turquoise", "secondary_color": "Emerald" }
+        },
+        "026": {
+          "person": { "body_shape": "Average" },
+          "eyes": { "color": "Amber" },
+          "torso": { "primary_color": "Gold", "secondary_color": "White" }
+        },
+        "027": {
+          "person": { "body_shape": "Chubby" },
+          "eyes": { "color": "Hazel" },
+          "torso": { "primary_color": "Pink", "secondary_color": "Peach" }
+        },
+        "028": {
+          "person": { "body_shape": "Athletic" },
+          "eyes": { "color": "Green" },
+          "torso": { "primary_color": "Lime", "secondary_color": "Mint" }
+        },
+        "029": {
+          "person": { "body_shape": "Slim" },
+          "eyes": { "color": "Gray" },
+          "torso": { "primary_color": "Silver", "secondary_color": "Sky Blue" }
+        },
+        "030": {
+          "person": { "body_shape": "Average" },
+          "eyes": { "color": "Amber" },
+          "torso": { "primary_color": "Amber", "secondary_color": "Gold" }
+        }
+      }
+    }
+  }
+}

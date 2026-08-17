@@ -121,7 +121,8 @@ export const CORES_OLHO = ['Blue', 'Green', 'Brown', 'Hazel', 'Gray', 'Amber', '
  * Levantamento completo das 18 espécies do pacote em
  * `docs/history/2026-08-08-generate-art-schema-proprio.md`. */
 export const ARQUETIPOS = [
-  'Human', 'Elf', 'Mermaid', 'Necroid', 'Furry', 'Molluscoid', 'Eldritch', 'Robot', 'Avian', 'Alien', 'Cyborg',
+  'Human', 'Elf', 'Mermaid', 'Necroid', 'Furry', 'Molluscoid', 'Eldritch', 'Robot', 'Avian', 'Draconic', 'Alien',
+  'Cyborg',
 ] as const;
 
 /** Ver rationale completo no comentário de `FORMAS_CORPO_DESCRICOES` acima. */
@@ -135,6 +136,7 @@ export const ARQUETIPOS_DESCRICOES: Record<(typeof ARQUETIPOS)[number], string> 
   Eldritch: 'eldritch, criatura cósmica/tentacular',
   Robot: 'robótico',
   Avian: 'aviano, tipo ave',
+  Draconic: 'dracônico, dragão humanoide',
   Alien: 'alienígena genérico',
   Cyborg: 'ciborgue, parte orgânico e parte máquina',
 };
