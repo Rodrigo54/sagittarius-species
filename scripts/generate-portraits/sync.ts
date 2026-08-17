@@ -1,13 +1,8 @@
 import { existsSync } from 'node:fs';
 import { readdir, rm } from 'node:fs/promises';
 import { join } from 'node:path';
+import { nomesNumerados } from '../utils';
 import type { SpeciesInfo } from './types';
-
-function nomesEsperados(quantidade: number): Set<string> {
-  return new Set(
-    Array.from({ length: quantidade }, (_, i) => `${String(i + 1).padStart(3, '0')}.dds`)
-  );
-}
 
 async function limparPasta(pasta: string, esperados: Set<string>) {
   if (!existsSync(pasta)) return;
@@ -28,13 +23,13 @@ export async function limparOrfaos(info: SpeciesInfo, pastaDestinoEspecie: strin
   if (info.config.gendered) {
     await limparPasta(
       join(pastaDestinoEspecie, 'male'),
-      nomesEsperados(info.arquivosMale.length)
+      nomesNumerados(info.arquivosMale.length, '.dds')
     );
     await limparPasta(
       join(pastaDestinoEspecie, 'female'),
-      nomesEsperados(info.arquivosFemale.length)
+      nomesNumerados(info.arquivosFemale.length, '.dds')
     );
   } else {
-    await limparPasta(pastaDestinoEspecie, nomesEsperados(info.arquivosFlat.length));
+    await limparPasta(pastaDestinoEspecie, nomesNumerados(info.arquivosFlat.length, '.dds'));
   }
 }

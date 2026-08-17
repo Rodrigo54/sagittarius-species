@@ -2,8 +2,824 @@
   "name": "default",
   "gendered": true,
   "rig": "ssm_shared",
+  "species_classes": [
+    "HUM"
+  ],
+  "categories": [
+    "humanoids"
+  ],
   "counts": {
     "male": 25,
     "female": 25
+  },
+  "geracaoArt": {
+    "base": {
+      "species": {
+        "archetype": "Human",
+        "template": "<species.archetype>, futuristic sci-fi space marine"
+      },
+      "hair": {
+        "extra": "(no helmet, no hood, no head covering, full head of hair:1.2), face fully visible"
+      },
+      "torso": {
+        "state": "FullyCovered",
+        "template": "navy blue metallic plating, science fiction astronaut uniform, space marine armor, smooth flat white chest armor plate, gold metallic trim details, gold accents"
+      }
+    },
+    "modelo": {
+      "variant": "distilled",
+      "steps": 4,
+      "cfg": 1,
+      "aspectRatio": "2:3"
+    },
+    "male": {
+      "person": {
+        "gender": "Male",
+        "extra": "(teenager:1.2)"
+      },
+      "torso": {
+        "extra": "(male chest armor, muscular male torso)"
+      },
+      "variantes": {
+        "001": {
+          "person": {
+            "age": 20,
+            "ethnicity": "Caucasian",
+            "body_shape": "Athletic",
+            "extra": "(young boy)"
+          },
+          "hair": {
+            "style": "Wavy",
+            "primary_color": "Blonde"
+          },
+          "eyes": {
+            "shape": "Round",
+            "color": "Blue"
+          },
+          "torso": {
+            "extra": "flat masculine chest, male chest armor, muscular male torso"
+          }
+        },
+        "002": {
+          "person": {
+            "age": 17,
+            "ethnicity": "Caucasian",
+            "body_shape": "Slim",
+            "extra": "(young boy)"
+          },
+          "hair": {
+            "style": "Short Wavy",
+            "primary_color": "Pink",
+            "secondary_color": "Purple"
+          },
+          "eyes": {
+            "shape": "Monolid",
+            "color": "Blue"
+          },
+          "torso": {
+            "extra": "flat masculine chest, male chest armor, muscular male torso"
+          }
+        },
+        "003": {
+          "person": {
+            "age": 18,
+            "ethnicity": "Caucasian",
+            "body_shape": "Athletic"
+          },
+          "hair": {
+            "style": "Long Wavy",
+            "primary_color": "Brown",
+            "secondary_color": "Mustard"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Brown"
+          }
+        },
+        "004": {
+          "person": {
+            "age": 23,
+            "ethnicity": "Pacific",
+            "body_shape": "Muscular"
+          },
+          "hair": {
+            "style": "Undercut",
+            "primary_color": "Silver"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "color": "Brown"
+          }
+        },
+        "005": {
+          "person": {
+            "age": 25,
+            "ethnicity": "Nordic",
+            "body_shape": "Average"
+          },
+          "hair": {
+            "style": "Spiky",
+            "primary_color": "Copper"
+          },
+          "eyes": {
+            "shape": "Hooded",
+            "color": "Amber"
+          }
+        },
+        "006": {
+          "person": {
+            "age": 26,
+            "ethnicity": "Asian",
+            "body_shape": "Muscular"
+          },
+          "hair": {
+            "style": "Long Straight",
+            "primary_color": "Blonde"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "color": "Blue"
+          }
+        },
+        "007": {
+          "person": {
+            "age": 26,
+            "ethnicity": "Nordic",
+            "body_shape": "Athletic"
+          },
+          "hair": {
+            "style": "Curly",
+            "primary_color": "Charcoal"
+          },
+          "eyes": {
+            "shape": "Hooded",
+            "color": "Green"
+          }
+        },
+        "008": {
+          "person": {
+            "age": 29,
+            "ethnicity": "African",
+            "body_shape": "Athletic"
+          },
+          "hair": {
+            "style": "Undercut",
+            "primary_color": "Blonde"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Blue"
+          }
+        },
+        "009": {
+          "person": {
+            "age": 23,
+            "ethnicity": "Mixed",
+            "body_shape": "Curvy"
+          },
+          "hair": {
+            "style": "Wavy",
+            "primary_color": "Charcoal"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Hazel"
+          }
+        },
+        "010": {
+          "person": {
+            "age": 16,
+            "ethnicity": "Asian",
+            "body_shape": "Average"
+          },
+          "hair": {
+            "style": "Spiky",
+            "primary_color": "Peach",
+            "secondary_color": "Blonde"
+          },
+          "eyes": {
+            "shape": "Hooded",
+            "color": "Gray"
+          }
+        },
+        "011": {
+          "person": {
+            "age": 24,
+            "ethnicity": "Latino",
+            "body_shape": "Muscular"
+          },
+          "hair": {
+            "style": "Curly",
+            "primary_color": "Red"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Gray"
+          }
+        },
+        "012": {
+          "person": {
+            "age": 21,
+            "ethnicity": "Asian",
+            "body_shape": "Slim"
+          },
+          "hair": {
+            "style": "Short Curly",
+            "primary_color": "Mustard"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Gray"
+          }
+        },
+        "013": {
+          "person": {
+            "age": 28,
+            "ethnicity": "African",
+            "body_shape": "Slim"
+          },
+          "hair": {
+            "style": "Dreadlocks",
+            "primary_color": "Silver"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Blue"
+          }
+        },
+        "014": {
+          "person": {
+            "age": 22,
+            "ethnicity": "Caucasian",
+            "body_shape": "Slim"
+          },
+          "hair": {
+            "style": "Wavy",
+            "primary_color": "Blue"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "color": "Gray"
+          }
+        },
+        "015": {
+          "person": {
+            "age": 22,
+            "ethnicity": "Latino",
+            "body_shape": "Muscular"
+          },
+          "hair": {
+            "style": "Short Wavy",
+            "primary_color": "Burgundy"
+          },
+          "eyes": {
+            "shape": "Round",
+            "color": "Blue"
+          }
+        },
+        "016": {
+          "person": {
+            "age": 24,
+            "ethnicity": "African",
+            "body_shape": "Athletic"
+          },
+          "hair": {
+            "style": "Afro",
+            "primary_color": "Black"
+          },
+          "eyes": {
+            "shape": "Round",
+            "color": "Brown"
+          }
+        },
+        "017": {
+          "person": {
+            "age": 21,
+            "ethnicity": "African",
+            "body_shape": "Average"
+          },
+          "hair": {
+            "style": "Undercut",
+            "primary_color": "Maroon"
+          },
+          "eyes": {
+            "shape": "Round",
+            "color": "Green"
+          }
+        },
+        "018": {
+          "person": {
+            "age": 20,
+            "ethnicity": "Pacific",
+            "body_shape": "Slim"
+          },
+          "hair": {
+            "style": "Ponytail",
+            "primary_color": "Brown"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "color": "Green"
+          }
+        },
+        "019": {
+          "person": {
+            "age": 22,
+            "ethnicity": "Mixed",
+            "body_shape": "Average"
+          },
+          "hair": {
+            "style": "Long Wavy",
+            "primary_color": "Brown"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "color": "Hazel"
+          }
+        },
+        "020": {
+          "person": {
+            "age": 28,
+            "ethnicity": "Latino",
+            "body_shape": "Average"
+          },
+          "hair": {
+            "style": "Wavy",
+            "primary_color": "Copper"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "color": "Green"
+          }
+        },
+        "021": {
+          "person": {
+            "age": 25,
+            "ethnicity": "Latino",
+            "body_shape": "Athletic"
+          },
+          "hair": {
+            "style": "Long",
+            "primary_color": "Charcoal"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "color": "Violet"
+          }
+        },
+        "022": {
+          "person": {
+            "age": 29,
+            "ethnicity": "Asian",
+            "body_shape": "Average"
+          },
+          "hair": {
+            "style": "Long Straight",
+            "primary_color": "Brown"
+          },
+          "eyes": {
+            "shape": "Monolid",
+            "color": "Hazel"
+          }
+        },
+        "023": {
+          "person": {
+            "age": 24,
+            "ethnicity": "Pacific",
+            "body_shape": "Athletic"
+          },
+          "hair": {
+            "style": "Straight",
+            "primary_color": "Bronze"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "color": "Brown"
+          }
+        },
+        "024": {
+          "person": {
+            "age": 21,
+            "ethnicity": "Mixed",
+            "body_shape": "Average"
+          },
+          "hair": {
+            "style": "Dreadlocks",
+            "primary_color": "Mustard"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "color": "Green"
+          }
+        },
+        "025": {
+          "person": {
+            "age": 22,
+            "ethnicity": "Mixed",
+            "body_shape": "Average"
+          },
+          "hair": {
+            "style": "Long Wavy",
+            "primary_color": "Brown",
+            "secondary_color": "Blonde"
+          },
+          "eyes": {
+            "shape": "Monolid",
+            "color": "Amber"
+          }
+        }
+      },
+      "referenceImage": [
+        "assets/portraits/ssm_default/reference_male.png"
+      ]
+    },
+    "female": {
+      "person": {
+        "gender": "Female"
+      },
+      "variantes": {
+        "001": {
+          "person": {
+            "age": 22,
+            "ethnicity": "Latino",
+            "body_shape": "Curvy"
+          },
+          "hair": {
+            "style": "Undercut",
+            "primary_color": "Blue"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Hazel"
+          }
+        },
+        "002": {
+          "person": {
+            "age": 21,
+            "ethnicity": "Asian",
+            "body_shape": "Average"
+          },
+          "hair": {
+            "style": "Short",
+            "primary_color": "Teal"
+          },
+          "eyes": {
+            "shape": "Monolid",
+            "color": "Brown"
+          }
+        },
+        "003": {
+          "person": {
+            "age": 21,
+            "ethnicity": "Latino",
+            "body_shape": "Athletic"
+          },
+          "hair": {
+            "style": "Bun",
+            "primary_color": "Brown"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "color": "Gray"
+          }
+        },
+        "004": {
+          "person": {
+            "age": 23,
+            "ethnicity": "Caucasian",
+            "body_shape": "Curvy"
+          },
+          "hair": {
+            "style": "Long",
+            "primary_color": "Blonde"
+          },
+          "eyes": {
+            "shape": "Round",
+            "color": "Gray"
+          }
+        },
+        "005": {
+          "person": {
+            "age": 20,
+            "ethnicity": "Caucasian",
+            "body_shape": "Curvy"
+          },
+          "hair": {
+            "style": "Undercut",
+            "primary_color": "Pink"
+          },
+          "eyes": {
+            "shape": "Downturned",
+            "color": "Hazel"
+          }
+        },
+        "006": {
+          "person": {
+            "age": 23,
+            "ethnicity": "Latino",
+            "body_shape": "Hourglass"
+          },
+          "hair": {
+            "style": "Curly",
+            "primary_color": "Charcoal"
+          },
+          "eyes": {
+            "shape": "Round",
+            "color": "Gray"
+          }
+        },
+        "007": {
+          "person": {
+            "age": 21,
+            "ethnicity": "Pacific",
+            "body_shape": "Average"
+          },
+          "hair": {
+            "style": "Long Wavy",
+            "primary_color": "Mustard"
+          },
+          "eyes": {
+            "shape": "Round",
+            "color": "Gray"
+          }
+        },
+        "008": {
+          "person": {
+            "age": 27,
+            "ethnicity": "African",
+            "body_shape": "Slim"
+          },
+          "hair": {
+            "style": "Dreadlocks",
+            "primary_color": "Blonde"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "color": "Amber"
+          }
+        },
+        "009": {
+          "person": {
+            "age": 21,
+            "ethnicity": "Latino",
+            "body_shape": "Curvy"
+          },
+          "hair": {
+            "style": "Long Wavy",
+            "secondary_color": "Olive",
+            "primary_color": "Bronze"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Green"
+          }
+        },
+        "010": {
+          "person": {
+            "age": 20,
+            "ethnicity": "Nordic",
+            "body_shape": "Curvy"
+          },
+          "hair": {
+            "style": "Long Wavy",
+            "primary_color": "Red"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "color": "Gray"
+          }
+        },
+        "011": {
+          "person": {
+            "age": 24,
+            "ethnicity": "Latino",
+            "body_shape": "Curvy"
+          },
+          "hair": {
+            "style": "Long",
+            "primary_color": "Black"
+          },
+          "eyes": {
+            "shape": "Monolid",
+            "color": "Violet"
+          }
+        },
+        "012": {
+          "person": {
+            "age": 29,
+            "ethnicity": "Asian",
+            "body_shape": "Athletic"
+          },
+          "hair": {
+            "style": "Ponytail",
+            "primary_color": "White"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Amber"
+          }
+        },
+        "013": {
+          "person": {
+            "age": 20,
+            "ethnicity": "Pacific",
+            "body_shape": "Athletic"
+          },
+          "hair": {
+            "style": "Long",
+            "primary_color": "Brown"
+          },
+          "eyes": {
+            "shape": "Monolid",
+            "color": "Blue"
+          }
+        },
+        "014": {
+          "person": {
+            "age": 22,
+            "ethnicity": "Caucasian",
+            "body_shape": "Athletic"
+          },
+          "hair": {
+            "style": "Undercut",
+            "primary_color": "Gray"
+          },
+          "eyes": {
+            "shape": "Hooded",
+            "color": "Blue"
+          }
+        },
+        "015": {
+          "person": {
+            "age": 26,
+            "ethnicity": "African",
+            "body_shape": "Average"
+          },
+          "hair": {
+            "style": "Ponytail",
+            "primary_color": "Charcoal"
+          },
+          "eyes": {
+            "shape": "Hooded",
+            "color": "Green"
+          }
+        },
+        "016": {
+          "person": {
+            "age": 22,
+            "ethnicity": "Pacific",
+            "body_shape": "Athletic"
+          },
+          "hair": {
+            "style": "Ponytail",
+            "primary_color": "Brown"
+          },
+          "eyes": {
+            "shape": "Round",
+            "color": "Violet"
+          }
+        },
+        "017": {
+          "person": {
+            "age": 29,
+            "ethnicity": "Pacific",
+            "body_shape": "Curvy"
+          },
+          "hair": {
+            "style": "Short",
+            "primary_color": "Copper"
+          },
+          "eyes": {
+            "shape": "Hooded",
+            "color": "Blue"
+          }
+        },
+        "018": {
+          "person": {
+            "age": 20,
+            "ethnicity": "Latino",
+            "body_shape": "Average"
+          },
+          "hair": {
+            "style": "Braided",
+            "primary_color": "Blonde"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "color": "Green"
+          }
+        },
+        "019": {
+          "person": {
+            "age": 22,
+            "ethnicity": "Pacific",
+            "body_shape": "Hourglass"
+          },
+          "hair": {
+            "style": "Braided",
+            "primary_color": "Brown"
+          },
+          "eyes": {
+            "shape": "Monolid",
+            "color": "Hazel"
+          }
+        },
+        "020": {
+          "person": {
+            "age": 26,
+            "ethnicity": "African",
+            "body_shape": "Average"
+          },
+          "hair": {
+            "style": "Curly",
+            "secondary_color": "Silver",
+            "primary_color": "Charcoal"
+          },
+          "eyes": {
+            "shape": "Monolid",
+            "color": "Hazel"
+          }
+        },
+        "021": {
+          "person": {
+            "age": 25,
+            "ethnicity": "Asian",
+            "body_shape": "Athletic"
+          },
+          "hair": {
+            "style": "Curly",
+            "primary_color": "Charcoal"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Hazel"
+          }
+        },
+        "022": {
+          "person": {
+            "age": 26,
+            "ethnicity": "Pacific",
+            "body_shape": "Hourglass"
+          },
+          "hair": {
+            "style": "Straight",
+            "primary_color": "Black"
+          },
+          "eyes": {
+            "shape": "Monolid",
+            "color": "Violet"
+          }
+        },
+        "023": {
+          "person": {
+            "age": 20,
+            "ethnicity": "African",
+            "body_shape": "Hourglass"
+          },
+          "hair": {
+            "style": "Curly",
+            "primary_color": "Mustard"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Green"
+          }
+        },
+        "024": {
+          "person": {
+            "age": 21,
+            "ethnicity": "Mixed",
+            "body_shape": "Slim"
+          },
+          "hair": {
+            "style": "Short",
+            "primary_color": "Blonde"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "color": "Blue"
+          }
+        },
+        "025": {
+          "person": {
+            "age": 26,
+            "ethnicity": "Caucasian",
+            "body_shape": "Slim"
+          },
+          "hair": {
+            "style": "Short Wavy",
+            "secondary_color": "Gray",
+            "primary_color": "Blonde"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Brown"
+          }
+        }
+      },
+      "referenceImage": [
+        "assets/portraits/ssm_default/reference_female.png"
+      ]
+    }
   }
 }

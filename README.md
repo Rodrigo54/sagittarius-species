@@ -8,8 +8,8 @@
 
 Sagittarius Species is a Stellaris mod that adds AI-assisted portrait art for **18 species**, each plugged into
 the game's `species_classes` / `portrait_categories` / `portrait_sets` data chain (see `CLAUDE.md` for the full
-model). Most species share one of two animated rigs (`sl_shared` or `ssm_shared`) rather than shipping unique
-meshes — see `portraits.md` and the "`sl_shared` vs. `ssm_shared`" section of `CLAUDE.md` for why.
+model). Every species shares the same animated rig (`ssm_shared`) rather than shipping a unique mesh — see
+`docs/pipeline-portraits.md` and the "`sl_shared` vs. `ssm_shared`" section of `CLAUDE.md` for why.
 
 This repository is a content/asset pipeline, not an application: `mod/sagittarius-species/` is the Clausewitz-script
 mod itself (published to the Steam Workshop), and `scripts/` (Bun/TypeScript) converts source art in `assets/`
@@ -38,9 +38,9 @@ into the textures and `.txt`/`.yml` files inside `mod/`.
 | Mercenaries | `ssm_mercenary` | HUM |
 | Star Knight | `ssm_knight` | HUM |
 
-`ssm_mermaids` and `ssm_astral` currently use the legacy `sl_shared` rig — a migration to `ssm_shared` was
-attempted and reverted after in-game testing found framing issues (see `future-plans.md`). Every other species
-above uses `ssm_shared`.
+All 18 species above use the `ssm_shared` rig. The legacy `sl_shared` rig is still versioned in the repository,
+but no species points at it: it is the input `bun run shared-rig` derives `ssm_shared` from, and the only
+surviving copy of the original mesh and animations.
 
 ## Recommended tools
 
@@ -48,8 +48,7 @@ The pipeline needs these to run end to end; everything after the runtime/OS pair
 optional depending on what you're touching:
 
 - **[Bun](https://bun.sh)** — runtime for every script in `scripts/` (`bun scripts/xxx.ts` or `bun run <task>`).
-- **PowerShell** — required for `bun run copy`/`bun run overwrite` (Windows-only; bash equivalents exist for the
-  rest of the pipeline).
+- **PowerShell** — required for `bun run copy`, which uses `robocopy` (Windows-only).
 - **[texconv](https://github.com/microsoft/DirectXTex)** (`bin/texconv/`) — PNG→DDS conversion engine.
   Auto-downloaded by `bun run setup`.
 - **[ImageMagick](https://imagemagick.org)** (`bin/imagemagick/`) — image manipulation (trim/resize/composite)
@@ -58,7 +57,7 @@ optional depending on what you're touching:
   animated rig itself (mesh/skeleton/animations, `.mesh`/`.anim` files). Not required for the normal portrait
   pipeline.
 - **VS Code + [cwtools](https://marketplace.visualstudio.com/items?itemName=tboby.cwtools-vscode)** — Clausewitz
-  script validation/lint. Open `sagittarius-species.code-workspace`, not the raw folder — see `cwtools.md`.
+  script validation/lint. Open `sagittarius-species.code-workspace`, not the raw folder — see `docs/cwtools.md`.
 - **Affinity Designer/Photo or Photoshop** — editing the source `.psd` reference/art layers in `assets/`.
 - **[StabilityMatrix](https://github.com/LykosAI/StabilityMatrix)** (ComfyUI) — AI-assisted portrait art
   generation for new species.
@@ -71,7 +70,7 @@ bun run portrait     # sync assets/portraits/ -> mod/ (textures + .txt)
 bun run rooms         # sync assets/city_sets/ -> mod/ (textures + .txt)
 bun run names          # generate name_lists + localisation + species_names
 bun run shared-rig    # derive gfx/.../ssm_shared/ from sl_shared/
-bun run copy           # copy the mod into the local Stellaris mods folder (Windows/PowerShell only)
+bun run copy           # sync the mod into the local Stellaris mods folder (Windows/PowerShell only)
 ```
 
 See `CLAUDE.md` for the full command reference, the asset→mod pipeline details, and the data model connecting

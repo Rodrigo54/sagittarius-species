@@ -1353,7 +1353,7 @@
       "plural": "Brazilians",
       "home_planet": "Brazil",
       "home_system": "Cygnus",
-      "portrait": "ssm_default"
+      "species_class": "HUM"
     },
     {
       "key": "Drakorian",
@@ -1361,7 +1361,7 @@
       "plural": "Drakorians",
       "home_planet": "Draxion",
       "home_system": "Celestria",
-      "portrait": "ssm_knight"
+      "species_class": "HUM"
     },
     {
       "key": "Exodite",
@@ -1369,7 +1369,7 @@
       "plural": "Exodites",
       "home_planet": "Elyndria",
       "home_system": "Eterna",
-      "portrait": "ssm_astral"
+      "species_class": "HUM"
     },
     {
       "key": "Icaran",
@@ -1377,7 +1377,7 @@
       "plural": "Icarans",
       "home_planet": "Haldar",
       "home_system": "Novarion",
-      "portrait": "ssm_vargrosianos"
+      "species_class": "HUM"
     },
     {
       "key": "Saurian",
@@ -1385,7 +1385,7 @@
       "plural": "Saurians",
       "home_planet": "Onyxia",
       "home_system": "Hyperion",
-      "portrait": "ssm_mercenary"
+      "species_class": "HUM"
     },
     {
       "key": "Skrull",
@@ -1393,7 +1393,7 @@
       "plural": "Skrulls",
       "home_planet": "Nibiru",
       "home_system": "Galactron",
-      "portrait": "ssm_elves"
+      "species_class": "HUM"
     },
     {
       "key": "Telaxian",
@@ -1401,7 +1401,7 @@
       "plural": "Telaxians",
       "home_planet": "Solara",
       "home_system": "Eridanis",
-      "portrait": "ssm_high_elves"
+      "species_class": "HUM"
     },
     {
       "key": "Viltrumite",
@@ -1409,7 +1409,7 @@
       "plural": "Viltrumites",
       "home_planet": "Synthia",
       "home_system": "Rigel",
-      "portrait": "ssm_default"
+      "species_class": "HUM"
     },
     {
       "key": "Voth",
@@ -1417,7 +1417,7 @@
       "plural": "Voths",
       "home_planet": "Terra",
       "home_system": "Denebola",
-      "portrait": "ssm_knight"
+      "species_class": "HUM"
     },
     {
       "key": "Yridian",
@@ -1425,7 +1425,7 @@
       "plural": "Yridians",
       "home_planet": "Umbra",
       "home_system": "Cygnus",
-      "portrait": "ssm_astral"
+      "species_class": "HUM"
     },
     {
       "key": "Zoran",
@@ -1433,7 +1433,7 @@
       "plural": "Zorans",
       "home_planet": "Xenon",
       "home_system": "Aquila",
-      "portrait": "ssm_vargrosianos"
+      "species_class": "HUM"
     },
     {
       "key": "Dulcian",
@@ -1441,7 +1441,7 @@
       "plural": "Dulcians",
       "home_planet": "Delphoria",
       "home_system": "Proxima",
-      "portrait": "ssm_mercenary"
+      "species_class": "HUM"
     },
     {
       "key": "Idiran",
@@ -1449,7 +1449,7 @@
       "plural": "Idirans",
       "home_planet": "Malvora",
       "home_system": "Libra",
-      "portrait": "ssm_elves"
+      "species_class": "HUM"
     },
     {
       "key": "Cybrax",
@@ -1457,7 +1457,7 @@
       "plural": "Cybrax",
       "home_planet": "Cybrax Core",
       "home_system": "Cybrax Nexus",
-      "portrait": "ssm_cyborg"
+      "species_class": "MACHINE"
     },
     {
       "key": "Omnix",
@@ -1465,7 +1465,7 @@
       "plural": "Omnix",
       "home_planet": "Omnimax",
       "home_system": "Omnimix",
-      "portrait": "ssm_new_order"
+      "species_class": "MACHINE"
     },
     {
       "key": "Machinix",
@@ -1473,7 +1473,7 @@
       "plural": "Machinix",
       "home_planet": "Machimax",
       "home_system": "Machimax Nexus",
-      "portrait": "ssm_green_order"
+      "species_class": "MACHINE"
     }
   ]
 }

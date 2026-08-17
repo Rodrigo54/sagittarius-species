@@ -38,5 +38,15 @@
   ],
   "cSpell.words": [
     "Jomini"
+  ],
+  "json.schemas": [
+    {
+      "fileMatch": ["assets/portraits/*/portrait.json"],
+      "url": "./scripts/portrait-schema/portrait.schema.json"
+    },
+    {
+      "fileMatch": ["assets/name_lists/*.json"],
+      "url": "./scripts/name-list-schema/name-list.schema.json"
+    }
   ]
 }

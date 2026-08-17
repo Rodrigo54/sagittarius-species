@@ -3,6 +3,14 @@
   "gendered": true,
   "rig": "ssm_shared",
   "ancora": "cabeca",
+  "species_classes": [
+    "PLANT",
+    "HUM"
+  ],
+  "categories": [
+    "plantoids",
+    "humanoids"
+  ],
   "counts": {
     "male": 10,
     "female": 10

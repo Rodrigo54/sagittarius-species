@@ -3,6 +3,12 @@
   "gendered": false,
   "rig": "ssm_shared",
   "modo": "altura",
+  "species_classes": [
+    "MOL"
+  ],
+  "categories": [
+    "molluscoids"
+  ],
   "counts": {
     "flat": 8
   }

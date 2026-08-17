@@ -1,0 +1,426 @@
+{
+  "name": "drakelings",
+  "gendered": true,
+  "rig": "ssm_shared",
+  "species_classes": [
+    "INF",
+    "REP"
+  ],
+  "categories": [
+    "infernals",
+    "reptilians"
+  ],
+  "counts": {
+    "male": 15,
+    "female": 15
+  },
+  "geracaoArt": {
+    "base": {
+      "species": {
+        "archetype": "Draconic",
+        "template": "<species.archetype>, cute little dragon person, forge-worker artisan, true dragon head with a short blunt rounded snout, full round cheeks, small blunt horns curving back from the brow, small rounded frills where ears would be, soft smooth scales instead of skin, no fur, no feathers, humanoid build, gentle harmless creature, (no wings, wingless, nothing on the back:1.2), not a lizard man, not a crocodile, not a dinosaur, not a demon"
+      },
+      "eyes": {
+        "extra": "(vertical slit pupils:1.2), large round eyes with soft rounded lids, gentle friendly gaze"
+      },
+      "torso": {
+        "state": "TorsoCoveredArmsBare"
+      }
+    },
+    "modelo": {
+      "variant": "distilled",
+      "aspectRatio": "4:5"
+    },
+    "male": {
+      "person": {
+        "gender": "Male",
+        "extra": "heavier build, broader chest and thicker neck, wider blunt snout, thicker heavier horns"
+      },
+      "torso": {
+        "template": "sleeveless blacksmith gear, hammered bronze chest plate worn over a thick leather apron, covering chest and stomach, (all the metal in warm bronze, no iron, no steel, no silver:1.2), riveted bronze edges with darker bronze buckles and a couple of plain leather straps crossing the chest, soot-darkened bronze with a worn hand-forged surface, (completely sleeveless, bare shoulders and bare arms, no sleeves, no gloves, no gauntlets:1.2), small soft scales covering the head, neck and arms, the exposed scales forming a smooth gradient from <torso.primary_color> across the head, horns and shoulders to <torso.secondary_color> down the throat and arms, the two colors blending gradually into one another with no hard edge"
+      },
+      "referenceImage": [
+        "assets/portraits/ssm_drakelings/reference_flat_1.png"
+      ],
+      "variantes": {
+        "001": {
+          "person": {
+            "body_shape": "Athletic"
+          },
+          "eyes": {
+            "color": "Amber"
+          },
+          "torso": {
+            "primary_color": "Copper",
+            "secondary_color": "Gold"
+          }
+        },
+        "002": {
+          "person": {
+            "body_shape": "Muscular"
+          },
+          "eyes": {
+            "color": "Amber"
+          },
+          "torso": {
+            "primary_color": "Red",
+            "secondary_color": "Gold"
+          }
+        },
+        "003": {
+          "person": {
+            "body_shape": "Slim"
+          },
+          "eyes": {
+            "color": "Green"
+          },
+          "torso": {
+            "primary_color": "Emerald",
+            "secondary_color": "Mint"
+          }
+        },
+        "004": {
+          "person": {
+            "body_shape": "Average"
+          },
+          "eyes": {
+            "color": "Violet"
+          },
+          "torso": {
+            "primary_color": "Violet",
+            "secondary_color": "Lilac"
+          }
+        },
+        "005": {
+          "person": {
+            "body_shape": "Chubby"
+          },
+          "eyes": {
+            "color": "Hazel"
+          },
+          "torso": {
+            "primary_color": "Burgundy",
+            "secondary_color": "Rose"
+          }
+        },
+        "006": {
+          "person": {
+            "body_shape": "Muscular"
+          },
+          "eyes": {
+            "color": "Amber"
+          },
+          "torso": {
+            "primary_color": "Copper",
+            "secondary_color": "Amber"
+          }
+        },
+        "007": {
+          "person": {
+            "body_shape": "Average"
+          },
+          "eyes": {
+            "color": "Green"
+          },
+          "torso": {
+            "primary_color": "Olive",
+            "secondary_color": "Lime"
+          }
+        },
+        "008": {
+          "person": {
+            "body_shape": "Athletic"
+          },
+          "eyes": {
+            "color": "Blue"
+          },
+          "torso": {
+            "primary_color": "Charcoal",
+            "secondary_color": "Navy"
+          }
+        },
+        "009": {
+          "person": {
+            "body_shape": "Chubby"
+          },
+          "eyes": {
+            "color": "Hazel"
+          },
+          "torso": {
+            "primary_color": "Bronze",
+            "secondary_color": "Beige"
+          }
+        },
+        "010": {
+          "person": {
+            "body_shape": "Average"
+          },
+          "eyes": {
+            "color": "Amber"
+          },
+          "torso": {
+            "primary_color": "Green",
+            "secondary_color": "Yellow"
+          }
+        },
+        "011": {
+          "person": {
+            "body_shape": "Slim"
+          },
+          "eyes": {
+            "color": "Gray"
+          },
+          "torso": {
+            "primary_color": "Azure",
+            "secondary_color": "Pearl"
+          }
+        },
+        "012": {
+          "person": {
+            "body_shape": "Muscular"
+          },
+          "eyes": {
+            "color": "Amber"
+          },
+          "torso": {
+            "primary_color": "Gold",
+            "secondary_color": "Yellow"
+          }
+        },
+        "013": {
+          "person": {
+            "body_shape": "Average"
+          },
+          "eyes": {
+            "color": "Blue"
+          },
+          "torso": {
+            "primary_color": "Copper",
+            "secondary_color": "Beige"
+          }
+        },
+        "014": {
+          "person": {
+            "body_shape": "Muscular"
+          },
+          "eyes": {
+            "color": "Green"
+          },
+          "torso": {
+            "primary_color": "Turquoise",
+            "secondary_color": "Emerald"
+          },
+          "seed": 1949057160
+        },
+        "015": {
+          "person": {
+            "body_shape": "Chubby"
+          },
+          "eyes": {
+            "color": "Hazel"
+          },
+          "torso": {
+            "primary_color": "Brown",
+            "secondary_color": "Mustard"
+          }
+        }
+      }
+    },
+    "female": {
+      "person": {
+        "gender": "Female",
+        "extra": "(fuller rounded chest, clearly narrower waist:1.2), slimmer neck, shorter finer snout, smaller slender horns, larger rounded frills"
+      },
+      "torso": {
+        "template": "sleeveless blacksmith gear tailored to a curved figure, hammered polished silver breastplate curving out over a full rounded chest and drawing in sharply below it, (a very narrow cinched waist contrasting against the much wider chest above it:1.4), (all the metal in bright polished silver, no bronze, no brass, no gold:1.2), a wide leather belt pulling the waist in tight, a fitted leather apron cut close to the body below the belt, riveted silver edges with pale silver buckles, soot darkened only in the crevices of the hand-forged surface, (completely sleeveless, bare shoulders and bare arms, no sleeves, no gloves, no gauntlets:1.2), small soft scales covering the head, neck and arms, the exposed scales forming a smooth gradient from <torso.primary_color> across the head, horns and shoulders to <torso.secondary_color> down the throat and arms, blending with no hard edge"
+      },
+      "referenceImage": [
+        "assets/portraits/ssm_drakelings/reference_flat_1.png"
+      ],
+      "variantes": {
+        "001": {
+          "person": {
+            "body_shape": "Hourglass"
+          },
+          "eyes": {
+            "color": "Blue"
+          },
+          "torso": {
+            "primary_color": "Pearl",
+            "secondary_color": "Salmon"
+          }
+        },
+        "002": {
+          "person": {
+            "body_shape": "Curvy"
+          },
+          "eyes": {
+            "color": "Brown"
+          },
+          "torso": {
+            "primary_color": "Orange",
+            "secondary_color": "Peach"
+          }
+        },
+        "003": {
+          "person": {
+            "body_shape": "Hourglass"
+          },
+          "eyes": {
+            "color": "Blue"
+          },
+          "torso": {
+            "primary_color": "Sapphire",
+            "secondary_color": "Cyan"
+          },
+          "seed": 2024349424
+        },
+        "004": {
+          "person": {
+            "body_shape": "Slim"
+          },
+          "eyes": {
+            "color": "Gray"
+          },
+          "torso": {
+            "primary_color": "Charcoal",
+            "secondary_color": "Silver"
+          }
+        },
+        "005": {
+          "person": {
+            "body_shape": "Curvy"
+          },
+          "eyes": {
+            "color": "Green"
+          },
+          "torso": {
+            "primary_color": "Teal",
+            "secondary_color": "Turquoise"
+          },
+          "seed": 4076716163
+        },
+        "006": {
+          "person": {
+            "body_shape": "Hourglass"
+          },
+          "eyes": {
+            "color": "Blue"
+          },
+          "torso": {
+            "primary_color": "Olive",
+            "secondary_color": "Pearl"
+          }
+        },
+        "007": {
+          "person": {
+            "body_shape": "Average"
+          },
+          "eyes": {
+            "color": "Violet"
+          },
+          "torso": {
+            "primary_color": "Magenta",
+            "secondary_color": "Pink"
+          }
+        },
+        "008": {
+          "person": {
+            "body_shape": "Curvy"
+          },
+          "eyes": {
+            "color": "Brown"
+          },
+          "torso": {
+            "primary_color": "Amber",
+            "secondary_color": "Yellow"
+          }
+        },
+        "009": {
+          "person": {
+            "body_shape": "Hourglass"
+          },
+          "eyes": {
+            "color": "Violet"
+          },
+          "torso": {
+            "primary_color": "Purple",
+            "secondary_color": "Lavender"
+          }
+        },
+        "010": {
+          "person": {
+            "body_shape": "Slim"
+          },
+          "eyes": {
+            "color": "Brown"
+          },
+          "torso": {
+            "primary_color": "Ruby",
+            "secondary_color": "Salmon"
+          }
+        },
+        "011": {
+          "person": {
+            "body_shape": "Curvy"
+          },
+          "eyes": {
+            "color": "Violet"
+          },
+          "torso": {
+            "primary_color": "Amethyst",
+            "secondary_color": "White"
+          }
+        },
+        "012": {
+          "person": {
+            "body_shape": "Hourglass"
+          },
+          "eyes": {
+            "color": "Brown"
+          },
+          "torso": {
+            "primary_color": "Coral",
+            "secondary_color": "Peach"
+          }
+        },
+        "013": {
+          "person": {
+            "body_shape": "Athletic"
+          },
+          "eyes": {
+            "color": "Amber"
+          },
+          "torso": {
+            "primary_color": "Gold",
+            "secondary_color": "White"
+          }
+        },
+        "014": {
+          "person": {
+            "body_shape": "Curvy"
+          },
+          "eyes": {
+            "color": "Green"
+          },
+          "torso": {
+            "primary_color": "Lime",
+            "secondary_color": "Mint"
+          }
+        },
+        "015": {
+          "person": {
+            "body_shape": "Hourglass"
+          },
+          "eyes": {
+            "color": "Gray"
+          },
+          "torso": {
+            "primary_color": "Silver",
+            "secondary_color": "Sky Blue"
+          }
+        }
+      }
+    }
+  }
+}

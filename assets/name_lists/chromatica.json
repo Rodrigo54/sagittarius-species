@@ -590,7 +590,7 @@
       "plural": "Little Monsters",
       "home_planet": "Chromatica",
       "home_system": "Artpop",
-      "portrait": "ssm_default"
+      "species_class": "HUM"
     },
     {
       "key": "Madonnian",
@@ -598,7 +598,7 @@
       "plural": "Madonnians",
       "home_planet": "Vogue",
       "home_system": "Confessions",
-      "portrait": "ssm_default"
+      "species_class": "HUM"
     },
     {
       "key": "Hive",
@@ -606,7 +606,7 @@
       "plural": "Hive",
       "home_planet": "Renaissance",
       "home_system": "Lemonade",
-      "portrait": "ssm_default"
+      "species_class": "HUM"
     },
     {
       "key": "Brat",
@@ -614,7 +614,7 @@
       "plural": "Brats",
       "home_planet": "Crash",
       "home_system": "Brat",
-      "portrait": "ssm_default"
+      "species_class": "HUM"
     },
     {
       "key": "Toxic",
@@ -622,41 +622,125 @@
       "plural": "Toxics",
       "home_planet": "Blackout",
       "home_system": "Circus",
-      "portrait": "ssm_default"
+      "species_class": "HUM"
     }
   ],
   "_meta": {
     "ship_names": {
-      "generic": { "theme": "mistura de todas as convenções abaixo", "target_count": 18 },
-      "corvette": { "theme": "divas pop 2000+ tier C (maior volume)", "target_count": 20 },
-      "destroyer": { "theme": "divas pop 2000+ tier B", "target_count": 7 },
-      "cruiser": { "theme": "divas pop 2000+ tier A/B", "target_count": 8 },
-      "battleship": { "theme": "divas pop 2000+ tier A", "target_count": 4 },
-      "titan": { "theme": "maiores ícones pop 2000+ (Gaga, Madonna, Beyoncé)", "target_count": 3 },
-      "juggernaut": { "theme": "maiores ícones pop 2000+ + Britney Spears", "target_count": 4 },
-      "constructor": { "theme": "estilistas/designers icônicos", "target_count": 12 },
-      "science": { "theme": "cientistas LGBT+", "target_count": 7 },
-      "research_station": { "theme": "cientistas LGBT+ (subset)", "target_count": 4 },
-      "colonizer": { "theme": "bairros-santuário LGBT+", "target_count": 18 },
-      "sponsored_colonizer": { "theme": "bairros-santuário LGBT+ (subset)", "target_count": 4 },
-      "transport": { "theme": "divas pop 2000+ tier B", "target_count": 7 },
-      "military_station_small": { "theme": "divas pop 2000+ tier C (subset)", "target_count": 8 },
-      "military_station_medium": { "theme": "divas pop 2000+ tier C (subset)", "target_count": 8 },
-      "military_station_large": { "theme": "divas pop 2000+ tier B", "target_count": 7 },
-      "ion_cannon": { "theme": "divas pop 2000+ tier A", "target_count": 4 }
+      "generic": {
+        "theme": "mistura de todas as convenções abaixo",
+        "target_count": 18
+      },
+      "corvette": {
+        "theme": "divas pop 2000+ tier C (maior volume)",
+        "target_count": 20
+      },
+      "destroyer": {
+        "theme": "divas pop 2000+ tier B",
+        "target_count": 7
+      },
+      "cruiser": {
+        "theme": "divas pop 2000+ tier A/B",
+        "target_count": 8
+      },
+      "battleship": {
+        "theme": "divas pop 2000+ tier A",
+        "target_count": 4
+      },
+      "titan": {
+        "theme": "maiores ícones pop 2000+ (Gaga, Madonna, Beyoncé)",
+        "target_count": 3
+      },
+      "juggernaut": {
+        "theme": "maiores ícones pop 2000+ + Britney Spears",
+        "target_count": 4
+      },
+      "constructor": {
+        "theme": "estilistas/designers icônicos",
+        "target_count": 12
+      },
+      "science": {
+        "theme": "cientistas LGBT+",
+        "target_count": 7
+      },
+      "research_station": {
+        "theme": "cientistas LGBT+ (subset)",
+        "target_count": 4
+      },
+      "colonizer": {
+        "theme": "bairros-santuário LGBT+",
+        "target_count": 18
+      },
+      "sponsored_colonizer": {
+        "theme": "bairros-santuário LGBT+ (subset)",
+        "target_count": 4
+      },
+      "transport": {
+        "theme": "divas pop 2000+ tier B",
+        "target_count": 7
+      },
+      "military_station_small": {
+        "theme": "divas pop 2000+ tier C (subset)",
+        "target_count": 8
+      },
+      "military_station_medium": {
+        "theme": "divas pop 2000+ tier C (subset)",
+        "target_count": 8
+      },
+      "military_station_large": {
+        "theme": "divas pop 2000+ tier B",
+        "target_count": 7
+      },
+      "ion_cannon": {
+        "theme": "divas pop 2000+ tier A",
+        "target_count": 4
+      }
     },
-    "fleet_names": { "theme": "unidades militares com adjetivo temático camp/queer", "target_count": 22 },
-    "army_names": { "theme": "tom satírico-autoritário + marcos históricos LGBT+", "target_count": 18 },
+    "fleet_names": {
+      "theme": "unidades militares com adjetivo temático camp/queer",
+      "target_count": 22
+    },
+    "army_names": {
+      "theme": "tom satírico-autoritário + marcos históricos LGBT+",
+      "target_count": 18
+    },
     "planet_names": {
-      "generic": { "theme": "marcas de moda + divas pop, mix geral", "target_count": 12 },
-      "pc_desert": { "theme": "marcas/divas latinas dramáticas", "target_count": 4 },
-      "pc_tropical": { "theme": "marcas vibrantes + divas latinas", "target_count": 5 },
-      "pc_gaia": { "theme": "luxo clássico + divas disco", "target_count": 5 },
-      "pc_ocean": { "theme": "marcas fluidas + divas de balada", "target_count": 4 },
-      "pc_arctic": { "theme": "marcas minimalistas + divas frias", "target_count": 4 },
-      "pc_nuked": { "theme": "moda punk/vanguarda + divas provocadoras", "target_count": 4 },
-      "pc_alpine": { "theme": "luxo clássico + divas atemporais", "target_count": 3 }
+      "generic": {
+        "theme": "marcas de moda + divas pop, mix geral",
+        "target_count": 12
+      },
+      "pc_desert": {
+        "theme": "marcas/divas latinas dramáticas",
+        "target_count": 4
+      },
+      "pc_tropical": {
+        "theme": "marcas vibrantes + divas latinas",
+        "target_count": 5
+      },
+      "pc_gaia": {
+        "theme": "luxo clássico + divas disco",
+        "target_count": 5
+      },
+      "pc_ocean": {
+        "theme": "marcas fluidas + divas de balada",
+        "target_count": 4
+      },
+      "pc_arctic": {
+        "theme": "marcas minimalistas + divas frias",
+        "target_count": 4
+      },
+      "pc_nuked": {
+        "theme": "moda punk/vanguarda + divas provocadoras",
+        "target_count": 4
+      },
+      "pc_alpine": {
+        "theme": "luxo clássico + divas atemporais",
+        "target_count": 3
+      }
     },
-    "character_names": { "theme": "primeiro nome glamouroso + sobrenome de casa de ballroom (combinatório)", "target_count": 80 }
+    "character_names": {
+      "theme": "primeiro nome glamouroso + sobrenome de casa de ballroom (combinatório)",
+      "target_count": 80
+    }
   }
 }

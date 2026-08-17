@@ -1,0 +1,155 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "UNET fixo (único arquivo Distilled instalado — ver docs/pipeline-generate-art.md)"
+    },
+    "inputs": {
+      "unet_name": "flux-2-klein-4b.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Text encoder fixo (Qwen 3 4B, único arquivo instalado — mesmo da variante Base)"
+    },
+    "inputs": {
+      "clip_name": "qwen_3_4b_fp4_flux2.safetensors",
+      "type": "flux2"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "VAE fixo (único arquivo instalado — mesmo da variante Base)"
+    },
+    "inputs": {
+      "vae_name": "flux2-vae.safetensors"
+    }
+  },
+  "4": {
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Positivo (texto pronto, montado em TS por prompt-builder.ts)"
+    },
+    "inputs": {
+      "text": "",
+      "clip": ["2", 0]
+    }
+  },
+  "5": {
+    "class_type": "ConditioningZeroOut",
+    "_meta": {
+      "title": "Distilled não tem negativo real — CFG=1 zera a guidance de qualquer forma (ver template oficial 'Flux.2 Klein 4B Distilled'). Alimentado pelo mesmo CLIPTextEncode positivo (node 4), não por um texto negativo próprio — workflow.ts NÃO escreve .inputs.text aqui (este node não tem esse input)."
+    },
+    "inputs": {
+      "conditioning": ["4", 0]
+    }
+  },
+  "6": {
+    "class_type": "EmptyFlux2LatentImage",
+    "_meta": {
+      "title": "width/height sobrescritos por workflow.ts a partir de aspectRatio (ver resolution.ts)"
+    },
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "batch_size": 1
+    }
+  },
+  "7": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": 0
+    }
+  },
+  "8": {
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "Sampler fixo (euler) — igual ao template oficial do Flux.2 Klein"
+    },
+    "inputs": {
+      "sampler_name": "euler"
+    }
+  },
+  "9": {
+    "class_type": "Flux2Scheduler",
+    "_meta": {
+      "title": "steps=4 (padrão oficial da Distilled) — width/height sobrescritos junto com o node 6"
+    },
+    "inputs": {
+      "steps": 4,
+      "width": 1024,
+      "height": 1024
+    }
+  },
+  "10": {
+    "class_type": "CFGGuider",
+    "_meta": {
+      "title": "cfg=1 (padrão oficial da Distilled). positive/negative apontam direto pro 4/5 aqui (baseline sem referência); workflow.ts rewire pro último ReferenceLatent da cadeia quando referenceImage não está vazio"
+    },
+    "inputs": {
+      "cfg": 1,
+      "model": ["1", 0],
+      "positive": ["4", 0],
+      "negative": ["5", 0]
+    }
+  },
+  "11": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "noise": ["7", 0],
+      "guider": ["10", 0],
+      "sampler": ["8", 0],
+      "sigmas": ["9", 0],
+      "latent_image": ["6", 0]
+    }
+  },
+  "12": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": ["11", 0],
+      "vae": ["3", 0]
+    }
+  },
+  "13": {
+    "class_type": "LoadBackgroundRemovalModel",
+    "inputs": {
+      "bg_removal_name": "birefnet.safetensors"
+    }
+  },
+  "14": {
+    "class_type": "RemoveBackground",
+    "inputs": {
+      "bg_removal_model": ["13", 0],
+      "image": ["12", 0]
+    }
+  },
+  "15": {
+    "class_type": "InvertMask",
+    "_meta": {
+      "title": "Inverte a máscara — RemoveBackground devolve 1=primeiro plano, mas JoinImageWithAlpha já inverte internamente (espera 1=área mascarada/removida); sem isso o personagem sai transparente e o fundo opaco"
+    },
+    "inputs": {
+      "mask": ["14", 0]
+    }
+  },
+  "16": {
+    "class_type": "JoinImageWithAlpha",
+    "_meta": {
+      "title": "Compõe a máscara como canal alfa (RGBA)"
+    },
+    "inputs": {
+      "image": ["12", 0],
+      "alpha": ["15", 0]
+    }
+  },
+  "17": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "ssm_species_distilled",
+      "images": ["16", 0]
+    }
+  }
+}

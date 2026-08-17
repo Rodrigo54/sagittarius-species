@@ -49,12 +49,6 @@ const ANCORAS: Record<string, { x: number; y: number }> = {
   center_right: { x: 1, y: 0.5 },
 };
 
-/** Fallback usado só quando o chamador não passa a lista de sprites de retrato
- * (ver `lerTiposDeRetrato`). Cobre a maioria dos casos, mas **não** os
- * `*_masked` da tela de contatos e do primeiro contato — por isso a lista
- * derivada dos `.gfx` é o caminho preferido. */
-export const SPRITE_RETRATO = /^GFX_portrait_character/;
-
 export interface Retangulo {
   x0: number;
   y0: number;
@@ -244,16 +238,15 @@ function deslocamento(no: No, estado: Estado): { x: number; y: number; ressalvas
 }
 
 /** Percorre a árvore e emite um `Contexto` por ícone que desenha um retrato.
- * `spritesDeRetrato` vem de `lerTiposDeRetrato`; omitir cai no fallback por
- * prefixo, que perde as variantes mascaradas. */
+ * `spritesDeRetrato` vem de `lerNomesDeRetrato` — reconhecer o sprite por
+ * prefixo de nome não serve, porque perde as variantes mascaradas da tela de
+ * contatos e do primeiro contato. */
 export function coletarContextos(
   raiz: No,
   arquivo: string,
-  spritesDeRetrato?: ReadonlySet<string>
+  spritesDeRetrato: ReadonlySet<string>
 ): Contexto[] {
   const contextos: Contexto[] = [];
-  const ehRetrato = (sprite: string) =>
-    spritesDeRetrato ? spritesDeRetrato.has(sprite) : SPRITE_RETRATO.test(sprite);
 
   function visitar(no: No, estado: Estado) {
     const desloc = deslocamento(no, estado);
@@ -283,7 +276,7 @@ export function coletarContextos(
       }
     }
 
-    if (no.sprite && ehRetrato(no.sprite)) {
+    if (no.sprite && spritesDeRetrato.has(no.sprite)) {
       const scale = no.scale ?? 1;
       // A janela vive nas coordenadas do sprite: desconta a posição do ícone
       // dentro do pai e desfaz a escala com que ele é desenhado.

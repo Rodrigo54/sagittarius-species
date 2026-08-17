@@ -1,30 +1,34 @@
 {
   "name": "sagittarius-species",
-  "version": "1.9.0",
+  "version": "1.11.0",
   "description": "Mod para o jogo Stellaris, da Paradox Interactive.",
   "type": "module",
   "scripts": {
     "setup": "bun scripts/download-bin.ts",
-    "copy": "pwsh scripts/copy.ps1",
-    "overwrite": "pwsh scripts/overwrite.ps1",
+    "copy": "pwsh -NoProfile -File scripts/copy.ps1",
     "converter": "bun run portrait && bun run rooms",
     "portrait": "bun scripts/generate-portraits/index.ts",
+    "taxonomy": "bun scripts/generate-taxonomy/index.ts",
     "shared-rig": "bun scripts/generate-shared-rig/index.ts",
     "rooms": "bun scripts/generate-rooms/index.ts",
-    "names": "bun scripts/generate-names/index.ts"
+    "names": "bun scripts/generate-names/index.ts",
+    "art": "bun scripts/generate-art/index.ts",
+    "publish-workshop": "bun scripts/publish-workshop/index.ts"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "7zip-bin": "^5.2.0",
-    "@types/bun": "^1.0.12",
-    "@types/lodash": "^4.17.0",
+    "@types/bun": "^1.3.14",
+    "@types/node": "^20.19.43",
     "@types/node-7z": "^2.1.11",
     "node-7z": "^3.0.0",
     "typescript": "^7.0.2"
   },
   "dependencies": {
+    "commander": "^15.0.0",
     "jomini": "^0.9.1",
-    "lodash": "^4.17.21"
+    "marked": "^18.0.9",
+    "zod": "^4.4.3"
   }
 }

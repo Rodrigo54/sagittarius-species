@@ -1,9 +1,7 @@
 import type { Jomini, Writer } from 'jomini';
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import type { PortraitClassMap } from './portrait-map';
-import { resolveSpeciesClass } from './portrait-map';
-import type { SpeciesNameEntry } from './types';
+import type { SpeciesNameEntry } from '../name-list-schema';
 
 export interface SpeciesNameSource {
   /** id do name_list de origem (ex.: "ssm_altmer"), usado como campo
@@ -22,13 +20,17 @@ export interface ResolvedSpeciesEntry {
   species_class: string;
 }
 
-/** Resolve species_class de cada entrada (via portrait, com override nos
- * casos ambíguos) e valida unicidade global da chave `key` entre todos os
- * JSONs. Não lança — devolve os erros pra quem chama decidir quando travar a
- * geração, permitindo acumular erros de todas as fontes numa única mensagem. */
+/** Junta as espécies-flavor de todas as culturas e valida a unicidade global
+ * da chave `key` — o jogo agrupa as entradas por ela, então duas culturas
+ * declarando a mesma chave sobrescreveriam uma à outra em silêncio.
+ *
+ * A `species_class` vem declarada em cada entrada (validada pelo schema); não
+ * há dedução a partir do portrait, porque `species_names` não tem vínculo
+ * nenhum com retrato — o jogo sorteia espécie-flavor e retrato separadamente,
+ * dentro da classe. Não lança: devolve os erros pra quem chama acumular tudo
+ * numa mensagem só. */
 export function resolveSpeciesNames(
-  sources: SpeciesNameSource[],
-  portraitMap: PortraitClassMap
+  sources: SpeciesNameSource[]
 ): { resolved: ResolvedSpeciesEntry[]; errors: string[] } {
   const resolved: ResolvedSpeciesEntry[] = [];
   const keyOwners = new Map<string, string>();
@@ -36,8 +38,6 @@ export function resolveSpeciesNames(
 
   for (const source of sources) {
     for (const entry of source.entries) {
-      const context = `${source.fileName}.species_names.${entry.key}`;
-
       const previousOwner = keyOwners.get(entry.key);
       if (previousOwner) {
         errors.push(
@@ -47,17 +47,6 @@ export function resolveSpeciesNames(
       }
       keyOwners.set(entry.key, source.fileName);
 
-      const { value: speciesClass, error } = resolveSpeciesClass(
-        entry.portrait,
-        entry.species_class,
-        portraitMap,
-        context
-      );
-      if (error) {
-        errors.push(error);
-        continue;
-      }
-
       resolved.push({
         key: entry.key,
         name: entry.name,
@@ -65,7 +54,7 @@ export function resolveSpeciesNames(
         home_planet: entry.home_planet,
         home_system: entry.home_system,
         name_list: source.fileName,
-        species_class: speciesClass!,
+        species_class: entry.species_class,
       });
     }
   }
@@ -78,14 +67,7 @@ export async function writeSpeciesNamesFile(
   parser: Jomini,
   destino: string
 ) {
-  const byClass = new Map<string, ResolvedSpeciesEntry[]>();
-  for (const entry of entries) {
-    if (!byClass.has(entry.species_class)) {
-      byClass.set(entry.species_class, []);
-    }
-    byClass.get(entry.species_class)!.push(entry);
-  }
-
+  const byClass = Map.groupBy(entries, (entry) => entry.species_class);
   const classesOrdenadas = Array.from(byClass.keys()).sort();
 
   const content = parser.write((writer: Writer) => {

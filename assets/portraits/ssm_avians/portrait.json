@@ -2,6 +2,12 @@
   "name": "avians",
   "gendered": false,
   "rig": "ssm_shared",
+  "species_classes": [
+    "AVI"
+  ],
+  "categories": [
+    "avians"
+  ],
   "counts": {
     "flat": 50
   }

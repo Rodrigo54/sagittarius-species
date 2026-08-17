@@ -23,7 +23,7 @@ import { readFile, readdir, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { coletarContextos, montarArvore, type Contexto } from './gui-layout';
-import { lerTiposDeRetrato } from './portrait-types';
+import { lerNomesDeRetrato } from './portrait-types';
 
 const __DIRNAME = dirname(fileURLToPath(import.meta.url));
 
@@ -41,9 +41,9 @@ async function main() {
     throw new Error(`nenhum .gui em ${pastaInterface} — instalação do Stellaris está nesse caminho?`);
   }
 
-  const tipos = await lerTiposDeRetrato(STELLARIS_PATH);
-  const spritesDeRetrato = new Set(tipos.map((t) => t.nome));
-  console.log(`${tipos.length} portraitType de personagem declarados nos .gfx do jogo`);
+  const nomes = await lerNomesDeRetrato(STELLARIS_PATH);
+  const spritesDeRetrato = new Set(nomes);
+  console.log(`${nomes.length} portraitType de personagem declarados nos .gfx do jogo`);
 
   const jomini = await Jomini.initialize();
   const contextos: Contexto[] = [];

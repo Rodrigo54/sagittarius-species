@@ -3,6 +3,14 @@
   "gendered": false,
   "rig": "ssm_shared",
   "modo": "altura",
+  "species_classes": [
+    "MACHINE"
+  ],
+  "categories": [
+    "machines",
+    "synthetics",
+    "cybernetics"
+  ],
   "counts": {
     "flat": 12
   }

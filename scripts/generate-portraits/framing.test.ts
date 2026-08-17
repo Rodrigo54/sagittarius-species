@@ -99,11 +99,12 @@ describe('validarEnquadramento', () => {
     expect(validarEnquadramento([medida(300, 400)], 'largura', GUIA, 'ssm_teste')).toEqual([]);
   });
 
-  test('recusa arte que flutuaria acima da base', () => {
+  test('recusa arte que flutuaria acima da base, e manda trocar o modo', () => {
     // 600 de largura com proporção quase quadrada não alcança 780.
     const erros = validarEnquadramento([medida(600, 500)], 'largura', GUIA, 'ssm_teste');
     expect(erros).toHaveLength(1);
     expect(erros[0]).toContain('flutuaria');
+    expect(erros[0]).toContain('"modo": "altura"');
   });
 
   test('a âncora de cabeça é levada em conta ao checar a base', () => {
@@ -112,7 +113,10 @@ describe('validarEnquadramento', () => {
     expect(validarEnquadramento([medida(600, 700)], 'largura', GUIA, 'ssm_teste')).toEqual([]);
     const comAncora = validarEnquadramento([medida(600, 700, 0.3)], 'largura', GUIA, 'ssm_teste');
     expect(comAncora).toHaveLength(1);
-    expect(comAncora[0]).toContain('flutuaria');
+    // Culpa da âncora, não da proporção: trocar o modo aqui só encolheria a
+    // arte à toa, então a mensagem tem que apontar a âncora e não o modo.
+    expect(comAncora[0]).toContain('âncora "cabeca"');
+    expect(comAncora[0]).not.toContain('"modo": "altura"');
   });
 
   test('recusa conteúdo vazio', () => {

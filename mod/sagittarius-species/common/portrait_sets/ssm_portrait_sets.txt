@@ -1,80 +1,164 @@
-ssm_humanoids = {
-	species_class = HUM
-	portraits = {
-		"ssm_default"
-		"ssm_elves"
-		"ssm_high_elves"
-		"ssm_astral"
-		"ssm_necron"
-		"ssm_vargrosianos"
-		"ssm_knight"
-		"ssm_green_elves"
-	}
-}
-
-ssm_mammalians = {
-	species_class = MAM
-	portraits = {
-		"ssm_gamba"
-	}
-}
-
-ssm_molluscoids = {
-	species_class = MOL
-	portraits = {
-		"ssm_octopus"
-		"ssm_hastur"
-	}
-}
-
-ssm_necroids = {
-	species_class = NECROID
-	portraits = {
-		"ssm_necron"
-	}
-}
-
 ssm_aquatics = {
-	species_class = AQUATIC
-	portraits = {
-		"ssm_mermaids"
-	}
-}
-
-ssm_plantoids = {
-	species_class = PLANT
-	portraits = {
-		"ssm_green_elves"
-	}
+  species_class = AQUATIC
+  conditional_portraits = {
+    randomizable = {
+      has_aquatics = yes
+    }
+    playable = {
+      has_aquatics = yes
+    }
+    portraits = {
+      "ssm_mermaids"
+    }
+  }
 }
 
 ssm_avians = {
-	species_class = AVI
-	portraits = {
-		"ssm_avians"
-	}
+  species_class = AVI
+  portraits = {
+    "ssm_avians"
+  }
 }
 
-ssm_cybernetics = {
-	species_class = HUM
-	portraits = {
-		"ssm_mercenary"
-	}
+ssm_humanoids = {
+  species_class = HUM
+  portraits = {
+    "ssm_default"
+    "ssm_elves"
+    "ssm_high_elves"
+    "ssm_knight"
+    "ssm_vargrosianos"
+  }
+  conditional_portraits = {
+    randomizable = {
+      has_plantoids = no
+    }
+    playable = {
+      always = yes
+    }
+    portraits = {
+      "ssm_green_elves"
+    }
+  }
+  conditional_portraits = {
+    randomizable = {
+      has_aquatics = no
+    }
+    playable = {
+      always = yes
+    }
+    portraits = {
+      "ssm_mermaids"
+    }
+  }
+  conditional_portraits = {
+    randomizable = {
+      has_necroids = no
+    }
+    playable = {
+      always = yes
+    }
+    portraits = {
+      "ssm_necron"
+    }
+  }
 }
 
-ssm_psionic = {
-	species_class = HUM
+ssm_humanoids_cybernetics = {
+  species_class = HUM
+  portraits = {
+    "ssm_mercenary"
+  }
+}
+
+ssm_humanoids_psionics = {
+  species_class = HUM
   portraits = {
     "ssm_astral"
   }
 }
 
+ssm_infernals = {
+  species_class = INF
+  conditional_portraits = {
+    randomizable = {
+      has_infernals = yes
+    }
+    playable = {
+      has_infernals = yes
+    }
+    portraits = {
+      "ssm_drakelings"
+    }
+  }
+}
+
 ssm_machine = {
-	species_class = MACHINE
-	portraits = {
-		"ssm_green_order"
-		"ssm_new_order"
-		"ssm_cyborg"
-		"ssm_timbot"
-	}
+  species_class = MACHINE
+  portraits = {
+    "ssm_cyborg"
+    "ssm_green_order"
+    "ssm_new_order"
+    "ssm_timbot"
+  }
+}
+
+ssm_mammalians = {
+  species_class = MAM
+  portraits = {
+    "ssm_gamba"
+  }
+}
+
+ssm_molluscoids = {
+  species_class = MOL
+  portraits = {
+    "ssm_hastur"
+    "ssm_octopus"
+  }
+}
+
+ssm_necroids = {
+  species_class = NECROID
+  conditional_portraits = {
+    randomizable = {
+      has_necroids = yes
+    }
+    playable = {
+      has_necroids = yes
+    }
+    portraits = {
+      "ssm_necron"
+    }
+  }
+}
+
+ssm_plantoids = {
+  species_class = PLANT
+  conditional_portraits = {
+    randomizable = {
+      has_plantoids = yes
+    }
+    playable = {
+      has_plantoids = yes
+    }
+    portraits = {
+      "ssm_green_elves"
+    }
+  }
+}
+
+ssm_reptilians = {
+  species_class = REP
+  conditional_portraits = {
+    randomizable = {
+      has_infernals = no
+    }
+    playable = {
+      always = yes
+    }
+    portraits = {
+      "ssm_drakelings"
+    }
+  }
 }

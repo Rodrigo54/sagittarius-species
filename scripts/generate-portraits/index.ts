@@ -1,6 +1,7 @@
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { PASTA_ASSETS, PASTA_MOD, PASTA_RAIZ, converter } from '../converter';
+import { derivarTaxonomia, escreverTaxonomia } from '../generate-taxonomy/gerar';
 import { carregarEspecie, listarPastasEspecies } from './discovery';
 import { prepararEspecie } from './staging';
 import { limparOrfaos } from './sync';
@@ -30,14 +31,32 @@ async function main() {
   }
   const slugs = filtro !== undefined ? [filtro] : todosSlugs;
 
-  const especies = await Promise.all(
-    slugs.map((slug) => carregarEspecie(PASTA_PORTRAITS_ASSETS, slug))
+  // carregarEspecie (via lerConfig) já valida a FORMA do portrait.json contra
+  // o schema zod e lança exceção se estiver malformado — capturado aqui, não
+  // deixado propagar cru, pra não quebrar o padrão "valida tudo, reporta tudo
+  // de uma vez" só porque uma espécie entre 18 tem um erro de forma.
+  const resultadosCarga = await Promise.all(
+    slugs.map(async (slug) => {
+      try {
+        return { slug, info: await carregarEspecie(PASTA_PORTRAITS_ASSETS, slug), erro: undefined };
+      } catch (erro) {
+        return { slug, info: undefined, erro: erro instanceof Error ? erro.message : String(erro) };
+      }
+    })
   );
 
-  // Valida tudo antes de mexer em qualquer arquivo — erro trava a geração sem
-  // deixar o mod num estado parcialmente limpo/atualizado.
+  const errosDeCarga = resultadosCarga.flatMap((r) => (r.erro !== undefined ? [r.erro] : []));
+  const especies = resultadosCarga.flatMap((r) => (r.info !== undefined ? [r.info] : []));
+
+  // Valida o resto (arquivos no disco: contagem de PNGs, geometria, canal
+  // alfa) antes de mexer em qualquer arquivo — erro trava a geração sem
+  // deixar o mod num estado parcialmente limpo/atualizado. A taxonomia entra
+  // aqui pelo mesmo motivo: ela é derivada agora e só escrita no fim, pra que
+  // uma filiação inválida (numa espécie qualquer, mesmo fora do filtro) não
+  // seja descoberta depois de já ter convertido textura.
   const errosPorEspecie = await Promise.all(especies.map((info) => validarEspecie(info)));
-  const erros = errosPorEspecie.flat();
+  const taxonomia = await derivarTaxonomia();
+  const erros = [...errosDeCarga, ...errosPorEspecie.flat(), ...taxonomia.erros];
   if (erros.length > 0) {
     console.error(
       `${erros.length} erro(s) de validação encontrado(s) — nada foi escrito ou apagado:`
@@ -71,11 +90,19 @@ async function main() {
     await writeFile(join(PASTA_PORTRAIT_TXT, `${info.slug}_portrait.txt`), conteudoTxt);
   }
 
+  // Registro em common/ (portrait_sets + portrait_categories), sempre com
+  // TODAS as espécies — mesmo sob filtro, já que os dois arquivos descrevem o
+  // mod inteiro. Escrito aqui pra que sincronizar a arte de uma espécie nunca
+  // deixe o registro dela para trás; `bun run taxonomy` faz só esta parte,
+  // quando nenhuma textura mudou.
+  await escreverTaxonomia(taxonomia.sets);
+
   console.log(
     filtro !== undefined
       ? `Gerado: só ${filtro} (filtro de linha de comando). ${enquadrados} retrato(s) enquadrado(s).`
       : `Gerado: ${especies.length} espécie(s) de portrait, ${enquadrados} retrato(s) enquadrado(s) a partir de master.`
   );
+  console.log(`Registro: ${taxonomia.sets.length} portrait_set(s) a partir de ${taxonomia.especies} espécie(s).`);
 }
 
 main();

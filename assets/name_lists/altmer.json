@@ -3256,7 +3256,7 @@
       "plural": "Altmers",
       "home_planet": "Nirn",
       "home_system": "Mundus",
-      "portrait": "ssm_high_elves"
+      "species_class": "HUM"
     },
     {
       "key": "Aelodian",
@@ -3264,7 +3264,7 @@
       "plural": "Aelodians",
       "home_planet": "Althor",
       "home_system": "Zoroth",
-      "portrait": "ssm_elves"
+      "species_class": "HUM"
     },
     {
       "key": "Arcturian",
@@ -3272,7 +3272,7 @@
       "plural": "Arcturians",
       "home_planet": "Arctus Prime",
       "home_system": "Orianth",
-      "portrait": "ssm_astral"
+      "species_class": "HUM"
     },
     {
       "key": "Caelian",
@@ -3280,7 +3280,7 @@
       "plural": "Caelians",
       "home_planet": "Caelum",
       "home_system": "Sagittarius",
-      "portrait": "ssm_knight"
+      "species_class": "HUM"
     },
     {
       "key": "Cryonian",
@@ -3288,7 +3288,7 @@
       "plural": "Cryonians",
       "home_planet": "Chronos",
       "home_system": "Nebulos",
-      "portrait": "ssm_vargrosianos"
+      "species_class": "HUM"
     },
     {
       "key": "Kalendrian",
@@ -3296,7 +3296,7 @@
       "plural": "Kalendrians",
       "home_planet": "Janus",
       "home_system": "Celestia",
-      "portrait": "ssm_default"
+      "species_class": "HUM"
     },
     {
       "key": "Lunarian",
@@ -3304,7 +3304,7 @@
       "plural": "Lunarians",
       "home_planet": "Lumina",
       "home_system": "Arcturos",
-      "portrait": "ssm_high_elves"
+      "species_class": "HUM"
     },
     {
       "key": "Pallasian",
@@ -3312,7 +3312,7 @@
       "plural": "Pallasians",
       "home_planet": "Mithras",
       "home_system": "Lumina",
-      "portrait": "ssm_mercenary"
+      "species_class": "HUM"
     },
     {
       "key": "Pyronian",
@@ -3320,7 +3320,7 @@
       "plural": "Pyronians",
       "home_planet": "Terra",
       "home_system": "Sagitta",
-      "portrait": "ssm_elves"
+      "species_class": "HUM"
     }
   ]
 }

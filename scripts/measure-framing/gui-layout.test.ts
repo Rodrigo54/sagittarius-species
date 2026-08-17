@@ -1,9 +1,17 @@
 import { describe, expect, test } from 'bun:test';
 import { coletarContextos, montarArvore } from './gui-layout';
 
+/** Os sprites de retrato que os casos abaixo usam — no uso real esta lista sai
+ * dos `.gfx` do jogo, via `lerNomesDeRetrato`. */
+const SPRITES = new Set([
+  'GFX_portrait_character',
+  'GFX_portrait_character_close_up',
+  'GFX_portrait_character_hologram',
+]);
+
 /** Monta a árvore como o jomini a entrega (um `guiTypes` com filhos) e coleta. */
 function coletar(bloco: unknown) {
-  return coletarContextos(montarArvore(bloco, 'guiTypes'), 'teste.gui');
+  return coletarContextos(montarArvore(bloco, 'guiTypes'), 'teste.gui', SPRITES);
 }
 
 describe('janela visível do retrato', () => {
@@ -37,7 +45,6 @@ describe('janela visível do retrato', () => {
   });
 
   test('iconType sem scale usa 1 (diplomacy_event_view.gui)', () => {
-    // O caso que a varredura heurística inicial errava: sem `scale` declarado.
     const [ctx] = coletar({
       containerWindowType: {
         name: 'portrait_background',

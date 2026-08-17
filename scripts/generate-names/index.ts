@@ -8,7 +8,6 @@ import {
   loadNameListFiles,
   readNameList,
 } from './name-lists';
-import { loadPortraitClassMap } from './portrait-map';
 import {
   resolveSpeciesNames,
   writeSpeciesNamesFile,
@@ -23,16 +22,11 @@ const PASTA_MOD = join(__DIRNAME, '../../mod/sagittarius-species');
 const PASTA_NAME_LISTS = join(PASTA_MOD, 'common/name_lists');
 const PASTA_SPECIES_NAMES = join(PASTA_MOD, 'common/species_names');
 const PASTA_L10N = join(PASTA_MOD, 'localisation');
-const PORTRAIT_SETS_PATH = join(
-  PASTA_MOD,
-  'common/portrait_sets/ssm_portrait_sets.txt'
-);
 const VANILLA_KEYS_PATH = join(__DIRNAME, '../vanilla-keys.json');
 
 async function main() {
   const parser = await Jomini.initialize();
   const vanillaKeys = await loadVanillaKeys(VANILLA_KEYS_PATH);
-  const portraitMap = await loadPortraitClassMap(PORTRAIT_SETS_PATH);
   const localizations = await loadLocalization(PASTA_L10N);
   const arquivos = await loadNameListFiles(PASTA_ASSETS);
 
@@ -54,7 +48,7 @@ async function main() {
     entries: item.speciesNames,
   }));
   const { resolved: resolvedSpecies, errors: speciesErrors } =
-    resolveSpeciesNames(speciesSources, portraitMap);
+    resolveSpeciesNames(speciesSources);
   validationErrors.push(...speciesErrors);
 
   if (validationErrors.length > 0) {

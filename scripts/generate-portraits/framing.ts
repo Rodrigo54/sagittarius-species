@@ -1,10 +1,9 @@
 /** Enquadramento da arte-fonte no canvas do rig.
  *
- * Vive aqui, no pipeline, e não mais num script de migração que reescrevia
- * `assets/portraits/` in place: `assets/` guarda master nativo, e o
- * enquadramento é derivado a cada `bun run portrait`. Consequência prática —
- * trocar o canvas do rig passa a ser mudar uma constante em `types.ts`, em vez
- * de reprocessar (e degradar) a arte-fonte.
+ * `assets/` guarda master nativo e o enquadramento é derivado a cada
+ * `bun run portrait`, aqui no pipeline — a arte-fonte nunca é reescrita.
+ * Consequência prática: trocar o canvas do rig é mudar uma constante em
+ * `types.ts`, sem reprocessar (e degradar) a arte-fonte.
  */
 
 import { $ } from 'bun';
@@ -16,7 +15,7 @@ import type { GuiaEnquadramento, ModoEnquadramento, RigInfo } from './types';
 
 const __DIRNAME = dirname(fileURLToPath(import.meta.url));
 
-export const MAGICK = join(__DIRNAME, '../../bin/imagemagick/magick.exe');
+const MAGICK = join(__DIRNAME, '../../bin/imagemagick/magick.exe');
 
 export interface MedidaTrim {
   arquivo: string;
@@ -188,8 +187,15 @@ export function validarEnquadramento(
     // altura isolada, porque ancorar pela cabeça sobe a arte e portanto sobe
     // também a base.
     if (modo === 'largura' && geometria.y + geometria.altura < guia.canvas.altura) {
+      // Duas causas distintas levam à mesma geometria, e a saída de cada uma é
+      // o oposto da outra: se a âncora subiu a arte até o teto, trocar o modo
+      // só encolheria o personagem sem necessidade.
+      const culpaDaAncora = geometria.y === 0 && (medida.inicioDoCorpo ?? 0) > 0;
+      const saida = culpaDaAncora
+        ? `a âncora "cabeca" subiu a arte ${Math.round((medida.inicioDoCorpo ?? 0) * geometria.altura)}px, até o topo do canvas, e a base subiu junto. Reveja "ancora" no portrait.json: essa arte não tem estrutura fina a sacrificar acima da cabeça, ou o detector de densidade não a está enxergando como tal.`
+        : `o busto flutuaria. Arte larga demais pro guia: declare "modo": "altura" no portrait.json, ou ajuste a arte.`;
       erros.push(
-        `${slug}: "${basename(medida.arquivo)}" tem conteúdo ${medida.largura}x${medida.altura} — escalado pra largura ${guia.largura} resulta em altura ${geometria.altura} a partir de y=${geometria.y}, terminando em ${geometria.y + geometria.altura}, antes da borda inferior do canvas (${guia.canvas.altura}); o busto flutuaria. Arte atípica: declare "modo": "altura" no portrait.json, ou ajuste a arte.`
+        `${slug}: "${basename(medida.arquivo)}" tem conteúdo ${medida.largura}x${medida.altura} — escalado pra largura ${guia.largura} resulta em altura ${geometria.altura} a partir de y=${geometria.y}, terminando em ${geometria.y + geometria.altura}, antes da borda inferior do canvas (${guia.canvas.altura}); ${saida}`
       );
     }
 

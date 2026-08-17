@@ -3,8 +3,7 @@
  * Existe para dar um único formato de entrada à conversão, apesar de os dois
  * rigs terem contratos de arte diferentes: o `ssm_shared` guarda master nativo
  * e é enquadrado aqui; o `sl_shared` legado guarda arte já enquadrada e é
- * copiada byte a byte (cópia idêntica ⇒ DDS idêntico, então o legado fica
- * imune a esta mudança de pipeline).
+ * copiada byte a byte (cópia idêntica ⇒ DDS idêntico).
  *
  * Efeito colateral útil: a pasta é o enquadramento final em PNG, aberto em
  * qualquer visualizador — é onde se confere a olho o que o jogo vai receber,

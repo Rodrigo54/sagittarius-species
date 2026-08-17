@@ -1,10 +1,9 @@
 import { existsSync } from 'node:fs';
 import { readFile, readdir } from 'node:fs/promises';
-import { join } from 'node:path';
+import { basename, join } from 'node:path';
+import { zPortraitConfig } from '../portrait-schema';
+import { ordenarNumericamente } from '../utils';
 import type { PortraitConfig, SpeciesInfo } from './types';
-
-const ordenarNumericamente = (arquivos: string[]) =>
-  [...arquivos].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 
 async function listarPngs(pasta: string): Promise<string[]> {
   if (!existsSync(pasta)) return [];
@@ -22,9 +21,23 @@ export async function listarPastasEspecies(pastaPortraits: string): Promise<stri
     .sort();
 }
 
+/** Lê e valida `portrait.json` contra o schema `zod` de `portrait-schema/` —
+ * único ponto de carga usado por `generate-portraits` e `generate-art`, então
+ * validar aqui cobre os dois pipelines de uma vez (nenhum dos dois faz
+ * `JSON.parse` de `portrait.json` por conta própria). Cobre a forma do
+ * arquivo; o que depende do disco (contagem de PNGs, geometria, canal alfa)
+ * fica com `validarEspecie`. */
 export async function lerConfig(pastaEspecie: string): Promise<PortraitConfig> {
   const conteudo = await readFile(join(pastaEspecie, 'portrait.json'), 'utf-8');
-  return JSON.parse(conteudo);
+  const resultado = zPortraitConfig.safeParse(JSON.parse(conteudo));
+  if (!resultado.success) {
+    const slug = basename(pastaEspecie);
+    const erros = resultado.error.issues
+      .map((issue) => `${slug}: portrait.json — ${issue.path.join('.') || '(raiz)'}: ${issue.message}`)
+      .join('\n');
+    throw new Error(erros);
+  }
+  return resultado.data;
 }
 
 export async function carregarEspecie(

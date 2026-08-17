@@ -1,18 +1,27 @@
 import { open } from 'node:fs/promises';
 import { basename } from 'node:path';
+import { pad } from '../utils';
 import { medirInicioDoCorpo, medirTrims, resolverGuia, validarEnquadramento } from './framing';
 import { rigDe, type SpeciesInfo } from './types';
 
 /** Confere que os arquivos são exatamente "001.png".."NNN.png", zero-padded a 3
  * dígitos, sequenciais e sem buracos — é a convenção que a lista
- * character_textures gerada assume ao numerar as texturas. */
+ * character_textures gerada assume ao numerar as texturas.
+ *
+ * `esperado` ausente é o caso em que `counts` não declara o gênero que
+ * `gendered` promete: erro de configuração, com mensagem própria em vez de
+ * uma comparação de contagem contra um número que não existe. */
 function validarSequencia(
   arquivos: string[],
-  esperado: number,
+  esperado: number | undefined,
   rotulo: string,
   slug: string
 ): string[] {
   const erros: string[] = [];
+
+  if (esperado === undefined) {
+    return [`${slug}: portrait.json não declara "counts.${rotulo}" (encontrei ${arquivos.length} PNG(s) em "${rotulo}")`];
+  }
 
   if (arquivos.length !== esperado) {
     erros.push(
@@ -22,7 +31,7 @@ function validarSequencia(
   }
 
   arquivos.forEach((arquivo, index) => {
-    const nomeEsperado = `${String(index + 1).padStart(3, '0')}.png`;
+    const nomeEsperado = `${pad(index + 1)}.png`;
     if (basename(arquivo) !== nomeEsperado) {
       erros.push(
         `${slug}: esperava "${nomeEsperado}" na posição ${index} de "${rotulo}", encontrou "${basename(arquivo)}" — numeração precisa ser sequencial e zero-padded a 3 dígitos, sem buracos`
@@ -133,16 +142,10 @@ export async function validarEspecie(info: SpeciesInfo): Promise<string[]> {
   }
 
   if (config.gendered) {
-    erros.push(
-      ...validarSequencia(info.arquivosMale, config.counts.male ?? -1, 'male', slug)
-    );
-    erros.push(
-      ...validarSequencia(info.arquivosFemale, config.counts.female ?? -1, 'female', slug)
-    );
+    erros.push(...validarSequencia(info.arquivosMale, config.counts.male, 'male', slug));
+    erros.push(...validarSequencia(info.arquivosFemale, config.counts.female, 'female', slug));
   } else {
-    erros.push(
-      ...validarSequencia(info.arquivosFlat, config.counts.flat ?? -1, 'flat', slug)
-    );
+    erros.push(...validarSequencia(info.arquivosFlat, config.counts.flat, 'flat', slug));
   }
 
   // só confere a arte se a sequência já bateu — evita erro de dimensão

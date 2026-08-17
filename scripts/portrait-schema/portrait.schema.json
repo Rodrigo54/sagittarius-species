@@ -1,0 +1,3342 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nome da espécie sem o prefixo ssm_ — precisa bater com o nome da pasta assets/portraits/ssm_<name>/."
+    },
+    "gendered": {
+      "type": "boolean",
+      "description": "true = a espécie tem subpastas male/female; false = espécie \"flat\", PNGs NNN.png direto na raiz da pasta."
+    },
+    "rig": {
+      "description": "Rig de retrato compartilhado. Omitido = sl_shared.",
+      "type": "string",
+      "enum": [
+        "sl_shared",
+        "ssm_shared"
+      ]
+    },
+    "modo": {
+      "description": "Modo de enquadramento — só faz sentido em rig com guia (ssm_shared). Omitido = largura.",
+      "type": "string",
+      "enum": [
+        "largura",
+        "altura"
+      ],
+      "enumDescriptions": [
+        "escala a arte pela largura do guia (padrão)",
+        "escala a arte pela altura mínima do guia (composições largas demais pro guia, ou que precisam mostrar algo abaixo do busto)"
+      ]
+    },
+    "ancora": {
+      "description": "O que encosta no topo do guia — só faz sentido em rig com guia (ssm_shared). Omitido = conteudo.",
+      "type": "string",
+      "enum": [
+        "conteudo",
+        "cabeca"
+      ],
+      "enumDescriptions": [
+        "encosta no topo do guia o bounding box da arte (padrão)",
+        "encosta no topo do guia a cabeça, primeira linha densa de pixels opacos"
+      ]
+    },
+    "species_classes": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "HUM",
+          "MAM",
+          "REP",
+          "AVI",
+          "ART",
+          "MOL",
+          "FUN",
+          "PLANT",
+          "LITHOID",
+          "NECROID",
+          "AQUATIC",
+          "TOX",
+          "INF",
+          "MACHINE"
+        ],
+        "enumDescriptions": [
+          "humanoide",
+          "mamífero",
+          "reptiliano",
+          "aviano",
+          "artrópode",
+          "moluscoide",
+          "fungoide",
+          "plantoide — exige o DLC Plantoids Species Pack",
+          "lithoide — exige o DLC Lithoids Species Pack",
+          "necroide — exige o DLC Necroids Species Pack",
+          "aquático — exige o DLC Aquatics Species Pack",
+          "toxoide — exige o DLC Toxoids Species Pack",
+          "infernal — exige o DLC Infernals Species Pack",
+          "máquina"
+        ]
+      },
+      "description": "species_class do Stellaris que esta espécie pode ter, em ORDEM DE PREFERÊNCIA. A primeira recebe o gate positivo do DLC dela; as seguintes acumulam as negações, então quem não tem o DLC cai na próxima da lista (ex.: [\"AQUATIC\",\"HUM\"] = aquática pra quem tem o Aquatics Species Pack, humanoide pros demais). Uma classe só = espécie sem fallback."
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "humanoids",
+          "mammalians",
+          "reptilians",
+          "avians",
+          "arthropoids",
+          "molluscoids",
+          "fungoids",
+          "plantoids",
+          "lithoids",
+          "necroids",
+          "aquatics",
+          "toxoids",
+          "infernals",
+          "machines",
+          "cybernetics",
+          "synthetics",
+          "psionics"
+        ],
+        "enumDescriptions": [
+          "aba Humanoid — espelha a classe HUM",
+          "aba Mammalian — espelha a classe MAM",
+          "aba Reptilian — espelha a classe REP",
+          "aba Avian — espelha a classe AVI",
+          "aba Arthropoid — espelha a classe ART",
+          "aba Molluscoid — espelha a classe MOL",
+          "aba Fungoid — espelha a classe FUN",
+          "aba Plantoid — espelha a classe PLANT",
+          "aba Lithoid — espelha a classe LITHOID",
+          "aba Necroid — espelha a classe NECROID",
+          "aba Aquatic — espelha a classe AQUATIC",
+          "aba Toxoid — espelha a classe TOX",
+          "aba Infernal — espelha a classe INF",
+          "aba Machine — espelha a classe MACHINE",
+          "aba Cybernetic — temática, transversal a classes",
+          "aba Synthetic — temática, transversal a classes",
+          "aba Psionic — temática, transversal a classes"
+        ]
+      },
+      "description": "Categorias (abas do editor de império) onde esta espécie aparece, declaradas por extenso — inclusive as que espelham uma classe declarada em species_classes. \"sagittarius\" nunca é declarada: toda espécie do mod entra nela automaticamente."
+    },
+    "counts": {
+      "type": "object",
+      "properties": {
+        "male": {
+          "description": "Quantidade de variantes masculinas.",
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "female": {
+          "description": "Quantidade de variantes femininas.",
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "flat": {
+          "description": "Quantidade de variantes (espécie sem gênero).",
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "additionalProperties": false,
+      "description": "Quantidade de variantes por gênero — precisa bater exato com os PNGs encontrados em assets/portraits/ssm_<name>/."
+    },
+    "geracaoArt": {
+      "type": "object",
+      "properties": {
+        "base": {
+          "type": "object",
+          "properties": {
+            "person": {
+              "type": "object",
+              "properties": {
+                "age": {
+                  "description": "Idade aparente do indivíduo.",
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "ethnicity": {
+                  "description": "Etnia.",
+                  "type": "string",
+                  "enum": [
+                    "African",
+                    "Asian",
+                    "Caucasian",
+                    "Latino",
+                    "Pacific",
+                    "Mixed",
+                    "Nordic"
+                  ]
+                },
+                "body_shape": {
+                  "description": "Tipo físico/corpo.",
+                  "type": "string",
+                  "enum": [
+                    "Slim",
+                    "Athletic",
+                    "Average",
+                    "Curvy",
+                    "Chubby",
+                    "Hourglass",
+                    "Muscular"
+                  ],
+                  "enumDescriptions": [
+                    "corpo magro",
+                    "corpo atlético",
+                    "corpo mediano",
+                    "corpo com curvas acentuadas",
+                    "corpo rechonchudo",
+                    "corpo em ampulheta, cintura marcada",
+                    "corpo musculoso"
+                  ]
+                },
+                "gender": {
+                  "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                  "type": "string",
+                  "enum": [
+                    "Female",
+                    "Male",
+                    "Androgynous"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Atributos da pessoa/indivíduo."
+            },
+            "hair": {
+              "type": "object",
+              "properties": {
+                "style": {
+                  "description": "Estilo/corte de cabelo.",
+                  "type": "string",
+                  "enum": [
+                    "Short",
+                    "Long",
+                    "Curly",
+                    "Straight",
+                    "Wavy",
+                    "Bald",
+                    "Ponytail",
+                    "Braided",
+                    "Bun",
+                    "Spiky",
+                    "Undercut",
+                    "Afro",
+                    "Dreadlocks",
+                    "Long Curly",
+                    "Short Curly",
+                    "Long Straight",
+                    "Short Straight",
+                    "Long Wavy",
+                    "Short Wavy"
+                  ],
+                  "enumDescriptions": [
+                    "cabelo curto",
+                    "cabelo longo",
+                    "cabelo cacheado",
+                    "cabelo liso",
+                    "cabelo ondulado",
+                    "careca, sem cabelo",
+                    "rabo de cavalo",
+                    "cabelo trançado",
+                    "coque",
+                    "cabelo espetado",
+                    "raspado nas laterais, mais longo no topo",
+                    "cabelo afro (black power)",
+                    "dreadlocks",
+                    "cabelo cacheado longo",
+                    "cabelo cacheado curto",
+                    "cabelo liso longo",
+                    "cabelo liso curto",
+                    "cabelo ondulado longo",
+                    "cabelo ondulado curto"
+                  ]
+                },
+                "primary_color": {
+                  "description": "Cor principal do cabelo.",
+                  "type": "string",
+                  "enum": [
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum",
+                    "Amethyst",
+                    "Pearl"
+                  ]
+                },
+                "secondary_color": {
+                  "description": "Cor secundária do cabelo (mechas, dip-dye, etc.).",
+                  "type": "string",
+                  "enum": [
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum",
+                    "Amethyst",
+                    "Pearl"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Cabelo."
+            },
+            "eyes": {
+              "type": "object",
+              "properties": {
+                "shape": {
+                  "description": "Formato dos olhos.",
+                  "type": "string",
+                  "enum": [
+                    "Round",
+                    "Almond",
+                    "Hooded",
+                    "Monolid",
+                    "Upturned",
+                    "Downturned",
+                    "Oval",
+                    "Closed"
+                  ],
+                  "enumDescriptions": [
+                    "olhos redondos",
+                    "olhos amendoados",
+                    "olhos com pálpebra caída, cobrindo parte da dobra",
+                    "olhos sem dobra visível na pálpebra",
+                    "olhos puxados para cima nos cantos externos",
+                    "olhos caídos para baixo nos cantos externos",
+                    "olhos ovais",
+                    "olhos fechados"
+                  ]
+                },
+                "color": {
+                  "description": "Cor dos olhos.",
+                  "type": "string",
+                  "enum": [
+                    "Blue",
+                    "Green",
+                    "Brown",
+                    "Hazel",
+                    "Gray",
+                    "Amber",
+                    "Violet"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Olhos."
+            },
+            "torso": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "description": "Estado estruturado do tronco (âncora: prioridade alta, peso automático no prompt). Neutro — não julga \"mais coberto é melhor\" (escama à mostra é um estado tão correto quanto armadura completa, dependendo da espécie).",
+                  "type": "string",
+                  "enum": [
+                    "Bare",
+                    "FullyCovered",
+                    "ArmsCoveredTorsoBare",
+                    "TorsoCoveredArmsBare",
+                    "PartiallyCovered",
+                    "CroppedSleeved"
+                  ],
+                  "enumDescriptions": [
+                    "tronco à mostra, sem cobertura",
+                    "tronco totalmente coberto",
+                    "braços cobertos, tronco à mostra",
+                    "tronco coberto, braços à mostra",
+                    "tronco parcialmente coberto",
+                    "peito e braços cobertos (top cropped com manga comprida), barriga à mostra"
+                  ]
+                },
+                "primary_color": {
+                  "description": "Cor principal do que cobre o tronco (mesmo vocabulário de hair.primary_color, reaproveitado).",
+                  "type": "string",
+                  "enum": [
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum",
+                    "Amethyst",
+                    "Pearl"
+                  ]
+                },
+                "secondary_color": {
+                  "description": "Cor secundária/acento do que cobre o tronco (mesmo vocabulário de hair.secondary_color, reaproveitado).",
+                  "type": "string",
+                  "enum": [
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum",
+                    "Amethyst",
+                    "Pearl"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "O que está sobre o tronco do indivíduo — armadura, escama, pele nua, pelagem, roupa comum, o que fizer sentido pra espécie. O template é onde cada cor é posicionada na peça certa (\"...top in <torso.primary_color>, ...waistband in <torso.secondary_color>\"), em vez de as cores saírem soltas e a IA decidir onde aplicá-las."
+            },
+            "species": {
+              "type": "object",
+              "properties": {
+                "archetype": {
+                  "type": "string",
+                  "enum": [
+                    "Human",
+                    "Elf",
+                    "Mermaid",
+                    "Necroid",
+                    "Furry",
+                    "Molluscoid",
+                    "Eldritch",
+                    "Robot",
+                    "Avian",
+                    "Draconic",
+                    "Alien",
+                    "Cyborg"
+                  ],
+                  "description": "Arquétipo visual — categoria ampla, reaproveitável entre espécies visualmente diferentes (ex.: \"Human\" cobre ssm_default, ssm_knight, ssm_astral e ssm_mercenary).",
+                  "enumDescriptions": [
+                    "humano",
+                    "élfico",
+                    "sereia/tritão",
+                    "necroide, morto-vivo/esquelético",
+                    "peludo, antropomórfico animal",
+                    "moluscoide, tipo molusco/lesma",
+                    "eldritch, criatura cósmica/tentacular",
+                    "robótico",
+                    "aviano, tipo ave",
+                    "dracônico, dragão humanoide",
+                    "alienígena genérico",
+                    "ciborgue, parte orgânico e parte máquina"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "archetype"
+              ],
+              "additionalProperties": false,
+              "description": "O que esta ESPÉCIE é — arquétipo visual e o texto que a diferencia das outras que compartilham o mesmo arquétipo. Só pode ser declarada em geracaoArt.base: descreve a espécie inteira, não o indivíduo (o que varia por indivíduo é person/hair/eyes/torso)."
+            }
+          },
+          "additionalProperties": false,
+          "description": "Atributos da espécie (species) mais os do indivíduo — forma do bloco \"base\" e do objeto mesclado que alimenta o prompt."
+        },
+        "modelo": {
+          "type": "object",
+          "properties": {
+            "variant": {
+              "description": "\"distilled\" (4 passos, CFG=1, o negativo é descartado via ConditioningZeroOut — padrão) ou \"base\" (20 passos, CFG=5, negativo real; ~5x mais lento, para o lote final quando a qualidade extra compensar). Ausente = \"distilled\".",
+              "type": "string",
+              "enum": [
+                "distilled",
+                "base"
+              ]
+            },
+            "steps": {
+              "description": "Passos do sampler (Flux2Scheduler). Ausente mantém o padrão da variante (\"distilled\"=4, \"base\"=20).",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "cfg": {
+              "description": "CFG scale do CFGGuider. Ausente mantém o padrão da variante (\"distilled\"=1 — CFG≠1 nessa variante tende a degradar a qualidade, já que a guidance foi destilada nos pesos —, \"base\"=5).",
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "aspectRatio": {
+              "description": "Proporção largura:altura livre (ex.: \"2:3\", \"4:5\", \"1:1\") — width/height são derivados preservando a contagem de megapixels do quadrado 1024x1024 (padrão do Flux.2 Klein), arredondados pro múltiplo de 16 mais próximo. Ausente = \"1:1\".",
+              "type": "string",
+              "pattern": "^\\d+:\\d+$"
+            }
+          },
+          "additionalProperties": false,
+          "description": "Configuração de sampler/resolução do Flux.2 Klein — ver geracaoArt."
+        },
+        "male": {
+          "type": "object",
+          "properties": {
+            "person": {
+              "type": "object",
+              "properties": {
+                "age": {
+                  "description": "Idade aparente do indivíduo.",
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "ethnicity": {
+                  "description": "Etnia.",
+                  "type": "string",
+                  "enum": [
+                    "African",
+                    "Asian",
+                    "Caucasian",
+                    "Latino",
+                    "Pacific",
+                    "Mixed",
+                    "Nordic"
+                  ]
+                },
+                "body_shape": {
+                  "description": "Tipo físico/corpo.",
+                  "type": "string",
+                  "enum": [
+                    "Slim",
+                    "Athletic",
+                    "Average",
+                    "Curvy",
+                    "Chubby",
+                    "Hourglass",
+                    "Muscular"
+                  ],
+                  "enumDescriptions": [
+                    "corpo magro",
+                    "corpo atlético",
+                    "corpo mediano",
+                    "corpo com curvas acentuadas",
+                    "corpo rechonchudo",
+                    "corpo em ampulheta, cintura marcada",
+                    "corpo musculoso"
+                  ]
+                },
+                "gender": {
+                  "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                  "type": "string",
+                  "enum": [
+                    "Female",
+                    "Male",
+                    "Androgynous"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Atributos da pessoa/indivíduo."
+            },
+            "hair": {
+              "type": "object",
+              "properties": {
+                "style": {
+                  "description": "Estilo/corte de cabelo.",
+                  "type": "string",
+                  "enum": [
+                    "Short",
+                    "Long",
+                    "Curly",
+                    "Straight",
+                    "Wavy",
+                    "Bald",
+                    "Ponytail",
+                    "Braided",
+                    "Bun",
+                    "Spiky",
+                    "Undercut",
+                    "Afro",
+                    "Dreadlocks",
+                    "Long Curly",
+                    "Short Curly",
+                    "Long Straight",
+                    "Short Straight",
+                    "Long Wavy",
+                    "Short Wavy"
+                  ],
+                  "enumDescriptions": [
+                    "cabelo curto",
+                    "cabelo longo",
+                    "cabelo cacheado",
+                    "cabelo liso",
+                    "cabelo ondulado",
+                    "careca, sem cabelo",
+                    "rabo de cavalo",
+                    "cabelo trançado",
+                    "coque",
+                    "cabelo espetado",
+                    "raspado nas laterais, mais longo no topo",
+                    "cabelo afro (black power)",
+                    "dreadlocks",
+                    "cabelo cacheado longo",
+                    "cabelo cacheado curto",
+                    "cabelo liso longo",
+                    "cabelo liso curto",
+                    "cabelo ondulado longo",
+                    "cabelo ondulado curto"
+                  ]
+                },
+                "primary_color": {
+                  "description": "Cor principal do cabelo.",
+                  "type": "string",
+                  "enum": [
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum",
+                    "Amethyst",
+                    "Pearl"
+                  ]
+                },
+                "secondary_color": {
+                  "description": "Cor secundária do cabelo (mechas, dip-dye, etc.).",
+                  "type": "string",
+                  "enum": [
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum",
+                    "Amethyst",
+                    "Pearl"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Cabelo."
+            },
+            "eyes": {
+              "type": "object",
+              "properties": {
+                "shape": {
+                  "description": "Formato dos olhos.",
+                  "type": "string",
+                  "enum": [
+                    "Round",
+                    "Almond",
+                    "Hooded",
+                    "Monolid",
+                    "Upturned",
+                    "Downturned",
+                    "Oval",
+                    "Closed"
+                  ],
+                  "enumDescriptions": [
+                    "olhos redondos",
+                    "olhos amendoados",
+                    "olhos com pálpebra caída, cobrindo parte da dobra",
+                    "olhos sem dobra visível na pálpebra",
+                    "olhos puxados para cima nos cantos externos",
+                    "olhos caídos para baixo nos cantos externos",
+                    "olhos ovais",
+                    "olhos fechados"
+                  ]
+                },
+                "color": {
+                  "description": "Cor dos olhos.",
+                  "type": "string",
+                  "enum": [
+                    "Blue",
+                    "Green",
+                    "Brown",
+                    "Hazel",
+                    "Gray",
+                    "Amber",
+                    "Violet"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Olhos."
+            },
+            "torso": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "description": "Estado estruturado do tronco (âncora: prioridade alta, peso automático no prompt). Neutro — não julga \"mais coberto é melhor\" (escama à mostra é um estado tão correto quanto armadura completa, dependendo da espécie).",
+                  "type": "string",
+                  "enum": [
+                    "Bare",
+                    "FullyCovered",
+                    "ArmsCoveredTorsoBare",
+                    "TorsoCoveredArmsBare",
+                    "PartiallyCovered",
+                    "CroppedSleeved"
+                  ],
+                  "enumDescriptions": [
+                    "tronco à mostra, sem cobertura",
+                    "tronco totalmente coberto",
+                    "braços cobertos, tronco à mostra",
+                    "tronco coberto, braços à mostra",
+                    "tronco parcialmente coberto",
+                    "peito e braços cobertos (top cropped com manga comprida), barriga à mostra"
+                  ]
+                },
+                "primary_color": {
+                  "description": "Cor principal do que cobre o tronco (mesmo vocabulário de hair.primary_color, reaproveitado).",
+                  "type": "string",
+                  "enum": [
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum",
+                    "Amethyst",
+                    "Pearl"
+                  ]
+                },
+                "secondary_color": {
+                  "description": "Cor secundária/acento do que cobre o tronco (mesmo vocabulário de hair.secondary_color, reaproveitado).",
+                  "type": "string",
+                  "enum": [
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum",
+                    "Amethyst",
+                    "Pearl"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "O que está sobre o tronco do indivíduo — armadura, escama, pele nua, pelagem, roupa comum, o que fizer sentido pra espécie. O template é onde cada cor é posicionada na peça certa (\"...top in <torso.primary_color>, ...waistband in <torso.secondary_color>\"), em vez de as cores saírem soltas e a IA decidir onde aplicá-las."
+            },
+            "referenceImage": {
+              "description": "Imagens de referência (conceito visual, ex.: gerado no Midjourney) deste gênero — cada entrada é um indivíduo/conceito diferente da espécie (não ângulos do mesmo personagem), encadeadas via ReferenceLatent pra dar amplitude visual ao resultado. Uma lista só por gênero, sem override por variante. Ausente/vazio = txt2img puro, sem referência.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "variantes": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "pattern": "^\\d{3}$"
+              },
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "person": {
+                    "type": "object",
+                    "properties": {
+                      "age": {
+                        "description": "Idade aparente do indivíduo.",
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "ethnicity": {
+                        "description": "Etnia.",
+                        "type": "string",
+                        "enum": [
+                          "African",
+                          "Asian",
+                          "Caucasian",
+                          "Latino",
+                          "Pacific",
+                          "Mixed",
+                          "Nordic"
+                        ]
+                      },
+                      "body_shape": {
+                        "description": "Tipo físico/corpo.",
+                        "type": "string",
+                        "enum": [
+                          "Slim",
+                          "Athletic",
+                          "Average",
+                          "Curvy",
+                          "Chubby",
+                          "Hourglass",
+                          "Muscular"
+                        ],
+                        "enumDescriptions": [
+                          "corpo magro",
+                          "corpo atlético",
+                          "corpo mediano",
+                          "corpo com curvas acentuadas",
+                          "corpo rechonchudo",
+                          "corpo em ampulheta, cintura marcada",
+                          "corpo musculoso"
+                        ]
+                      },
+                      "gender": {
+                        "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                        "type": "string",
+                        "enum": [
+                          "Female",
+                          "Male",
+                          "Androgynous"
+                        ]
+                      },
+                      "template": {
+                        "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                        "type": "string"
+                      },
+                      "extra": {
+                        "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Atributos da pessoa/indivíduo."
+                  },
+                  "hair": {
+                    "type": "object",
+                    "properties": {
+                      "style": {
+                        "description": "Estilo/corte de cabelo.",
+                        "type": "string",
+                        "enum": [
+                          "Short",
+                          "Long",
+                          "Curly",
+                          "Straight",
+                          "Wavy",
+                          "Bald",
+                          "Ponytail",
+                          "Braided",
+                          "Bun",
+                          "Spiky",
+                          "Undercut",
+                          "Afro",
+                          "Dreadlocks",
+                          "Long Curly",
+                          "Short Curly",
+                          "Long Straight",
+                          "Short Straight",
+                          "Long Wavy",
+                          "Short Wavy"
+                        ],
+                        "enumDescriptions": [
+                          "cabelo curto",
+                          "cabelo longo",
+                          "cabelo cacheado",
+                          "cabelo liso",
+                          "cabelo ondulado",
+                          "careca, sem cabelo",
+                          "rabo de cavalo",
+                          "cabelo trançado",
+                          "coque",
+                          "cabelo espetado",
+                          "raspado nas laterais, mais longo no topo",
+                          "cabelo afro (black power)",
+                          "dreadlocks",
+                          "cabelo cacheado longo",
+                          "cabelo cacheado curto",
+                          "cabelo liso longo",
+                          "cabelo liso curto",
+                          "cabelo ondulado longo",
+                          "cabelo ondulado curto"
+                        ]
+                      },
+                      "primary_color": {
+                        "description": "Cor principal do cabelo.",
+                        "type": "string",
+                        "enum": [
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum",
+                          "Amethyst",
+                          "Pearl"
+                        ]
+                      },
+                      "secondary_color": {
+                        "description": "Cor secundária do cabelo (mechas, dip-dye, etc.).",
+                        "type": "string",
+                        "enum": [
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum",
+                          "Amethyst",
+                          "Pearl"
+                        ]
+                      },
+                      "template": {
+                        "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                        "type": "string"
+                      },
+                      "extra": {
+                        "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Cabelo."
+                  },
+                  "eyes": {
+                    "type": "object",
+                    "properties": {
+                      "shape": {
+                        "description": "Formato dos olhos.",
+                        "type": "string",
+                        "enum": [
+                          "Round",
+                          "Almond",
+                          "Hooded",
+                          "Monolid",
+                          "Upturned",
+                          "Downturned",
+                          "Oval",
+                          "Closed"
+                        ],
+                        "enumDescriptions": [
+                          "olhos redondos",
+                          "olhos amendoados",
+                          "olhos com pálpebra caída, cobrindo parte da dobra",
+                          "olhos sem dobra visível na pálpebra",
+                          "olhos puxados para cima nos cantos externos",
+                          "olhos caídos para baixo nos cantos externos",
+                          "olhos ovais",
+                          "olhos fechados"
+                        ]
+                      },
+                      "color": {
+                        "description": "Cor dos olhos.",
+                        "type": "string",
+                        "enum": [
+                          "Blue",
+                          "Green",
+                          "Brown",
+                          "Hazel",
+                          "Gray",
+                          "Amber",
+                          "Violet"
+                        ]
+                      },
+                      "template": {
+                        "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                        "type": "string"
+                      },
+                      "extra": {
+                        "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Olhos."
+                  },
+                  "torso": {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "description": "Estado estruturado do tronco (âncora: prioridade alta, peso automático no prompt). Neutro — não julga \"mais coberto é melhor\" (escama à mostra é um estado tão correto quanto armadura completa, dependendo da espécie).",
+                        "type": "string",
+                        "enum": [
+                          "Bare",
+                          "FullyCovered",
+                          "ArmsCoveredTorsoBare",
+                          "TorsoCoveredArmsBare",
+                          "PartiallyCovered",
+                          "CroppedSleeved"
+                        ],
+                        "enumDescriptions": [
+                          "tronco à mostra, sem cobertura",
+                          "tronco totalmente coberto",
+                          "braços cobertos, tronco à mostra",
+                          "tronco coberto, braços à mostra",
+                          "tronco parcialmente coberto",
+                          "peito e braços cobertos (top cropped com manga comprida), barriga à mostra"
+                        ]
+                      },
+                      "primary_color": {
+                        "description": "Cor principal do que cobre o tronco (mesmo vocabulário de hair.primary_color, reaproveitado).",
+                        "type": "string",
+                        "enum": [
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum",
+                          "Amethyst",
+                          "Pearl"
+                        ]
+                      },
+                      "secondary_color": {
+                        "description": "Cor secundária/acento do que cobre o tronco (mesmo vocabulário de hair.secondary_color, reaproveitado).",
+                        "type": "string",
+                        "enum": [
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum",
+                          "Amethyst",
+                          "Pearl"
+                        ]
+                      },
+                      "template": {
+                        "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                        "type": "string"
+                      },
+                      "extra": {
+                        "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "O que está sobre o tronco do indivíduo — armadura, escama, pele nua, pelagem, roupa comum, o que fizer sentido pra espécie. O template é onde cada cor é posicionada na peça certa (\"...top in <torso.primary_color>, ...waistband in <torso.secondary_color>\"), em vez de as cores saírem soltas e a IA decidir onde aplicá-las."
+                  },
+                  "seed": {
+                    "description": "Seed de geração desta variante (noise_seed do ComfyUI) — a seed da imagem em disco, gravada automaticamente por qualquer forma de \"bun run art --seed\" (um inteiro fixa aquele valor; sem valor sorteia um) ou colada à mão. Fixa a imagem: reexecuções sem --seed reproduzem esta seed. Ausente = usa a seed determinística; \"--seed default\" apaga esta chave e devolve a variante a ela.",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Uma variante nomeada por indivíduo — chave é o índice zero-padded a 3 dígitos (\"001\"..\"NNN\"), mesma convenção do PNG final. A contagem de chaves precisa bater exatamente com counts.<gênero>."
+            }
+          },
+          "required": [
+            "variantes"
+          ],
+          "additionalProperties": false,
+          "description": "Bloco de um gênero (male/female/flat): overrides sobre base, mais uma variante nomeada por indivíduo."
+        },
+        "female": {
+          "type": "object",
+          "properties": {
+            "person": {
+              "type": "object",
+              "properties": {
+                "age": {
+                  "description": "Idade aparente do indivíduo.",
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "ethnicity": {
+                  "description": "Etnia.",
+                  "type": "string",
+                  "enum": [
+                    "African",
+                    "Asian",
+                    "Caucasian",
+                    "Latino",
+                    "Pacific",
+                    "Mixed",
+                    "Nordic"
+                  ]
+                },
+                "body_shape": {
+                  "description": "Tipo físico/corpo.",
+                  "type": "string",
+                  "enum": [
+                    "Slim",
+                    "Athletic",
+                    "Average",
+                    "Curvy",
+                    "Chubby",
+                    "Hourglass",
+                    "Muscular"
+                  ],
+                  "enumDescriptions": [
+                    "corpo magro",
+                    "corpo atlético",
+                    "corpo mediano",
+                    "corpo com curvas acentuadas",
+                    "corpo rechonchudo",
+                    "corpo em ampulheta, cintura marcada",
+                    "corpo musculoso"
+                  ]
+                },
+                "gender": {
+                  "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                  "type": "string",
+                  "enum": [
+                    "Female",
+                    "Male",
+                    "Androgynous"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Atributos da pessoa/indivíduo."
+            },
+            "hair": {
+              "type": "object",
+              "properties": {
+                "style": {
+                  "description": "Estilo/corte de cabelo.",
+                  "type": "string",
+                  "enum": [
+                    "Short",
+                    "Long",
+                    "Curly",
+                    "Straight",
+                    "Wavy",
+                    "Bald",
+                    "Ponytail",
+                    "Braided",
+                    "Bun",
+                    "Spiky",
+                    "Undercut",
+                    "Afro",
+                    "Dreadlocks",
+                    "Long Curly",
+                    "Short Curly",
+                    "Long Straight",
+                    "Short Straight",
+                    "Long Wavy",
+                    "Short Wavy"
+                  ],
+                  "enumDescriptions": [
+                    "cabelo curto",
+                    "cabelo longo",
+                    "cabelo cacheado",
+                    "cabelo liso",
+                    "cabelo ondulado",
+                    "careca, sem cabelo",
+                    "rabo de cavalo",
+                    "cabelo trançado",
+                    "coque",
+                    "cabelo espetado",
+                    "raspado nas laterais, mais longo no topo",
+                    "cabelo afro (black power)",
+                    "dreadlocks",
+                    "cabelo cacheado longo",
+                    "cabelo cacheado curto",
+                    "cabelo liso longo",
+                    "cabelo liso curto",
+                    "cabelo ondulado longo",
+                    "cabelo ondulado curto"
+                  ]
+                },
+                "primary_color": {
+                  "description": "Cor principal do cabelo.",
+                  "type": "string",
+                  "enum": [
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum",
+                    "Amethyst",
+                    "Pearl"
+                  ]
+                },
+                "secondary_color": {
+                  "description": "Cor secundária do cabelo (mechas, dip-dye, etc.).",
+                  "type": "string",
+                  "enum": [
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum",
+                    "Amethyst",
+                    "Pearl"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Cabelo."
+            },
+            "eyes": {
+              "type": "object",
+              "properties": {
+                "shape": {
+                  "description": "Formato dos olhos.",
+                  "type": "string",
+                  "enum": [
+                    "Round",
+                    "Almond",
+                    "Hooded",
+                    "Monolid",
+                    "Upturned",
+                    "Downturned",
+                    "Oval",
+                    "Closed"
+                  ],
+                  "enumDescriptions": [
+                    "olhos redondos",
+                    "olhos amendoados",
+                    "olhos com pálpebra caída, cobrindo parte da dobra",
+                    "olhos sem dobra visível na pálpebra",
+                    "olhos puxados para cima nos cantos externos",
+                    "olhos caídos para baixo nos cantos externos",
+                    "olhos ovais",
+                    "olhos fechados"
+                  ]
+                },
+                "color": {
+                  "description": "Cor dos olhos.",
+                  "type": "string",
+                  "enum": [
+                    "Blue",
+                    "Green",
+                    "Brown",
+                    "Hazel",
+                    "Gray",
+                    "Amber",
+                    "Violet"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Olhos."
+            },
+            "torso": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "description": "Estado estruturado do tronco (âncora: prioridade alta, peso automático no prompt). Neutro — não julga \"mais coberto é melhor\" (escama à mostra é um estado tão correto quanto armadura completa, dependendo da espécie).",
+                  "type": "string",
+                  "enum": [
+                    "Bare",
+                    "FullyCovered",
+                    "ArmsCoveredTorsoBare",
+                    "TorsoCoveredArmsBare",
+                    "PartiallyCovered",
+                    "CroppedSleeved"
+                  ],
+                  "enumDescriptions": [
+                    "tronco à mostra, sem cobertura",
+                    "tronco totalmente coberto",
+                    "braços cobertos, tronco à mostra",
+                    "tronco coberto, braços à mostra",
+                    "tronco parcialmente coberto",
+                    "peito e braços cobertos (top cropped com manga comprida), barriga à mostra"
+                  ]
+                },
+                "primary_color": {
+                  "description": "Cor principal do que cobre o tronco (mesmo vocabulário de hair.primary_color, reaproveitado).",
+                  "type": "string",
+                  "enum": [
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum",
+                    "Amethyst",
+                    "Pearl"
+                  ]
+                },
+                "secondary_color": {
+                  "description": "Cor secundária/acento do que cobre o tronco (mesmo vocabulário de hair.secondary_color, reaproveitado).",
+                  "type": "string",
+                  "enum": [
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum",
+                    "Amethyst",
+                    "Pearl"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "O que está sobre o tronco do indivíduo — armadura, escama, pele nua, pelagem, roupa comum, o que fizer sentido pra espécie. O template é onde cada cor é posicionada na peça certa (\"...top in <torso.primary_color>, ...waistband in <torso.secondary_color>\"), em vez de as cores saírem soltas e a IA decidir onde aplicá-las."
+            },
+            "referenceImage": {
+              "description": "Imagens de referência (conceito visual, ex.: gerado no Midjourney) deste gênero — cada entrada é um indivíduo/conceito diferente da espécie (não ângulos do mesmo personagem), encadeadas via ReferenceLatent pra dar amplitude visual ao resultado. Uma lista só por gênero, sem override por variante. Ausente/vazio = txt2img puro, sem referência.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "variantes": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "pattern": "^\\d{3}$"
+              },
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "person": {
+                    "type": "object",
+                    "properties": {
+                      "age": {
+                        "description": "Idade aparente do indivíduo.",
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "ethnicity": {
+                        "description": "Etnia.",
+                        "type": "string",
+                        "enum": [
+                          "African",
+                          "Asian",
+                          "Caucasian",
+                          "Latino",
+                          "Pacific",
+                          "Mixed",
+                          "Nordic"
+                        ]
+                      },
+                      "body_shape": {
+                        "description": "Tipo físico/corpo.",
+                        "type": "string",
+                        "enum": [
+                          "Slim",
+                          "Athletic",
+                          "Average",
+                          "Curvy",
+                          "Chubby",
+                          "Hourglass",
+                          "Muscular"
+                        ],
+                        "enumDescriptions": [
+                          "corpo magro",
+                          "corpo atlético",
+                          "corpo mediano",
+                          "corpo com curvas acentuadas",
+                          "corpo rechonchudo",
+                          "corpo em ampulheta, cintura marcada",
+                          "corpo musculoso"
+                        ]
+                      },
+                      "gender": {
+                        "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                        "type": "string",
+                        "enum": [
+                          "Female",
+                          "Male",
+                          "Androgynous"
+                        ]
+                      },
+                      "template": {
+                        "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                        "type": "string"
+                      },
+                      "extra": {
+                        "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Atributos da pessoa/indivíduo."
+                  },
+                  "hair": {
+                    "type": "object",
+                    "properties": {
+                      "style": {
+                        "description": "Estilo/corte de cabelo.",
+                        "type": "string",
+                        "enum": [
+                          "Short",
+                          "Long",
+                          "Curly",
+                          "Straight",
+                          "Wavy",
+                          "Bald",
+                          "Ponytail",
+                          "Braided",
+                          "Bun",
+                          "Spiky",
+                          "Undercut",
+                          "Afro",
+                          "Dreadlocks",
+                          "Long Curly",
+                          "Short Curly",
+                          "Long Straight",
+                          "Short Straight",
+                          "Long Wavy",
+                          "Short Wavy"
+                        ],
+                        "enumDescriptions": [
+                          "cabelo curto",
+                          "cabelo longo",
+                          "cabelo cacheado",
+                          "cabelo liso",
+                          "cabelo ondulado",
+                          "careca, sem cabelo",
+                          "rabo de cavalo",
+                          "cabelo trançado",
+                          "coque",
+                          "cabelo espetado",
+                          "raspado nas laterais, mais longo no topo",
+                          "cabelo afro (black power)",
+                          "dreadlocks",
+                          "cabelo cacheado longo",
+                          "cabelo cacheado curto",
+                          "cabelo liso longo",
+                          "cabelo liso curto",
+                          "cabelo ondulado longo",
+                          "cabelo ondulado curto"
+                        ]
+                      },
+                      "primary_color": {
+                        "description": "Cor principal do cabelo.",
+                        "type": "string",
+                        "enum": [
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum",
+                          "Amethyst",
+                          "Pearl"
+                        ]
+                      },
+                      "secondary_color": {
+                        "description": "Cor secundária do cabelo (mechas, dip-dye, etc.).",
+                        "type": "string",
+                        "enum": [
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum",
+                          "Amethyst",
+                          "Pearl"
+                        ]
+                      },
+                      "template": {
+                        "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                        "type": "string"
+                      },
+                      "extra": {
+                        "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Cabelo."
+                  },
+                  "eyes": {
+                    "type": "object",
+                    "properties": {
+                      "shape": {
+                        "description": "Formato dos olhos.",
+                        "type": "string",
+                        "enum": [
+                          "Round",
+                          "Almond",
+                          "Hooded",
+                          "Monolid",
+                          "Upturned",
+                          "Downturned",
+                          "Oval",
+                          "Closed"
+                        ],
+                        "enumDescriptions": [
+                          "olhos redondos",
+                          "olhos amendoados",
+                          "olhos com pálpebra caída, cobrindo parte da dobra",
+                          "olhos sem dobra visível na pálpebra",
+                          "olhos puxados para cima nos cantos externos",
+                          "olhos caídos para baixo nos cantos externos",
+                          "olhos ovais",
+                          "olhos fechados"
+                        ]
+                      },
+                      "color": {
+                        "description": "Cor dos olhos.",
+                        "type": "string",
+                        "enum": [
+                          "Blue",
+                          "Green",
+                          "Brown",
+                          "Hazel",
+                          "Gray",
+                          "Amber",
+                          "Violet"
+                        ]
+                      },
+                      "template": {
+                        "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                        "type": "string"
+                      },
+                      "extra": {
+                        "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Olhos."
+                  },
+                  "torso": {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "description": "Estado estruturado do tronco (âncora: prioridade alta, peso automático no prompt). Neutro — não julga \"mais coberto é melhor\" (escama à mostra é um estado tão correto quanto armadura completa, dependendo da espécie).",
+                        "type": "string",
+                        "enum": [
+                          "Bare",
+                          "FullyCovered",
+                          "ArmsCoveredTorsoBare",
+                          "TorsoCoveredArmsBare",
+                          "PartiallyCovered",
+                          "CroppedSleeved"
+                        ],
+                        "enumDescriptions": [
+                          "tronco à mostra, sem cobertura",
+                          "tronco totalmente coberto",
+                          "braços cobertos, tronco à mostra",
+                          "tronco coberto, braços à mostra",
+                          "tronco parcialmente coberto",
+                          "peito e braços cobertos (top cropped com manga comprida), barriga à mostra"
+                        ]
+                      },
+                      "primary_color": {
+                        "description": "Cor principal do que cobre o tronco (mesmo vocabulário de hair.primary_color, reaproveitado).",
+                        "type": "string",
+                        "enum": [
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum",
+                          "Amethyst",
+                          "Pearl"
+                        ]
+                      },
+                      "secondary_color": {
+                        "description": "Cor secundária/acento do que cobre o tronco (mesmo vocabulário de hair.secondary_color, reaproveitado).",
+                        "type": "string",
+                        "enum": [
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum",
+                          "Amethyst",
+                          "Pearl"
+                        ]
+                      },
+                      "template": {
+                        "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                        "type": "string"
+                      },
+                      "extra": {
+                        "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "O que está sobre o tronco do indivíduo — armadura, escama, pele nua, pelagem, roupa comum, o que fizer sentido pra espécie. O template é onde cada cor é posicionada na peça certa (\"...top in <torso.primary_color>, ...waistband in <torso.secondary_color>\"), em vez de as cores saírem soltas e a IA decidir onde aplicá-las."
+                  },
+                  "seed": {
+                    "description": "Seed de geração desta variante (noise_seed do ComfyUI) — a seed da imagem em disco, gravada automaticamente por qualquer forma de \"bun run art --seed\" (um inteiro fixa aquele valor; sem valor sorteia um) ou colada à mão. Fixa a imagem: reexecuções sem --seed reproduzem esta seed. Ausente = usa a seed determinística; \"--seed default\" apaga esta chave e devolve a variante a ela.",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Uma variante nomeada por indivíduo — chave é o índice zero-padded a 3 dígitos (\"001\"..\"NNN\"), mesma convenção do PNG final. A contagem de chaves precisa bater exatamente com counts.<gênero>."
+            }
+          },
+          "required": [
+            "variantes"
+          ],
+          "additionalProperties": false,
+          "description": "Bloco de um gênero (male/female/flat): overrides sobre base, mais uma variante nomeada por indivíduo."
+        },
+        "flat": {
+          "type": "object",
+          "properties": {
+            "person": {
+              "type": "object",
+              "properties": {
+                "age": {
+                  "description": "Idade aparente do indivíduo.",
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "ethnicity": {
+                  "description": "Etnia.",
+                  "type": "string",
+                  "enum": [
+                    "African",
+                    "Asian",
+                    "Caucasian",
+                    "Latino",
+                    "Pacific",
+                    "Mixed",
+                    "Nordic"
+                  ]
+                },
+                "body_shape": {
+                  "description": "Tipo físico/corpo.",
+                  "type": "string",
+                  "enum": [
+                    "Slim",
+                    "Athletic",
+                    "Average",
+                    "Curvy",
+                    "Chubby",
+                    "Hourglass",
+                    "Muscular"
+                  ],
+                  "enumDescriptions": [
+                    "corpo magro",
+                    "corpo atlético",
+                    "corpo mediano",
+                    "corpo com curvas acentuadas",
+                    "corpo rechonchudo",
+                    "corpo em ampulheta, cintura marcada",
+                    "corpo musculoso"
+                  ]
+                },
+                "gender": {
+                  "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                  "type": "string",
+                  "enum": [
+                    "Female",
+                    "Male",
+                    "Androgynous"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Atributos da pessoa/indivíduo."
+            },
+            "hair": {
+              "type": "object",
+              "properties": {
+                "style": {
+                  "description": "Estilo/corte de cabelo.",
+                  "type": "string",
+                  "enum": [
+                    "Short",
+                    "Long",
+                    "Curly",
+                    "Straight",
+                    "Wavy",
+                    "Bald",
+                    "Ponytail",
+                    "Braided",
+                    "Bun",
+                    "Spiky",
+                    "Undercut",
+                    "Afro",
+                    "Dreadlocks",
+                    "Long Curly",
+                    "Short Curly",
+                    "Long Straight",
+                    "Short Straight",
+                    "Long Wavy",
+                    "Short Wavy"
+                  ],
+                  "enumDescriptions": [
+                    "cabelo curto",
+                    "cabelo longo",
+                    "cabelo cacheado",
+                    "cabelo liso",
+                    "cabelo ondulado",
+                    "careca, sem cabelo",
+                    "rabo de cavalo",
+                    "cabelo trançado",
+                    "coque",
+                    "cabelo espetado",
+                    "raspado nas laterais, mais longo no topo",
+                    "cabelo afro (black power)",
+                    "dreadlocks",
+                    "cabelo cacheado longo",
+                    "cabelo cacheado curto",
+                    "cabelo liso longo",
+                    "cabelo liso curto",
+                    "cabelo ondulado longo",
+                    "cabelo ondulado curto"
+                  ]
+                },
+                "primary_color": {
+                  "description": "Cor principal do cabelo.",
+                  "type": "string",
+                  "enum": [
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum",
+                    "Amethyst",
+                    "Pearl"
+                  ]
+                },
+                "secondary_color": {
+                  "description": "Cor secundária do cabelo (mechas, dip-dye, etc.).",
+                  "type": "string",
+                  "enum": [
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum",
+                    "Amethyst",
+                    "Pearl"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Cabelo."
+            },
+            "eyes": {
+              "type": "object",
+              "properties": {
+                "shape": {
+                  "description": "Formato dos olhos.",
+                  "type": "string",
+                  "enum": [
+                    "Round",
+                    "Almond",
+                    "Hooded",
+                    "Monolid",
+                    "Upturned",
+                    "Downturned",
+                    "Oval",
+                    "Closed"
+                  ],
+                  "enumDescriptions": [
+                    "olhos redondos",
+                    "olhos amendoados",
+                    "olhos com pálpebra caída, cobrindo parte da dobra",
+                    "olhos sem dobra visível na pálpebra",
+                    "olhos puxados para cima nos cantos externos",
+                    "olhos caídos para baixo nos cantos externos",
+                    "olhos ovais",
+                    "olhos fechados"
+                  ]
+                },
+                "color": {
+                  "description": "Cor dos olhos.",
+                  "type": "string",
+                  "enum": [
+                    "Blue",
+                    "Green",
+                    "Brown",
+                    "Hazel",
+                    "Gray",
+                    "Amber",
+                    "Violet"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Olhos."
+            },
+            "torso": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "description": "Estado estruturado do tronco (âncora: prioridade alta, peso automático no prompt). Neutro — não julga \"mais coberto é melhor\" (escama à mostra é um estado tão correto quanto armadura completa, dependendo da espécie).",
+                  "type": "string",
+                  "enum": [
+                    "Bare",
+                    "FullyCovered",
+                    "ArmsCoveredTorsoBare",
+                    "TorsoCoveredArmsBare",
+                    "PartiallyCovered",
+                    "CroppedSleeved"
+                  ],
+                  "enumDescriptions": [
+                    "tronco à mostra, sem cobertura",
+                    "tronco totalmente coberto",
+                    "braços cobertos, tronco à mostra",
+                    "tronco coberto, braços à mostra",
+                    "tronco parcialmente coberto",
+                    "peito e braços cobertos (top cropped com manga comprida), barriga à mostra"
+                  ]
+                },
+                "primary_color": {
+                  "description": "Cor principal do que cobre o tronco (mesmo vocabulário de hair.primary_color, reaproveitado).",
+                  "type": "string",
+                  "enum": [
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum",
+                    "Amethyst",
+                    "Pearl"
+                  ]
+                },
+                "secondary_color": {
+                  "description": "Cor secundária/acento do que cobre o tronco (mesmo vocabulário de hair.secondary_color, reaproveitado).",
+                  "type": "string",
+                  "enum": [
+                    "Black",
+                    "Brown",
+                    "Blonde",
+                    "Red",
+                    "White",
+                    "Gray",
+                    "Blue",
+                    "Green",
+                    "Pink",
+                    "Purple",
+                    "Orange",
+                    "Yellow",
+                    "Teal",
+                    "Cyan",
+                    "Magenta",
+                    "Maroon",
+                    "Turquoise",
+                    "Lavender",
+                    "Beige",
+                    "Gold",
+                    "Silver",
+                    "Bronze",
+                    "Copper",
+                    "Indigo",
+                    "Violet",
+                    "Lilac",
+                    "Burgundy",
+                    "Olive",
+                    "Peach",
+                    "Coral",
+                    "Mint",
+                    "Azure",
+                    "Amber",
+                    "Charcoal",
+                    "Navy",
+                    "Sky Blue",
+                    "Lime",
+                    "Mustard",
+                    "Rose",
+                    "Periwinkle",
+                    "Salmon",
+                    "Emerald",
+                    "Sapphire",
+                    "Ruby",
+                    "Platinum",
+                    "Amethyst",
+                    "Pearl"
+                  ]
+                },
+                "template": {
+                  "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                  "type": "string"
+                },
+                "extra": {
+                  "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "description": "O que está sobre o tronco do indivíduo — armadura, escama, pele nua, pelagem, roupa comum, o que fizer sentido pra espécie. O template é onde cada cor é posicionada na peça certa (\"...top in <torso.primary_color>, ...waistband in <torso.secondary_color>\"), em vez de as cores saírem soltas e a IA decidir onde aplicá-las."
+            },
+            "referenceImage": {
+              "description": "Imagens de referência (conceito visual, ex.: gerado no Midjourney) deste gênero — cada entrada é um indivíduo/conceito diferente da espécie (não ângulos do mesmo personagem), encadeadas via ReferenceLatent pra dar amplitude visual ao resultado. Uma lista só por gênero, sem override por variante. Ausente/vazio = txt2img puro, sem referência.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "variantes": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "pattern": "^\\d{3}$"
+              },
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "person": {
+                    "type": "object",
+                    "properties": {
+                      "age": {
+                        "description": "Idade aparente do indivíduo.",
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "ethnicity": {
+                        "description": "Etnia.",
+                        "type": "string",
+                        "enum": [
+                          "African",
+                          "Asian",
+                          "Caucasian",
+                          "Latino",
+                          "Pacific",
+                          "Mixed",
+                          "Nordic"
+                        ]
+                      },
+                      "body_shape": {
+                        "description": "Tipo físico/corpo.",
+                        "type": "string",
+                        "enum": [
+                          "Slim",
+                          "Athletic",
+                          "Average",
+                          "Curvy",
+                          "Chubby",
+                          "Hourglass",
+                          "Muscular"
+                        ],
+                        "enumDescriptions": [
+                          "corpo magro",
+                          "corpo atlético",
+                          "corpo mediano",
+                          "corpo com curvas acentuadas",
+                          "corpo rechonchudo",
+                          "corpo em ampulheta, cintura marcada",
+                          "corpo musculoso"
+                        ]
+                      },
+                      "gender": {
+                        "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                        "type": "string",
+                        "enum": [
+                          "Female",
+                          "Male",
+                          "Androgynous"
+                        ]
+                      },
+                      "template": {
+                        "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                        "type": "string"
+                      },
+                      "extra": {
+                        "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Atributos da pessoa/indivíduo."
+                  },
+                  "hair": {
+                    "type": "object",
+                    "properties": {
+                      "style": {
+                        "description": "Estilo/corte de cabelo.",
+                        "type": "string",
+                        "enum": [
+                          "Short",
+                          "Long",
+                          "Curly",
+                          "Straight",
+                          "Wavy",
+                          "Bald",
+                          "Ponytail",
+                          "Braided",
+                          "Bun",
+                          "Spiky",
+                          "Undercut",
+                          "Afro",
+                          "Dreadlocks",
+                          "Long Curly",
+                          "Short Curly",
+                          "Long Straight",
+                          "Short Straight",
+                          "Long Wavy",
+                          "Short Wavy"
+                        ],
+                        "enumDescriptions": [
+                          "cabelo curto",
+                          "cabelo longo",
+                          "cabelo cacheado",
+                          "cabelo liso",
+                          "cabelo ondulado",
+                          "careca, sem cabelo",
+                          "rabo de cavalo",
+                          "cabelo trançado",
+                          "coque",
+                          "cabelo espetado",
+                          "raspado nas laterais, mais longo no topo",
+                          "cabelo afro (black power)",
+                          "dreadlocks",
+                          "cabelo cacheado longo",
+                          "cabelo cacheado curto",
+                          "cabelo liso longo",
+                          "cabelo liso curto",
+                          "cabelo ondulado longo",
+                          "cabelo ondulado curto"
+                        ]
+                      },
+                      "primary_color": {
+                        "description": "Cor principal do cabelo.",
+                        "type": "string",
+                        "enum": [
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum",
+                          "Amethyst",
+                          "Pearl"
+                        ]
+                      },
+                      "secondary_color": {
+                        "description": "Cor secundária do cabelo (mechas, dip-dye, etc.).",
+                        "type": "string",
+                        "enum": [
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum",
+                          "Amethyst",
+                          "Pearl"
+                        ]
+                      },
+                      "template": {
+                        "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                        "type": "string"
+                      },
+                      "extra": {
+                        "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Cabelo."
+                  },
+                  "eyes": {
+                    "type": "object",
+                    "properties": {
+                      "shape": {
+                        "description": "Formato dos olhos.",
+                        "type": "string",
+                        "enum": [
+                          "Round",
+                          "Almond",
+                          "Hooded",
+                          "Monolid",
+                          "Upturned",
+                          "Downturned",
+                          "Oval",
+                          "Closed"
+                        ],
+                        "enumDescriptions": [
+                          "olhos redondos",
+                          "olhos amendoados",
+                          "olhos com pálpebra caída, cobrindo parte da dobra",
+                          "olhos sem dobra visível na pálpebra",
+                          "olhos puxados para cima nos cantos externos",
+                          "olhos caídos para baixo nos cantos externos",
+                          "olhos ovais",
+                          "olhos fechados"
+                        ]
+                      },
+                      "color": {
+                        "description": "Cor dos olhos.",
+                        "type": "string",
+                        "enum": [
+                          "Blue",
+                          "Green",
+                          "Brown",
+                          "Hazel",
+                          "Gray",
+                          "Amber",
+                          "Violet"
+                        ]
+                      },
+                      "template": {
+                        "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                        "type": "string"
+                      },
+                      "extra": {
+                        "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Olhos."
+                  },
+                  "torso": {
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "description": "Estado estruturado do tronco (âncora: prioridade alta, peso automático no prompt). Neutro — não julga \"mais coberto é melhor\" (escama à mostra é um estado tão correto quanto armadura completa, dependendo da espécie).",
+                        "type": "string",
+                        "enum": [
+                          "Bare",
+                          "FullyCovered",
+                          "ArmsCoveredTorsoBare",
+                          "TorsoCoveredArmsBare",
+                          "PartiallyCovered",
+                          "CroppedSleeved"
+                        ],
+                        "enumDescriptions": [
+                          "tronco à mostra, sem cobertura",
+                          "tronco totalmente coberto",
+                          "braços cobertos, tronco à mostra",
+                          "tronco coberto, braços à mostra",
+                          "tronco parcialmente coberto",
+                          "peito e braços cobertos (top cropped com manga comprida), barriga à mostra"
+                        ]
+                      },
+                      "primary_color": {
+                        "description": "Cor principal do que cobre o tronco (mesmo vocabulário de hair.primary_color, reaproveitado).",
+                        "type": "string",
+                        "enum": [
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum",
+                          "Amethyst",
+                          "Pearl"
+                        ]
+                      },
+                      "secondary_color": {
+                        "description": "Cor secundária/acento do que cobre o tronco (mesmo vocabulário de hair.secondary_color, reaproveitado).",
+                        "type": "string",
+                        "enum": [
+                          "Black",
+                          "Brown",
+                          "Blonde",
+                          "Red",
+                          "White",
+                          "Gray",
+                          "Blue",
+                          "Green",
+                          "Pink",
+                          "Purple",
+                          "Orange",
+                          "Yellow",
+                          "Teal",
+                          "Cyan",
+                          "Magenta",
+                          "Maroon",
+                          "Turquoise",
+                          "Lavender",
+                          "Beige",
+                          "Gold",
+                          "Silver",
+                          "Bronze",
+                          "Copper",
+                          "Indigo",
+                          "Violet",
+                          "Lilac",
+                          "Burgundy",
+                          "Olive",
+                          "Peach",
+                          "Coral",
+                          "Mint",
+                          "Azure",
+                          "Amber",
+                          "Charcoal",
+                          "Navy",
+                          "Sky Blue",
+                          "Lime",
+                          "Mustard",
+                          "Rose",
+                          "Periwinkle",
+                          "Salmon",
+                          "Emerald",
+                          "Sapphire",
+                          "Ruby",
+                          "Platinum",
+                          "Amethyst",
+                          "Pearl"
+                        ]
+                      },
+                      "template": {
+                        "description": "Texto desta seção no prompt, na sintaxe de interpolação: \"<secao.campo>\" injeta o valor do campo (o do objeto já mesclado base→gênero→variante), \"[trecho]\" marca um trecho opcional, que some inteiro se o campo dentro dele não estiver declarado. Fora de colchetes o campo é OBRIGATÓRIO — não declarar é erro, não um prompt silenciosamente incompleto. Omitido = usa o template default de scripts/generate-art/base.json.",
+                        "type": "string"
+                      },
+                      "extra": {
+                        "description": "Texto acrescentado logo depois do template desta seção — mesma sintaxe de interpolação (com ou sem placeholder). Concatena entre base→gênero→variante (não é \"o último vence\"), pra uma variante acrescentar um detalhe sem reescrever o texto inteiro da base.",
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "O que está sobre o tronco do indivíduo — armadura, escama, pele nua, pelagem, roupa comum, o que fizer sentido pra espécie. O template é onde cada cor é posicionada na peça certa (\"...top in <torso.primary_color>, ...waistband in <torso.secondary_color>\"), em vez de as cores saírem soltas e a IA decidir onde aplicá-las."
+                  },
+                  "seed": {
+                    "description": "Seed de geração desta variante (noise_seed do ComfyUI) — a seed da imagem em disco, gravada automaticamente por qualquer forma de \"bun run art --seed\" (um inteiro fixa aquele valor; sem valor sorteia um) ou colada à mão. Fixa a imagem: reexecuções sem --seed reproduzem esta seed. Ausente = usa a seed determinística; \"--seed default\" apaga esta chave e devolve a variante a ela.",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "additionalProperties": false
+              },
+              "description": "Uma variante nomeada por indivíduo — chave é o índice zero-padded a 3 dígitos (\"001\"..\"NNN\"), mesma convenção do PNG final. A contagem de chaves precisa bater exatamente com counts.<gênero>."
+            }
+          },
+          "required": [
+            "variantes"
+          ],
+          "additionalProperties": false,
+          "description": "Bloco de um gênero (male/female/flat): overrides sobre base, mais uma variante nomeada por indivíduo."
+        }
+      },
+      "required": [
+        "base"
+      ],
+      "additionalProperties": false,
+      "description": "Configuração completa de geração de arte via IA (bun run art, Flux.2 Klein) pra esta espécie — campo opt-in, ausente na maioria das espécies hoje."
+    }
+  },
+  "required": [
+    "name",
+    "gendered",
+    "species_classes",
+    "categories",
+    "counts"
+  ],
+  "additionalProperties": false,
+  "description": "Formato completo de assets/portraits/ssm_<especie>/portrait.json."
+}

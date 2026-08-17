@@ -1,7 +1,7 @@
 import { $ } from 'bun';
 import { existsSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __DIRNAME = dirname(fileURLToPath(import.meta.url));
@@ -12,7 +12,7 @@ export const PASTA_MOD = join(PASTA_RAIZ, 'mod/sagittarius-species');
 
 const TEXCONV = join(__DIRNAME, '../bin/texconv/texconv.exe');
 
-// Só os formatos usados pelo pipeline (linear/UNORM — o Stellaris não suporta as variantes sRGB, ver image.md)
+// Só os formatos usados pelo pipeline (linear/UNORM — o Stellaris não suporta as variantes sRGB, ver docs/pipeline-texturas.md)
 const FORMATOS = {
   bc3: 'BC3_UNORM',
   bc1: 'BC1_UNORM',
@@ -35,7 +35,7 @@ function agruparPorPastaDestino(
   const grupos = new Map<string, string[]>();
 
   for (const arquivo of arquivos) {
-    const caminhoRelativo = arquivo.replace(pastaOrigem, '');
+    const caminhoRelativo = relative(pastaOrigem, arquivo);
     const pastaDestinoArquivo = join(pastaDestino, dirname(caminhoRelativo));
     const grupo = grupos.get(pastaDestinoArquivo) ?? [];
     grupo.push(arquivo);
@@ -46,7 +46,8 @@ function agruparPorPastaDestino(
 }
 
 /** Agrupa os arquivos por pasta de destino e invoca o texconv uma vez por
- * pasta (só aceita um -o por invocação, ao contrário do nvtt antigo). */
+ * pasta — ele aceita vários arquivos de entrada, mas só um `-o` por
+ * invocação, então o agrupamento é o que define quantas chamadas acontecem. */
 export async function converter(arquivos: string[], options: ConverterOptions) {
   const formato = FORMATOS[options.format];
   const grupos = agruparPorPastaDestino(
