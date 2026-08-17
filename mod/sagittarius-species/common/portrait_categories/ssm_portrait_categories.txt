@@ -1,91 +1,107 @@
 sagittarius = {
-	name = ssm_sagittarius
-	sets = {
-		ssm_humanoids
-		ssm_mammalians
-		ssm_molluscoids
-		ssm_aquatics
-		ssm_avians
-		ssm_cybernetics
-		ssm_machine
-	}
+  name = ssm_sagittarius
+  sets = {
+    ssm_avians
+    ssm_humanoids
+    ssm_humanoids_cybernetics
+    ssm_humanoids_psionics
+    ssm_machine
+    ssm_mammalians
+    ssm_molluscoids
+    ssm_reptilians
+  }
 }
 
 humanoids = {
-	name = HUM
-	sets = {
-		ssm_humanoids
-		ssm_cybernetics
-	}
+  name = HUM
+  sets = {
+    ssm_humanoids
+    ssm_humanoids_cybernetics
+    ssm_humanoids_psionics
+  }
 }
 
 mammalians = {
-	name = MAM
-	sets = {
-		ssm_mammalians
-	}
+  name = MAM
+  sets = {
+    ssm_mammalians
+  }
+}
+
+reptilians = {
+  name = REP
+  sets = {
+    ssm_reptilians
+  }
 }
 
 avians = {
-	name = AVI
-	sets = {
-		ssm_avians
-	}
+  name = AVI
+  sets = {
+    ssm_avians
+  }
 }
 
 molluscoids = {
-	name = MOL
-	sets = {
-		ssm_molluscoids
-	}
-}
-
-necroids = {
-	name = NECROID
-	sets = {
-		ssm_necroids
-	}
+  name = MOL
+  sets = {
+    ssm_molluscoids
+  }
 }
 
 plantoids = {
-	name = PLANT
-	sets = {
-		ssm_plantoids
-	}
+  name = PLANT
+  sets = {
+    ssm_plantoids
+  }
+}
+
+necroids = {
+  name = NECROID
+  sets = {
+    ssm_necroids
+  }
 }
 
 aquatics = {
-	name = AQUATIC
-	sets = {
-		ssm_aquatics
-	}
+  name = AQUATIC
+  sets = {
+    ssm_aquatics
+  }
 }
 
-cybernetics = {
-	name = CYBERNETIC
-	sets = {
-		ssm_cybernetics
-		ssm_machine
-	}
-}
-
-synthetics = {
-	name = SYNTH
-	sets = {
-		ssm_machine
-	}
+infernals = {
+  name = INF
+  sets = {
+    ssm_infernals
+  }
 }
 
 machines = {
-	name = MACHINE
-	sets = {
-		ssm_machine
-	}
+  name = MACHINE
+  sets = {
+    ssm_machine
+  }
+}
+
+cybernetics = {
+  name = CYBERNETIC
+  sets = {
+    ssm_humanoids_cybernetics
+    ssm_machine
+  }
+}
+
+synthetics = {
+  name = SYNTH
+  sets = {
+    ssm_machine
+  }
 }
 
 psionics = {
-	name = PSIONIC
-	sets = {
-		ssm_psionic
+  name = PSIONIC
+  sets = {
+    ssm_humanoids_psionics
   }
 }
