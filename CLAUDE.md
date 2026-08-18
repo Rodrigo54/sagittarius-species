@@ -50,6 +50,7 @@ O runtime é o **Bun** (veja `bun.lockb`) — rode os scripts com `bun scripts/x
 
 ```bash
 bun run setup       # bun scripts/download-bin.ts — baixa os binários auxiliares em bin/ (veja seção abaixo)
+bun run hooks       # bun scripts/install-git-hooks.ts — copia scripts/git-hooks/ para .git/hooks/ (roda sozinho no `bun install`, via `prepare`)
 bun run converter   # roda a conversão de portraits + rooms (bun run portrait && bun run rooms)
 bun run portrait     # bun scripts/generate-portraits/index.ts — sincroniza assets/portraits/ com mod/ (DDS + .txt), direto no mod/; aceita um slug opcional (ex.: `bun run portrait ssm_elves`) pra processar uma espécie só. Sempre regenera também o registro (portrait_sets/portrait_categories), do mod inteiro, mesmo sob filtro
 bun run taxonomy     # bun scripts/generate-taxonomy/index.ts — regenera só o registro em common/ (portrait_sets + portrait_categories) a partir da filiação declarada nos portrait.json (veja seção abaixo)
@@ -234,6 +235,23 @@ seja a raiz do mod, e aqui ela fica numa subpasta. `.cwtools/` é vendorizado (s
 manualmente). `.editorconfig`: `.yml` é `utf-8-bom`, 80 colunas; `.txt`/`.gfx`/`.mod`/`.json` usam indentação
 de 2 espaços. Rationale completo da configuração do workspace (por que multi-root, onde fica o cache de regras,
 por que as configs ficam no `.code-workspace`): `docs/cwtools.md`.
+
+## Convenção de commits
+
+Mensagem de commit segue Conventional Commits **com emoji obrigatório por tipo** (`✨ feat(escopo): assunto`,
+`🐛 fix: ...`, `🛠️ chore: ...`), validada pelo hook `commit-msg` que chama o `commitlint`. A tabela `TYPE_EMOJI`
+no topo de `commitlint.config.js` é a fonte da verdade dos tipos aceitos e do emoji de cada um; a regra
+`type-emoji`, definida no mesmo arquivo, é própria (nenhum preset pronto exige emoji **e** tipo).
+
+**Nenhum commit deste repositório leva trailer `Co-Authored-By:` de Claude/Anthropic** — não escreva essa linha
+ao commitar; a regra `no-ia-coauthor` reprova a mensagem se ela aparecer. Coautoria de pessoas continua valendo.
+
+O hook fica
+versionado em `scripts/git-hooks/` e é instalado por cópia (`bun run hooks`, também rodado pelo `prepare` do
+`bun install`) em vez de `core.hooksPath`, porque `.git/hooks/` também guarda os hooks do git-lfs.
+
+Tabela completa de tipos/emojis, regras validadas e como testar uma mensagem sem commitar:
+`docs/convencao-de-commits.md`; o porquê: `docs/history/2026-08-17-commitlint.md`.
 
 ## Metadados de release
 
