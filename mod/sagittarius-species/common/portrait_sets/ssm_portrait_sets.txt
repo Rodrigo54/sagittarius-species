@@ -103,13 +103,6 @@ ssm_machine = {
   }
 }
 
-ssm_mammalians = {
-  species_class = MAM
-  portraits = {
-    "ssm_gamba"
-  }
-}
-
 ssm_molluscoids = {
   species_class = MOL
   portraits = {

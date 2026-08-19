@@ -26,7 +26,7 @@ into the textures and `.txt`/`.yml` files inside `mod/`.
 | Atlantis Space (Mermaids) | `ssm_mermaids` | AQUATIC |
 | Astral Humans | `ssm_astral` | HUM |
 | Necromancers | `ssm_necron` | NECROID |
-| Furries | `ssm_gamba` | MAM |
+| Drakelings | `ssm_drakelings` | INF |
 | Mollusk | `ssm_octopus` | MOL |
 | Lovecraftian Mollusk | `ssm_hastur` | MOL |
 | Order of the Green Knights | `ssm_green_order` | MACHINE |

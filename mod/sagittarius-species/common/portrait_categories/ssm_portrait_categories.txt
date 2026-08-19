@@ -6,7 +6,6 @@ sagittarius = {
     ssm_humanoids_cybernetics
     ssm_humanoids_psionics
     ssm_machine
-    ssm_mammalians
     ssm_molluscoids
     ssm_reptilians
   }
@@ -18,13 +17,6 @@ humanoids = {
     ssm_humanoids
     ssm_humanoids_cybernetics
     ssm_humanoids_psionics
-  }
-}
-
-mammalians = {
-  name = MAM
-  sets = {
-    ssm_mammalians
   }
 }
 
