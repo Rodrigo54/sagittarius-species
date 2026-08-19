@@ -11,5 +11,360 @@
   ],
   "counts": {
     "genderless": 25
+  },
+  "geracaoArt": {
+    "base": {
+      "species": {
+        "archetype": "Robot",
+        "template": "<species.archetype>, cute humanoid mascot companion robot, glossy toy-like ceramic and polished metal construction, rounded friendly proportions, oversized head on a slim articulated body",
+        "extra": "fully mechanical machine, smooth hard faceplate instead of a human face, metal and ceramic surfaces only"
+      },
+      "eyes": {
+        "template": "(large glowing <torso.secondary_color> optical lens eyes:1.3), bright luminous digital eyes set into a dark faceplate panel, thin simple mouth line etched on the faceplate below"
+      },
+      "torso": {
+        "state": "FullyCovered",
+        "template": "sealed <torso.primary_color> robotic chassis, smooth glossy curved armor plating over chest and abdomen, glowing <torso.secondary_color> light strips and small indicator lights, black articulated shoulder and elbow joints, ribbed accordion bellows at the neck and waist"
+      }
+    },
+    "modelo": {
+      "variant": "distilled",
+      "steps": 4,
+      "cfg": 1,
+      "aspectRatio": "2:3"
+    },
+    "genderless": {
+      "referenceImage": [
+        "assets/portraits/ssm_timbot/reference/genderless_a.png",
+        "assets/portraits/ssm_timbot/reference/genderless_b.png"
+      ],
+      "variantes": {
+        "001": {
+          "person": {
+            "extra": "rounded dome head with two thin flexible antennae standing on top"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "extra": "twin small stacked lenses inside each eye socket"
+          },
+          "torso": {
+            "primary_color": "White",
+            "secondary_color": "Turquoise"
+          }
+        },
+        "002": {
+          "person": {
+            "extra": "cubic head with softly rounded edges and a recessed visor slot"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "extra": "narrow visor slit with two glowing dots for pupils"
+          },
+          "torso": {
+            "primary_color": "Silver",
+            "secondary_color": "Sky Blue"
+          }
+        },
+        "003": {
+          "person": {
+            "extra": "rounded dome head with short swept-back fins and one stubby antenna"
+          },
+          "eyes": {
+            "shape": "Round",
+            "extra": "twin small stacked lenses inside each eye socket"
+          },
+          "torso": {
+            "primary_color": "Platinum",
+            "secondary_color": "Cyan"
+          }
+        },
+        "004": {
+          "person": {
+            "extra": "tall elongated dome head with a narrow faceplate"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "extra": "single large circular lens per eye with a bright glowing inner ring"
+          },
+          "torso": {
+            "primary_color": "Pearl",
+            "secondary_color": "Cyan"
+          }
+        },
+        "005": {
+          "person": {
+            "extra": "boxy faceted head with chamfered corners and a flat rectangular faceplate"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "extra": "blocky pixelated LED matrix eyes with square glowing pupils"
+          },
+          "torso": {
+            "primary_color": "Pearl",
+            "secondary_color": "Turquoise"
+          }
+        },
+        "006": {
+          "person": {
+            "extra": "rounded dome head with short swept-back fins and one stubby antenna"
+          },
+          "eyes": {
+            "shape": "Round",
+            "extra": "narrow visor slit with two glowing dots for pupils"
+          },
+          "torso": {
+            "primary_color": "Silver",
+            "secondary_color": "Azure"
+          }
+        },
+        "007": {
+          "person": {
+            "extra": "rounded dome head with two thin flexible antennae standing on top"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "extra": "concentric aperture rings inside each lens, camera iris look"
+          },
+          "torso": {
+            "primary_color": "Silver",
+            "secondary_color": "Turquoise"
+          }
+        },
+        "008": {
+          "person": {
+            "extra": "rounded dome head with large circular ear discs on both sides"
+          },
+          "eyes": {
+            "shape": "Round",
+            "extra": "single large circular lens per eye with a bright glowing inner ring"
+          },
+          "torso": {
+            "primary_color": "White",
+            "secondary_color": "Azure"
+          }
+        },
+        "009": {
+          "person": {
+            "extra": "boxy faceted head with chamfered corners and a flat rectangular faceplate"
+          },
+          "eyes": {
+            "shape": "Round",
+            "extra": "concentric aperture rings inside each lens, camera iris look"
+          },
+          "torso": {
+            "primary_color": "White",
+            "secondary_color": "Cyan"
+          }
+        },
+        "010": {
+          "person": {
+            "extra": "tall elongated dome head with a narrow faceplate"
+          },
+          "eyes": {
+            "shape": "Round",
+            "extra": "narrow visor slit with two glowing dots for pupils"
+          },
+          "torso": {
+            "primary_color": "Platinum",
+            "secondary_color": "Cyan"
+          }
+        },
+        "011": {
+          "person": {
+            "extra": "smooth rounded dome helmet head with a dark wraparound visor band across the eyes"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "extra": "blocky pixelated LED matrix eyes with square glowing pupils"
+          },
+          "torso": {
+            "primary_color": "White",
+            "secondary_color": "Sky Blue"
+          }
+        },
+        "012": {
+          "person": {
+            "extra": "cubic head with softly rounded edges and a recessed visor slot"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "extra": "single large circular lens per eye with a bright glowing inner ring"
+          },
+          "torso": {
+            "primary_color": "White",
+            "secondary_color": "Sky Blue"
+          }
+        },
+        "013": {
+          "person": {
+            "extra": "smooth rounded dome helmet head with a dark wraparound visor band across the eyes"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "extra": "half-moon crescent glow inside each lens"
+          },
+          "torso": {
+            "primary_color": "Pearl",
+            "secondary_color": "Azure"
+          }
+        },
+        "014": {
+          "person": {
+            "extra": "wide horizontally stretched oval head with a broad faceplate"
+          },
+          "eyes": {
+            "shape": "Round",
+            "extra": "half-moon crescent glow inside each lens"
+          },
+          "torso": {
+            "primary_color": "Platinum",
+            "secondary_color": "Sky Blue"
+          }
+        },
+        "015": {
+          "person": {
+            "extra": "wide horizontally stretched oval head with a broad faceplate"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "extra": "softly diffused even glow with no visible pupil"
+          },
+          "torso": {
+            "primary_color": "Pearl",
+            "secondary_color": "Cyan"
+          }
+        },
+        "016": {
+          "person": {
+            "extra": "smooth rounded dome helmet head with a dark wraparound visor band across the eyes"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "extra": "wide lens with a bright vertical slit pupil"
+          },
+          "torso": {
+            "primary_color": "Platinum",
+            "secondary_color": "Azure"
+          }
+        },
+        "017": {
+          "person": {
+            "extra": "smooth rounded dome helmet head with a dark wraparound visor band across the eyes"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "extra": "single large circular lens per eye with a bright glowing inner ring"
+          },
+          "torso": {
+            "primary_color": "Pearl",
+            "secondary_color": "Turquoise"
+          }
+        },
+        "018": {
+          "person": {
+            "extra": "wide horizontally stretched oval head with a broad faceplate"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "extra": "blocky pixelated LED matrix eyes with square glowing pupils"
+          },
+          "torso": {
+            "primary_color": "Silver",
+            "secondary_color": "Turquoise"
+          }
+        },
+        "019": {
+          "person": {
+            "extra": "cubic head with softly rounded edges and a recessed visor slot"
+          },
+          "eyes": {
+            "shape": "Round",
+            "extra": "wide lens with a bright vertical slit pupil"
+          },
+          "torso": {
+            "primary_color": "Platinum",
+            "secondary_color": "Turquoise"
+          }
+        },
+        "020": {
+          "person": {
+            "extra": "rounded dome head with two thin flexible antennae standing on top"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "extra": "softly diffused even glow with no visible pupil"
+          },
+          "torso": {
+            "primary_color": "Pearl",
+            "secondary_color": "Cyan"
+          }
+        },
+        "021": {
+          "person": {
+            "extra": "rounded dome head with short swept-back fins and one stubby antenna"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "extra": "concentric aperture rings inside each lens, camera iris look"
+          },
+          "torso": {
+            "primary_color": "Silver",
+            "secondary_color": "Sky Blue"
+          }
+        },
+        "022": {
+          "person": {
+            "extra": "boxy faceted head with chamfered corners and a flat rectangular faceplate"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "extra": "wide lens with a bright vertical slit pupil"
+          },
+          "torso": {
+            "primary_color": "Silver",
+            "secondary_color": "Sky Blue"
+          }
+        },
+        "023": {
+          "person": {
+            "extra": "rounded dome head with large circular ear discs on both sides"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "extra": "twin small stacked lenses inside each eye socket"
+          },
+          "torso": {
+            "primary_color": "Platinum",
+            "secondary_color": "Cyan"
+          }
+        },
+        "024": {
+          "person": {
+            "extra": "tall elongated dome head with a narrow faceplate"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "extra": "half-moon crescent glow inside each lens"
+          },
+          "torso": {
+            "primary_color": "White",
+            "secondary_color": "Azure"
+          }
+        },
+        "025": {
+          "person": {
+            "extra": "rounded dome head with large circular ear discs on both sides"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "extra": "softly diffused even glow with no visible pupil"
+          },
+          "torso": {
+            "primary_color": "White",
+            "secondary_color": "Azure"
+          }
+        }
+      }
+    }
   }
 }
