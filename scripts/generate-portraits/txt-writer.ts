@@ -1,3 +1,4 @@
+import type { GeneroAlvo } from '../portrait-schema';
 import { pad } from '../utils';
 import { RIGS, RIG_PADRAO, type SpeciesInfo } from './types';
 
@@ -100,16 +101,21 @@ function blocoPortraitGroups(
 export function gerarConteudoTxt(slug: string, info: SpeciesInfo): string {
   const entity = RIGS[info.config.rig ?? RIG_PADRAO].entity;
 
-  if (info.config.gendered) {
+  // Toda textura vive sob a pasta do gênero a que pertence, `genderless/`
+  // inclusive — o caminho aqui é o mesmo de `assets/portraits/<slug>/<gênero>/`,
+  // porque o staging e a conversão só espelham o caminho relativo.
+  const texturas = (genero: GeneroAlvo) =>
+    info.arquivos[genero]!.map((_, i) => `gfx/models/portraits/${slug}/${genero}/${pad(i + 1)}.dds`);
+
+  // A espécie sem gênero gera UM portrait, usado nas três posições de
+  // portrait_groups; a com gênero gera dois, cada um com trigger de gênero.
+  // A diferença é de estrutura do arquivo gerado, não de iteração.
+  if (info.arquivos.genderless === undefined) {
     const grupoMale = `${slug}_male_01`;
     const grupoFemale = `${slug}_female_01`;
 
-    const texturasMale = info.arquivosMale.map(
-      (_, i) => `gfx/models/portraits/${slug}/male/${pad(i + 1)}.dds`
-    );
-    const texturasFemale = info.arquivosFemale.map(
-      (_, i) => `gfx/models/portraits/${slug}/female/${pad(i + 1)}.dds`
-    );
+    const texturasMale = texturas('male');
+    const texturasFemale = texturas('female');
 
     const portraits = [
       `portraits = {`,
@@ -124,13 +130,10 @@ export function gerarConteudoTxt(slug: string, info: SpeciesInfo): string {
   }
 
   const grupo = `${slug}_01`;
-  const texturas = info.arquivosFlat.map(
-    (_, i) => `gfx/models/portraits/${slug}/${pad(i + 1)}.dds`
-  );
 
   const portraits = [
     `portraits = {`,
-    blocoPortraitEntry(grupo, 'human_male_greetings_01', texturas, entity),
+    blocoPortraitEntry(grupo, 'human_male_greetings_01', texturas('genderless'), entity),
     `}`,
   ].join('\n');
 

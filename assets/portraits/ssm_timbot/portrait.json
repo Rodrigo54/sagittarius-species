@@ -1,6 +1,5 @@
 {
   "name": "timbot",
-  "gendered": false,
   "rig": "ssm_shared",
   "species_classes": [
     "MACHINE"
@@ -11,6 +10,6 @@
     "cybernetics"
   ],
   "counts": {
-    "flat": 25
+    "genderless": 25
   }
 }

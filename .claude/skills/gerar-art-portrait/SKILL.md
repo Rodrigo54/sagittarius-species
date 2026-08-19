@@ -6,7 +6,7 @@ description: "Gera ou aprimora o bloco `geracaoArt` de um `portrait.json` (asset
 # Gerar art portrait (`geracaoArt`)
 
 Preenche ou ajusta `geracaoArt` num `portrait.json` já existente — `base` (campos comuns e os templates de
-prompt de cada seção), `modelo` (variante do modelo Flux.2 Klein e proporção), e `male`/`female`/`flat` (imagens
+prompt de cada seção), `modelo` (variante do modelo Flux.2 Klein e proporção), e `male`/`female`/`genderless` (imagens
 de referência/conceito + uma variante nomeada por indivíduo) — através de uma entrevista que escolhe o visual da
 espécie e usa um gerador determinístico pra criar N indivíduos distintos sem repetir combinação, em vez de
 escrever cada bloco à mão. Ao final, confere o prompt composto com `--export-prompt` e entrega ao usuário o
@@ -17,7 +17,7 @@ Toda a interação é em **português do Brasil** (CLAUDE.md deste repositório)
 ## Contexto do pipeline (leia antes de perguntar qualquer coisa)
 
 Esta skill assume que a espécie **já existe** — pasta `assets/portraits/ssm_<especie>/` com `portrait.json`
-(`name`/`gendered`/`counts`) e os PNGs de origem já presentes. Se a espécie ainda não existe, isso é trabalho de
+(`name`/`counts`) e os PNGs de origem já presentes. Se a espécie ainda não existe, isso é trabalho de
 arte/pipeline separado, fora do escopo (ver "Fora de escopo" no fim).
 
 **O pipeline gera via Flux.2 Klein Base, não via checkpoint SDXL** — não existe `checkpoint`/`lora` configurável
@@ -106,7 +106,7 @@ em disco.
 Uma pergunta de cada vez, aguardando resposta. Se o usuário já deu tema/referência/etc. ao invocar a skill, pule
 direto pro que falta.
 
-1. **Qual espécie.** Confirme o slug, leia `gendered`/`counts` do `portrait.json` — isso já fixa quantas
+1. **Qual espécie.** Confirme o slug, leia `counts` do `portrait.json` (as chaves são os gêneros da espécie) — isso já fixa quantas
    variantes cada gênero precisa (não pergunte, é fato do arquivo).
 2. **Arquétipo visual (`species`).** Qual `archetype` de `ARQUETIPOS` (leia a lista em `vocabulario.ts` e
    ofereça as opções que fizerem sentido pra espécie) melhor descreve a espécie — e, se o
@@ -174,7 +174,7 @@ pergunte de novo. Só depois disso, escreva qualquer coisa.
     "modelo"?: { "variant"?: "distilled" | "base", "steps"?: N, "cfg"?: N, "aspectRatio"?: "2:3" },
     "male":   { "person": { "gender": "Male" },   "referenceImage"?: ["assets/portraits/ssm_<esp>/reference_male.png", ...],   "variantes": { "001": {...}, ... } },
     "female": { "person": { "gender": "Female" }, "referenceImage"?: ["assets/portraits/ssm_<esp>/reference_female.png", ...], "variantes": { "001": {...}, ... } }
-    // ou "flat": { "variantes": {...} } pra espécie sem gênero (gendered: false)
+    // ou "genderless": { "variantes": {...} } pra espécie sem gênero (counts: { genderless: N })
     // cada variante: { person?, hair?, eyes?, torso?, seed? } — `seed` NÃO é escrita por esta skill (ver abaixo)
   }
   ```
@@ -292,7 +292,7 @@ resto ela **entrega como comando pronto pra colar**, com o número de variantes 
    preservando as `seed` existentes.
 2. Confira/complete `assets/portraits/ssm_<especie>/portrait.json` com o resto do `geracaoArt` (`base`,
    `modelo`, `referenceImage`).
-3. Rode `bun run art <slug> male -e` (e `female`/`flat` conforme aplicável) — **esta é a única execução que a
+3. Rode `bun run art <slug> male -e` (e `female`/`genderless` conforme aplicável) — **esta é a única execução que a
    skill faz sozinha**. Confira o texto composto antes de qualquer GPU: os campos-âncora presentes, cada cor na
    peça certa, nada de `[trecho]` sumindo por campo não declarado. Corrija e repita até o prompt fazer sentido —
    o ciclo é instantâneo e de graça.

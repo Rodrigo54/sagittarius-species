@@ -8,10 +8,9 @@ import { ErroCoberturaDeCampo, validarEspecie } from './validacao';
 function especie(geracaoArt: PortraitConfig['geracaoArt']): PortraitConfig {
   return {
     name: 'fixture',
-    gendered: true,
     species_classes: ['HUM'],
     categories: ['humanoids'],
-    counts: { male: 1 },
+    counts: { male: 1, female: 1 },
     geracaoArt,
   } as PortraitConfig;
 }
@@ -115,7 +114,6 @@ describe('validarEspecie — escopo', () => {
   test('confere todas as variantes de todos os gêneros, não só a primeira', () => {
     const config = {
       name: 'fixture',
-      gendered: true,
       species_classes: ['HUM'],
       categories: ['humanoids'],
       counts: { male: 2, female: 1 },
@@ -134,10 +132,9 @@ describe('validarEspecie — escopo', () => {
   test('o erro aponta a variante exata, mesmo quando ela é a última do lote', () => {
     const config = {
       name: 'fixture',
-      gendered: true,
       species_classes: ['HUM'],
       categories: ['humanoids'],
-      counts: { male: 3 },
+      counts: { male: 3, female: 3 },
       geracaoArt: {
         base: { species: { archetype: 'Human' }, torso: { state: 'FullyCovered', template: 'plain armor' } },
         male: {
@@ -155,6 +152,6 @@ describe('validarEspecie — escopo', () => {
   });
 
   test('espécie sem geracaoArt não tem nada a validar', () => {
-    expect(validarEspecie({ name: 'x', gendered: false, counts: { flat: 1 } } as PortraitConfig, 'x', BASE_ART)).toBe(0);
+    expect(validarEspecie({ name: 'x', counts: { genderless: 1 } } as PortraitConfig, 'x', BASE_ART)).toBe(0);
   });
 });

@@ -1,6 +1,5 @@
 {
   "name": "mercenary",
-  "gendered": false,
   "rig": "ssm_shared",
   "modo": "altura",
   "species_classes": [
@@ -11,6 +10,6 @@
     "cybernetics"
   ],
   "counts": {
-    "flat": 19
+    "genderless": 19
   }
 }

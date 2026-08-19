@@ -1,6 +1,5 @@
 {
   "name": "gamba",
-  "gendered": true,
   "rig": "ssm_shared",
   "species_classes": [
     "MAM"

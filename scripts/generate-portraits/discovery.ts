@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { readFile, readdir } from 'node:fs/promises';
 import { basename, join } from 'node:path';
-import { zPortraitConfig } from '../portrait-schema';
+import { generosDe, zPortraitConfig, type GeneroAlvo } from '../portrait-schema';
 import { ordenarNumericamente } from '../utils';
 import type { PortraitConfig, SpeciesInfo } from './types';
 
@@ -47,13 +47,13 @@ export async function carregarEspecie(
   const pastaAssets = join(pastaPortraits, slug);
   const config = await lerConfig(pastaAssets);
 
-  const arquivosMale = config.gendered
-    ? await listarPngs(join(pastaAssets, 'male'))
-    : [];
-  const arquivosFemale = config.gendered
-    ? await listarPngs(join(pastaAssets, 'female'))
-    : [];
-  const arquivosFlat = config.gendered ? [] : await listarPngs(pastaAssets);
+  // Uma subpasta por gênero declarado — inclusive `genderless/`, que é uma
+  // pasta como qualquer outra. Por isso nada aqui precisa saber o que é ter
+  // gênero: a lista de pastas a varrer vem do próprio `counts`.
+  const arquivos: Partial<Record<GeneroAlvo, string[]>> = {};
+  for (const genero of generosDe(config.counts)) {
+    arquivos[genero] = await listarPngs(join(pastaAssets, genero));
+  }
 
-  return { slug, pastaAssets, config, arquivosMale, arquivosFemale, arquivosFlat };
+  return { slug, pastaAssets, config, arquivos };
 }

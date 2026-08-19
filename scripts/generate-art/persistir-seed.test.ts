@@ -6,10 +6,10 @@ import { aplicarSeed } from './persistir-seed';
  * chaves irmãs que não podem se mexer de lugar. */
 const PORTRAIT_JSON = `{
   "name": "astral",
-  "gendered": true,
   "rig": "ssm_shared",
   "counts": {
-    "male": 2
+    "male": 2,
+    "female": 2
   },
   "geracaoArt": {
     "base": {
@@ -56,7 +56,7 @@ describe('aplicarSeed', () => {
 
   test('preserva a ordem original das chaves — sem isso o diff vira o arquivo inteiro', () => {
     const saida = aplicarSeed(PORTRAIT_JSON, 'male', '001', 999);
-    expect(Object.keys(JSON.parse(saida))).toEqual(['name', 'gendered', 'rig', 'counts', 'geracaoArt']);
+    expect(Object.keys(JSON.parse(saida))).toEqual(['name', 'rig', 'counts', 'geracaoArt']);
     // A seed nova entra no lugar da antiga, não no fim do bloco da variante.
     expect(Object.keys(JSON.parse(saida).geracaoArt.male.variantes['001'])).toEqual(['person', 'seed']);
   });

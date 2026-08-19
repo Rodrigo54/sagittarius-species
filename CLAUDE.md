@@ -57,7 +57,7 @@ bun run taxonomy     # bun scripts/generate-taxonomy/index.ts — regenera só o
 bun run shared-rig   # bun scripts/generate-shared-rig/index.ts — deriva gfx/.../ssm_shared/ a partir de sl_shared/ (veja seção "Rig compartilhado")
 bun run rooms         # bun scripts/generate-rooms/index.ts — sincroniza assets/city_sets/ com mod/ (DDS + .txt), direto no mod/
 bun run names          # bun scripts/generate-names/index.ts — gera name_lists + species_names (veja seção abaixo)
-bun run art   # bun scripts/generate-art/index.ts <slug> <male|female|flat> [-n NNN,...] [-s [N]] [-p] [-e] — gera retratos via IA no ComfyUI local; `-s` sempre grava a seed no portrait.json (valor fixa, sem valor sorteia, `default` volta pra determinística e apaga a chave) (veja seção abaixo)
+bun run art   # bun scripts/generate-art/index.ts <slug> <male|female|genderless> [-n NNN,...] [-s [N]] [-p] [-e] — gera retratos via IA no ComfyUI local; `-s` sempre grava a seed no portrait.json (valor fixa, sem valor sorteia, `default` volta pra determinística e apaga a chave) (veja seção abaixo)
 bun run copy           # pwsh scripts/copy.ps1 — sincroniza o mod na pasta local de mods do Stellaris (apaga e recopia, reportando a variação de tamanho)
 bun run publish-workshop -- [-m|--metadata-only]   # bun scripts/publish-workshop/index.ts — publica no Steam Workshop via steamcmd (veja seção "Publicação no Steam Workshop")
 ```
@@ -133,7 +133,7 @@ aceitos, pipeline de rooms, `converter.ts`): `docs/pipeline-texturas.md`.
 ## Pipeline de portraits
 
 `scripts/generate-portraits/` (comando `bun run portrait`) mantém `assets/portraits/ssm_<espécie>/` e `mod/`
-sempre em sincronia: cada espécie declara sua forma num `portrait.json` obrigatório (`name`, `gendered`, `rig`,
+sempre em sincronia: cada espécie declara sua forma num `portrait.json` obrigatório (`name`, `rig`,
 `counts`, `modo`/`ancora`), tudo é validado antes de qualquer escrita/remoção, `.dds` órfãos são apagados, e o
 `ssm_<espécie>_portrait.txt` inteiro é regenerado do zero a cada execução. Dois contratos de arte, um por rig:
 `ssm_shared` guarda **master nativo** com enquadramento **derivado** a cada execução (trim → resize →

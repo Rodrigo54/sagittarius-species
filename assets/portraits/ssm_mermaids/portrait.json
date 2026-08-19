@@ -1,6 +1,5 @@
 {
   "name": "mermaids",
-  "gendered": true,
   "rig": "ssm_shared",
   "modo": "altura",
   "species_classes": [

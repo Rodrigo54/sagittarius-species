@@ -14,7 +14,7 @@ enfileirar geração de verdade no ComfyUI é decisão do Rodrigo, executada por
 ## Interface de linha de comando
 
 ```
-bun run art <slug> <male|female|flat> [options]
+bun run art <slug> <male|female|genderless> [options]
 
   -n, --variante <NNN>   variante(s) a gerar; repetível e aceita lista por vírgula
                          (`-n 001,004 -n 007`). Padrão: todas as declaradas
@@ -39,7 +39,7 @@ posicionais escritos depois da flag.
 ## Peças do pipeline
 
 - **`scripts/portrait-schema/`** — schema `zod` (`schema.ts`) que descreve o `portrait.json` **inteiro**
-  (`name`/`gendered`/`rig`/`counts`/`modo`/`ancora` + `geracaoArt`), fonte de verdade única usada tanto por
+  (`name`/`rig`/`counts`/`modo`/`ancora` + `geracaoArt`), fonte de verdade única usada tanto por
   `generate-portraits` quanto por `generate-art`. `.strict()` em todo objeto — chave desconhecida é erro, não é
   ignorada em silêncio. `campos.ts` isola os campos de **dado** de cada seção (sem `template`/`extra`): é deles
   que sai o conjunto de caminhos interpoláveis, sem lista paralela. `vocabulario.ts` guarda os enums aceitos
@@ -94,7 +94,7 @@ posicionais escritos depois da flag.
 - **`geracaoArt` no `portrait.json`**: `base` (`species` — só aqui, ver abaixo —, `torso`, `eyes`/`hair`/`person`
   quando fixos pra toda espécie), `modelo` (`variant`: `"distilled"` (padrão) ou `"base"`;
   `steps`/`cfg`/`aspectRatio` — sem checkpoint/LoRA/sampler, ver `scripts/portrait-schema/schema.ts`),
-  `male`/`female`/`flat` (`referenceImage`
+  `male`/`female`/`genderless` (`referenceImage`
   como **lista** de imagens de referência/conceito por gênero + `variantes` nomeadas `"001"`..`"NNN"`, uma por
   indivíduo, contagem batendo exato com `counts.<gênero>` — conferido pelo schema via `.superRefine`). Cada
   variante aceita ainda um `seed` opcional (`noise_seed` do ComfyUI): a seed **da imagem que está em disco**

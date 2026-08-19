@@ -108,12 +108,7 @@ async function main() {
   let instalados = 0;
   for (const info of alvos) {
     const pastaEspecie = join(PASTA_PORTRAITS_MOD, info.slug);
-    const grupos = info.config.gendered
-      ? [
-          { sub: 'male', n: info.arquivosMale.length },
-          { sub: 'female', n: info.arquivosFemale.length },
-        ]
-      : [{ sub: '', n: info.arquivosFlat.length }];
+    const grupos = Object.entries(info.arquivos).map(([sub, arquivos]) => ({ sub, n: arquivos.length }));
 
     for (const grupo of grupos) {
       for (let i = 1; i <= grupo.n; i++) {

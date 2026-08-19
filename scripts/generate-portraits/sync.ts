@@ -20,16 +20,7 @@ async function limparPasta(pasta: string, esperados: Set<string>) {
  * PNG de origem — limpeza total, sem exceção (decisão explícita: preferimos
  * perder um retrato sem fonte a manter lixo não rastreável). */
 export async function limparOrfaos(info: SpeciesInfo, pastaDestinoEspecie: string) {
-  if (info.config.gendered) {
-    await limparPasta(
-      join(pastaDestinoEspecie, 'male'),
-      nomesNumerados(info.arquivosMale.length, '.dds')
-    );
-    await limparPasta(
-      join(pastaDestinoEspecie, 'female'),
-      nomesNumerados(info.arquivosFemale.length, '.dds')
-    );
-  } else {
-    await limparPasta(pastaDestinoEspecie, nomesNumerados(info.arquivosFlat.length, '.dds'));
+  for (const [genero, arquivos] of Object.entries(info.arquivos)) {
+    await limparPasta(join(pastaDestinoEspecie, genero), nomesNumerados(arquivos.length, '.dds'));
   }
 }

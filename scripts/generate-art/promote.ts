@@ -1,6 +1,6 @@
 import { copyFile, mkdir, readdir, unlink } from 'node:fs/promises';
 import { join } from 'node:path';
-import type { GeneroAlvo, PortraitConfig } from '../portrait-schema';
+import { quantidadeDe, type GeneroAlvo, type PortraitConfig } from '../portrait-schema';
 import { pad } from '../utils';
 
 /** Opera só em `PortraitConfig.counts`/`GeneroAlvo`, agnóstico de como o
@@ -8,10 +8,9 @@ import { pad } from '../utils';
 
 /** Nome de PNG numerado na convenção do pipeline (`001.png`..`NNN.png`) — o
  * único formato de arquivo que a limpeza de órfãos abaixo tem permissão de
- * apagar. Relevante porque, pra espécie `flat`, `pastaDestino` é a própria
- * pasta da espécie (mesmo nível de `portrait.json`, `.md`, imagens de
- * referência) — sem esse filtro, a limpeza apagaria arquivos que não são
- * PNG numerado nenhum. */
+ * apagar. A limpeza só toca no que o próprio pipeline cria: qualquer outra
+ * coisa que apareça na pasta do gênero foi posta ali por uma pessoa, e some
+ * só se essa pessoa apagar. */
 const PADRAO_PNG_NUMERADO = /^\d{3}\.png$/;
 
 /** Copia (não move) o staging inteiro pra `assets/`, só se os N arquivos
@@ -31,7 +30,7 @@ export async function promoverEspecie(
   pastaStagingGenero: string,
   pastaAssetsEspecie: string
 ): Promise<{ promovidos: number; removidos: number }> {
-  const esperado = config.counts[genero];
+  const esperado = quantidadeDe(config.counts, genero);
   if (esperado === undefined) {
     throw new Error(
       `${slug}: portrait.json não declara "counts.${genero}" — sem isso não há quantas imagens promover. Nada foi promovido.`
@@ -55,7 +54,7 @@ export async function promoverEspecie(
     );
   }
 
-  const pastaDestino = genero === 'flat' ? pastaAssetsEspecie : join(pastaAssetsEspecie, genero);
+  const pastaDestino = join(pastaAssetsEspecie, genero);
   await mkdir(pastaDestino, { recursive: true });
 
   for (const chave of chavesEsperadas) {

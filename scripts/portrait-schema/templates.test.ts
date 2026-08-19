@@ -42,10 +42,9 @@ describe('integração com o schema do portrait.json', () => {
   function config(template: string) {
     return {
       name: 'fixture',
-      gendered: true,
       species_classes: ['HUM'],
       categories: ['humanoids'],
-      counts: { male: 1 },
+      counts: { male: 1, female: 1 },
       geracaoArt: {
         base: { species: { archetype: 'Mermaid' }, torso: { template } },
         male: { variantes: { '001': {} } },
@@ -66,8 +65,7 @@ describe('integração com o schema do portrait.json', () => {
   test('species declarada fora de base é recusada (.strict) — é seção da espécie, não do indivíduo', () => {
     const resultado = zPortraitConfig.safeParse({
       name: 'fixture',
-      gendered: true,
-      counts: { male: 1 },
+      counts: { male: 1, female: 1 },
       geracaoArt: {
         base: { species: { archetype: 'Mermaid' } },
         male: { species: { archetype: 'Elf' }, variantes: { '001': {} } },
@@ -79,8 +77,7 @@ describe('integração com o schema do portrait.json', () => {
   test('extra_prompt não existe mais — um portrait.json antigo falha alto, não em silêncio', () => {
     const resultado = zPortraitConfig.safeParse({
       name: 'fixture',
-      gendered: true,
-      counts: { male: 1 },
+      counts: { male: 1, female: 1 },
       geracaoArt: {
         base: { species: { archetype: 'Mermaid' }, extra_prompt: { positive: 'texto antigo' } },
         male: { variantes: { '001': {} } },

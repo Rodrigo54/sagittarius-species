@@ -1,6 +1,5 @@
 {
   "name": "cyborg",
-  "gendered": false,
   "rig": "ssm_shared",
   "modo": "altura",
   "species_classes": [
@@ -12,6 +11,6 @@
     "cybernetics"
   ],
   "counts": {
-    "flat": 12
+    "genderless": 12
   }
 }

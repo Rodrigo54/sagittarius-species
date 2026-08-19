@@ -32,7 +32,7 @@ const CAMINHOS_WORKFLOW: Record<'base' | 'distilled', string> = {
   distilled: join(PASTA_RAIZ, 'scripts/comfyui/ssm_species_portrait_workflow_distilled.json'),
 };
 
-const GENEROS_VALIDOS: readonly GeneroAlvo[] = ['male', 'female', 'flat'];
+const GENEROS_VALIDOS: readonly GeneroAlvo[] = ['male', 'female', 'genderless'];
 
 interface Argumentos {
   slug: string;

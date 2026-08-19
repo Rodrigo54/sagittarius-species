@@ -6,10 +6,6 @@
       "type": "string",
       "description": "Nome da espécie sem o prefixo ssm_ — precisa bater com o nome da pasta assets/portraits/ssm_<name>/."
     },
-    "gendered": {
-      "type": "boolean",
-      "description": "true = a espécie tem subpastas male/female; false = espécie \"flat\", PNGs NNN.png direto na raiz da pasta."
-    },
     "rig": {
       "description": "Rig de retrato compartilhado. Omitido = sl_shared.",
       "type": "string",
@@ -71,12 +67,12 @@
           "artrópode",
           "moluscoide",
           "fungoide",
-          "plantoide — exige o DLC Plantoids Species Pack",
-          "lithoide — exige o DLC Lithoids Species Pack",
-          "necroide — exige o DLC Necroids Species Pack",
-          "aquático — exige o DLC Aquatics Species Pack",
-          "toxoide — exige o DLC Toxoids Species Pack",
-          "infernal — exige o DLC Infernals Species Pack",
+          "plantoide — o retrato exige o Plantoids Species Pack (a classe também é jogável com o Ancient Relics Story Pack)",
+          "lithoide — exige o Lithoids Species Pack",
+          "necroide — o retrato exige o Necroids Species Pack (a classe também é jogável com o Vipra the Vapor)",
+          "aquático — o retrato exige o Aquatics Species Pack (a classe também é jogável com o Shadows of the Shroud)",
+          "toxoide — exige o Toxoids Species Pack",
+          "infernal — exige o Infernals Species Pack",
           "máquina"
         ]
       },
@@ -128,29 +124,46 @@
       "description": "Categorias (abas do editor de império) onde esta espécie aparece, declaradas por extenso — inclusive as que espelham uma classe declarada em species_classes. \"sagittarius\" nunca é declarada: toda espécie do mod entra nela automaticamente."
     },
     "counts": {
-      "type": "object",
-      "properties": {
-        "male": {
-          "description": "Quantidade de variantes masculinas.",
-          "type": "integer",
-          "exclusiveMinimum": 0,
-          "maximum": 9007199254740991
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "male": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991,
+              "description": "Quantidade de variantes masculinas."
+            },
+            "female": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991,
+              "description": "Quantidade de variantes femininas."
+            }
+          },
+          "required": [
+            "male",
+            "female"
+          ],
+          "additionalProperties": false
         },
-        "female": {
-          "description": "Quantidade de variantes femininas.",
-          "type": "integer",
-          "exclusiveMinimum": 0,
-          "maximum": 9007199254740991
-        },
-        "flat": {
-          "description": "Quantidade de variantes (espécie sem gênero).",
-          "type": "integer",
-          "exclusiveMinimum": 0,
-          "maximum": 9007199254740991
+        {
+          "type": "object",
+          "properties": {
+            "genderless": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991,
+              "description": "Quantidade de variantes (espécie sem gênero)."
+            }
+          },
+          "required": [
+            "genderless"
+          ],
+          "additionalProperties": false
         }
-      },
-      "additionalProperties": false,
-      "description": "Quantidade de variantes por gênero — precisa bater exato com os PNGs encontrados em assets/portraits/ssm_<name>/."
+      ],
+      "description": "Quantidade de variantes por gênero — precisa bater exato com os PNGs encontrados em assets/portraits/ssm_<name>/<gênero>/. As chaves declaradas SÃO os gêneros da espécie: {male, female} para espécie com gênero, {genderless} para espécie sem."
     },
     "geracaoArt": {
       "type": "object",
@@ -202,7 +215,7 @@
                   ]
                 },
                 "gender": {
-                  "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                  "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/genderless) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
                   "type": "string",
                   "enum": [
                     "Female",
@@ -714,7 +727,7 @@
                   ]
                 },
                 "gender": {
-                  "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                  "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/genderless) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
                   "type": "string",
                   "enum": [
                     "Female",
@@ -1154,7 +1167,7 @@
                         ]
                       },
                       "gender": {
-                        "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                        "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/genderless) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
                         "type": "string",
                         "enum": [
                           "Female",
@@ -1550,7 +1563,7 @@
             "variantes"
           ],
           "additionalProperties": false,
-          "description": "Bloco de um gênero (male/female/flat): overrides sobre base, mais uma variante nomeada por indivíduo."
+          "description": "Bloco de um gênero (male/female/genderless): overrides sobre base, mais uma variante nomeada por indivíduo."
         },
         "female": {
           "type": "object",
@@ -1599,7 +1612,7 @@
                   ]
                 },
                 "gender": {
-                  "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                  "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/genderless) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
                   "type": "string",
                   "enum": [
                     "Female",
@@ -2039,7 +2052,7 @@
                         ]
                       },
                       "gender": {
-                        "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                        "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/genderless) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
                         "type": "string",
                         "enum": [
                           "Female",
@@ -2435,9 +2448,9 @@
             "variantes"
           ],
           "additionalProperties": false,
-          "description": "Bloco de um gênero (male/female/flat): overrides sobre base, mais uma variante nomeada por indivíduo."
+          "description": "Bloco de um gênero (male/female/genderless): overrides sobre base, mais uma variante nomeada por indivíduo."
         },
-        "flat": {
+        "genderless": {
           "type": "object",
           "properties": {
             "person": {
@@ -2484,7 +2497,7 @@
                   ]
                 },
                 "gender": {
-                  "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                  "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/genderless) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
                   "type": "string",
                   "enum": [
                     "Female",
@@ -2924,7 +2937,7 @@
                         ]
                       },
                       "gender": {
-                        "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
+                        "description": "Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/genderless) do bloco pai, que usa outra convenção (inclusive não tem \"Androgynous\").",
                         "type": "string",
                         "enum": [
                           "Female",
@@ -3320,7 +3333,7 @@
             "variantes"
           ],
           "additionalProperties": false,
-          "description": "Bloco de um gênero (male/female/flat): overrides sobre base, mais uma variante nomeada por indivíduo."
+          "description": "Bloco de um gênero (male/female/genderless): overrides sobre base, mais uma variante nomeada por indivíduo."
         }
       },
       "required": [
@@ -3332,7 +3345,6 @@
   },
   "required": [
     "name",
-    "gendered",
     "species_classes",
     "categories",
     "counts"

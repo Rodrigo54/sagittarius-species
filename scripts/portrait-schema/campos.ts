@@ -43,7 +43,7 @@ export const CAMPOS_PERSON = {
     .enum(GENEROS_PESSOA)
     .optional()
     .describe(
-      'Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/flat) do bloco pai, que usa outra convenção (inclusive não tem "Androgynous").'
+      'Gênero do indivíduo no prompt (Female/Male/Androgynous) — não confundir com a chave de gênero-alvo de geração (male/female/genderless) do bloco pai, que usa outra convenção (inclusive não tem "Androgynous").'
     ),
 } as const;
 

@@ -12,7 +12,7 @@ import {
   type SpeciesClassId,
 } from './vocabulario';
 
-const GENEROS_ALVO = ['male', 'female', 'flat'] as const;
+const GENEROS_ALVO = ['male', 'female', 'genderless'] as const;
 
 /** Fonte de verdade do formato de `assets/portraits/ssm_<especie>/portrait.json`
  * — schema `zod`, com tipos TS inferidos automaticamente (`z.infer`, no fim
@@ -117,6 +117,44 @@ const zCamposCompostos = zCamposDoIndividuo
 
 const CHAVE_VARIANTE = /^\d{3}$/;
 
+const zQuantidade = z.number().int().positive();
+
+/** `counts` é a **fonte única** dos gêneros da espécie: as chaves presentes
+ * dizem se ela tem gênero (`male`+`female`) ou não (`genderless`), e é o mesmo
+ * conjunto de chaves que nomeia as subpastas em
+ * `assets/portraits/ssm_<name>/<gênero>/` e em `mod/gfx/models/portraits/`.
+ * Não existe campo booleano separado declarando isso — seriam duas fontes pro
+ * mesmo fato, que precisariam ser validadas uma contra a outra.
+ *
+ * União estrita (nunca os três juntos, nunca `male` sozinho): o estado
+ * inválido não é representável no tipo, então quem consome `counts` não
+ * carrega um `| undefined` que a validação já eliminou. Espécie de gênero
+ * único não existe hoje e não é suportada — `txt-writer` monta
+ * `portrait_groups` assumindo os dois grupos. */
+const zCounts = z
+  .union(
+    [
+      z
+        .object({
+          male: zQuantidade.describe('Quantidade de variantes masculinas.'),
+          female: zQuantidade.describe('Quantidade de variantes femininas.'),
+        })
+        .strict(),
+      z
+        .object({
+          genderless: zQuantidade.describe('Quantidade de variantes (espécie sem gênero).'),
+        })
+        .strict(),
+    ],
+    {
+      error:
+        'counts inválido: espécie sem gênero declara só "genderless"; espécie com gênero declara "male" E "female" (nunca as duas formas juntas, nunca um gênero sozinho). Os valores são inteiros positivos.',
+    }
+  )
+  .describe(
+    'Quantidade de variantes por gênero — precisa bater exato com os PNGs encontrados em assets/portraits/ssm_<name>/<gênero>/. As chaves declaradas SÃO os gêneros da espécie: {male, female} para espécie com gênero, {genderless} para espécie sem.'
+  );
+
 /** Config de sampler/resolução do pipeline de geração de arte via IA
  * (`bun run art`, Flux.2 Klein). São só quatro campos porque o resto do grafo
  * não tem o que configurar por espécie: existe um único arquivo de
@@ -191,7 +229,7 @@ function zBlocoGenero() {
         ),
     })
     .strict()
-    .describe('Bloco de um gênero (male/female/flat): overrides sobre base, mais uma variante nomeada por indivíduo.');
+    .describe('Bloco de um gênero (male/female/genderless): overrides sobre base, mais uma variante nomeada por indivíduo.');
 }
 
 const zGeracaoArt = z
@@ -200,7 +238,7 @@ const zGeracaoArt = z
     modelo: zModelo.optional(),
     male: zBlocoGenero().optional(),
     female: zBlocoGenero().optional(),
-    flat: zBlocoGenero().optional(),
+    genderless: zBlocoGenero().optional(),
   })
   .strict()
   .describe(
@@ -210,7 +248,6 @@ const zGeracaoArt = z
 const zPortraitConfigBase = z
   .object({
     name: z.string().describe('Nome da espécie sem o prefixo ssm_ — precisa bater com o nome da pasta assets/portraits/ssm_<name>/.'),
-    gendered: z.boolean().describe('true = a espécie tem subpastas male/female; false = espécie "flat", PNGs NNN.png direto na raiz da pasta.'),
     rig: z.enum(RIGS_VALIDOS).optional().describe('Rig de retrato compartilhado. Omitido = sl_shared.'),
     modo: z.enum(MODOS_ENQUADRAMENTO).optional().describe('Modo de enquadramento — só faz sentido em rig com guia (ssm_shared). Omitido = largura.'),
     ancora: z.enum(ANCORAS_VERTICAIS).optional().describe('O que encosta no topo do guia — só faz sentido em rig com guia (ssm_shared). Omitido = conteudo.'),
@@ -225,14 +262,7 @@ const zPortraitConfigBase = z
       .describe(
         'Categorias (abas do editor de império) onde esta espécie aparece, declaradas por extenso — inclusive as que espelham uma classe declarada em species_classes. "sagittarius" nunca é declarada: toda espécie do mod entra nela automaticamente.'
       ),
-    counts: z
-      .object({
-        male: z.number().int().positive().optional().describe('Quantidade de variantes masculinas.'),
-        female: z.number().int().positive().optional().describe('Quantidade de variantes femininas.'),
-        flat: z.number().int().positive().optional().describe('Quantidade de variantes (espécie sem gênero).'),
-      })
-      .strict()
-      .describe('Quantidade de variantes por gênero — precisa bater exato com os PNGs encontrados em assets/portraits/ssm_<name>/.'),
+    counts: zCounts,
     geracaoArt: zGeracaoArt.optional(),
   })
   .strict()
@@ -246,7 +276,7 @@ const zPortraitConfigBase = z
 function validarVariantesDeGeracaoArt(
   ctx: z.RefinementCtx,
   geracaoArt: GeracaoArt | undefined,
-  counts: { male?: number; female?: number; flat?: number }
+  counts: Counts
 ): void {
   if (!geracaoArt) return;
 
@@ -254,7 +284,7 @@ function validarVariantesDeGeracaoArt(
     const bloco = geracaoArt[genero];
     if (!bloco) continue;
 
-    const esperado = counts[genero];
+    const esperado = quantidadeDe(counts, genero);
     if (esperado === undefined) {
       ctx.addIssue({
         code: 'custom',
@@ -343,10 +373,27 @@ export const zPortraitConfig = zPortraitConfigBase.superRefine((config, ctx) => 
   validarFiliacao(ctx, config.species_classes, config.categories);
 });
 
+export type Counts = z.infer<typeof zCounts>;
+
+/** Os gêneros que a espécie tem, na ordem canônica de `GENEROS_ALVO` — as
+ * chaves de `counts`, que também são os nomes das subpastas em `assets/` e em
+ * `mod/`. Ponto único que traduz "o que o arquivo declara" em "quais gêneros
+ * percorrer", usado por todo pipeline que itera gênero. */
+export function generosDe(counts: Counts): GeneroAlvo[] {
+  return GENEROS_ALVO.filter((genero) => genero in counts);
+}
+
+/** A quantidade declarada para um gênero, ou `undefined` se a espécie não o
+ * tem. Só faz sentido quando o gênero vem de fora do arquivo (argumento de
+ * linha de comando, por exemplo) — quem itera `generosDe` já sabe que existe. */
+export function quantidadeDe(counts: Counts, genero: GeneroAlvo): number | undefined {
+  return (counts as Partial<Record<GeneroAlvo, number>>)[genero];
+}
+
 export type PortraitConfig = z.infer<typeof zPortraitConfig>;
 export type CamposCompostos = z.infer<typeof zCamposCompostos>;
 export type Variante = z.infer<typeof zVariante>;
 export type GeracaoArt = z.infer<typeof zGeracaoArt>;
 export type GeracaoArtGenero = z.infer<ReturnType<typeof zBlocoGenero>>;
 export type GeracaoArtModelo = z.infer<typeof zModelo>;
-export type GeneroAlvo = 'male' | 'female' | 'flat';
+export type GeneroAlvo = (typeof GENEROS_ALVO)[number];

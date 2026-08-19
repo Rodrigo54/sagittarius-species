@@ -1,6 +1,5 @@
 {
   "name": "octopus",
-  "gendered": false,
   "rig": "ssm_shared",
   "species_classes": [
     "MOL"
@@ -9,6 +8,6 @@
     "molluscoids"
   ],
   "counts": {
-    "flat": 21
+    "genderless": 21
   }
 }

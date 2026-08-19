@@ -27,7 +27,7 @@ export async function prepararEspecie(
   pastaAssetsRaiz: string,
   pastaStaging: string
 ): Promise<Preparado> {
-  const origens = [...info.arquivosMale, ...info.arquivosFemale, ...info.arquivosFlat];
+  const origens = Object.values(info.arquivos).flat();
   const rig = rigDe(info.config);
 
   // Recria a pasta da espécie do zero: sem isso, um PNG removido da arte-fonte

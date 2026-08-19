@@ -24,7 +24,7 @@ import { montarPrompts } from './prompt-builder';
  *    Vem de graça: montar o prompt de cada variante dispara
  *    `ErroCampoObrigatorio` do motor de interpolação. */
 
-const GENEROS: readonly GeneroAlvo[] = ['male', 'female', 'flat'];
+const GENEROS: readonly GeneroAlvo[] = ['male', 'female', 'genderless'];
 
 /** Campos de dado efetivamente declarados no objeto mesclado (`template` e
  * `extra` não contam — são o texto, não o dado que precisa chegar nele). */

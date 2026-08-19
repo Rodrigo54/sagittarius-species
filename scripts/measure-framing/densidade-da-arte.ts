@@ -39,7 +39,7 @@ async function main() {
     const info = await carregarEspecie(PASTA_PORTRAITS, slug);
     if (!rigDe(info.config).guia) continue; // rig legado não deriva enquadramento
 
-    const arquivos = [...info.arquivosMale, ...info.arquivosFemale, ...info.arquivosFlat];
+    const arquivos = Object.values(info.arquivos).flat();
     const valores: number[] = [];
     for (const arquivo of arquivos) {
       valores.push(detectarInicioDoCorpo(decodificarPng(await readFile(arquivo))));

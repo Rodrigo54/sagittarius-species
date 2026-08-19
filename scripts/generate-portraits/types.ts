@@ -1,4 +1,4 @@
-import type { PortraitConfig, RigId } from '../portrait-schema';
+import type { GeneroAlvo, PortraitConfig, RigId } from '../portrait-schema';
 
 export type { PortraitConfig, RigId };
 
@@ -112,9 +112,11 @@ export interface SpeciesInfo {
   /** Caminho completo até assets/portraits/ssm_<especie> */
   pastaAssets: string;
   config: PortraitConfig;
-  arquivosMale: string[];
-  arquivosFemale: string[];
-  arquivosFlat: string[];
+  /** PNGs de origem por gênero, com uma chave por gênero declarado em
+   * `config.counts` (`generosDe`) — as mesmas chaves que nomeiam as subpastas
+   * em `assets/` e em `mod/`. Quem precisa de todos os arquivos itera os
+   * valores; quem precisa de um gênero específico já sabe que ele existe. */
+  arquivos: Partial<Record<GeneroAlvo, string[]>>;
 }
 
 export function rigDe(config: PortraitConfig): RigInfo {
