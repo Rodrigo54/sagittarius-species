@@ -55,7 +55,13 @@ export const CAMPOS_HAIR = {
 
 export const CAMPOS_EYES = {
   shape: z.enum(FORMAS_OLHO).optional().describe('Formato dos olhos.'),
-  color: z.enum(CORES_OLHO).optional().describe('Cor dos olhos.'),
+  color: z.enum(CORES_OLHO).optional().describe('Cor dos olhos, no vocabulário de íris humana (Blue, Hazel...).'),
+  primary_color: z
+    .enum(CORES)
+    .optional()
+    .describe(
+      'Cor do olho no vocabulário genérico de cores (o mesmo de hair/torso), para olhos que a íris humana de eyes.color não descreve: LED, visor, brilho emissivo, lente colorida.'
+    ),
 } as const;
 
 export const CAMPOS_TORSO = {
