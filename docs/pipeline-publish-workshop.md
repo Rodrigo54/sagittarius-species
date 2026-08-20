@@ -22,9 +22,15 @@ baixando os arquivos que faltam direto dos servidores da Steam. Por isso a insta
 porque, depois do primeiro uso, essa mesma pasta passa a guardar a sessão de login cacheada pelo `steamcmd`;
 uma reinstalação destruiria esse cache e obrigaria a fazer login (com senha + Steam Guard) de novo.
 
-## Os dois arquivos `.md` em `steam-workshop/`
+## Os arquivos `.md` em `steam-workshop/`
 
-- **`description.md`** — a descrição do item na página do Workshop. Markdown válido (headings, `**negrito**`,
+- **`description.pt.md`** — a descrição em português, **fonte de autoria**: é aqui que o texto nasce e é
+  revisado. Não é publicado (a API exposta pelo `steamcmd` não aceita descrição por idioma — ver "Fora de
+  escopo"), e o script de publish nem lê este arquivo. Quem for mudar a descrição edita este primeiro e depois
+  reflete a mudança no `description.md`; os dois carregam a mesma estrutura (mesmas seções, mesma ordem, mesmos
+  emojis, mesmos números), o que torna a tradução um espelho.
+- **`description.md`** — a descrição do item na página do Workshop, em inglês, **tradução do `description.pt.md`**.
+  Markdown válido (headings, `**negrito**`,
   links, imagens — inclusive o padrão `[![alt](imgurl)](linkurl)` pra um banner clicável). Usado inteiro em
   **todo publish** (não só `--metadata-only`) — `title`/`description` sempre vão no VDF, então a descrição da
   Steam nunca fica desatualizada em relação ao arquivo.
@@ -34,7 +40,7 @@ uma reinstalação destruiria esse cache e obrigaria a fazer login (com senha + 
   que encontrar. O modo normal do publish usa só essa seção; o resto do arquivo é histórico de referência, nunca
   reenviado.
 
-Os dois eram uma mistura de BBCode literal com markdown solto antes desta pipeline existir — foram reescritos
+`description.md` e `change-notes.md` eram uma mistura de BBCode literal com markdown solto antes desta pipeline existir — foram reescritos
 pra Markdown puro (ver `git log` de `steam-workshop/*.md` em torno da introdução deste pipeline) porque o
 conversor precisa de sintaxe válida pra funcionar direito; BBCode digitado à mão nesses arquivos ainda funciona
 (não é sintaxe markdown válida, então o parser trata como texto puro e ele atravessa sem mudança), mas não é
