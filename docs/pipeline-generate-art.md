@@ -210,6 +210,38 @@ Modelos instalados, mapeamento de pastas e pegadinhas encontradas ao configurar 
   autenticado, é preciso visitar a página do modelo gated no site e clicar em "Agree and access repository"
   manualmente antes de baixar (caso de `black-forest-labs/FLUX.1-dev`).
 
+### Comfy MCP (tools do ComfyUI dentro do Claude Code)
+
+O **Comfy MCP local** (`https://github.com/Comfy-Org/comfy-mcp`) expõe o ComfyUI como tools de MCP — buscar
+modelos e templates, validar e submeter workflows, acompanhar a fila, puxar os outputs. É um servidor stdio que
+não fala com o ComfyUI direto: ele envolve o `comfy-cli`, e é o `comfy-cli` que chega no servidor
+`127.0.0.1:8188` descrito acima.
+
+- **Instalação**: `uv tool install comfy-mcp` e `uv tool install "comfy-cli>=1.14.0"` (1.14.0 é o piso de versão
+  que o servidor exige). Os executáveis ficam em `C:\Users\rodrigo\.local\bin\` (`comfy-mcp.exe`, `comfy.exe`).
+  Cada um no seu venv isolado do `uv`, sem misturar dependências com o venv que o Stability Matrix gerencia.
+- **Workspace**: `comfy set-default D:\StabilityMatrix\Packages\ComfyUI` aponta o `comfy-cli` pra instalação do
+  Stability Matrix, em vez de ele criar um workspace próprio com um segundo ComfyUI.
+- **Registro no Claude Code**, em escopo `user` (vale em qualquer projeto, não só neste repo):
+
+  ```bash
+  claude mcp add comfy-mcp -s user -e "COMFY_BIN=C:\Users\rodrigo\.local\bin\comfy.exe" \
+    -- "C:\Users\rodrigo\.local\bin\comfy-mcp.exe"
+  ```
+
+  `COMFY_BIN` é obrigatório aqui: o cliente MCP lança o servidor com um ambiente mínimo, que não inclui o `PATH`
+  do shell, então sem o caminho absoluto o servidor sobe e completa o handshake mas toda tool falha com
+  "`comfy` not found on PATH".
+- **Quem sobe o ComfyUI é o Rodrigo, pela UI do Stability Matrix** — não a tool `launch_comfyui`. O venv do
+  `comfy-cli` não tem torch, então quem tem que iniciar o processo é o venv do próprio pacote. Enquanto o
+  servidor estiver desligado, as tools que dependem dele (`server_info`, `run_workflow`, `generate_image`)
+  falham; as offline (ler notas e slots de um workflow, por exemplo) continuam valendo.
+- **`COMFY_API_KEY` não está configurada**, de propósito: ela só é necessária pros nós de partner-API (Seedream,
+  Kling, Nano Banana, Veo e afins), que gastam créditos da Comfy. O pipeline deste repo é Flux.2 Klein local.
+
+Vale aqui a mesma regra do `bun run art` (topo deste documento): **enfileirar geração de verdade é decisão do
+Rodrigo**, agora inclusive pelas tools do MCP, que consomem a mesma GPU.
+
 ### Mapeamento de pastas de modelo (Stability Matrix ↔ ComfyUI)
 
 O ComfyUI já reconhece essas pastas nativamente, sem precisar editar `extra_model_paths.yaml`:
