@@ -19,8 +19,8 @@ describe('montarVdf', () => {
     expect(vdf).toContain('"title"\t\t"Sagittarius Species"');
     expect(vdf).toContain('"description"\t\t"Uma descrição [b]qualquer[/b]."');
     expect(vdf).not.toContain('"changenote"');
-    // Barra invertida do caminho Windows precisa vir duplicada no VDF
-    expect(vdf).toContain('"contentfolder"\t\t"D:\\\\dev\\\\mod"');
+    // Caminho Windows vai literal: o parser do steamcmd não processa escapes
+    expect(vdf).toContain('"contentfolder"\t\t"D:\\dev\\mod"');
   });
 
   test('changenote entra quando fornecido, junto com title/description', () => {
@@ -31,9 +31,9 @@ describe('montarVdf', () => {
     expect(vdf).toContain('"changenote"\t\t"* Mudança 1\n* Mudança 2"');
   });
 
-  test('escapa aspas duplas dentro do valor', () => {
+  test('troca as aspas duplas do valor por aspas tipográficas', () => {
     const vdf = montarVdf({ ...BASE, changenote: 'Texto com "aspas" no meio.' });
-    expect(vdf).toContain('"changenote"\t\t"Texto com \\"aspas\\" no meio."');
+    expect(vdf).toContain('"changenote"\t\t"Texto com “aspas” no meio."');
   });
 
   test('produz um bloco "workshopitem" bem-formado', () => {

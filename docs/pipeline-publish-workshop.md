@@ -108,10 +108,14 @@ key/value pairs that should be updated"):
 }
 ```
 
-`escaparValorVdf` escapa barra invertida e aspas duplas (`\` → `\\`, `"` → `\"`) — importa em caminhos Windows
-(`D:\dev\...` vira `D:\\dev\\...` no VDF) e em qualquer texto de changenote/descrição que contenha aspas.
-Quebras de linha literais dentro do valor não precisam de escape. Gerado em runtime dentro de `bin/steamcmd/`
-(fora do git, sobrescrito a cada publish).
+O KeyValues do `steamcmd` lê este VDF **sem sequências de escape**: dentro de um valor entre aspas, `\"` não
+escapa nada — a aspa encerra o valor ali, e o resto do texto cai na posição de chave, derrubando o publish com
+`Assertion Failed: CKeyValuesSystem::AddStringToPool: key name too long` seguido de `got } in key in file
+workshopitem`. Como não existe forma de representar uma aspa dupla no valor, `sanitizarValorVdf` troca cada uma
+por aspa tipográfica, alternando abertura (`“`) e fechamento (`”`) — é o único caractere que a montagem do VDF
+altera. Barra invertida e quebra de linha são literais e passam intactas, inclusive nos caminhos Windows de
+`contentfolder`/`previewfile` (`D:\dev\...` vai como está). Gerado em runtime dentro de `bin/steamcmd/` (fora do
+git, sobrescrito a cada publish).
 
 ## Orquestração (`index.ts`)
 

@@ -12,15 +12,22 @@ export type ConteudoVdfPublicacao = {
   changenote?: string;
 };
 
-/** Escapa um valor pro formato VDF (KeyValues): barra invertida e aspas duplas são os únicos
- * caracteres especiais dentro de uma string entre aspas. Quebras de linha literais são aceitas
- * sem escape (changenote/description costumam ser multi-linha). */
-function escaparValorVdf(valor: string): string {
-  return valor.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+/** O KeyValues do steamcmd lê este VDF sem sequências de escape: dentro de um valor entre aspas,
+ * `\"` não escapa nada e a aspa encerra o valor ali, jogando o resto do texto na posição de chave
+ * (o parse falha com `key name too long` / `got } in key`). Como não há como representar uma aspa
+ * dupla, ela vira aspa tipográfica, alternando abertura e fechamento. Barra invertida e quebra de
+ * linha são literais e passam intactas — inclusive nos caminhos Windows de `contentfolder`. */
+function sanitizarValorVdf(valor: string): string {
+  let proximaEhAbertura = true;
+  return valor.replace(/"/g, () => {
+    const aspa = proximaEhAbertura ? '“' : '”';
+    proximaEhAbertura = !proximaEhAbertura;
+    return aspa;
+  });
 }
 
 function par(chave: string, valor: string): string {
-  return `\t"${chave}"\t\t"${escaparValorVdf(valor)}"`;
+  return `\t"${chave}"\t\t"${sanitizarValorVdf(valor)}"`;
 }
 
 export function montarVdf(config: ConteudoVdfPublicacao): string {
