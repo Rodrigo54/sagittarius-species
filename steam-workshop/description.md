@@ -2,7 +2,7 @@
 
 Sagittarius Species is the portrait pack for anyone who's ever wanted their own empire to look like it walked straight out of a con hall, a tabletop splatbook, and a late-night sci-fi marathon — all at once. AI-assisted art, a shared animated rig, and a genuine excuse to fill the galaxy with people you actually want to run into on the diplomacy screen.
 
-**18 species · 587 portraits · one shared animated rig · updated for Stellaris 4.5**
+**19 species · 637 portraits · one shared animated rig · updated for Stellaris 4.5**
 
 Every species shows up under its matching tab in the empire creator, and the mod registers a tab of its own, Sagittarius.
 
@@ -10,6 +10,8 @@ Every species shows up under its matching tab in the empire creator, and the mod
 
 - 🌍 **Humans (augmented realism)** — 50 portraits (25 male / 25 female)\
   Colonists from an old blue sphere who traded the patience of evolution for discreet implants and pressure suits. Wherever they arrive they measure, map and stay: expansion, for them, is less conquest than habit.
+- 🕊️ **UN Humans** — 50 portraits (25 male / 25 female)\
+  A unified Earth peacekeeping corps, deployed to mediate as often as to fight. They carry enough firepower to enforce the ceasefire they're proposing, and enough patience to wait for someone to accept it.
 - 🧝 **Space Elves** — 50 portraits (25 male / 25 female)\
   Long-lived houses that left the forest for the hull of a ship and began counting history in centuries instead of generations. They fly in pale close-fitted suits and treat every new route as a verse still waiting to be memorized.
 - 👑 **High Elves** — 50 portraits (25 male / 25 female)\

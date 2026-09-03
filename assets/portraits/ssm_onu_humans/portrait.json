@@ -1,0 +1,14 @@
+{
+  "name": "onu_humans",
+  "rig": "ssm_shared",
+  "species_classes": [
+    "HUM"
+  ],
+  "categories": [
+    "humanoids"
+  ],
+  "counts": {
+    "male": 25,
+    "female": 25
+  }
+}

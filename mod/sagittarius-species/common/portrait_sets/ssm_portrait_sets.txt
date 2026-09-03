@@ -27,6 +27,7 @@ ssm_humanoids = {
     "ssm_elves"
     "ssm_high_elves"
     "ssm_knight"
+    "ssm_onu_humans"
     "ssm_vargrosianos"
   }
   conditional_portraits = {

@@ -12,7 +12,7 @@ Clausewitz script.
 ## O que é este projeto
 
 Sagittarius Species é um mod para Stellaris (Paradox Interactive) que adiciona retratos de espécies gerados por IA
-(18 espécies: elfos, moluscos, avianos, ciborgues, necromantes, etc.). Este repositório é um pipeline de
+(19 espécies: elfos, moluscos, avianos, ciborgues, necromantes, etc.). Este repositório é um pipeline de
 conteúdo/assets, não uma aplicação — não existe um passo de build/test/lint no sentido tradicional. As duas coisas
 que existem são:
 
@@ -167,7 +167,7 @@ continua versionado por dois motivos: é a **fonte de derivação** do `ssm_shar
 mesh dele) e é a única cópia restante desse mesh/animação, já que o mod de origem não existe mais.
 **`ssm_shared/`** é o fork **derivado** (`bun run shared-rig`, sempre regenerado do zero a partir de
 `sl_shared/`, nunca editado à mão) com o mesh reduzido a um único plano (`pPlaneShape4`), UV remapeada pro
-canvas inteiro e recortado no topo — canvas **980×780** (isotrópico), usado por **todas as 18 espécies** e
+canvas inteiro e recortado no topo — canvas **980×780** (isotrópico), usado por **todas as 19 espécies** e
 ponto de partida pra espécies novas.
 Trocar o rig de uma espécie é só editar `rig` no `portrait.json` e rodar `bun run portrait`, sem passo de
 migração.
