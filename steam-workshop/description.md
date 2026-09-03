@@ -2,7 +2,7 @@
 
 Sagittarius Species is the portrait pack for anyone who's ever wanted their own empire to look like it walked straight out of a con hall, a tabletop splatbook, and a late-night sci-fi marathon — all at once. AI-assisted art, a shared animated rig, and a genuine excuse to fill the galaxy with people you actually want to run into on the diplomacy screen.
 
-**19 species · 637 portraits · one shared animated rig · updated for Stellaris 4.5**
+**19 species · 626 portraits · one shared animated rig · updated for Stellaris 4.5**
 
 Every species shows up under its matching tab in the empire creator, and the mod registers a tab of its own, Sagittarius.
 
@@ -18,7 +18,7 @@ Every species shows up under its matching tab in the empire creator, and the mod
   Nobility that plates its own skin in worked gold and carries gemstones engraved with the entire bloodline of whoever wears them. They govern by protocol and memory, certain that any mistake made today was already made and corrected a thousand years ago.
 - ✨ **Astral Humans** — 50 portraits (25 male / 25 female)\
   Minds that opened a tear in the veil and came back with violet burning in their eyes and sigils glowing under the armor. They see the route before they calculate it, which is why they hardly ever explain the decision they just made.
-- 🏛️ **New Vargrosians** — 41 portraits (25 male / 16 female)\
+- 🏛️ **New Vargrosians** — 30 portraits (15 male / 15 female)\
   An ash-skinned people in heavy mantles, heirs to a culture old enough that its own architecture is already ruin on three worlds. They speak little, record everything, and judge an entire empire by how carefully it treats what came before.
 - ⚔️ **Star Knight** — 40 portraits (21 male / 19 female)\
   A sworn order in silver and blue plate, trained to cross the void the way one crosses a monastery hallway. Each knight answers for a stretch of space and defends it without expecting reinforcement, orders, or reward.
