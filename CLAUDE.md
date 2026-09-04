@@ -58,6 +58,7 @@ bun run shared-rig   # bun scripts/generate-shared-rig/index.ts — deriva gfx/.
 bun run rooms         # bun scripts/generate-rooms/index.ts — sincroniza assets/city_sets/ com mod/ (DDS + .txt), direto no mod/
 bun run names          # bun scripts/generate-names/index.ts — gera name_lists + species_names (veja seção abaixo)
 bun run art   # bun scripts/generate-art/index.ts <slug> <male|female|genderless> [-n NNN,...] [-s [N]] [-p] [-e] — gera retratos via IA no ComfyUI local; `-s` sempre grava a seed no portrait.json (valor fixa, sem valor sorteia, `default` volta pra determinística e apaga a chave) (veja seção abaixo)
+bun run promo          # bun scripts/generate-promo/index.ts [slug] — gera assets/promo/ssm_<espécie>.png a partir de species-promo.json; aceita um slug opcional pra processar uma espécie só (veja seção abaixo)
 bun run copy           # pwsh scripts/copy.ps1 — sincroniza o mod na pasta local de mods do Stellaris (apaga e recopia, reportando a variação de tamanho)
 bun run publish-workshop -- [-m|--metadata-only]   # bun scripts/publish-workshop/index.ts — publica no Steam Workshop via steamcmd (veja seção "Publicação no Steam Workshop")
 ```
@@ -208,6 +209,19 @@ e depois evoluído: `docs/history/2026-07-28-generate-art-v1.md` e
 Peças completas do pipeline (schema, `base.json`, `prompt-builder.ts`, templates do workflow ComfyUI,
 precedência de seed), setup do ComfyUI local (modelos instalados, pastas, gotchas) e a receita pra instalar um
 modelo novo: `docs/pipeline-generate-art.md`.
+
+## Pipeline de imagens promocionais (`bun run promo`)
+
+`scripts/generate-promo/` compõe, via ImageMagick, uma imagem de divulgação 1920×1080 por espécie
+(`assets/promo/ssm_<espécie>.png`), combinando retratos já existentes (`assets/portraits/`) e fundos de cidade
+(`assets/city_sets/`) — não gera arte nova via IA, só reaproveita o que já existe. `assets/promo/
+species-promo.json` (validado por `scripts/promo-schema/`, mesmo desenho de `portrait-schema/`) é a fonte de
+nome/lore/escolha de arte por espécie: cada uma declara `variantes` (as 3 do pódio, sempre explícitas, sem
+seleção automática) e, opcionalmente, `fundo` e `escalas` por colocação. Layout, grade de 12 colunas, regra de
+"nunca flutuando" (mesmo princípio de `generate-portraits/framing.ts`) e as armadilhas do ImageMagick já
+resolvidas (`-gravity` vazando de dentro de `( )`, caminho Windows quebrando `-font`/`caption:@`):
+`docs/pipeline-promo.md`; o porquê da migração de 4 pra 3 personagens e do layout ter virado grade: 
+`docs/history/2026-09-03-generate-promo.md`.
 
 ## Pipeline de listas de nomes / localização / species_names
 

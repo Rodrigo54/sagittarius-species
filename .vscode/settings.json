@@ -47,6 +47,10 @@
     {
       "fileMatch": ["assets/name_lists/*.json"],
       "url": "./scripts/name-list-schema/name-list.schema.json"
+    },
+    {
+      "fileMatch": ["assets/promo/species-promo.json"],
+      "url": "./scripts/promo-schema/promo.schema.json"
     }
   ]
 }

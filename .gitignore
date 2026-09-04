@@ -5,6 +5,7 @@ output
 bin
 lista_de_arquivos.txt
 .portraits-framed
+.promo-staging
 .portraits-generated
 *.af~lock~
 .env

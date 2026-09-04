@@ -15,6 +15,7 @@
     "rooms": "bun scripts/generate-rooms/index.ts",
     "names": "bun scripts/generate-names/index.ts",
     "art": "bun scripts/generate-art/index.ts",
+    "promo": "bun scripts/generate-promo/index.ts",
     "publish-workshop": "bun scripts/publish-workshop/index.ts"
   },
   "author": "",
