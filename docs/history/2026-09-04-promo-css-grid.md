@@ -79,3 +79,18 @@ Fix: `scripts/generate-promo/renderizacao.ts` escreve o HTML num arquivo tempor�
 a ter a mesma origem `file://` dos recursos que referencia, e tudo carrega normalmente. Vale registrar como
 pegadinha porque não é intuitivo à primeira vista — `setContent` parece a API óbvia pra "renderizar este HTML",
 e o comportamento errado não produz nenhum sinal de erro pra apontar a causa.
+
+## Depois do commit: Steam rejeitando o tamanho — PNG vira JPEG
+
+Logo depois de commitar a migração, o Rodrigo reportou que a Steam recusava as imagens de
+`assets/promo/ssm_*.png` na galeria do Workshop por tamanho — o `page.screenshot()` do Playwright, sem `type`
+explícito, sai como PNG lossless, e o canvas 1920×1080 cheio de foto/gradiente/personagem produzia arquivos de
+~2-2.6MB, bem acima do 1MB que a Steam aceita (o mesmo motivo pelo qual `steam-workshop/pictures/screenshot__*`
+já eram `.jpg`, não `.png`).
+
+Fix: `page.screenshot({ type: 'jpeg', quality: 85 })`. A composição não é pixel art nem tem texto miúdo onde
+artefato de compressão salte aos olhos — é essencialmente uma foto composta —, então a perda de qualidade em 85
+é imperceptível e o resultado caiu pra ~300-400KB, bem abaixo do limite. `caminhoSaida()` (`types.ts`) passou a
+resolver `.jpg`, e `limparOrfaos()` (`index.ts`) ganhou uma regra extra: qualquer `ssm_*.png` remanescente é
+órfão por definição, já que nenhuma espécie gera mais PNG — foi assim que os 19 PNGs antigos, já commitados na
+migração anterior, saíram do repositório sem precisar de um `git rm` manual por fora do pipeline.

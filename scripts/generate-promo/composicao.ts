@@ -26,6 +26,12 @@ import type { VariantePodio } from './selecao';
 import { montarHtml, type PersonagemRenderizado } from './template';
 import { medirRecortes, type MedidaRecorte } from './trim';
 
+/** A Steam rejeita imagem de galeria do Workshop acima de 1MB — a saída sai
+ * como JPEG (não PNG) por causa disso; 85 é o ponto onde a compressão fica
+ * imperceptível a olho nessa composição (foto/gradiente, sem texto miúdo nem
+ * bordas duras de pixel art) e ainda cai bem abaixo do limite. */
+const QUALIDADE_JPEG = 85;
+
 /** Geometria final de um personagem (posição/tamanho no canvas) mais o
  * recorte CSS que reproduz o "trim + resize!" físico que o ImageMagick fazia
  * antes — escala a bounding box do trim pra caber exatamente em
@@ -111,5 +117,5 @@ export async function montarImagem(
   // bloqueiam o evento `load` — sem isso o screenshot pode sair com a fonte
   // de fallback do sistema em vez de Orbitron/Exo2.
   await page.evaluate(() => document.fonts.ready);
-  await page.screenshot({ path: destino });
+  await page.screenshot({ path: destino, type: 'jpeg', quality: QUALIDADE_JPEG });
 }

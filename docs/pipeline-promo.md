@@ -1,6 +1,6 @@
 # Pipeline de imagens promocionais
 
-Como `bun run promo` gera, para cada espécie, uma imagem de divulgação 1920×1080 (`assets/promo/ssm_<slug>.png`)
+Como `bun run promo` gera, para cada espécie, uma imagem de divulgação 1920×1080 (`assets/promo/ssm_<slug>.jpg`)
 combinando arte já existente — retratos (`assets/portraits/`) e fundos de cidade (`assets/city_sets/`) — via
 HTML/CSS renderizado num Chromium/Edge headless (Playwright). Não gera arte nova via IA: é um pipeline de
 composição, não de geração (a regra de quem roda `bun run art` continua igual, veja a seção própria no
@@ -115,6 +115,16 @@ O degradê é um `linear-gradient(to right, ...)` direto — trivial em CSS; a v
 precisava de um `gradient:black-none` vertical girado -90° pra sair com a orientação certa, uma armadilha que
 deixou de existir com a migração.
 
+### Formato de saída: JPEG, não PNG
+
+O screenshot sai como JPEG (`page.screenshot({ type: 'jpeg', quality: 85 })`), não PNG — a Steam rejeita
+imagem de galeria do Workshop acima de 1MB, e o screenshot lossless de um canvas 1920×1080 cheio de foto/
+gradiente passava disso por uma boa margem (~2-2.6MB). A composição não é pixel art nem tem texto miúdo onde
+artefato de compressão salte aos olhos, então a perda do JPEG em qualidade 85 é imperceptível a olho e o
+resultado cai pra ~300-400KB — bem abaixo do limite, com folga. `caminhoSaida()` em `types.ts` já resolve pra
+`.jpg`; a limpeza de órfãos em `index.ts` trata qualquer `ssm_*.png` remanescente como órfão por definição
+(nenhuma espécie gera mais PNG desde essa mudança).
+
 ## Fontes e calibração de tamanho
 
 `Orbitron-Bold.ttf` (título) e `Exo2-Regular.ttf` (subtítulo/lore) ficam vendorizadas em `assets/promo/`, com a
@@ -149,10 +159,10 @@ bun run promo ssm_elves   # só uma espécie, pra iterar rápido — as outras n
 
 Todas as espécies são resolvidas (variantes + fundo) antes de compor qualquer imagem — erro em uma trava a
 geração inteira, em vez de deixar `assets/promo/` com imagens novas e antigas misturadas. Rodando sem filtro,
-`assets/promo/ssm_*.png` cuja espécie saiu de `species-promo.json` é apagado (mesma lógica de limpeza de
+`assets/promo/ssm_*.jpg` cuja espécie saiu de `species-promo.json` é apagado (mesma lógica de limpeza de
 órfãos que `generate-portraits`/`generate-rooms` aplicam do lado do `mod/`, aqui aplicada à própria saída em
 `assets/`).
 
-A saída fica em `assets/promo/ssm_<slug>.png` — fonte/ativo do repositório como qualquer outro, não em
+A saída fica em `assets/promo/ssm_<slug>.jpg` — fonte/ativo do repositório como qualquer outro, não em
 `steam-workshop/pictures/`; o upload pra galeria de screenshots do Workshop continua manual (veja a limitação
 equivalente documentada na seção de publish-workshop do `CLAUDE.md`).

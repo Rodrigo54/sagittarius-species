@@ -97,14 +97,19 @@ async function main() {
   );
 }
 
-/** Apaga `assets/promo/ssm_*.png` cuja espécie saiu de `species-promo.json` —
+/** Apaga `assets/promo/ssm_*.jpg` cuja espécie saiu de `species-promo.json` —
  * mesma lógica de limpeza de órfãos que `generate-portraits`/`generate-rooms`
- * aplicam do lado do `mod/`, aqui aplicada à própria saída em `assets/`. */
+ * aplicam do lado do `mod/`, aqui aplicada à própria saída em `assets/`.
+ * Também varre `.png`: a saída era PNG antes da migração pra JPEG (Steam
+ * rejeitava o tamanho), então qualquer `ssm_*.png` remanescente de uma
+ * execução anterior é órfão por definição — nenhuma espécie gera mais PNG. */
 async function limparOrfaos(slugsValidos: string[]) {
   const itens = await readdir(PASTA_PROMO_ASSETS);
-  const validos = new Set(slugsValidos.map((slug) => `${slug}.png`));
+  const validos = new Set(slugsValidos.map((slug) => `${slug}.jpg`));
   for (const item of itens) {
-    if (item.endsWith('.png') && item.startsWith('ssm_') && !validos.has(item)) {
+    const eOrfao =
+      item.startsWith('ssm_') && (item.endsWith('.png') || (item.endsWith('.jpg') && !validos.has(item)));
+    if (eOrfao) {
       await unlink(join(PASTA_PROMO_ASSETS, item));
       console.log(`Removido órfão: assets/promo/${item}`);
     }
