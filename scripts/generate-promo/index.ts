@@ -1,8 +1,18 @@
+// O projeto compila sem lib DOM (scripts/tsconfig.json — código Bun
+// server-side); esta referência traz `document` só pro corpo da função que o
+// Playwright serializa e roda dentro do browser (`page.evaluate`).
+/// <reference lib="dom" />
+
 import { readdir, unlink } from 'node:fs/promises';
 import { join } from 'node:path';
+import { chromium } from 'playwright';
+import { calibrar } from './calibracao';
 import { montarImagem } from './composicao';
 import { carregarConfig, carregarRoomsDisponiveis, carregarVariantesDisponiveis } from './discovery';
+import { CANVAS } from './layout';
+import { renderizarHtml } from './renderizacao';
 import { selecionarFundo, selecionarVariantes } from './selecao';
+import { paginaDeCalibracaoHtml } from './template';
 import { caminhoSaida, PASTA_PROMO_ASSETS } from './types';
 
 async function main() {
@@ -52,11 +62,28 @@ async function main() {
     process.exit(1);
   }
 
-  for (const r of resolvidos) {
-    // Inalcançável na prática (qualquer falha já teria virado erro acima),
-    // só aqui pra o TypeScript estreitar os três campos juntos.
-    if (r.especie === undefined || r.variantes === undefined || r.fundo === undefined) continue;
-    await montarImagem(r.slug, r.especie, r.variantes, r.fundo, caminhoSaida(r.slug));
+  // `channel: 'msedge'` usa o Edge já instalado no Windows em vez de baixar
+  // um Chromium próprio do Playwright — este pipeline não precisa de um
+  // browser vendorizado em `bin/`, só de renderizar HTML/CSS local.
+  const browser = await chromium.launch({ channel: 'msedge' });
+  try {
+    const page = await browser.newPage({ viewport: { width: CANVAS.largura, height: CANVAS.altura } });
+
+    // Calibração de font-size roda contra o config INTEIRO, nunca só o
+    // filtro — o tamanho do texto é global entre as 19 espécies, pra manter
+    // a identidade visual consistente entre execuções filtradas e completas.
+    await renderizarHtml(page, paginaDeCalibracaoHtml(), 'calibracao.html');
+    await page.evaluate(() => document.fonts.ready);
+    const fontes = await calibrar(page, config, 'PromoTitulo', 'PromoCorpo');
+
+    for (const r of resolvidos) {
+      // Inalcançável na prática (qualquer falha já teria virado erro acima),
+      // só aqui pra o TypeScript estreitar os três campos juntos.
+      if (r.especie === undefined || r.variantes === undefined || r.fundo === undefined) continue;
+      await montarImagem(page, r.slug, r.especie, r.variantes, r.fundo, caminhoSaida(r.slug), fontes);
+    }
+  } finally {
+    await browser.close();
   }
 
   if (filtro === undefined) {

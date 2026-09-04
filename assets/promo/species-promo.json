@@ -1,7 +1,9 @@
 {
   "ssm_default": {
-    "nome": "Humans (augmented realism)",
+    "titulo": "Humans",
+    "subtitulo": "Augmented Colonists of Old Earth",
     "lore": "Colonists from an old blue sphere who traded the patience of evolution for discreet implants and pressure suits. Wherever they arrive they measure, map and stay: expansion, for them, is less conquest than habit.",
+    "fundo": "074",
     "variantes": [
       "male/001",
       "female/001",
@@ -9,8 +11,10 @@
     ]
   },
   "ssm_onu_humans": {
-    "nome": "UN Humans",
+    "titulo": "UN Humans",
+    "subtitulo": "Earth's United Peacekeeping Corps",
     "lore": "A unified Earth peacekeeping corps, deployed to mediate as often as to fight. They carry enough firepower to enforce the ceasefire they're proposing, and enough patience to wait for someone to accept it.",
+    "fundo": "076",
     "variantes": [
       "female/001",
       "male/001",
@@ -18,8 +22,10 @@
     ]
   },
   "ssm_elves": {
-    "nome": "Space Elves",
+    "titulo": "Space Elves",
+    "subtitulo": "Ancient Houses Among the Stars",
     "lore": "Long-lived houses that left the forest for the hull of a ship and began counting history in centuries instead of generations. They fly in pale close-fitted suits and treat every new route as a verse still waiting to be memorized.",
+    "fundo": "064",
     "variantes": [
       "female/001",
       "male/001",
@@ -27,26 +33,32 @@
     ]
   },
   "ssm_high_elves": {
-    "nome": "High Elves",
+    "titulo": "High Elves",
+    "subtitulo": "Gilded Nobility of Blood and Protocol",
     "lore": "Nobility that plates its own skin in worked gold and carries gemstones engraved with the entire bloodline of whoever wears them. They govern by protocol and memory, certain that any mistake made today was already made and corrected a thousand years ago.",
+    "fundo": "086",
     "variantes": [
-      "female/001",
+      "male/021",
       "male/001",
       "female/002"
     ]
   },
   "ssm_astral": {
-    "nome": "Astral Humans",
+    "titulo": "Astral Humans",
+    "subtitulo": "Seers Beyond the Veil",
     "lore": "Minds that opened a tear in the veil and came back with violet burning in their eyes and sigils glowing under the armor. They see the route before they calculate it, which is why they hardly ever explain the decision they just made.",
+    "fundo": "096",
     "variantes": [
       "female/001",
       "male/001",
-      "female/002"
+      "female/006"
     ]
   },
   "ssm_vargrosianos": {
-    "nome": "New Vargrosians",
+    "titulo": "New Vargrosians",
+    "subtitulo": "Heirs to a Buried Civilization",
     "lore": "An ash-skinned people in heavy mantles, heirs to a culture old enough that its own architecture is already ruin on three worlds. They speak little, record everything, and judge an entire empire by how carefully it treats what came before.",
+    "fundo": "075",
     "variantes": [
       "female/001",
       "male/001",
@@ -54,17 +66,21 @@
     ]
   },
   "ssm_knight": {
-    "nome": "Star Knight",
+    "titulo": "Star Knight",
+    "subtitulo": "Sworn Order of the Void",
     "lore": "A sworn order in silver and blue plate, trained to cross the void the way one crosses a monastery hallway. Each knight answers for a stretch of space and defends it without expecting reinforcement, orders, or reward.",
+    "fundo": "018",
     "variantes": [
-      "female/001",
+      "male/008",
       "male/001",
       "female/002"
     ]
   },
   "ssm_mercenary": {
-    "nome": "Mercenaries",
+    "titulo": "Mercenaries",
+    "subtitulo": "Guns for Hire, Questions for No One",
     "lore": "Veterans of wars nobody filed, wrapped in patched plating, orange visors, and guns older than their own contracts. They charge up front and ask exactly zero questions about the flag they're about to raise.",
+    "fundo": "045",
     "variantes": [
       "genderless/001",
       "genderless/002",
@@ -72,8 +88,10 @@
     ]
   },
   "ssm_timbot": {
-    "nome": "Timbot",
+    "titulo": "Timbot",
+    "subtitulo": "Household Units Turned Starfaring Crew",
     "lore": "White-shelled units with cyan visors, built for household service and promoted to crew at the insistence of the crews themselves. They follow orders with absolute literalism and keep a record of every single one, forever.",
+    "fundo": "031",
     "variantes": [
       "genderless/001",
       "genderless/002",
@@ -81,8 +99,10 @@
     ]
   },
   "ssm_green_order": {
-    "nome": "Order of the Green Knights",
+    "titulo": "Order of the Green Knights",
+    "subtitulo": "Cult of Sap and Circuitry",
     "lore": "Emerald-plated automata with a living crystal socketed in the chest, maintained by a cult that sees no difference between sap and circuitry. They march to defend green worlds and recognize no authority but that of those who plant.",
+    "fundo": "089",
     "variantes": [
       "genderless/001",
       "genderless/002",
@@ -90,8 +110,10 @@
     ]
   },
   "ssm_new_order": {
-    "nome": "Order of Red Soldiers",
+    "titulo": "Order of Red Soldiers",
+    "subtitulo": "Mass-Produced Colossi of a Forgotten War",
     "lore": "Armored colossi with an incandescent core driven into the chest, mass-produced for a campaign that burned through units faster than the assembly line could deliver them. They still fall into formation long after the war ended.",
+    "fundo": "010",
     "variantes": [
       "genderless/001",
       "genderless/002",
@@ -99,8 +121,10 @@
     ]
   },
   "ssm_cyborg": {
-    "nome": "Cyborgs",
+    "titulo": "Cyborgs",
+    "subtitulo": "Warriors Rebuilt by Every Campaign",
     "lore": "Warriors in red plate with lit visors, a little more machine after every campaign because that is exactly how they survived the last one. They regard the body they were born with as a first draft, never the final version.",
+    "fundo": "020",
     "variantes": [
       "genderless/001",
       "genderless/002",
@@ -108,8 +132,10 @@
     ]
   },
   "ssm_avians": {
-    "nome": "Shaw's Birds",
+    "titulo": "Shaw's Birds",
+    "subtitulo": "Raptors Bred for Altitude",
     "lore": "Feathered raptors in pale goldsmith-worked suits who keep the head perfectly still while the rest of the body works. They fly on an instinct for altitude, and consider any maneuver below diving speed an act of cowardice.",
+    "fundo": "061",
     "variantes": [
       "genderless/001",
       "genderless/002",
@@ -117,8 +143,10 @@
     ]
   },
   "ssm_octopus": {
-    "nome": "Mollusks",
+    "titulo": "Mollusks",
+    "subtitulo": "Deep-Pressure Diplomats",
     "lore": "Orange bodies of thick tentacle wrapped in heavy mantles, built for pressures that would crumple a ship's hull. They negotiate slowly, remember everything, and never make it clear how many of them are in the room.",
+    "fundo": "068",
     "variantes": [
       "genderless/001",
       "genderless/002",
@@ -126,8 +154,10 @@
     ]
   },
   "ssm_hastur": {
-    "nome": "Lovecraftian Mollusks",
+    "titulo": "Lovecraftian Mollusks",
+    "subtitulo": "Something Answered From Beyond the Veil",
     "lore": "Amber creatures whose faces are hidden behind a pale mask and whose speech left the range of ordinary hearing long ago. Whatever they found beyond the veil came back with them, coiled in the tentacles and lit on the brow.",
+    "fundo": "027",
     "variantes": [
       "genderless/001",
       "genderless/002",
@@ -135,8 +165,10 @@
     ]
   },
   "ssm_green_elves": {
-    "nome": "Green Elves",
+    "titulo": "Green Elves",
+    "subtitulo": "Folk Who Grow With the Season",
     "lore": "Folk with branches budding through their braids and a leaf at the tip of each ear, with skin that photosynthesizes as well as any field back home. They live at the pace of the season and find any plan that ignores winter simply rude.",
+    "fundo": "037",
     "variantes": [
       "female/001",
       "male/001",
@@ -144,8 +176,10 @@
     ]
   },
   "ssm_necron": {
-    "nome": "Necromancers",
+    "titulo": "Necromancers",
+    "subtitulo": "Empire Built on the Ledger of Death",
     "lore": "Practitioners with green light in their gaze who learned to draw labor, memory and service out of whatever has stopped breathing. Death, to them, is a change of duty — and the entire empire is organized around that ledger.",
+    "fundo": "028",
     "variantes": [
       "female/001",
       "male/001",
@@ -153,8 +187,10 @@
     ]
   },
   "ssm_mermaids": {
-    "nome": "Space Atlanteans",
+    "titulo": "Space Atlanteans",
+    "subtitulo": "Royalty of the Flooded Hulls",
     "lore": "Iridescent-scaled royalty that traded the home ocean for the vacuum without giving up a single ceremony. They sail flooded hulls, measure standing by the color of a tail, and still call open space \"the current\".",
+    "fundo": "066",
     "variantes": [
       "female/001",
       "male/001",
@@ -162,8 +198,10 @@
     ]
   },
   "ssm_drakelings": {
-    "nome": "Drakelings",
+    "titulo": "Drakelings",
+    "subtitulo": "Forge-Born Dragon-Folk",
     "lore": "Short, soft-scaled dragon-folk born beside the forge and raised on the rhythm of the hammer. They wear hand-beaten bronze and silver, and measure an empire's worth by what it can manufacture.",
+    "fundo": "006",
     "variantes": [
       "female/001",
       "male/001",

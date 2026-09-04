@@ -8,7 +8,8 @@ import { zSpeciesPromoFile } from './schema';
 function arquivo(entrada: Record<string, unknown> = {}) {
   return {
     ssm_teste: {
-      nome: 'Espécie Teste',
+      titulo: 'Espécie Teste',
+      subtitulo: 'Um subtítulo qualquer.',
       lore: 'Um parágrafo qualquer.',
       variantes: ['male/001', 'female/002', 'male/003'],
       ...entrada,
@@ -17,28 +18,50 @@ function arquivo(entrada: Record<string, unknown> = {}) {
 }
 
 describe('estrutura do arquivo', () => {
-  test('entrada mínima (nome + lore + variantes) passa', () => {
+  test('entrada mínima (titulo + subtitulo + lore + variantes) passa', () => {
     expect(zSpeciesPromoFile.safeParse(arquivo()).success).toBe(true);
   });
 
   test('várias espécies no mesmo arquivo passa', () => {
     const resultado = zSpeciesPromoFile.safeParse({
-      ssm_um: { nome: 'Um', lore: 'Lore um.', variantes: ['male/001', 'female/002', 'male/003'] },
-      ssm_dois: { nome: 'Dois', lore: 'Lore dois.', variantes: ['male/001', 'female/002', 'male/003'] },
+      ssm_um: {
+        titulo: 'Um',
+        subtitulo: 'Sub um.',
+        lore: 'Lore um.',
+        variantes: ['male/001', 'female/002', 'male/003'],
+      },
+      ssm_dois: {
+        titulo: 'Dois',
+        subtitulo: 'Sub dois.',
+        lore: 'Lore dois.',
+        variantes: ['male/001', 'female/002', 'male/003'],
+      },
     });
     expect(resultado.success).toBe(true);
   });
 
   test('chave sem o prefixo ssm_ é erro', () => {
     const resultado = zSpeciesPromoFile.safeParse({
-      elves: { nome: 'Elves', lore: 'x', variantes: ['male/001', 'female/002', 'male/003'] },
+      elves: {
+        titulo: 'Elves',
+        subtitulo: 'x',
+        lore: 'x',
+        variantes: ['male/001', 'female/002', 'male/003'],
+      },
     });
     expect(resultado.success).toBe(false);
   });
 
   test('sem lore é erro', () => {
     const resultado = zSpeciesPromoFile.safeParse({
-      ssm_teste: { nome: 'x', variantes: ['male/001', 'female/002', 'male/003'] },
+      ssm_teste: { titulo: 'x', subtitulo: 'x', variantes: ['male/001', 'female/002', 'male/003'] },
+    });
+    expect(resultado.success).toBe(false);
+  });
+
+  test('sem subtitulo é erro', () => {
+    const resultado = zSpeciesPromoFile.safeParse({
+      ssm_teste: { titulo: 'x', lore: 'x', variantes: ['male/001', 'female/002', 'male/003'] },
     });
     expect(resultado.success).toBe(false);
   });
@@ -52,7 +75,9 @@ describe('estrutura do arquivo', () => {
 
 describe('variantes (obrigatório, sem seleção automática)', () => {
   test('sem variantes é erro — não há mais seleção automática', () => {
-    const resultado = zSpeciesPromoFile.safeParse({ ssm_teste: { nome: 'x', lore: 'x' } });
+    const resultado = zSpeciesPromoFile.safeParse({
+      ssm_teste: { titulo: 'x', subtitulo: 'x', lore: 'x' },
+    });
     expect(resultado.success).toBe(false);
   });
 

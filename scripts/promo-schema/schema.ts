@@ -28,9 +28,12 @@ const QUANTIDADE_DE_VARIANTES = 3;
 
 const zEspeciePromo = z
   .object({
-    nome: z
+    titulo: z
       .string()
       .describe('Nome de exibição da espécie — o mesmo texto em negrito usado em steam-workshop/description.md.'),
+    subtitulo: z
+      .string()
+      .describe('Linha curta de apoio ao título (ex.: um epíteto ou a natureza do governo/facção) — exibida entre o título e o lore na imagem de divulgação.'),
     lore: z
       .string()
       .describe('Parágrafo de lore usado no painel de texto da imagem de divulgação — cópia editável do parágrafo de description.md, não vinculada a ele.'),

@@ -1,56 +1,77 @@
-/** Geometria da imagem de divulgação — todos os números em pixels do canvas
- * final (1920×1080). Nenhum destes valores veio da entrevista pixel a pixel;
- * são o "como" de um "o quê" já combinado (painel de texto à esquerda com
- * degradê, pódio de 3 personagens à direita) e ficam aqui, isolados,
- * exatamente para serem reajustados depois da validação visual
- * (`bun run promo`) sem mexer em `composicao.ts`. */
+/** Geometria da imagem de divulgação. O eixo X segue uma grade de 12 colunas
+ * e o eixo Y uma grade de 12 linhas, ambas do canvas inteiro (1920×1080) —
+ * `GRID` é literalmente a grade CSS (`grid-column`/`grid-row`) usada pelo
+ * template HTML; `ZONA_PERSONAGENS`/`RANKS` continuam derivados das mesmas
+ * colunas, mas resolvidos aqui em px porque os personagens são posicionados
+ * livremente (não encaixados em células inteiras) dentro da zona. Isolado de
+ * `template.ts`/`composicao.ts` exatamente para serem reajustados depois da
+ * validação visual (`bun run promo`) sem mexer em como o HTML é montado. */
 
 export const CANVAS = { largura: 1920, altura: 1080 };
 
-/** Grade de 12 colunas no eixo X do canvas inteiro: 4 colunas pro painel de
- * texto (encostado na borda esquerda), 1 coluna de respiro, 6 colunas pra
- * zona dos personagens, e 1 coluna de margem na borda direita. Cada retrato
- * do pódio ocupa exatamente 2 dessas colunas. */
 const GRID_COLUNAS = 12;
+const GRID_LINHAS = 12;
 const LARGURA_COLUNA = CANVAS.largura / GRID_COLUNAS;
-const COLUNAS_TEXTO = 4;
-const COLUNAS_RESPIRO = 1;
-const COLUNAS_RETRATOS = 6;
-const COLUNAS_MARGEM_DIREITA = 1;
-const COLUNAS_POR_RETRATO = 2;
+const ALTURA_LINHA = CANVAS.altura / GRID_LINHAS;
 
-/** Painel de texto: as 4 colunas da borda esquerda da grade, sem margem
- * antes dela — só o respiro fica entre o texto e os personagens. */
-export const PAINEL = {
-  largura: COLUNAS_TEXTO * LARGURA_COLUNA,
-  margemEsquerda: 90,
-  margemDireita: 70,
-  topoTitulo: 130,
-  alturaTitulo: 140,
-  tamanhoTitulo: 52,
-  espacoAntesLore: 40,
-  tamanhoLore: 27,
-  margemInferior: 100,
+/** Uma faixa de linhas de grid CSS: 1-based, `fim` exclusivo (mesma
+ * convenção de `grid-column`/`grid-row`). */
+interface FaixaGrid {
+  inicio: number;
+  fim: number;
+}
+
+function paraCss(faixa: FaixaGrid): string {
+  return `${faixa.inicio} / ${faixa.fim}`;
+}
+
+/** Um bloco de texto: a faixa em CSS (pro template) e a mesma faixa já
+ * resolvida em px (pra calibração de font-size, que mede contra o motor real
+ * de renderização, não pode divergir do que o CSS realmente ocupa). */
+function resolverBloco(coluna: FaixaGrid, linha: FaixaGrid) {
+  return {
+    colunaCss: paraCss(coluna),
+    linhaCss: paraCss(linha),
+    larguraPx: (coluna.fim - coluna.inicio) * LARGURA_COLUNA,
+    alturaPx: (linha.fim - linha.inicio) * ALTURA_LINHA,
+  };
+}
+
+/** Blocos de texto em coordenadas de grid CSS. Eixo Y: 1 linha de margem
+ * superior → 2 linhas de título → 1 linha de subtítulo → 1 linha de
+ * espaçamento → 6 linhas de lore → 1 linha de margem inferior (12 no
+ * total). Eixo X: todo bloco compartilha a coluna 1 como margem esquerda;
+ * a largura de conteúdo decresce do título (banner cheio, estica por cima da
+ * zona dos personagens) pro lore (só a coluna de texto tradicional). */
+export const GRID = {
+  colunas: GRID_COLUNAS,
+  linhas: GRID_LINHAS,
+  titulo: resolverBloco({ inicio: 2, fim: 12 }, { inicio: 2, fim: 4 }),
+  subtitulo: resolverBloco({ inicio: 2, fim: 8 }, { inicio: 4, fim: 5 }),
+  lore: resolverBloco({ inicio: 2, fim: 6 }, { inicio: 6, fim: 12 }),
 };
 
-/** Largura do degradê (maior que o painel de texto — a transição continua
+/** Largura do degradê (maior que o bloco de lore — a transição continua
  * suavemente até perto da zona dos personagens, em vez de terminar num corte
  * seco na borda do texto). */
 export const LARGURA_DEGRADE = 950;
 
-/** Zona onde os 3 personagens são posicionados: as 6 colunas depois do
- * painel de texto + o respiro, até a margem direita da grade. */
+/** Zona onde os 3 personagens são posicionados: as 6 colunas depois da
+ * margem esquerda + o respiro (colunas 6-11), até a margem direita da
+ * grade — mesmas colunas de sempre, independentes da largura de cada bloco
+ * de texto (o título, banner cheio, passa por cima delas na vertical). */
 export const ZONA_PERSONAGENS = {
-  xMin: (COLUNAS_TEXTO + COLUNAS_RESPIRO) * LARGURA_COLUNA,
-  xMax: CANVAS.largura - COLUNAS_MARGEM_DIREITA * LARGURA_COLUNA,
+  xMin: 5 * LARGURA_COLUNA,
+  xMax: CANVAS.largura - 1 * LARGURA_COLUNA,
 };
 
 /** Altura do personagem em 1º lugar (o maior); os demais escalam a partir
  * daqui. Mesma regra do pipeline principal de portraits
  * (`scripts/generate-portraits/framing.ts`): a arte sempre alcança a borda
- * inferior do canvas, sem gap — "nunca flutuando". Como os 3 compartilham
- * essa borda como linha de base, ficam todos "de pé no mesmo chão". */
-export const ALTURA_BASE_PERSONAGEM = 980;
+ * inferior do canvas, sem gap — "nunca flutuando". 8 das 12 linhas da grade
+ * (as linhas 5-12, a metade inferior do canvas): deixa as 4 linhas do topo
+ * livres para o banner de título não colidir com as cabeças. */
+export const ALTURA_BASE_PERSONAGEM = 8 * ALTURA_LINHA;
 
 export type Colocacao = 1 | 2 | 3;
 
@@ -66,6 +87,8 @@ interface RankInfo {
 /** 6 colunas ÷ 2 colunas por retrato = 3 encaixes iguais dentro da zona. O
  * centro do encaixe de índice `i` (0 = mais à esquerda) cai em `(2i+1)/6` da
  * zona — a mesma conta de sempre pra achar o meio de 3 fatias iguais. */
+const COLUNAS_RETRATOS = 6;
+const COLUNAS_POR_RETRATO = 2;
 const ENCAIXES_DE_RETRATO = COLUNAS_RETRATOS / COLUNAS_POR_RETRATO;
 function centroDoEncaixe(indice: number): number {
   return (2 * indice + 1) / (2 * ENCAIXES_DE_RETRATO);

@@ -8,9 +8,13 @@
   "additionalProperties": {
     "type": "object",
     "properties": {
-      "nome": {
+      "titulo": {
         "type": "string",
         "description": "Nome de exibição da espécie — o mesmo texto em negrito usado em steam-workshop/description.md."
+      },
+      "subtitulo": {
+        "type": "string",
+        "description": "Linha curta de apoio ao título (ex.: um epíteto ou a natureza do governo/facção) — exibida entre o título e o lore na imagem de divulgação."
       },
       "lore": {
         "type": "string",
@@ -49,7 +53,8 @@
       }
     },
     "required": [
-      "nome",
+      "titulo",
+      "subtitulo",
       "lore",
       "variantes"
     ],
