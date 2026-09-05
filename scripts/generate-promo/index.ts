@@ -1,28 +1,29 @@
+import { Command } from 'commander';
 // O projeto compila sem lib DOM (scripts/tsconfig.json — código Bun
 // server-side); esta referência traz `document` só pro corpo da função que o
 // Playwright serializa e roda dentro do browser (`page.evaluate`).
 /// <reference lib="dom" />
 
-import { readdir, unlink } from 'node:fs/promises';
-import { join } from 'node:path';
 import { chromium } from 'playwright';
 import { calibrar } from './calibracao';
 import { montarImagem } from './composicao';
 import { carregarConfig, carregarRoomsDisponiveis, carregarVariantesDisponiveis } from './discovery';
 import { CANVAS } from './layout';
 import { renderizarHtml } from './renderizacao';
-import { selecionarFundo, selecionarVariantes } from './selecao';
+import { limparArquivos } from '../shared/files';
 import { paginaDeCalibracaoHtml } from './template';
-import { caminhoSaida, PASTA_PROMO_ASSETS } from './types';
+import { validarEspecie } from './validation';
+import { caminhoSaida, PASTA_PROMO_ASSETS } from './paths';
 
 async function main() {
-  const config = await carregarConfig();
-  const todosSlugs = Object.keys(config);
 
   // Filtro opcional por linha de comando (ex.: `bun run promo ssm_elves`) pra
   // iterar rápido numa espécie só — as outras não são tocadas, nem para
   // limpeza de órfãos.
-  const filtro = process.argv[2];
+  const programa = new Command().name('bun run promo').description('Gera imagens promocionais das espécies.').argument('[especie]', 'Espécie a processar.').parse();
+  const filtro: string | undefined = programa.args[0];
+  const config = await carregarConfig();
+  const todosSlugs = Object.keys(config);
   if (filtro !== undefined && !todosSlugs.includes(filtro)) {
     console.error(`Espécie "${filtro}" não encontrada em species-promo.json. Disponíveis:`);
     for (const slug of todosSlugs) console.error(` - ${slug}`);
@@ -32,16 +33,16 @@ async function main() {
 
   const rooms = await carregarRoomsDisponiveis();
 
-  // Resolve tudo (variantes + fundo, automático ou por override) antes de
-  // compor qualquer imagem — erro em uma espécie trava a geração inteira, em
-  // vez de deixar assets/promo/ com imagens novas e antigas misturadas.
+  // Resolve e valida tudo (variantes + fundo, automático ou por override;
+  // PNGs legíveis; fontes no disco) antes de compor qualquer imagem — erro em
+  // uma espécie trava a geração inteira, em vez de deixar assets/promo/ com
+  // imagens novas e antigas misturadas.
   const resolvidos = await Promise.all(
     slugs.map(async (slug) => {
       try {
         const especie = config[slug];
         const info = await carregarVariantesDisponiveis(slug);
-        const variantes = selecionarVariantes(info, especie.variantes);
-        const fundo = selecionarFundo(slug, rooms, especie.fundo);
+        const { variantes, fundo } = await validarEspecie(info, especie, rooms);
         return { slug, especie, variantes, fundo, erro: undefined as string | undefined };
       } catch (erro) {
         return {
@@ -104,16 +105,12 @@ async function main() {
  * rejeitava o tamanho), então qualquer `ssm_*.png` remanescente de uma
  * execução anterior é órfão por definição — nenhuma espécie gera mais PNG. */
 async function limparOrfaos(slugsValidos: string[]) {
-  const itens = await readdir(PASTA_PROMO_ASSETS);
-  const validos = new Set(slugsValidos.map((slug) => `${slug}.jpg`));
-  for (const item of itens) {
-    const eOrfao =
-      item.startsWith('ssm_') && (item.endsWith('.png') || (item.endsWith('.jpg') && !validos.has(item)));
-    if (eOrfao) {
-      await unlink(join(PASTA_PROMO_ASSETS, item));
-      console.log(`Removido órfão: assets/promo/${item}`);
-    }
-  }
+  await limparArquivos(PASTA_PROMO_ASSETS, (nome) => nome.startsWith('ssm_') && nome.endsWith('.png'), new Set());
+  await limparArquivos(
+    PASTA_PROMO_ASSETS,
+    (nome) => nome.startsWith('ssm_') && nome.endsWith('.jpg'),
+    new Set(slugsValidos.map((slug) => `${slug}.jpg`))
+  );
 }
 
-main();
+main().catch(erro => { console.error(erro instanceof Error ? erro.message : erro); process.exitCode = 1; });

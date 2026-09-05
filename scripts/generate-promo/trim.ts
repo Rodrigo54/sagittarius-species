@@ -6,11 +6,9 @@
  * novo seria um passo intermediário sem propósito. */
 
 import { $ } from 'bun';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { MAGICK } from '../shared/paths';
 
-const __DIRNAME = dirname(fileURLToPath(import.meta.url));
-const MAGICK = join(__DIRNAME, '../../bin/imagemagick/magick.exe');
+
 
 export interface MedidaRecorte {
   arquivo: string;

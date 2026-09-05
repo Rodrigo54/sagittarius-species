@@ -2,15 +2,17 @@
  * `title`/`description` são sempre enviados (todo publish mantém a descrição da Steam em sincronia
  * com `description.md`); `changenote` é opcional — presente na publicação de conteúdo, ausente no
  * modo `--metadata-only` (só título/descrição, sem build nova). Ver `docs/pipeline-publish-workshop.md`. */
-export type ConteudoVdfPublicacao = {
+type Metadados = {
   appid: string;
   publishedFileId: string;
-  contentFolder: string;
   previewFile: string;
   title: string;
   description: string;
-  changenote?: string;
 };
+export type ConteudoVdfPublicacao = Metadados & (
+  | { modo: 'metadata'; contentFolder?: never; changenote?: never }
+  | { modo: 'conteudo'; contentFolder: string; changenote: string }
+);
 
 /** O KeyValues do steamcmd lê este VDF sem sequências de escape: dentro de um valor entre aspas,
  * `\"` não escapa nada e a aspa encerra o valor ali, jogando o resto do texto na posição de chave
@@ -34,13 +36,13 @@ export function montarVdf(config: ConteudoVdfPublicacao): string {
   const linhas = [
     par('appid', config.appid),
     par('publishedfileid', config.publishedFileId),
-    par('contentfolder', config.contentFolder),
     par('previewfile', config.previewFile),
     par('title', config.title),
     par('description', config.description),
   ];
 
-  if (config.changenote !== undefined) {
+  if (config.modo === 'conteudo') {
+    linhas.push(par('contentfolder', config.contentFolder));
     linhas.push(par('changenote', config.changenote));
   }
 

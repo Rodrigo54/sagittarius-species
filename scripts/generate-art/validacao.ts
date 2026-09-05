@@ -1,4 +1,7 @@
+import { stat } from 'node:fs/promises';
+import { join } from 'node:path';
 import { caminhosDoTemplate, type CamposCompostos, type GeneroAlvo, type PortraitConfig } from '../portrait-schema';
+import { PASTA_RAIZ } from '../shared/paths';
 import type { BaseArt } from './base';
 import { mesclarCampos } from './merge';
 import { montarPrompts } from './prompt-builder';
@@ -86,7 +89,7 @@ export class ErroCoberturaDeCampo extends Error {
 
 /** Valida a espécie inteira. Lança no primeiro problema encontrado, com a
  * variante nomeada; devolve a quantidade de variantes conferidas. */
-export function validarEspecie(config: PortraitConfig, slug: string, base: BaseArt): number {
+export async function validarEspecie(config: PortraitConfig, slug: string, base: BaseArt): Promise<number> {
   const geracaoArt = config.geracaoArt;
   if (!geracaoArt) return 0;
 
@@ -95,6 +98,16 @@ export function validarEspecie(config: PortraitConfig, slug: string, base: BaseA
   for (const genero of GENEROS) {
     const bloco = geracaoArt[genero];
     if (!bloco) continue;
+
+    // Confere aqui, e não só quando `bun run art` for de fato enviar a
+    // referência ao ComfyUI — senão uma referência apagada/renomeada só
+    // aparece como erro depois que o workflow/modelo já foi resolvido, no
+    // meio de uma geração real.
+    for (const caminhoRelativo of bloco.referenceImage ?? []) {
+      const caminho = join(PASTA_RAIZ, caminhoRelativo);
+      const info = await stat(caminho).catch(() => undefined);
+      if (!info?.isFile()) throw new Error(`${slug}/${genero}: referência "${caminhoRelativo}" não é um arquivo.`);
+    }
 
     for (const chave of Object.keys(bloco.variantes).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))) {
       const rotulo = `${slug}/${genero}/${chave}`;

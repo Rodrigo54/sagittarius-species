@@ -1,8 +1,4 @@
-import {
-  CATEGORIA_DA_CLASSE,
-  type CategoriaId,
-  type SpeciesClassId,
-} from '../portrait-schema';
+import { CATEGORIA_DA_CLASSE, type CategoriaId, type SpeciesClassId } from '../shared/stellaris';
 
 /** Vocabulário **do jogo** que só o gerador de taxonomia precisa: como cada
  * `species_class` vira um set, qual gate de DLC ela carrega, e qual rótulo

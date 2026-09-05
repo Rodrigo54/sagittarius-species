@@ -3,7 +3,8 @@ import { basename } from 'node:path';
 import { generosDe, quantidadeDe } from '../portrait-schema';
 import { pad } from '../utils';
 import { medirInicioDoCorpo, medirTrims, resolverGuia, validarEnquadramento } from './framing';
-import { rigDe, type SpeciesInfo } from './types';
+import { rigDe } from './types';
+import { type SpeciesInfo } from '../shared/species';
 
 /** Confere que os arquivos são exatamente "001.png".."NNN.png", zero-padded a 3
  * dígitos, sequenciais e sem buracos — é a convenção que a lista

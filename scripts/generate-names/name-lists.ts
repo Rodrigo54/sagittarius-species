@@ -1,5 +1,5 @@
 import type { Jomini, Writer } from 'jomini';
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { basename, join } from 'node:path';
 import { zNameList } from '../name-list-schema';
 import { listar } from '../utils';
@@ -25,11 +25,10 @@ export interface ParsedNameList {
   name: string;
   desc: string;
   fileName: string;
-  /** Objeto ainda envolto por "{ [fileName]: {...} }" — é o que createTXT e
-   * createTranslation esperam (o .txt final precisa do wrapper
-   * "ssm_altmer={...}", e o prefixo dos tokens de l10n vem justamente desse
-   * nível externo; sem ele, cada name_list geraria os mesmos nomes de token,
-   * colidindo entre arquivos). */
+  /** Objeto ainda envolto por "{ [fileName]: {...} }" — é o que `gerarNameList`
+   * espera (o .txt final precisa do wrapper "ssm_altmer={...}", e o prefixo
+   * dos tokens de l10n vem justamente desse nível externo; sem ele, cada
+   * name_list geraria os mesmos nomes de token, colidindo entre arquivos). */
   data: BlocoClausewitz;
   /** O mesmo conteúdo, mas desembrulhado (data[fileName]) — mais conveniente
    * pra validação, que referencia campos como ship_names/army_names direto. */
@@ -90,125 +89,64 @@ export async function readNameList(arquivo: string): Promise<ParsedNameList> {
   return parseNameListFile(resultado.data as ArquivoNameList);
 }
 
-export async function loadLocalization(
-  pastaDestinoL10n: string
-): Promise<string[]> {
-  const { pastas } = await listar(pastaDestinoL10n);
-  const localizations = Array.from(
-    new Set(
-      pastas.map((pasta) =>
-        pasta
-          .replace(pastaDestinoL10n, '')
-          .replace('\\name_lists', '')
-          .replace('\\', '')
-      )
-    )
-  );
-  return localizations;
+/** Confere que nenhum arquivo repete o "ssm_<cultura>" de outro — o jogo
+ * agrupa espécies-flavor por esse identificador, então uma colisão faria uma
+ * cultura pisar silenciosamente na outra. */
+export function detectarCulturasDuplicadas(itens: ParsedNameList[]): string[] {
+  const erros: string[] = [];
+  const vistos = new Set<string>();
+  for (const item of itens) {
+    if (vistos.has(item.fileName)) erros.push(`Cultura duplicada: ${item.fileName}`);
+    vistos.add(item.fileName);
+  }
+  return erros;
 }
 
-/** Par token → texto: a chave que vai pro `.yml` e o texto que o jogo mostra. */
-type TokenL10n = [token: string, texto: string];
+export interface NameListGerada {
+  txt: string;
+  localizations: Record<string, string>;
+}
 
-/** Achata o objeto em pares token→texto, um por string prefixada com `l10n|`.
- * O token é o caminho inteiro em MAIÚSCULAS, e é por isso que o wrapper
- * `ssm_<cultura>` precisa estar presente: ele é o prefixo que separa os
- * tokens de uma cultura dos de outra. */
-function achatarTokens(bloco: BlocoClausewitz, prefix = ''): TokenL10n[] {
-  const tokens: TokenL10n[] = [];
-
-  for (const [key, value] of Object.entries(bloco)) {
-    const newKey = `${prefix}${prefix ? '_' : ''}${key}`.toUpperCase();
-    if (typeof value === 'object' && value !== null) {
-      tokens.push(...achatarTokens(value as BlocoClausewitz, newKey));
-    } else if (typeof value === 'string' && value.startsWith('l10n|')) {
-      tokens.push([newKey, value.replace(L10N, '')]);
+/** Compõe todas as saídas em memória antes de qualquer escrita. */
+export function gerarNameList(parser: Jomini, item: ParsedNameList, idiomas: string[]): NameListGerada {
+  const tokens = new Map<string, string>();
+  const tokenDe = (path: string[]) => path.join('_').toUpperCase();
+  function coletar(valor: ValorClausewitz, path: string[]) {
+    if (typeof valor === 'string' && valor.startsWith('l10n|')) {
+      const token = tokenDe(path);
+      if (tokens.has(token)) throw new Error(item.fileName + ': colisão de token ' + token);
+      tokens.set(token, valor.replace(L10N, ''));
+    } else if (typeof valor === 'object') {
+      for (const [key, child] of Object.entries(valor)) coletar(child, [...path, key]);
     }
   }
-
-  return tokens;
-}
-
-export async function createTranslation(
-  objectData: BlocoClausewitz,
-  metaData: { name: string; desc: string; fileName: string; l10n: string },
-  pastaDestinoL10n: string
-): Promise<TokenL10n[]> {
-  const { name, desc, fileName, l10n } = metaData;
-  const tokens = achatarTokens(objectData);
-
-  const content =
-    `l_${l10n}:\n\n` +
-    `  name_list_${fileName}: ${JSON.stringify(name)}\n` +
-    `  name_list_${fileName}_desc: ${JSON.stringify(desc)}\n` +
-    tokens.map(([token, value]) => `  ${token}: "${value}"`).join('\n');
-
-  await writeFile(
-    join(pastaDestinoL10n, l10n, 'name_lists', `${fileName}_l_${l10n}.yml`),
-    '﻿' + content,
-    'utf8'
-  );
-
-  return tokens;
-}
-
-/** Uma string prefixada com `l10n|` é escrita como o token correspondente (sem
- * aspas — o jogo resolve pela localisation); qualquer outra vai entre aspas,
- * literal. */
-function escreverString(writer: Writer, valor: string, tokens: TokenL10n[]) {
-  if (!valor.startsWith('l10n|')) {
-    writer.write_quoted(valor);
-    return;
+  coletar(item.data, []);
+  function escrever(writer: Writer, valor: ValorClausewitz, path: string[]) {
+    if (Array.isArray(valor)) {
+      writer.write_array_start();
+      valor.forEach((child, i) => escrever(writer, child, [...path, String(i)]));
+      writer.write_end();
+    } else if (typeof valor === 'object') {
+      writer.write_object_start();
+      bloco(writer, valor, path);
+      writer.write_end();
+    } else if (typeof valor === 'string') {
+      if (valor.startsWith('l10n|')) writer.write_unquoted(tokenDe(path));
+      else writer.write_quoted(valor);
+    } else if (typeof valor === 'number') writer.write_integer(valor);
+    else writer.write_bool(valor);
   }
-  const texto = valor.replace(L10N, '');
-  const token = tokens.find(([, tokenTexto]) => tokenTexto === texto)?.[0];
-  if (token) writer.write_unquoted(token);
-}
-
-function escreverValor(writer: Writer, valor: ValorClausewitz, tokens: TokenL10n[]) {
-  if (Array.isArray(valor)) {
-    writer.write_array_start();
-    for (const item of valor) escreverValor(writer, item, tokens);
-    writer.write_end();
-    return;
+  function bloco(writer: Writer, valor: BlocoClausewitz, path: string[]) {
+    for (const [key, child] of Object.entries(valor)) {
+      writer.write_unquoted(key);
+      escrever(writer, child, [...path, key]);
+    }
   }
-  if (typeof valor === 'object') {
-    writer.write_object_start();
-    escreverBloco(writer, valor, tokens);
-    writer.write_end();
-    return;
-  }
-  if (typeof valor === 'string') {
-    escreverString(writer, valor, tokens);
-    return;
-  }
-  if (typeof valor === 'number') {
-    writer.write_integer(valor);
-    return;
-  }
-  if (typeof valor === 'boolean') {
-    writer.write_bool(valor);
-    return;
-  }
-  // Nada além dos tipos acima existe em script Clausewitz — um `null` no JSON
-  // de origem sairia do arquivo em silêncio se isto não travasse aqui.
-  throw new Error(`valor de tipo não serializável em name_list: ${JSON.stringify(valor)}`);
-}
-
-function escreverBloco(writer: Writer, bloco: BlocoClausewitz, tokens: TokenL10n[]) {
-  for (const [key, value] of Object.entries(bloco)) {
-    writer.write_unquoted(key);
-    escreverValor(writer, value, tokens);
-  }
-}
-
-export async function createTXT(
-  parser: Jomini,
-  objectData: BlocoClausewitz,
-  tokens: TokenL10n[],
-  fileName: string,
-  pastaDestino: string
-) {
-  const content = parser.write((writer: Writer) => escreverBloco(writer, objectData, tokens));
-  await writeFile(join(pastaDestino, `${fileName}.txt`), content);
+  const txt = new TextDecoder().decode(parser.write((writer: Writer) => bloco(writer, item.data, [])));
+  const linhas = [
+    '  name_list_' + item.fileName + ': ' + JSON.stringify(item.name),
+    '  name_list_' + item.fileName + '_desc: ' + JSON.stringify(item.desc),
+    ...Array.from(tokens, ([token, value]) => '  ' + token + ': ' + JSON.stringify(value)),
+  ].join('\n') + '\n';
+  return { txt, localizations: Object.fromEntries(idiomas.map(loc => [loc, '\uFEFFl_' + loc + ':\n\n' + linhas])) };
 }

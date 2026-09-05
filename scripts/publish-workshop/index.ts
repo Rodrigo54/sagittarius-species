@@ -3,17 +3,13 @@ import { Command } from 'commander';
 import { existsSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import { createInterface } from 'node:readline/promises';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
+import { PASTA_RAIZ, PASTA_MOD } from '../shared/paths';
 import { comTimestamp, extrairPrimeiraSecao, gravarTimestamp } from './change-notes';
 import { parseDescriptorMod } from './descriptor';
 import { markdownParaBBCode } from './md-to-bbcode';
 import { montarVdf } from './vdf';
 
-const __DIRNAME = dirname(fileURLToPath(import.meta.url));
-
-const PASTA_RAIZ = join(__DIRNAME, '../..');
-const PASTA_MOD = join(PASTA_RAIZ, 'mod/sagittarius-species');
 const CAMINHO_DESCRIPTOR = join(PASTA_MOD, 'descriptor.mod');
 const CAMINHO_THUMBNAIL = join(PASTA_MOD, 'thumbnail.png');
 const CAMINHO_CHANGE_NOTES = join(PASTA_RAIZ, 'steam-workshop/change-notes.md');
@@ -84,7 +80,7 @@ async function main() {
     )
     .option(
       '-m, --metadata-only',
-      'Só título/descrição: não publica conteúdo novo nem exige changenote em change-notes.md.'
+      'Atualiza título, descrição e thumbnail, sem conteúdo, changenote ou cópia local.'
     )
     .parse()
     .opts<{ metadataOnly?: boolean }>();
@@ -112,7 +108,7 @@ async function main() {
 
   if (modoMetadataOnly) {
     resumoModo = [
-      'Modo: metadata-only (só título/descrição, sem publicar conteúdo novo)',
+      'Modo: metadata-only (título, descrição e thumbnail)',
       `Título: ${descriptor.name}`,
       '',
       'Descrição (BBCode a ser enviada):',
@@ -140,21 +136,23 @@ async function main() {
   const vdfTexto = montarVdf({
     appid: APPID_STELLARIS,
     publishedFileId: descriptor.remoteFileId,
-    contentFolder: PASTA_MOD,
     previewFile: CAMINHO_THUMBNAIL,
     title: descriptor.name,
     description: descricaoBbcode,
-    changenote: changenoteBbcode,
+    ...(modoMetadataOnly
+      ? { modo: 'metadata' as const }
+      : { modo: 'conteudo' as const, contentFolder: PASTA_MOD, changenote: changenoteBbcode! }),
   });
 
   console.log('== Resumo do publish no Steam Workshop ==');
   console.log(`Versão do mod (descriptor.mod): ${descriptor.version}`);
   console.log(`publishedfileid: ${descriptor.remoteFileId}`);
-  console.log(`contentfolder: ${PASTA_MOD}`);
+  if (!modoMetadataOnly) console.log(`contentfolder: ${PASTA_MOD}`);
+  console.log(`Thumbnail: ${CAMINHO_THUMBNAIL}`);
   console.log('');
   console.log(resumoModo);
   console.log('');
-  console.log('Antes de publicar, este comando também roda "bun run copy" pra sincronizar o mod local de teste.');
+  if (!modoMetadataOnly) console.log('Antes de publicar, este comando também roda "bun run copy" pra sincronizar o mod local de teste.');
   console.log('');
 
   const confirmado = await confirmar('Prosseguir?');
@@ -163,8 +161,10 @@ async function main() {
     return;
   }
 
-  console.log('→ sincronizando mod local (bun run copy)...');
-  await $`bun run copy`.cwd(PASTA_RAIZ);
+  if (!modoMetadataOnly) {
+    console.log('→ sincronizando mod local (bun run copy)...');
+    await $`bun run copy`.cwd(PASTA_RAIZ);
+  }
 
   if (gravarChangeNotes) {
     await gravarChangeNotes();

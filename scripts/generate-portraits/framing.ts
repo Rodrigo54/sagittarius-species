@@ -7,15 +7,14 @@
  */
 
 import { $ } from 'bun';
+import { MAGICK } from '../shared/paths';
 import { readFile } from 'node:fs/promises';
-import { basename, dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename } from 'node:path';
 import { decodificarPng, type Imagem } from '../png';
 import type { GuiaEnquadramento, ModoEnquadramento, RigInfo } from './types';
 
-const __DIRNAME = dirname(fileURLToPath(import.meta.url));
 
-const MAGICK = join(__DIRNAME, '../../bin/imagemagick/magick.exe');
+
 
 export interface MedidaTrim {
   arquivo: string;

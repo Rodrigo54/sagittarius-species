@@ -1,10 +1,10 @@
 import { readFile } from 'node:fs/promises';
-import { carregarEspecie } from '../generate-portraits/discovery';
-import type { SpeciesInfo } from '../generate-portraits/types';
+import { carregarEspecie } from '../shared/species';
+import type { SpeciesInfo } from '../shared/species';
 import { carregarRooms } from '../generate-rooms/discovery';
 import type { RoomsInfo } from '../generate-rooms/types';
 import { zSpeciesPromoFile, type SpeciesPromoFile } from '../promo-schema';
-import { CAMINHO_CONFIG, PASTA_CITY_SETS_ASSETS, PASTA_PORTRAITS_ASSETS } from './types';
+import { CAMINHO_CONFIG, PASTA_CITY_SETS_ASSETS, PASTA_PORTRAITS_ASSETS } from './paths';
 
 /** Lê e valida `assets/promo/species-promo.json` contra o schema `zod` de
  * `promo-schema/` — único ponto de carga do arquivo. */

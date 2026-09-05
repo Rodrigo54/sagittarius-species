@@ -6,7 +6,7 @@
 import { pathToFileURL } from 'node:url';
 import { ESTILO_LORE, ESTILO_SUBTITULO, ESTILO_TITULO, type FontesCalibradas } from './calibracao';
 import { CANVAS, GRID, LARGURA_DEGRADE } from './layout';
-import { FONTE_CORPO, FONTE_TITULO } from './types';
+import { FONTE_CORPO, FONTE_TITULO } from './paths';
 
 function urlDeArquivo(caminho: string): string {
   return pathToFileURL(caminho).href;

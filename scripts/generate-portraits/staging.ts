@@ -13,7 +13,8 @@
 import { copyFile, mkdir, rm } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { enquadrarPng, medirInicioDoCorpo, medirTrims, resolverGuia } from './framing';
-import { rigDe, type SpeciesInfo } from './types';
+import { rigDe } from './types';
+import { type SpeciesInfo } from '../shared/species';
 
 export interface Preparado {
   /** Arquivos prontos pra conversão, na pasta derivada. */

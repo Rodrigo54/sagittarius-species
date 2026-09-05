@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import { PASTA_ASSETS } from '../converter';
+import { PASTA_ASSETS } from '../shared/paths';
 
 /** `assets/promo/` guarda tanto o config (`species-promo.json`) quanto os
  * ativos que o pipeline não deriva de mais ninguém (as fontes vendorizadas) —

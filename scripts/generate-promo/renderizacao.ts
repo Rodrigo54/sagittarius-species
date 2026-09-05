@@ -12,7 +12,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import type { Page } from 'playwright';
-import { PASTA_RAIZ } from '../converter';
+import { PASTA_RAIZ } from '../shared/paths';
 
 const PASTA_STAGING = join(PASTA_RAIZ, '.promo-staging');
 

@@ -1,10 +1,14 @@
+import { Command } from 'commander';
+import { mkdir, rm } from 'node:fs/promises';
+import { relative, dirname, extname } from 'node:path';
+import { promoverLote, type ArquivoPreparado } from './promote';
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { PASTA_ASSETS, PASTA_MOD, PASTA_RAIZ, converter } from '../converter';
-import { derivarTaxonomia, escreverTaxonomia } from '../generate-taxonomy/gerar';
-import { carregarEspecie, listarPastasEspecies } from './discovery';
+import { converter } from '../converter';
+import { PASTA_ASSETS, PASTA_MOD, PASTA_RAIZ } from '../shared/paths';
+import { derivarTaxonomia, arquivosTaxonomia } from '../generate-taxonomy/gerar';
+import { carregarEspecie, listarPastasEspecies } from '../shared/species';
 import { prepararEspecie } from './staging';
-import { limparOrfaos } from './sync';
 import { gerarConteudoTxt } from './txt-writer';
 import { validarEspecie } from './validation';
 
@@ -14,16 +18,18 @@ const PASTA_PORTRAIT_TXT = join(PASTA_MOD, 'gfx/portraits/portraits');
 
 /** Onde os PNGs enquadrados ficam antes de virar DDS. Fora do git (ver
  * .gitignore) — é saída derivada, reconstruída a cada execução. */
-const PASTA_STAGING = join(PASTA_RAIZ, '.portraits-framed');
+const PASTA_STAGING = join(PASTA_RAIZ, '.portrait-staging');
 
+let etapa = 'validação';
 async function main() {
-  const todosSlugs = await listarPastasEspecies(PASTA_PORTRAITS_ASSETS);
 
   // Filtro opcional por linha de comando (ex.: `bun run portrait ssm_elves`)
   // pra iterar rápido numa espécie só — validação, limpeza de órfãos,
   // enquadramento, conversão e regeneração do .txt ficam restritas a ela; as
   // outras espécies não são tocadas.
-  const filtro = process.argv[2];
+  const programa = new Command().name('bun run portrait').description('Prepara retratos em staging e promove o lote para o mod.').argument('[especie]', 'Espécie a processar.').parse();
+  const filtro: string | undefined = programa.args[0];
+  const todosSlugs = await listarPastasEspecies(PASTA_PORTRAITS_ASSETS);
   if (filtro !== undefined && !todosSlugs.includes(filtro)) {
     console.error(`Espécie "${filtro}" não encontrada em assets/portraits/. Disponíveis:`);
     for (const slug of todosSlugs) console.error(` - ${slug}`);
@@ -65,37 +71,48 @@ async function main() {
     process.exit(1);
   }
 
-  for (const info of especies) {
-    const pastaDestinoEspecie = join(PASTA_PORTRAITS_MOD, info.slug);
-    await limparOrfaos(info, pastaDestinoEspecie);
-  }
-
+  etapa = 'preparação do staging (mod preservado)';
+  const pastaPng = join(PASTA_STAGING, 'png');
+  const pastaModStaging = join(PASTA_STAGING, 'mod');
+  const pastaDds = join(pastaModStaging, 'gfx/models/portraits');
+  const saidas: ArquivoPreparado[] = [];
   const arquivos: string[] = [];
   let enquadrados = 0;
   for (const info of especies) {
-    const preparado = await prepararEspecie(info, PASTA_PORTRAITS_ASSETS, PASTA_STAGING);
+    const preparado = await prepararEspecie(info, PASTA_PORTRAITS_ASSETS, pastaPng);
     arquivos.push(...preparado.arquivos);
     enquadrados += preparado.enquadrados;
   }
 
+  // Cada DDS esperado precisa vir desta execução, nunca de um lote anterior.
+  for (const png of arquivos) {
+    const relativo = relative(pastaPng, png);
+    await rm(join(pastaDds, relativo.slice(0, -extname(relativo).length) + '.dds'), { force: true });
+  }
   await converter(arquivos, {
     format: 'bc3',
     noMips: true,
-    pastaOrigem: PASTA_STAGING,
-    pastaDestino: PASTA_PORTRAITS_MOD,
+    pastaOrigem: pastaPng,
+    pastaDestino: pastaDds,
   });
 
-  for (const info of especies) {
-    const conteudoTxt = gerarConteudoTxt(info.slug, info);
-    await writeFile(join(PASTA_PORTRAIT_TXT, `${info.slug}_portrait.txt`), conteudoTxt);
+  for (const png of arquivos) {
+    const relativo = relative(pastaPng, png);
+    const dds = relativo.slice(0, -extname(relativo).length) + '.dds';
+    saidas.push({ origem: join(pastaDds, dds), destino: join(PASTA_PORTRAITS_MOD, dds) });
   }
-
-  // Registro em common/ (portrait_sets + portrait_categories), sempre com
-  // TODAS as espécies — mesmo sob filtro, já que os dois arquivos descrevem o
-  // mod inteiro. Escrito aqui pra que sincronizar a arte de uma espécie nunca
-  // deixe o registro dela para trás; `bun run taxonomy` faz só esta parte,
-  // quando nenhuma textura mudou.
-  await escreverTaxonomia(taxonomia.sets);
+  const textos = [
+    ...especies.map(info => ({ caminho: 'gfx/portraits/portraits/' + info.slug + '_portrait.txt', conteudo: gerarConteudoTxt(info.slug, info) })),
+    ...arquivosTaxonomia(taxonomia.sets),
+  ];
+  for (const texto of textos) {
+    const origem = join(pastaModStaging, texto.caminho);
+    await mkdir(dirname(origem), { recursive: true });
+    await writeFile(origem, texto.conteudo);
+    saidas.push({ origem, destino: join(PASTA_MOD, texto.caminho) });
+  }
+  etapa = 'promoção para mod/ (uma falha pode deixar cópias parciais; confira o git diff)';
+  await promoverLote(saidas, especies, PASTA_PORTRAITS_MOD, PASTA_PORTRAIT_TXT, filtro);
 
   console.log(
     filtro !== undefined
@@ -105,4 +122,4 @@ async function main() {
   console.log(`Registro: ${taxonomia.sets.length} portrait_set(s) a partir de ${taxonomia.especies} espécie(s).`);
 }
 
-main();
+main().catch(erro => { console.error('Falha na etapa ' + etapa + ': ' + (erro instanceof Error ? erro.message : erro)); process.exitCode = 1; });

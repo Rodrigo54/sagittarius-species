@@ -21,7 +21,7 @@
 
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { PASTA_ASSETS } from '../converter';
+import { PASTA_ASSETS } from '../shared/paths';
 import { RIGS } from '../generate-portraits/types';
 import { CANTOS, MARCADOR, MAX_INDICE, codificar } from './encoding';
 import { codificarPng, criarImagem, pintarRetangulo, type Imagem } from '../png';

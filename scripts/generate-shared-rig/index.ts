@@ -1,3 +1,4 @@
+import { Command } from 'commander';
 import { existsSync } from 'node:fs';
 import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -55,6 +56,7 @@ const ARQUIVOS_ANIM = [
  * transformações), não é uma migração de disparo único.
  */
 async function main() {
+  new Command().name('bun run shared-rig').description('Regenera os arquivos derivados deste pipeline.').parse();
   const caminhoMeshOrigem = join(PASTA_SL_SHARED, NOME_MESH);
   if (!existsSync(caminhoMeshOrigem)) {
     console.error(`Não encontrado: ${caminhoMeshOrigem}`);

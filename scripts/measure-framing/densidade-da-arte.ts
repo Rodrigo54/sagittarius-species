@@ -19,8 +19,8 @@
 
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { PASTA_ASSETS } from '../converter';
-import { carregarEspecie, listarPastasEspecies } from '../generate-portraits/discovery';
+import { PASTA_ASSETS } from '../shared/paths';
+import { carregarEspecie, listarPastasEspecies } from '../shared/species';
 import { detectarInicioDoCorpo } from '../generate-portraits/framing';
 import { rigDe } from '../generate-portraits/types';
 import { decodificarPng } from '../png';

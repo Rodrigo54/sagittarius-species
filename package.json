@@ -16,7 +16,12 @@
     "names": "bun scripts/generate-names/index.ts",
     "art": "bun scripts/generate-art/index.ts",
     "promo": "bun scripts/generate-promo/index.ts",
-    "publish-workshop": "bun scripts/publish-workshop/index.ts"
+    "publish-workshop": "bun scripts/publish-workshop/index.ts",
+    "extract-vanilla": "bun scripts/extract-vanilla-keys.ts",
+    "check": "tsc --noEmit",
+    "test": "bun test",
+    "check:schemas": "bun scripts/check-schemas/index.ts",
+    "validate": "bun scripts/validate/index.ts"
   },
   "author": "",
   "license": "ISC",

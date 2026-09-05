@@ -1,9 +1,23 @@
 import { existsSync } from 'node:fs';
 import { readFile, readdir } from 'node:fs/promises';
 import { basename, join } from 'node:path';
-import { generosDe, zPortraitConfig, type GeneroAlvo } from '../portrait-schema';
+import { generosDe, zPortraitConfig, type GeneroAlvo, type PortraitConfig } from '../portrait-schema';
 import { ordenarNumericamente } from '../utils';
-import type { PortraitConfig, SpeciesInfo } from './types';
+
+export interface SpeciesInfo {
+  /** Nome da pasta, ex.: "ssm_astral" */
+  slug: string;
+  /** Caminho completo até assets/portraits/ssm_<especie> */
+  pastaAssets: string;
+  config: PortraitConfig;
+  /** PNGs de origem por gênero, com uma chave por gênero declarado em
+   * `config.counts` (`generosDe`) — as mesmas chaves que nomeiam as subpastas
+   * em `assets/` e em `mod/`. Quem precisa de todos os arquivos itera os
+   * valores; quem precisa de um gênero específico já sabe que ele existe. */
+  arquivos: Partial<Record<GeneroAlvo, string[]>>;
+}
+
+
 
 async function listarPngs(pasta: string): Promise<string[]> {
   if (!existsSync(pasta)) return [];

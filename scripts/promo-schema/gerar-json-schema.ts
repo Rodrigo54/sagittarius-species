@@ -12,6 +12,13 @@ import { zSpeciesPromoFile } from './schema';
  * `scripts/name-list-schema/gerar-json-schema.ts`. */
 const CAMINHO_SAIDA = join(import.meta.dir, 'promo.schema.json');
 
-const jsonSchema = z.toJSONSchema(zSpeciesPromoFile, { target: 'draft-7', io: 'input' });
-writeFileSync(CAMINHO_SAIDA, JSON.stringify(jsonSchema, null, 2) + '\n', 'utf8');
-console.log('OK:', CAMINHO_SAIDA);
+export function gerarJsonSchema() {
+  const jsonSchema = z.toJSONSchema(zSpeciesPromoFile, { target: 'draft-7', io: 'input' });
+  
+  return jsonSchema;
+}
+
+if (import.meta.main) {
+  writeFileSync(CAMINHO_SAIDA, JSON.stringify(gerarJsonSchema(), null, 2) + '\n', 'utf8');
+  console.log('OK:', CAMINHO_SAIDA);
+}

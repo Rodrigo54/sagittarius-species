@@ -1,6 +1,9 @@
+import { Command } from 'commander';
+import { mkdir } from 'node:fs/promises';
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { PASTA_ASSETS, PASTA_MOD, converter } from '../converter';
+import { converter } from '../converter';
+import { PASTA_ASSETS, PASTA_MOD } from '../shared/paths';
 import { carregarRooms } from './discovery';
 import { limparOrfaos } from './sync';
 import { gerarConteudoTxt } from './txt-writer';
@@ -11,6 +14,7 @@ const PASTA_CITY_SETS_MOD = join(PASTA_MOD, 'gfx/portraits/city_sets');
 const PASTA_ROOM_TXT = join(PASTA_MOD, 'gfx/portraits/asset_selectors');
 
 async function main() {
+  new Command().name('bun run rooms').description('Gera texturas e registros de fundos.').parse();
   const info = await carregarRooms(PASTA_CITY_SETS_ASSETS);
 
   // Valida tudo antes de mexer em qualquer arquivo — erro trava a geração sem
@@ -24,7 +28,6 @@ async function main() {
     process.exit(1);
   }
 
-  await limparOrfaos(info, PASTA_CITY_SETS_MOD);
 
   await converter(info.arquivos, {
     format: 'bc1',
@@ -33,9 +36,12 @@ async function main() {
     pastaDestino: PASTA_CITY_SETS_MOD,
   });
 
+  await mkdir(PASTA_ROOM_TXT, { recursive: true });
   await writeFile(join(PASTA_ROOM_TXT, 'ssm_room_textures.txt'), gerarConteudoTxt(info));
+
+  await limparOrfaos(info, PASTA_CITY_SETS_MOD);
 
   console.log(`Gerado: ${info.arquivos.length} room(s) de city_sets.`);
 }
 
-main();
+main().catch(erro => { console.error(erro instanceof Error ? erro.message : erro); process.exitCode = 1; });

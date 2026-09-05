@@ -1,5 +1,5 @@
-import { readFile } from 'node:fs/promises';
-import { comoBloco, type BlocoClausewitz, type VanillaKeys } from './types';
+import { comoBloco, type BlocoClausewitz } from './types';
+import type { VanillaKeys } from '../shared/vanilla';
 
 /** Chaves que o vanilla aceita mas não declara como bloco próprio, então não
  * aparecem no snapshot de `vanilla-keys.json` — não são erro de digitação. */
@@ -11,15 +11,6 @@ const IGNORADAS_POR_CAMPO = {
 
 type CampoValidado = keyof typeof IGNORADAS_POR_CAMPO;
 
-export async function loadVanillaKeys(path: string): Promise<VanillaKeys> {
-  const raw = await readFile(path, 'utf-8');
-  const parsed = JSON.parse(raw) as VanillaKeys;
-  return {
-    army: parsed.army,
-    shipSize: parsed.shipSize,
-    planetClass: parsed.planetClass,
-  };
-}
 
 function validateReservedKeys(
   bloco: BlocoClausewitz | undefined,

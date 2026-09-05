@@ -1,16 +1,8 @@
 import { z } from 'zod';
 import { CAMPOS_EYES, CAMPOS_HAIR, CAMPOS_PERSON, CAMPOS_SPECIES, CAMPOS_TORSO } from './campos';
 import { validarSintaxeDeTemplate } from './templates';
-import {
-  ANCORAS_VERTICAIS,
-  CATEGORIAS_VALIDAS,
-  CATEGORIA_DA_CLASSE,
-  MODOS_ENQUADRAMENTO,
-  RIGS_VALIDOS,
-  SPECIES_CLASSES_VALIDAS,
-  type CategoriaId,
-  type SpeciesClassId,
-} from './vocabulario';
+import { ANCORAS_VERTICAIS, MODOS_ENQUADRAMENTO, RIGS_VALIDOS } from './vocabulario';
+import { CATEGORIAS_VALIDAS, CATEGORIA_DA_CLASSE, SPECIES_CLASSES_VALIDAS, type CategoriaId, type SpeciesClassId } from '../shared/stellaris';
 
 const GENEROS_ALVO = ['male', 'female', 'genderless'] as const;
 

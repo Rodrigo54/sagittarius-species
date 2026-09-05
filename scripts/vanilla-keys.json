@@ -1,6 +1,6 @@
 {
   "_comment": "Gerado por scripts/extract-vanilla-keys.ts a partir da instalação local do Stellaris. Não editar à mão — rode \"bun scripts/extract-vanilla-keys.ts\" de novo pra atualizar.",
-  "generatedAt": "2026-07-22T17:06:56.439Z",
+  "generatedAt": "2026-09-05T21:02:28.188Z",
   "stellarisPath": "D:/SteamLibrary/steamapps/common/Stellaris",
   "army": [
     "abomination_army",
@@ -465,5 +465,17 @@
     "pc_tundra",
     "pc_volcanic",
     "pc_warden_guardian"
+  ],
+  "languages": [
+    "braz_por",
+    "english",
+    "french",
+    "german",
+    "japanese",
+    "korean",
+    "polish",
+    "russian",
+    "simp_chinese",
+    "spanish"
   ]
 }

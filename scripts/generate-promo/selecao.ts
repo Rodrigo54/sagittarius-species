@@ -1,5 +1,5 @@
 import { basename } from 'node:path';
-import type { SpeciesInfo } from '../generate-portraits/types';
+import type { SpeciesInfo } from '../shared/species';
 import type { RoomsInfo } from '../generate-rooms/types';
 import type { GeneroAlvo } from '../portrait-schema';
 import type { EspeciePromo, GeneroPromo } from '../promo-schema';

@@ -1,6 +1,7 @@
 import type { GeneroAlvo } from '../portrait-schema';
 import { pad } from '../utils';
-import { RIGS, RIG_PADRAO, type SpeciesInfo } from './types';
+import { RIGS, RIG_PADRAO } from './types';
+import { type SpeciesInfo } from '../shared/species';
 
 function blocoPortraitEntry(
   groupId: string,

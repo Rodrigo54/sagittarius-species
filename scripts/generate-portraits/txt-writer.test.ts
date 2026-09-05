@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 import { gerarConteudoTxt } from './txt-writer';
-import type { SpeciesInfo } from './types';
+import type { SpeciesInfo } from '../shared/species';
 
 function infoBase(rig?: SpeciesInfo['config']['rig']): SpeciesInfo {
   return {

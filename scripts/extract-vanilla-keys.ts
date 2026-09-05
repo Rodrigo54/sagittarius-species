@@ -9,12 +9,12 @@
 import { readFile, readdir, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { Command } from 'commander';
+import { caminhoStellaris } from './shared/paths';
+import { extrairIdiomas } from './shared/vanilla';
 
 const __DIRNAME = dirname(fileURLToPath(import.meta.url));
 
-// Caminho local da instalação do Stellaris. Ajuste se sua instalação Steam
-// estiver em outra unidade/pasta.
-const STELLARIS_PATH = 'D:/SteamLibrary/steamapps/common/Stellaris';
 
 const DESTINO = join(__DIRNAME, 'vanilla-keys.json');
 
@@ -48,6 +48,11 @@ async function extrairChavesDeNivelSuperior(
 }
 
 async function main() {
+  const programa = new Command().name('bun run extract-vanilla')
+    .description('Extrai chaves e idiomas da instalação do Stellaris.')
+    .argument('[instalacao]', 'Pasta do Stellaris; padrão: STELLARIS_PATH do .env.').parse();
+  const STELLARIS_PATH = caminhoStellaris(programa.args[0]);
+  const languages = await extrairIdiomas(STELLARIS_PATH);
   const army = await extrairChavesDeNivelSuperior(
     join(STELLARIS_PATH, 'common/armies')
   );
@@ -67,6 +72,7 @@ async function main() {
     army,
     shipSize,
     planetClass,
+    languages,
   };
 
   await writeFile(DESTINO, JSON.stringify(snapshot, null, 2) + '\n', 'utf8');
@@ -76,4 +82,4 @@ async function main() {
   );
 }
 
-main();
+main().catch(erro => { console.error(erro instanceof Error ? erro.message : erro); process.exitCode = 1; });

@@ -1,26 +1,28 @@
-import { existsSync } from 'node:fs';
-import { readdir, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { nomesNumerados } from '../utils';
-import type { SpeciesInfo } from './types';
+import { limparArquivos, listarEntradas } from '../shared/files';
+import type { SpeciesInfo } from '../shared/species';
 
-async function limparPasta(pasta: string, esperados: Set<string>) {
-  if (!existsSync(pasta)) return;
+const generos = ['male', 'female', 'genderless'] as const;
+const ddsNumerado = (nome: string) => /^\d{3,}\.dds$/.test(nome);
 
-  const itens = await readdir(pasta);
-  for (const item of itens) {
-    if (item.endsWith('.dds') && !esperados.has(item)) {
-      await rm(join(pasta, item));
-      console.log(`  removido órfão: ${join(pasta, item)}`);
-    }
+export async function limparOrfaos(info: SpeciesInfo, pastaDestinoEspecie: string) {
+  for (const [genero, arquivos] of Object.entries(info.arquivos)) {
+    await limparArquivos(join(pastaDestinoEspecie, genero), ddsNumerado, nomesNumerados(arquivos.length, '.dds'));
   }
 }
 
-/** Apaga, na pasta de destino em mod/, qualquer .dds que não corresponda a um
- * PNG de origem — limpeza total, sem exceção (decisão explícita: preferimos
- * perder um retrato sem fonte a manter lixo não rastreável). */
-export async function limparOrfaos(info: SpeciesInfo, pastaDestinoEspecie: string) {
-  for (const [genero, arquivos] of Object.entries(info.arquivos)) {
-    await limparPasta(join(pastaDestinoEspecie, genero), nomesNumerados(arquivos.length, '.dds'));
+/** A limpeza global pertence somente à execução sem filtro de espécie. */
+export async function limparOrfaosGlobais(especies: SpeciesInfo[], pastaModelos: string, pastaTxt: string) {
+  const atuais = new Map(especies.map(info => [info.slug, info]));
+  for (const entrada of await listarEntradas(pastaModelos)) {
+    if (!entrada.isDirectory() || !/^ssm_[a-z0-9_]+$/.test(entrada.name) || entrada.name === 'ssm_shared') continue;
+    const info = atuais.get(entrada.name);
+    for (const genero of generos) {
+      if (info?.arquivos[genero] !== undefined) continue;
+      await limparArquivos(join(pastaModelos, entrada.name, genero), ddsNumerado, new Set());
+    }
   }
+  await limparArquivos(pastaTxt, nome => /^ssm_[a-z0-9_]+_portrait\.txt$/.test(nome),
+    new Set(especies.map(info => info.slug + '_portrait.txt')));
 }
