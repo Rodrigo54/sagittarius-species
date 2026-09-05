@@ -271,7 +271,7 @@ por espécie não corrigiria.
 **Por que não é o padrão.** Metade do acervo tem estrutura fina no topo, e nem toda é sacrificável — em algumas
 ela é a característica da espécie (os tentáculos do `ssm_octopus`, com 23%, são o candidato óbvio). Empurrar isso
 para a faixa de corte é o mesmo erro que tirou a cauda da sereia do quadro. O script de diagnóstico aponta as
-candidatas; a decisão é visual, espécie a espécie, comparando o antes e o depois em `.portraits-framed/`.
+candidatas; a decisão é visual, espécie a espécie, comparando o antes e o depois em `.portrait-staging/png/`.
 
 **Consequência na validação.** Ancorar pela cabeça sobe a arte, e portanto sobe a base junto. A regra "a arte
 precisa alcançar a borda inferior do canvas" passou a ser conferida sobre a geometria final (`y + altura`), e não
@@ -391,3 +391,5 @@ resta pra material funcionar sem contorno.
    originais), então qualquer edição nele se propaga pro rig de todas as espécies na próxima regeração. Todo
    experimento vai pro fork derivado (`bun run shared-rig` regenera `ssm_shared/` do zero; nada lá é editado à
    mão).
+
+A instalação usada por `measure-framing/index.ts` vem de `STELLARIS_PATH` no `.env`, com override posicional opcional.

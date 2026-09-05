@@ -121,7 +121,7 @@ O screenshot sai como JPEG (`page.screenshot({ type: 'jpeg', quality: 85 })`), n
 imagem de galeria do Workshop acima de 1MB, e o screenshot lossless de um canvas 1920×1080 cheio de foto/
 gradiente passava disso por uma boa margem (~2-2.6MB). A composição não é pixel art nem tem texto miúdo onde
 artefato de compressão salte aos olhos, então a perda do JPEG em qualidade 85 é imperceptível a olho e o
-resultado cai pra ~300-400KB — bem abaixo do limite, com folga. `caminhoSaida()` em `types.ts` já resolve pra
+resultado cai pra ~300-400KB — bem abaixo do limite, com folga. `caminhoSaida()` em `paths.ts` já resolve pra
 `.jpg`; a limpeza de órfãos em `index.ts` trata qualquer `ssm_*.png` remanescente como órfão por definição
 (nenhuma espécie gera mais PNG desde essa mudança).
 

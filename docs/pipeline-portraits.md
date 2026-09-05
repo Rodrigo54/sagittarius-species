@@ -56,7 +56,7 @@ de prefixo que existia antes entre arte-fonte e mod publicado.
    - **`ssm_shared` — master + enquadramento derivado.** `assets/` guarda a arte **nativa**, em qualquer
      resolução, trimada no bounding box de conteúdo — não existe canvas/template fixo pra pintar em cima, o
      enquadramento é derivado, não desenhado. O enquadramento (trim → resize → composição no canvas do rig)
-     roda a cada `bun run portrait`, em `framing.ts`, escrevendo em `.portraits-framed/` (fora do git — é o
+     roda a cada `bun run portrait`, em `framing.ts`, escrevendo em `.portrait-staging/png/` (fora do git — é o
      enquadramento final em PNG, conferível a olho sem abrir um DDS). O guia é expresso em **fração do canvas**,
      o que torna o canvas do rig uma constante trocável sem recalibrar nada. `modo` escolhe entre escalar pela
      largura do guia (padrão) ou pela altura mínima (`altura`) — veja "Escolher o `modo`" abaixo. `ancora`
@@ -73,15 +73,14 @@ de prefixo que existia antes entre arte-fonte e mod publicado.
    conforme o contrato do rig — ou que o PNG tem o canvas exato (legado), ou que o master tem canal alfa e a
    geometria calculada cabe no canvas (`ssm_shared`). Qualquer divergência é erro — nada é escrito nem apagado
    se houver um erro em qualquer espécie.
-4. Só depois de validado tudo: para cada espécie, qualquer `.dds` já existente em
-   `mod/sagittarius-species/gfx/models/portraits/ssm_<espécie>/` que não corresponda a um PNG de origem é
-   **apagado** (limpeza total, sem exceção — histórico: essa decisão já removeu deliberadamente texturas órfãs
-   sem PNG de origem que estavam publicadas, como `ssm_cyborg/013.dds`). Depois disso, a arte é enquadrada e
-   convertida via `converter.ts`, e o `ssm_<espécie>_portrait.txt` inteiro é regenerado a partir do zero. Essa
-   limpeza é só de arquivo dentro da pasta de uma espécie que continua existindo — o pipeline **não** limpa
-   pastas de espécie inteiras que ficaram órfãs: se uma espécie for removida de `assets/portraits/`, a pasta
-   dela em `mod/.../gfx/models/portraits/` e o `ssm_<espécie>_portrait.txt` correspondente precisam ser
-   apagados à mão.
+4. Depois de validar, enquadra os PNGs em `.portrait-staging/png/`, converte os DDS e escreve os scripts
+   de retrato e taxonomia em `.portrait-staging/mod/`. O lote confere presença, tamanho e cabeçalho DDS antes
+   da primeira cópia para o mod. A promoção é automática e usa somente a lista de saídas desta execução;
+   arquivos antigos do staging não são promovidos. Uma falha de preparação preserva o mod. Uma falha durante
+   a cópia final pode deixar atualização parcial; o Git é o mecanismo de recuperação, sem rollback automático.
+   Depois da promoção, remove DDS numerados excedentes dos gêneros declarados. Sem filtro de espécie, também
+   remove DDS numerados de espécies/gêneros excluídos e scripts `ssm_*_portrait.txt` sem fonte. Rigs,
+   arquivos manuais fora desses padrões e diretórios são preservados. Com filtro, não há limpeza global.
 5. O template do `.txt` gerado é 100% derivado dos gêneros declarados em `counts` e da contagem de
    arquivos — `clothes_selector`, `attachment_selector` e `custom_attachment_label` são sempre os mesmos valores
    constantes em toda espécie hoje; `entity` é `sl_humanoid_01_entity` ou `ssm_humanoid_01_entity` conforme o

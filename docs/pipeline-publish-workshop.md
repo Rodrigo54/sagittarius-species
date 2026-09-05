@@ -40,11 +40,7 @@ uma reinstalação destruiria esse cache e obrigaria a fazer login (com senha + 
   que encontrar. O modo normal do publish usa só essa seção; o resto do arquivo é histórico de referência, nunca
   reenviado.
 
-`description.md` e `change-notes.md` eram uma mistura de BBCode literal com markdown solto antes desta pipeline existir — foram reescritos
-pra Markdown puro (ver `git log` de `steam-workshop/*.md` em torno da introdução deste pipeline) porque o
-conversor precisa de sintaxe válida pra funcionar direito; BBCode digitado à mão nesses arquivos ainda funciona
-(não é sintaxe markdown válida, então o parser trata como texto puro e ele atravessa sem mudança), mas não é
-mais necessário.
+Os arquivos de descrição e changenote usam Markdown. BBCode literal também atravessa o conversor como texto.
 
 ## Conversão Markdown → BBCode (`md-to-bbcode.ts`)
 
@@ -92,8 +88,8 @@ enviada.
 `montarVdf` gera o bloco `"workshopitem" { ... }` que o `steamcmd +workshop_build_item <arquivo>` espera —
 formato KeyValues (Clausewitz-like, mas não é o mesmo dialeto do resto do mod, não usa `jomini`). `title`/
 `description` são sempre incluídos; `changenote` é opcional (presente no modo normal, ausente em
-`--metadata-only` — nada impede combinar os três no mesmo VDF, a Valve documenta isso como incluir "the
-key/value pairs that should be updated"):
+`--metadata-only`). O modo metadata inclui `previewfile`, `title` e `description`, mas omite `contentfolder`
+e `changenote`. O modo normal inclui todos os campos mostrados abaixo:
 
 ```
 "workshopitem"
@@ -125,15 +121,14 @@ git, sobrescrito a cada publish).
 3. monta o conteúdo (changenote de change-notes.md, ou title+description de description.md)
 4. imprime resumo + pede confirmação ("digite sim")
 5. se confirmado:
-   a. bun run copy (sincroniza o mod local de teste)
+   a. bun run copy somente no modo normal (sincroniza o mod local de teste)
    b. grava timestamp em change-notes.md (só no modo normal, só se ainda não tinha)
    c. escreve o VDF em bin/steamcmd/publish.vdf
    d. steamcmd +login $STEAM_USERNAME +workshop_build_item <vdf> +quit (stdio herdado do
       terminal — steamcmd pode pedir senha/Steam Guard interativamente)
 ```
 
-`node:util.parseArgs` faz o parsing da única flag (`--metadata-only`) — é o padrão do projeto pra CLIs novas
-daqui pra frente, não só deste script.
+`commander` faz o parsing das opções e fornece `--help`, conforme o padrão de CLI do projeto.
 
 ### Detecção de sucesso: exit code do steamcmd não é confiável
 
