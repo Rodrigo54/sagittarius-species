@@ -1,27 +1,21 @@
 import { open } from 'node:fs/promises';
 import { basename } from 'node:path';
+import { generosDe, quantidadeDe } from '../portrait-schema';
 import { pad } from '../utils';
 import { medirInicioDoCorpo, medirTrims, resolverGuia, validarEnquadramento } from './framing';
-import { rigDe, type SpeciesInfo } from './types';
+import { rigDe } from './types';
+import { type SpeciesInfo } from '../shared/species';
 
 /** Confere que os arquivos são exatamente "001.png".."NNN.png", zero-padded a 3
  * dígitos, sequenciais e sem buracos — é a convenção que a lista
- * character_textures gerada assume ao numerar as texturas.
- *
- * `esperado` ausente é o caso em que `counts` não declara o gênero que
- * `gendered` promete: erro de configuração, com mensagem própria em vez de
- * uma comparação de contagem contra um número que não existe. */
+ * character_textures gerada assume ao numerar as texturas. */
 function validarSequencia(
   arquivos: string[],
-  esperado: number | undefined,
+  esperado: number,
   rotulo: string,
   slug: string
 ): string[] {
   const erros: string[] = [];
-
-  if (esperado === undefined) {
-    return [`${slug}: portrait.json não declara "counts.${rotulo}" (encontrei ${arquivos.length} PNG(s) em "${rotulo}")`];
-  }
 
   if (arquivos.length !== esperado) {
     erros.push(
@@ -141,22 +135,16 @@ export async function validarEspecie(info: SpeciesInfo): Promise<string[]> {
     }
   }
 
-  if (config.gendered) {
-    erros.push(...validarSequencia(info.arquivosMale, config.counts.male, 'male', slug));
-    erros.push(...validarSequencia(info.arquivosFemale, config.counts.female, 'female', slug));
-  } else {
-    erros.push(...validarSequencia(info.arquivosFlat, config.counts.flat, 'flat', slug));
+  for (const genero of generosDe(config.counts)) {
+    erros.push(...validarSequencia(info.arquivos[genero]!, quantidadeDe(config.counts, genero)!, genero, slug));
   }
 
   // só confere a arte se a sequência já bateu — evita erro de dimensão
   // confuso/redundante quando o problema real é contagem/numeração.
   if (erros.length === 0) {
     const validar = rigDe(config).guia ? validarMaster : validarCanvasExato;
-    if (config.gendered) {
-      erros.push(...(await validar(info.arquivosMale, info, 'male')));
-      erros.push(...(await validar(info.arquivosFemale, info, 'female')));
-    } else {
-      erros.push(...(await validar(info.arquivosFlat, info, 'flat')));
+    for (const genero of generosDe(config.counts)) {
+      erros.push(...(await validar(info.arquivos[genero]!, info, genero)));
     }
   }
 

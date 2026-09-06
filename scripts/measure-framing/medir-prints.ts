@@ -1,3 +1,4 @@
+import { Command } from 'commander';
 /**
  * Lê os screenshots de calibração e resolve a relação entre **coordenadas do
  * sprite** (que `index.ts` deriva dos `.gui`) e **coordenadas do canvas de
@@ -146,8 +147,8 @@ function acharRegioes(img: Imagem, eixo: 'y' | 'x'): Regiao[] {
 }
 
 async function main() {
-  const pasta = process.argv[2];
-  if (!pasta) throw new Error('uso: bun scripts/measure-framing/medir-prints.ts <pasta-com-prints>');
+  const programa = new Command().name('bun scripts/measure-framing/medir-prints.ts').argument('<pasta>', 'Pasta com os screenshots de calibração.').parse();
+  const pasta = programa.args[0]!;
 
   const arquivos = (await readdir(pasta)).filter((f) => f.toLowerCase().endsWith('.png')).sort();
   if (arquivos.length === 0) throw new Error(`nenhum .png em ${pasta}`);

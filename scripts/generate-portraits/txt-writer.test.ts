@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 import { gerarConteudoTxt } from './txt-writer';
-import type { SpeciesInfo } from './types';
+import type { SpeciesInfo } from '../shared/species';
 
 function infoBase(rig?: SpeciesInfo['config']['rig']): SpeciesInfo {
   return {
@@ -8,15 +8,12 @@ function infoBase(rig?: SpeciesInfo['config']['rig']): SpeciesInfo {
     pastaAssets: '',
     config: {
       name: 'teste',
-      gendered: false,
       rig,
       species_classes: ['HUM'],
       categories: ['humanoids'],
-      counts: { flat: 1 },
+      counts: { genderless: 1 },
     },
-    arquivosMale: [],
-    arquivosFemale: [],
-    arquivosFlat: ['assets/portraits/ssm_teste/001.png'],
+    arquivos: { genderless: ['assets/portraits/ssm_teste/genderless/001.png'] },
   };
 }
 

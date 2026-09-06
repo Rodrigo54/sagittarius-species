@@ -1,9 +1,4 @@
-import {
-  CATEGORIA_DA_CLASSE,
-  CATEGORIAS_TEMATICAS,
-  type CategoriaId,
-  type SpeciesClassId,
-} from '../portrait-schema';
+import { CATEGORIA_DA_CLASSE, CATEGORIAS_TEMATICAS, type CategoriaId, type SpeciesClassId } from '../shared/stellaris';
 import { GATE_DA_CLASSE, SET_DA_CLASSE } from './vocabulario';
 
 /** A filiação declarada por uma espécie, já lida do `portrait.json`. */

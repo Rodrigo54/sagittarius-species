@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "propertyNames": {
+    "type": "string",
+    "pattern": "^ssm_[a-z0-9_]+$"
+  },
+  "additionalProperties": {
+    "type": "object",
+    "properties": {
+      "titulo": {
+        "type": "string",
+        "description": "Nome de exibição da espécie — o mesmo texto em negrito usado em steam-workshop/description.md."
+      },
+      "subtitulo": {
+        "type": "string",
+        "description": "Linha curta de apoio ao título (ex.: um epíteto ou a natureza do governo/facção) — exibida entre o título e o lore na imagem de divulgação."
+      },
+      "lore": {
+        "type": "string",
+        "description": "Parágrafo de lore usado no painel de texto da imagem de divulgação — cópia editável do parágrafo de description.md, não vinculada a ele."
+      },
+      "variantes": {
+        "minItems": 3,
+        "maxItems": 3,
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^(male|female|genderless)\\/\\d{3}$"
+        },
+        "description": "As 3 variantes de personagem do pódio, na ordem 1º-2º-3º lugar, no formato \"<gênero>/<NNN>\" (ex.: [\"female/012\", \"male/003\", \"female/007\"]) — cada entrada precisa existir de fato em assets/portraits/<slug>/<gênero>/. Escolha sempre explícita, sem seleção automática."
+      },
+      "fundo": {
+        "description": "Override manual do fundo — o NNN de NNN_room.png em assets/city_sets/. Ausente = escolha automática e determinística por hash do slug.",
+        "type": "string",
+        "pattern": "^\\d{3}$"
+      },
+      "escalas": {
+        "description": "Override manual de escala por colocação no pódio (\"1\" a \"3\", 1 = maior/destaque) — a proporção do recorte varia por variante, e a escala padrão (definida em scripts/generate-promo/layout.ts) pode não caber bem em todas as espécies. Chave ausente = usa a escala padrão daquela colocação; objeto todo ausente = usa a escala padrão em todas.",
+        "type": "object",
+        "propertyNames": {
+          "type": "string",
+          "enum": [
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        "additionalProperties": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "required": [
+      "titulo",
+      "subtitulo",
+      "lore",
+      "variantes"
+    ],
+    "additionalProperties": false
+  },
+  "description": "Formato completo de assets/promo/species-promo.json — uma entrada por espécie, chave = slug ssm_<especie>."
+}

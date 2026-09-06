@@ -61,17 +61,15 @@ Detalhes de `scripts/download-bin.ts`:
 Requer Windows, já que o `texconv` é baseado em DirectX.
 
 `scripts/converter.ts` usa o `texconv` (`bin/texconv/texconv.exe`, baixado por `bun run setup` — veja acima)
-para converter PNG em DDS, e escreve **direto dentro de `mod/sagittarius-species/gfx/...`** — não existe pasta
-`output/` intermediária nem passo manual de mover/renomear arquivos. `converter.ts` é só o utilitário de baixo
-nível compartilhado: agrupa os arquivos recebidos pela pasta de destino (trocando a raiz `pastaOrigem` por
+para converter PNG em DDS no destino informado pelo chamador. Portraits usa `.portrait-staging/mod/` e
+rooms escreve diretamente em `mod/`. É um utilitário de baixo nível compartilhado: agrupa os arquivos recebidos pela pasta de destino (trocando a raiz `pastaOrigem` por
 `pastaDestino`, preservando a subestrutura de pastas), cria cada pasta de destino que ainda não existir, e roda
 o `texconv` uma vez por pasta (só aceita um único diretório de saída `-o` por invocação). `noMips: true` vira
 `-m 1`; a saída é sempre forçada para `-ft dds -y` (overwrite). Se uma pasta falhar na conversão, o processo
 para imediatamente (fail-fast).
 
-Os dois pipelines que usam esse utilitário seguem o mesmo formato (validar → limpar órfãos → converter →
-escrever `.txt`), com formato de textura e forma de pasta diferentes: `docs/pipeline-portraits.md` (retratos,
-BC3) e o pipeline de rooms abaixo (BC1).
+Portraits prepara e promove um lote completo antes de limpar órfãos (ver `docs/pipeline-portraits.md`).
+Rooms valida, converte, escreve o registro e só então limpa órfãos.
 
 ### Pipeline de rooms: `assets/city_sets/` → `mod/` sempre em sincronia
 
@@ -81,10 +79,8 @@ sempre espelhando exatamente o que existe em `assets/city_sets/`, toda vez que r
 1. Os PNGs de `assets/city_sets/` precisam ser `001_room.png`..`NNN_room.png`, sequenciais e zero-padded a 3
    dígitos, sem buracos — qualquer divergência é erro e trava a geração sem escrever nem apagar nada (mesmo
    padrão de `docs/pipeline-portraits.md`).
-2. Só depois de validado: qualquer `.dds` já existente em `mod/sagittarius-species/gfx/portraits/city_sets/` que
-   não corresponda a um PNG de origem é **apagado** (limpeza total, sem exceção — mesma política do pipeline de
-   portraits). Depois disso, os PNGs são convertidos via `converter.ts`, e
-   `gfx/portraits/asset_selectors/ssm_room_textures.txt` é regenerado do zero.
+2. Depois de validar, converte os PNGs via `converter.ts` e regenera
+   `gfx/portraits/asset_selectors/ssm_room_textures.txt`. Somente após sucesso remove DDS órfãos na pasta de city_sets.
 3. O `.txt` gerado contém **só as entradas do mod** (`room_selector.game_setup` com `"NNN_room" = { always = yes
    }` pra cada PNG) — nenhum `ruler` e nenhuma entrada vanilla duplicada. O `room_selector` é mesclado por chave
    entre arquivos diferentes dentro de `gfx/portraits/asset_selectors/` (é assim que mods de rooms coexistem com

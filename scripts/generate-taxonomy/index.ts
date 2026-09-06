@@ -1,3 +1,4 @@
+import { Command } from 'commander';
 import { gerarTaxonomia } from './gerar';
 
 /** Ponto de entrada de `bun run taxonomy`: regenera `ssm_portrait_sets.txt` e
@@ -10,6 +11,7 @@ import { gerarTaxonomia } from './gerar';
  * `species_classes`/`categories` de uma espécie e quer o registro atualizado
  * sem esperar a conversão de DDS. */
 async function main() {
+  new Command().name('bun run taxonomy').description('Regenera os arquivos derivados deste pipeline.').parse();
   try {
     const { especies, sets } = await gerarTaxonomia();
     console.log(`Gerado: ${sets} portrait_set(s) a partir de ${especies} espécie(s).`);

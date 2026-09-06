@@ -1,6 +1,5 @@
 {
   "name": "hastur",
-  "gendered": false,
   "rig": "ssm_shared",
   "modo": "altura",
   "species_classes": [
@@ -10,6 +9,6 @@
     "molluscoids"
   ],
   "counts": {
-    "flat": 8
+    "genderless": 8
   }
 }

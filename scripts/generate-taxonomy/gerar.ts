@@ -1,13 +1,12 @@
-import { writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
-import { PASTA_ASSETS, PASTA_MOD } from '../converter';
-import { lerConfig, listarPastasEspecies } from '../generate-portraits/discovery';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import type { PortraitConfig } from '../portrait-schema';
+import { PASTA_ASSETS, PASTA_MOD } from '../shared/paths';
+import { lerConfig, listarPastasEspecies } from '../shared/species';
 import { derivarSets, type Filiacao, type SetDerivado } from './agrupamento';
 import { gerarPortraitCategories, gerarPortraitSets } from './txt-writer';
 
 const PASTA_PORTRAITS_ASSETS = join(PASTA_ASSETS, 'portraits');
-const ARQUIVO_SETS = join(PASTA_MOD, 'common/portrait_sets/ssm_portrait_sets.txt');
-const ARQUIVO_CATEGORIES = join(PASTA_MOD, 'common/portrait_categories/ssm_portrait_categories.txt');
 
 export interface TaxonomiaDerivada {
   sets: SetDerivado[];
@@ -23,14 +22,20 @@ export interface TaxonomiaDerivada {
  *
  * Separado da escrita pra que `generate-portraits` possa validar a taxonomia
  * junto das outras validações — antes de converter textura ou apagar `.dds`
- * órfão — e só escrever no fim. */
-export async function derivarTaxonomia(): Promise<TaxonomiaDerivada> {
+ * órfão — e só escrever no fim.
+ *
+ * `configsPreCarregados` deixa quem já leu `portrait.json` de outra forma
+ * (ex.: `bun run validate`, que carrega `SpeciesInfo` completo pra validar
+ * retratos) reaproveitar o config em vez de reabrir o arquivo. */
+export async function derivarTaxonomia(
+  configsPreCarregados?: ReadonlyMap<string, PortraitConfig>
+): Promise<TaxonomiaDerivada> {
   const slugs = await listarPastasEspecies(PASTA_PORTRAITS_ASSETS);
 
   const carregadas = await Promise.all(
     slugs.map(async (slug) => {
       try {
-        const config = await lerConfig(join(PASTA_PORTRAITS_ASSETS, slug));
+        const config = configsPreCarregados?.get(slug) ?? (await lerConfig(join(PASTA_PORTRAITS_ASSETS, slug)));
         const filiacao: Filiacao = {
           slug,
           species_classes: config.species_classes,
@@ -53,8 +58,11 @@ export async function derivarTaxonomia(): Promise<TaxonomiaDerivada> {
 /** Regenera do zero os dois arquivos de `common/` que registram os retratos do
  * mod. Recebe os sets já derivados — quem chama decide quando validar. */
 export async function escreverTaxonomia(sets: SetDerivado[]): Promise<void> {
-  await writeFile(ARQUIVO_SETS, gerarPortraitSets(sets));
-  await writeFile(ARQUIVO_CATEGORIES, gerarPortraitCategories(sets));
+  for (const arquivo of arquivosTaxonomia(sets)) {
+    const caminho = join(PASTA_MOD, arquivo.caminho);
+    await mkdir(dirname(caminho), { recursive: true });
+    await writeFile(caminho, arquivo.conteudo);
+  }
 }
 
 /** Deriva e escreve numa tacada, travando se houver erro — o fluxo de quem só
@@ -69,4 +77,11 @@ export async function gerarTaxonomia(): Promise<{ especies: number; sets: number
 
   await escreverTaxonomia(sets);
   return { especies, sets: sets.length };
+}
+
+export function arquivosTaxonomia(sets: SetDerivado[]) {
+  return [
+    { caminho: 'common/portrait_sets/ssm_portrait_sets.txt', conteudo: gerarPortraitSets(sets) },
+    { caminho: 'common/portrait_categories/ssm_portrait_categories.txt', conteudo: gerarPortraitCategories(sets) },
+  ];
 }

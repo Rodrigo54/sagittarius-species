@@ -7,6 +7,22 @@ For the steam workshop change notes I recommended to use major mod version incre
 > publish time if it isn't there yet (that stamp is local bookkeeping only — it never gets sent
 > to Steam, which already timestamps updates on its own).
 
+## 1.14.0 — 2026-09-05 21:22
+
+* Updated the mod's Workshop thumbnail.
+* Added new promotional artwork for every species to the Workshop gallery.
+
+## 1.13.0 — 2026-09-03 18:41
+
+* **New species: ONU Humans** — 50 portraits (25 male, 25 female) in white/blue/gold armor, rescued from the mod's own history: this is the original Default Humans art from before the July 2026 rework, given a species slot of its own instead of staying lost in git history. That brings the pack to 19 species.
+* **Vargrosianos got a full art redo** — all 30 portraits (15 male, 15 female) were regenerated from scratch with sharper detail and higher resolution, replacing the older static set.
+
+## 1.12.0 — 2026-08-28 21:17
+
+* **The Timbots got a complete art overhaul.** All 25 units were redrawn from scratch: matte injection-molded plastic with visible seams and parting lines instead of polished ceramic, and each unit now comes in its own bold color — 20 distinct hues across the line, with unit 001 kept factory white. Their LED eyes and chassis light strips share a second color that glows against the shell.
+* **The Gamba species has been removed**, bringing the pack to 18 species. It was the mod's only Mammalian portrait, so the Mammalian tab it added to the empire creator is gone as well — existing empires using a Gamba portrait will need to pick a new one.
+* Rewrote the Workshop description: every species is now listed under the empire creator tab it actually appears in, with its portrait count and a bit of in-universe flavor.
+
 ## 1.11.0 — 2026-08-17 17:45
 
 * **New species: Drakelings** — 30 portraits (15 male, 15 female) of cute little dragon-folk blacksmiths, bronze-plated on one side of the forge and polished silver on the other. That brings the pack to 19 species.

@@ -176,7 +176,7 @@ describe('portrait_categories', () => {
   });
 
   test('o name de uma categoria espelhada é a própria species_class', () => {
-    const { portraitCategories } = gerar([especie('ssm_gamba', ['MAM'], ['mammalians'])]);
-    expect(portraitCategories).toContain(`mammalians = {\n  name = MAM`);
+    const { portraitCategories } = gerar([especie('ssm_drakelings', ['REP'], ['reptilians'])]);
+    expect(portraitCategories).toContain(`reptilians = {\n  name = REP`);
   });
 });

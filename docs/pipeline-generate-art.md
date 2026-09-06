@@ -14,7 +14,7 @@ enfileirar geração de verdade no ComfyUI é decisão do Rodrigo, executada por
 ## Interface de linha de comando
 
 ```
-bun run art <slug> <male|female|flat> [options]
+bun run art <slug> <male|female|genderless> [options]
 
   -n, --variante <NNN>   variante(s) a gerar; repetível e aceita lista por vírgula
                          (`-n 001,004 -n 007`). Padrão: todas as declaradas
@@ -39,7 +39,7 @@ posicionais escritos depois da flag.
 ## Peças do pipeline
 
 - **`scripts/portrait-schema/`** — schema `zod` (`schema.ts`) que descreve o `portrait.json` **inteiro**
-  (`name`/`gendered`/`rig`/`counts`/`modo`/`ancora` + `geracaoArt`), fonte de verdade única usada tanto por
+  (`name`/`rig`/`counts`/`modo`/`ancora` + `geracaoArt`), fonte de verdade única usada tanto por
   `generate-portraits` quanto por `generate-art`. `.strict()` em todo objeto — chave desconhecida é erro, não é
   ignorada em silêncio. `campos.ts` isola os campos de **dado** de cada seção (sem `template`/`extra`): é deles
   que sai o conjunto de caminhos interpoláveis, sem lista paralela. `vocabulario.ts` guarda os enums aceitos
@@ -94,7 +94,7 @@ posicionais escritos depois da flag.
 - **`geracaoArt` no `portrait.json`**: `base` (`species` — só aqui, ver abaixo —, `torso`, `eyes`/`hair`/`person`
   quando fixos pra toda espécie), `modelo` (`variant`: `"distilled"` (padrão) ou `"base"`;
   `steps`/`cfg`/`aspectRatio` — sem checkpoint/LoRA/sampler, ver `scripts/portrait-schema/schema.ts`),
-  `male`/`female`/`flat` (`referenceImage`
+  `male`/`female`/`genderless` (`referenceImage`
   como **lista** de imagens de referência/conceito por gênero + `variantes` nomeadas `"001"`..`"NNN"`, uma por
   indivíduo, contagem batendo exato com `counts.<gênero>` — conferido pelo schema via `.superRefine`). Cada
   variante aceita ainda um `seed` opcional (`noise_seed` do ComfyUI): a seed **da imagem que está em disco**
@@ -209,6 +209,38 @@ Modelos instalados, mapeamento de pastas e pegadinhas encontradas ao configurar 
   visível tanto pro Python de sistema quanto pro venv do ComfyUI. **Login ≠ acesso a repositório gated** — mesmo
   autenticado, é preciso visitar a página do modelo gated no site e clicar em "Agree and access repository"
   manualmente antes de baixar (caso de `black-forest-labs/FLUX.1-dev`).
+
+### Comfy MCP (tools do ComfyUI dentro do Claude Code)
+
+O **Comfy MCP local** (`https://github.com/Comfy-Org/comfy-mcp`) expõe o ComfyUI como tools de MCP — buscar
+modelos e templates, validar e submeter workflows, acompanhar a fila, puxar os outputs. É um servidor stdio que
+não fala com o ComfyUI direto: ele envolve o `comfy-cli`, e é o `comfy-cli` que chega no servidor
+`127.0.0.1:8188` descrito acima.
+
+- **Instalação**: `uv tool install comfy-mcp` e `uv tool install "comfy-cli>=1.14.0"` (1.14.0 é o piso de versão
+  que o servidor exige). Os executáveis ficam em `C:\Users\rodrigo\.local\bin\` (`comfy-mcp.exe`, `comfy.exe`).
+  Cada um no seu venv isolado do `uv`, sem misturar dependências com o venv que o Stability Matrix gerencia.
+- **Workspace**: `comfy set-default D:\StabilityMatrix\Packages\ComfyUI` aponta o `comfy-cli` pra instalação do
+  Stability Matrix, em vez de ele criar um workspace próprio com um segundo ComfyUI.
+- **Registro no Claude Code**, em escopo `user` (vale em qualquer projeto, não só neste repo):
+
+  ```bash
+  claude mcp add comfy-mcp -s user -e "COMFY_BIN=C:\Users\rodrigo\.local\bin\comfy.exe" \
+    -- "C:\Users\rodrigo\.local\bin\comfy-mcp.exe"
+  ```
+
+  `COMFY_BIN` é obrigatório aqui: o cliente MCP lança o servidor com um ambiente mínimo, que não inclui o `PATH`
+  do shell, então sem o caminho absoluto o servidor sobe e completa o handshake mas toda tool falha com
+  "`comfy` not found on PATH".
+- **Quem sobe o ComfyUI é o Rodrigo, pela UI do Stability Matrix** — não a tool `launch_comfyui`. O venv do
+  `comfy-cli` não tem torch, então quem tem que iniciar o processo é o venv do próprio pacote. Enquanto o
+  servidor estiver desligado, as tools que dependem dele (`server_info`, `run_workflow`, `generate_image`)
+  falham; as offline (ler notas e slots de um workflow, por exemplo) continuam valendo.
+- **`COMFY_API_KEY` não está configurada**, de propósito: ela só é necessária pros nós de partner-API (Seedream,
+  Kling, Nano Banana, Veo e afins), que gastam créditos da Comfy. O pipeline deste repo é Flux.2 Klein local.
+
+Vale aqui a mesma regra do `bun run art` (topo deste documento): **enfileirar geração de verdade é decisão do
+Rodrigo**, agora inclusive pelas tools do MCP, que consomem a mesma GPU.
 
 ### Mapeamento de pastas de modelo (Stability Matrix ↔ ComfyUI)
 

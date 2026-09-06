@@ -1,6 +1,5 @@
 {
   "name": "green_order",
-  "gendered": false,
   "rig": "ssm_shared",
   "modo": "altura",
   "species_classes": [
@@ -12,6 +11,6 @@
     "cybernetics"
   ],
   "counts": {
-    "flat": 15
+    "genderless": 15
   }
 }

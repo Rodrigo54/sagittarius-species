@@ -6,9 +6,6 @@ import { fileURLToPath } from 'node:url';
 
 const __DIRNAME = dirname(fileURLToPath(import.meta.url));
 
-export const PASTA_RAIZ = join(__DIRNAME, '..');
-export const PASTA_ASSETS = join(PASTA_RAIZ, 'assets');
-export const PASTA_MOD = join(PASTA_RAIZ, 'mod/sagittarius-species');
 
 const TEXCONV = join(__DIRNAME, '../bin/texconv/texconv.exe');
 

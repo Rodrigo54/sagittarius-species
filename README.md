@@ -6,7 +6,7 @@
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/Rodrigo54/sagittarius-species?style=plastic)
 ![Steam File Size](https://img.shields.io/steam/size/3054793206?style=plastic)
 
-Sagittarius Species is a Stellaris mod that adds AI-assisted portrait art for **18 species**, each plugged into
+Sagittarius Species is a Stellaris mod that adds AI-assisted portrait art for **19 species**, each plugged into
 the game's `species_classes` / `portrait_categories` / `portrait_sets` data chain (see `CLAUDE.md` for the full
 model). Every species shares the same animated rig (`ssm_shared`) rather than shipping a unique mesh — see
 `docs/pipeline-portraits.md` and the "`sl_shared` vs. `ssm_shared`" section of `CLAUDE.md` for why.
@@ -20,13 +20,14 @@ into the textures and `.txt`/`.yml` files inside `mod/`.
 | Species | Portrait slug | Species class |
 | --- | --- | --- |
 | Humans (augmented realism) | `ssm_default` | HUM |
+| UN Humans | `ssm_onu_humans` | HUM |
 | Space Elves | `ssm_elves` | HUM |
 | High Elves | `ssm_high_elves` | HUM |
 | Green Elves | `ssm_green_elves` | PLANT |
 | Atlantis Space (Mermaids) | `ssm_mermaids` | AQUATIC |
 | Astral Humans | `ssm_astral` | HUM |
 | Necromancers | `ssm_necron` | NECROID |
-| Furries | `ssm_gamba` | MAM |
+| Drakelings | `ssm_drakelings` | INF |
 | Mollusk | `ssm_octopus` | MOL |
 | Lovecraftian Mollusk | `ssm_hastur` | MOL |
 | Order of the Green Knights | `ssm_green_order` | MACHINE |
@@ -38,7 +39,7 @@ into the textures and `.txt`/`.yml` files inside `mod/`.
 | Mercenaries | `ssm_mercenary` | HUM |
 | Star Knight | `ssm_knight` | HUM |
 
-All 18 species above use the `ssm_shared` rig. The legacy `sl_shared` rig is still versioned in the repository,
+All 19 species above use the `ssm_shared` rig. The legacy `sl_shared` rig is still versioned in the repository,
 but no species points at it: it is the input `bun run shared-rig` derives `ssm_shared` from, and the only
 surviving copy of the original mesh and animations.
 

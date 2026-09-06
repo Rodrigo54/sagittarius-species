@@ -2,26 +2,8 @@ import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { z } from 'zod';
 import { zPortraitConfig } from './schema';
-import {
-  ANCORAS_VERTICAIS,
-  ANCORAS_VERTICAIS_DESCRICOES,
-  CATEGORIAS_DESCRICOES,
-  CATEGORIAS_VALIDAS,
-  SPECIES_CLASSES_DESCRICOES,
-  SPECIES_CLASSES_VALIDAS,
-  ESTADOS_TORSO,
-  ESTADOS_TORSO_DESCRICOES,
-  ESTILOS_CABELO,
-  ESTILOS_CABELO_DESCRICOES,
-  FORMAS_CORPO,
-  FORMAS_CORPO_DESCRICOES,
-  FORMAS_OLHO,
-  FORMAS_OLHO_DESCRICOES,
-  MODOS_ENQUADRAMENTO,
-  MODOS_ENQUADRAMENTO_DESCRICOES,
-  ARQUETIPOS,
-  ARQUETIPOS_DESCRICOES,
-} from './vocabulario';
+import { ANCORAS_VERTICAIS, ANCORAS_VERTICAIS_DESCRICOES, ESTADOS_TORSO, ESTADOS_TORSO_DESCRICOES, ESTILOS_CABELO, ESTILOS_CABELO_DESCRICOES, FORMAS_CORPO, FORMAS_CORPO_DESCRICOES, FORMAS_OLHO, FORMAS_OLHO_DESCRICOES, MODOS_ENQUADRAMENTO, MODOS_ENQUADRAMENTO_DESCRICOES, ARQUETIPOS, ARQUETIPOS_DESCRICOES } from './vocabulario';
+import { CATEGORIAS_DESCRICOES, CATEGORIAS_VALIDAS, SPECIES_CLASSES_DESCRICOES, SPECIES_CLASSES_VALIDAS } from '../shared/stellaris';
 
 /** Gera `portrait.schema.json` a partir do schema `zod` (`z.toJSONSchema()`
  * nativo do zod v4 — ver rationale de não usar `zod-to-json-schema` em
@@ -78,7 +60,13 @@ function injetarEnumDescriptions(node: unknown): void {
   for (const valor of Object.values(objeto)) injetarEnumDescriptions(valor);
 }
 
-const jsonSchema = z.toJSONSchema(zPortraitConfig, { target: 'draft-7' });
-injetarEnumDescriptions(jsonSchema);
-writeFileSync(CAMINHO_SAIDA, JSON.stringify(jsonSchema, null, 2) + '\n', 'utf8');
-console.log('OK:', CAMINHO_SAIDA);
+export function gerarJsonSchema() {
+  const jsonSchema = z.toJSONSchema(zPortraitConfig, { target: 'draft-7' });
+  injetarEnumDescriptions(jsonSchema);
+  return jsonSchema;
+}
+
+if (import.meta.main) {
+  writeFileSync(CAMINHO_SAIDA, JSON.stringify(gerarJsonSchema(), null, 2) + '\n', 'utf8');
+  console.log('OK:', CAMINHO_SAIDA);
+}

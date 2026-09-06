@@ -1,6 +1,5 @@
 {
   "name": "astral",
-  "gendered": true,
   "rig": "ssm_shared",
   "species_classes": [
     "HUM"

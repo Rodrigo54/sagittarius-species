@@ -1,6 +1,5 @@
 {
   "name": "drakelings",
-  "gendered": true,
   "rig": "ssm_shared",
   "species_classes": [
     "INF",

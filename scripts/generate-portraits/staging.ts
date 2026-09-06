@@ -13,7 +13,8 @@
 import { copyFile, mkdir, rm } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { enquadrarPng, medirInicioDoCorpo, medirTrims, resolverGuia } from './framing';
-import { rigDe, type SpeciesInfo } from './types';
+import { rigDe } from './types';
+import { type SpeciesInfo } from '../shared/species';
 
 export interface Preparado {
   /** Arquivos prontos pra conversão, na pasta derivada. */
@@ -27,7 +28,7 @@ export async function prepararEspecie(
   pastaAssetsRaiz: string,
   pastaStaging: string
 ): Promise<Preparado> {
-  const origens = [...info.arquivosMale, ...info.arquivosFemale, ...info.arquivosFlat];
+  const origens = Object.values(info.arquivos).flat();
   const rig = rigDe(info.config);
 
   // Recria a pasta da espécie do zero: sem isso, um PNG removido da arte-fonte

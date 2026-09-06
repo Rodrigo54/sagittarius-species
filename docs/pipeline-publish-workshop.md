@@ -1,8 +1,8 @@
 # Publicação no Steam Workshop
 
-`scripts/publish-workshop/` (comando `bun run publish-workshop -- [--metadata-only]`) publica o mod no Steam
-Workshop via `steamcmd`. Este documento detalha as peças; o resumo de alto nível está no `CLAUDE.md`, seção
-"Publicação no Steam Workshop".
+`scripts/publish-workshop/` (comando `bun run publish-workshop -- [--metadata-only] [--auto-approve]`) publica o
+mod no Steam Workshop via `steamcmd`. Este documento detalha as peças; o resumo de alto nível está no
+`CLAUDE.md`, seções "Fluxo de release" e "Publicação no Steam Workshop".
 
 ## Por que `steamcmd`
 
@@ -22,9 +22,15 @@ baixando os arquivos que faltam direto dos servidores da Steam. Por isso a insta
 porque, depois do primeiro uso, essa mesma pasta passa a guardar a sessão de login cacheada pelo `steamcmd`;
 uma reinstalação destruiria esse cache e obrigaria a fazer login (com senha + Steam Guard) de novo.
 
-## Os dois arquivos `.md` em `steam-workshop/`
+## Os arquivos `.md` em `steam-workshop/`
 
-- **`description.md`** — a descrição do item na página do Workshop. Markdown válido (headings, `**negrito**`,
+- **`description.pt.md`** — a descrição em português, **fonte de autoria**: é aqui que o texto nasce e é
+  revisado. Não é publicado (a API exposta pelo `steamcmd` não aceita descrição por idioma — ver "Fora de
+  escopo"), e o script de publish nem lê este arquivo. Quem for mudar a descrição edita este primeiro e depois
+  reflete a mudança no `description.md`; os dois carregam a mesma estrutura (mesmas seções, mesma ordem, mesmos
+  emojis, mesmos números), o que torna a tradução um espelho.
+- **`description.md`** — a descrição do item na página do Workshop, em inglês, **tradução do `description.pt.md`**.
+  Markdown válido (headings, `**negrito**`,
   links, imagens — inclusive o padrão `[![alt](imgurl)](linkurl)` pra um banner clicável). Usado inteiro em
   **todo publish** (não só `--metadata-only`) — `title`/`description` sempre vão no VDF, então a descrição da
   Steam nunca fica desatualizada em relação ao arquivo.
@@ -34,11 +40,7 @@ uma reinstalação destruiria esse cache e obrigaria a fazer login (com senha + 
   que encontrar. O modo normal do publish usa só essa seção; o resto do arquivo é histórico de referência, nunca
   reenviado.
 
-Os dois eram uma mistura de BBCode literal com markdown solto antes desta pipeline existir — foram reescritos
-pra Markdown puro (ver `git log` de `steam-workshop/*.md` em torno da introdução deste pipeline) porque o
-conversor precisa de sintaxe válida pra funcionar direito; BBCode digitado à mão nesses arquivos ainda funciona
-(não é sintaxe markdown válida, então o parser trata como texto puro e ele atravessa sem mudança), mas não é
-mais necessário.
+Os arquivos de descrição e changenote usam Markdown. BBCode literal também atravessa o conversor como texto.
 
 ## Conversão Markdown → BBCode (`md-to-bbcode.ts`)
 
@@ -86,8 +88,8 @@ enviada.
 `montarVdf` gera o bloco `"workshopitem" { ... }` que o `steamcmd +workshop_build_item <arquivo>` espera —
 formato KeyValues (Clausewitz-like, mas não é o mesmo dialeto do resto do mod, não usa `jomini`). `title`/
 `description` são sempre incluídos; `changenote` é opcional (presente no modo normal, ausente em
-`--metadata-only` — nada impede combinar os três no mesmo VDF, a Valve documenta isso como incluir "the
-key/value pairs that should be updated"):
+`--metadata-only`). O modo metadata inclui `previewfile`, `title` e `description`, mas omite `contentfolder`
+e `changenote`. O modo normal inclui todos os campos mostrados abaixo:
 
 ```
 "workshopitem"
@@ -102,10 +104,14 @@ key/value pairs that should be updated"):
 }
 ```
 
-`escaparValorVdf` escapa barra invertida e aspas duplas (`\` → `\\`, `"` → `\"`) — importa em caminhos Windows
-(`D:\dev\...` vira `D:\\dev\\...` no VDF) e em qualquer texto de changenote/descrição que contenha aspas.
-Quebras de linha literais dentro do valor não precisam de escape. Gerado em runtime dentro de `bin/steamcmd/`
-(fora do git, sobrescrito a cada publish).
+O KeyValues do `steamcmd` lê este VDF **sem sequências de escape**: dentro de um valor entre aspas, `\"` não
+escapa nada — a aspa encerra o valor ali, e o resto do texto cai na posição de chave, derrubando o publish com
+`Assertion Failed: CKeyValuesSystem::AddStringToPool: key name too long` seguido de `got } in key in file
+workshopitem`. Como não existe forma de representar uma aspa dupla no valor, `sanitizarValorVdf` troca cada uma
+por aspa tipográfica, alternando abertura (`“`) e fechamento (`”`) — é o único caractere que a montagem do VDF
+altera. Barra invertida e quebra de linha são literais e passam intactas, inclusive nos caminhos Windows de
+`contentfolder`/`previewfile` (`D:\dev\...` vai como está). Gerado em runtime dentro de `bin/steamcmd/` (fora do
+git, sobrescrito a cada publish).
 
 ## Orquestração (`index.ts`)
 
@@ -113,17 +119,16 @@ Quebras de linha literais dentro do valor não precisam de escape. Gerado em run
 1. valida plataforma (Windows), steamcmd instalado, STEAM_USERNAME setada
 2. lê descriptor.mod (name/version/remote_file_id)
 3. monta o conteúdo (changenote de change-notes.md, ou title+description de description.md)
-4. imprime resumo + pede confirmação ("digite sim")
+4. imprime resumo + pede confirmação ("digite sim"), a menos que `--auto-approve` tenha sido passada
 5. se confirmado:
-   a. bun run copy (sincroniza o mod local de teste)
+   a. bun run copy somente no modo normal (sincroniza o mod local de teste)
    b. grava timestamp em change-notes.md (só no modo normal, só se ainda não tinha)
    c. escreve o VDF em bin/steamcmd/publish.vdf
    d. steamcmd +login $STEAM_USERNAME +workshop_build_item <vdf> +quit (stdio herdado do
       terminal — steamcmd pode pedir senha/Steam Guard interativamente)
 ```
 
-`node:util.parseArgs` faz o parsing da única flag (`--metadata-only`) — é o padrão do projeto pra CLIs novas
-daqui pra frente, não só deste script.
+`commander` faz o parsing das opções e fornece `--help`, conforme o padrão de CLI do projeto.
 
 ### Detecção de sucesso: exit code do steamcmd não é confiável
 
@@ -151,7 +156,9 @@ Todo o caminho até a confirmação (validações, parsing do `descriptor.mod`, 
 `change-notes.md`, conversão MD→BBCode, montagem do resumo) roda com qualquer `STEAM_USERNAME` (mesmo
 inválido) e responder "não" no prompt cancela sem tocar em `change-notes.md`, sem rodar `bun run copy` e sem
 chamar `steamcmd`. É assim que dá pra validar mudanças no script sem risco de publicar algo sem querer — só
-confirmar "sim" de fato dispara login real + `bun run copy` + publish.
+confirmar "sim" (ou passar `--auto-approve`) de fato dispara login real + `bun run copy` + publish. Por isso
+`--auto-approve` nunca deve ser o padrão pra testar o script — só pra quando o resumo já foi conferido e o
+publish é mesmo pra valer.
 
 ## Fora de escopo (de propósito)
 
@@ -164,5 +171,3 @@ confirmar "sim" de fato dispara login real + `bun run copy` + publish.
   sem chave de idioma. Faria falta uma aplicação compilada contra o Steamworks SDK — fora de escopo aqui.
 - **Sync automático de versão** entre `package.json`/`descriptor.mod`/`README.md` — continua manual (ver
   "Metadados de release" no `CLAUDE.md`).
-- **Integração com o fluxo GitFlow/release** (`job-github-release`) — o publish no Workshop não é disparado
-  automaticamente por nenhum merge/tag; é sempre um comando manual, separado.

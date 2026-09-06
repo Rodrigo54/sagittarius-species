@@ -8,16 +8,15 @@ import { ErroCoberturaDeCampo, validarEspecie } from './validacao';
 function especie(geracaoArt: PortraitConfig['geracaoArt']): PortraitConfig {
   return {
     name: 'fixture',
-    gendered: true,
     species_classes: ['HUM'],
     categories: ['humanoids'],
-    counts: { male: 1 },
+    counts: { male: 1, female: 1 },
     geracaoArt,
   } as PortraitConfig;
 }
 
 describe('validarEspecie — cobertura', () => {
-  test('cor declarada que nenhum template referencia é erro, nomeando variante e campo', () => {
+  test('cor declarada que nenhum template referencia é erro, nomeando variante e campo', async () => {
     const config = especie({
       base: {
         species: { archetype: 'Mermaid' },
@@ -30,16 +29,16 @@ describe('validarEspecie — cobertura', () => {
       },
     });
 
-    expect(() => validarEspecie(config, 'mermaids', BASE_ART)).toThrow(ErroCoberturaDeCampo);
+    await expect(validarEspecie(config, 'mermaids', BASE_ART)).rejects.toThrow(ErroCoberturaDeCampo);
     try {
-      validarEspecie(config, 'mermaids', BASE_ART);
+      await validarEspecie(config, 'mermaids', BASE_ART);
     } catch (erro) {
       expect((erro as ErroCoberturaDeCampo).rotulo).toBe('mermaids/male/001');
       expect((erro as ErroCoberturaDeCampo).caminhos).toEqual(['torso.primary_color']);
     }
   });
 
-  test('a mesma cor passa quando o template da espécie a posiciona', () => {
+  test('a mesma cor passa quando o template da espécie a posiciona', async () => {
     const config = especie({
       base: {
         species: { archetype: 'Mermaid' },
@@ -47,10 +46,10 @@ describe('validarEspecie — cobertura', () => {
       },
       male: { person: { gender: 'Male' }, variantes: { '001': { torso: { primary_color: 'Salmon' } } } },
     });
-    expect(validarEspecie(config, 'mermaids', BASE_ART)).toBe(1);
+    expect(await validarEspecie(config, 'mermaids', BASE_ART)).toBe(1);
   });
 
-  test('sem template de espécie, o default do base.json cobre as cores', () => {
+  test('sem template de espécie, o default do base.json cobre as cores', async () => {
     const config = especie({
       base: { species: { archetype: 'Human' }, torso: { state: 'FullyCovered' } },
       male: {
@@ -58,10 +57,10 @@ describe('validarEspecie — cobertura', () => {
         variantes: { '001': { torso: { primary_color: 'Gold', secondary_color: 'Navy' } } },
       },
     });
-    expect(validarEspecie(config, 'default', BASE_ART)).toBe(1);
+    expect(await validarEspecie(config, 'default', BASE_ART)).toBe(1);
   });
 
-  test('campos cobertos por vocabulário posicionado na order não precisam de template', () => {
+  test('campos cobertos por vocabulário posicionado na order não precisam de template', async () => {
     const config = especie({
       base: { species: { archetype: 'Human' } },
       male: {
@@ -69,10 +68,10 @@ describe('validarEspecie — cobertura', () => {
         variantes: { '001': { person: { ethnicity: 'African' }, eyes: { shape: 'Hooded' } } },
       },
     });
-    expect(validarEspecie(config, 'default', BASE_ART)).toBe(1);
+    expect(await validarEspecie(config, 'default', BASE_ART)).toBe(1);
   });
 
-  test('template literal sem cor declarada continua válido (caso ssm_astral)', () => {
+  test('template literal sem cor declarada continua válido (caso ssm_astral)', async () => {
     const config = especie({
       base: {
         species: { archetype: 'Human', template: '<species.archetype>, mystical order warrior' },
@@ -80,12 +79,12 @@ describe('validarEspecie — cobertura', () => {
       },
       male: { person: { gender: 'Male' }, variantes: { '001': { person: { age: 21 } } } },
     });
-    expect(validarEspecie(config, 'astral', BASE_ART)).toBe(1);
+    expect(await validarEspecie(config, 'astral', BASE_ART)).toBe(1);
   });
 });
 
 describe('validarEspecie — obrigatoriedade', () => {
-  test('placeholder fora de colchetes sem valor na variante é erro', () => {
+  test('placeholder fora de colchetes sem valor na variante é erro', async () => {
     const config = especie({
       base: {
         species: { archetype: 'Mermaid' },
@@ -96,10 +95,10 @@ describe('validarEspecie — obrigatoriedade', () => {
         variantes: { '001': {} }, // não declara a cor que o template exige
       },
     });
-    expect(() => validarEspecie(config, 'mermaids', BASE_ART)).toThrow(ErroCampoObrigatorio);
+    await expect(validarEspecie(config, 'mermaids', BASE_ART)).rejects.toThrow(ErroCampoObrigatorio);
   });
 
-  test('o mesmo campo dentro de colchetes é opcional e não reprova', () => {
+  test('o mesmo campo dentro de colchetes é opcional e não reprova', async () => {
     const config = especie({
       base: {
         species: { archetype: 'Mermaid' },
@@ -107,15 +106,14 @@ describe('validarEspecie — obrigatoriedade', () => {
       },
       male: { person: { gender: 'Male' }, variantes: { '001': {} } },
     });
-    expect(validarEspecie(config, 'mermaids', BASE_ART)).toBe(1);
+    expect(await validarEspecie(config, 'mermaids', BASE_ART)).toBe(1);
   });
 });
 
 describe('validarEspecie — escopo', () => {
-  test('confere todas as variantes de todos os gêneros, não só a primeira', () => {
+  test('confere todas as variantes de todos os gêneros, não só a primeira', async () => {
     const config = {
       name: 'fixture',
-      gendered: true,
       species_classes: ['HUM'],
       categories: ['humanoids'],
       counts: { male: 2, female: 1 },
@@ -128,16 +126,15 @@ describe('validarEspecie — escopo', () => {
         female: { person: { gender: 'Female' }, variantes: { '001': { person: { age: 25 } } } },
       },
     } as PortraitConfig;
-    expect(validarEspecie(config, 'fixture', BASE_ART)).toBe(3);
+    expect(await validarEspecie(config, 'fixture', BASE_ART)).toBe(3);
   });
 
-  test('o erro aponta a variante exata, mesmo quando ela é a última do lote', () => {
+  test('o erro aponta a variante exata, mesmo quando ela é a última do lote', async () => {
     const config = {
       name: 'fixture',
-      gendered: true,
       species_classes: ['HUM'],
       categories: ['humanoids'],
-      counts: { male: 3 },
+      counts: { male: 3, female: 3 },
       geracaoArt: {
         base: { species: { archetype: 'Human' }, torso: { state: 'FullyCovered', template: 'plain armor' } },
         male: {
@@ -147,14 +144,14 @@ describe('validarEspecie — escopo', () => {
       },
     } as PortraitConfig;
     try {
-      validarEspecie(config, 'fixture', BASE_ART);
+      await validarEspecie(config, 'fixture', BASE_ART);
       throw new Error('deveria ter reprovado');
     } catch (erro) {
       expect((erro as ErroCoberturaDeCampo).rotulo).toBe('fixture/male/003');
     }
   });
 
-  test('espécie sem geracaoArt não tem nada a validar', () => {
-    expect(validarEspecie({ name: 'x', gendered: false, counts: { flat: 1 } } as PortraitConfig, 'x', BASE_ART)).toBe(0);
+  test('espécie sem geracaoArt não tem nada a validar', async () => {
+    expect(await validarEspecie({ name: 'x', counts: { genderless: 1 } } as PortraitConfig, 'x', BASE_ART)).toBe(0);
   });
 });

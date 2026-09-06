@@ -19,8 +19,8 @@
 
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { PASTA_ASSETS } from '../converter';
-import { carregarEspecie, listarPastasEspecies } from '../generate-portraits/discovery';
+import { PASTA_ASSETS } from '../shared/paths';
+import { carregarEspecie, listarPastasEspecies } from '../shared/species';
 import { detectarInicioDoCorpo } from '../generate-portraits/framing';
 import { rigDe } from '../generate-portraits/types';
 import { decodificarPng } from '../png';
@@ -39,7 +39,7 @@ async function main() {
     const info = await carregarEspecie(PASTA_PORTRAITS, slug);
     if (!rigDe(info.config).guia) continue; // rig legado não deriva enquadramento
 
-    const arquivos = [...info.arquivosMale, ...info.arquivosFemale, ...info.arquivosFlat];
+    const arquivos = Object.values(info.arquivos).flat();
     const valores: number[] = [];
     for (const arquivo of arquivos) {
       valores.push(detectarInicioDoCorpo(decodificarPng(await readFile(arquivo))));

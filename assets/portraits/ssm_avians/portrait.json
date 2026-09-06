@@ -1,6 +1,5 @@
 {
   "name": "avians",
-  "gendered": false,
   "rig": "ssm_shared",
   "species_classes": [
     "AVI"
@@ -9,6 +8,6 @@
     "avians"
   ],
   "counts": {
-    "flat": 50
+    "genderless": 50
   }
 }

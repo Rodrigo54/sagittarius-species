@@ -2,7 +2,7 @@
 
 `scripts/generate-names/` (comando `bun run names`, entrada em `index.ts`) usa a biblioteca `jomini` para ir de
 uma única fonte JSON até o script Clausewitz, todos os `.yml` de idioma, e o arquivo agregado de espécies-flavor.
-É uma pasta (não um arquivo único) porque passou de ~300 linhas: `types.ts` (tipos compartilhados),
+Responsabilidades: `types.ts` (tipos compartilhados),
 `validation.ts` (chaves reservadas + regra de `sequential_name`), `name-lists.ts` (geração de `.txt`/`.yml` por
 name_list) e `species-names.ts` (agregação de `species_names.txt`). A **forma** do JSON de origem é validada por
 um schema `zod` próprio (`scripts/name-list-schema/`), no mesmo desenho do `portrait-schema/`: fonte de verdade
@@ -24,20 +24,32 @@ leitura, não bloco lixo no `.txt`. `scripts/extract-vanilla-keys.ts` é auxilia
   string literal falha silenciosamente), não uma escolha de estilo. Quando usado, o script atribui um token e
   emite tanto a referência do token (no `.txt`) quanto a string real (no `.yml` de cada idioma).
 - Saída de localização: `mod/sagittarius-species/localisation/<lang>/name_lists/<fileName>_l_<lang>.yml`, gerada
-  para toda pasta de idioma já existente em `localisation/` (english, braz_por, french, german, japanese,
-  korean, polish, russian, simp_chinese, spanish).
+  para cada idioma de `languages` em `scripts/vanilla-keys.json`. As pastas de destino são criadas quando
+  necessário; sua existência não determina quais idiomas são gerados.
   - Arquivos `.yml` precisam ser UTF-8 **com BOM** (prefixo `﻿`) e têm largura máxima de 80 colunas conforme o
     `.editorconfig`.
-- Saída de script: `mod/sagittarius-species/common/name_lists/<fileName>.txt` só é regenerado a partir da
-  passada do locale `braz_por` (veja o trecho `if (loc === 'braz_por')`) — Português do Brasil é o idioma
-  "fonte da verdade" deste repositório (veja o `README.md`, escrito para um público brasileiro).
+- Saída de script: `mod/sagittarius-species/common/name_lists/<fileName>.txt` é composta uma vez por cultura.
+  O snapshot exige `braz_por`, idioma fonte da verdade do projeto. A geração usa o snapshot e não exige o jogo instalado.
 - **Validação (erro, não warning) antes de escrever qualquer arquivo**: `ship_names`/`ship_class_names` (exceto
   `generic`), `army_names` (exceto `generic`/`general`) e `planet_names` (exceto `generic`) precisam usar chaves
-  que existam em `scripts/vanilla-keys.json` — um snapshot congelado de `army`/`ship_size`/`planet_class`
+  que existam em `scripts/vanilla-keys.json` — um snapshot de `army`/`ship_size`/`planet_class` e `languages`
   extraído da instalação local do Stellaris via `bun scripts/extract-vanilla-keys.ts` (rode de novo manualmente
-  só quando o jogo receber patch relevante; o caminho da instalação está hardcoded no topo do script). Essa
+  quando o jogo receber patch relevante; a instalação vem de `STELLARIS_PATH` no `.env`, com override posicional opcional). Essa
   validação existe porque chaves inventadas (`android_defense_army`, `sponsored_coloniser`) não davam erro
   nenhum até o cwtools rodar — agora travam a geração.
+
+## Composição e sincronização
+
+`gerarNameList` compõe texto Clausewitz e localização em memória antes da escrita. Tokens derivam do caminho
+completo, incluindo índices de listas: dois campos com texto igual continuam com tokens distintos. Colisões
+de caminhos normalizados em maiúsculas são erros. Aspas, barras e quebras de linha recebem escaping na localização.
+
+A validação também rejeita culturas com o mesmo identificador. Após escrever todas as culturas e o agregado de
+espécies-flavor, `sync.ts` remove `ssm_*.txt` e `ssm_*_l_<idioma>.yml` de culturas excluídas, somente nas
+pastas de name_lists. A limpeza percorre os idiomas existentes para alcançar saídas antigas, sem usá-los como
+fonte dos idiomas a gerar. Arquivos fora desses padrões são preservados.
+
+Atualize o snapshot com `bun run extract-vanilla [instalacao]`. `bun run validate` confere as fontes sem escrever saídas.
 
 ## `species_names` (botão de aleatório na criação de império)
 

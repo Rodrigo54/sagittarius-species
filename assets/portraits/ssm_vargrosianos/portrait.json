@@ -1,6 +1,5 @@
 {
   "name": "vargrosianos",
-  "gendered": true,
   "rig": "ssm_shared",
   "species_classes": [
     "HUM"
@@ -9,7 +8,513 @@
     "humanoids"
   ],
   "counts": {
-    "male": 25,
-    "female": 16
+    "male": 15,
+    "female": 15
+  },
+  "geracaoArt": {
+    "base": {
+      "species": {
+        "archetype": "Alien",
+        "template": "<species.archetype> humanoid, elongated smooth skull with fine subtle ridges, pointed ears, refined aristocratic bone structure, sleek sci-fi officer aesthetic"
+      },
+      "torso": {
+        "state": "FullyCovered",
+        "template": "high-collared navy blue military uniform with gold trim, ornate pauldron shoulder armor, dark cape draped over one shoulder, gemstone insignia at the chest"
+      },
+      "hair": {
+        "extra": "sleek hair combed back close to the scalp, no volume"
+      }
+    },
+    "modelo": {
+      "variant": "distilled",
+      "steps": 4,
+      "cfg": 1,
+      "aspectRatio": "4:5"
+    },
+    "male": {
+      "person": {
+        "gender": "Male",
+        "extra": "(teenager:1.2)"
+      },
+      "torso": {
+        "extra": "rectangle male chest"
+      },
+      "variantes": {
+        "001": {
+          "person": {
+            "age": 18,
+            "body_shape": "Slim",
+            "extra": "dark royal violet skin"
+          },
+          "hair": {
+            "style": "Short Curly",
+            "primary_color": "Burgundy"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "color": "Blue"
+          },
+          "seed": 3169744597
+        },
+        "002": {
+          "person": {
+            "age": 21,
+            "body_shape": "Athletic",
+            "extra": "pale lilac skin"
+          },
+          "hair": {
+            "style": "Short Straight",
+            "primary_color": "Silver"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Blue"
+          },
+          "seed": 1158868096
+        },
+        "003": {
+          "person": {
+            "age": 23,
+            "body_shape": "Slim",
+            "extra": "deep amethyst purple skin"
+          },
+          "hair": {
+            "style": "Long Straight",
+            "primary_color": "Brown"
+          },
+          "eyes": {
+            "shape": "Downturned",
+            "color": "Blue"
+          }
+        },
+        "004": {
+          "person": {
+            "age": 24,
+            "body_shape": "Athletic",
+            "extra": "dark royal violet skin"
+          },
+          "hair": {
+            "style": "Straight",
+            "primary_color": "Charcoal"
+          },
+          "eyes": {
+            "shape": "Downturned",
+            "color": "Blue"
+          }
+        },
+        "005": {
+          "person": {
+            "age": 23,
+            "body_shape": "Athletic",
+            "extra": "pale lilac skin"
+          },
+          "hair": {
+            "style": "Long Straight",
+            "primary_color": "Lavender"
+          },
+          "eyes": {
+            "shape": "Downturned",
+            "color": "Gray"
+          }
+        },
+        "006": {
+          "person": {
+            "age": 24,
+            "body_shape": "Slim",
+            "extra": "deep amethyst purple skin"
+          },
+          "hair": {
+            "style": "Undercut",
+            "primary_color": "Black"
+          },
+          "eyes": {
+            "shape": "Hooded",
+            "color": "Gray"
+          }
+        },
+        "007": {
+          "person": {
+            "age": 21,
+            "body_shape": "Slim",
+            "extra": "deep amethyst purple skin"
+          },
+          "hair": {
+            "style": "Long Straight",
+            "primary_color": "Black"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "color": "Blue"
+          },
+          "seed": 3721093174
+        },
+        "008": {
+          "person": {
+            "age": 20,
+            "body_shape": "Slim",
+            "extra": "pale lilac skin"
+          },
+          "hair": {
+            "style": "Long Straight",
+            "primary_color": "Platinum"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "color": "Blue"
+          }
+        },
+        "009": {
+          "person": {
+            "age": 19,
+            "body_shape": "Muscular",
+            "extra": "dark royal violet skin"
+          },
+          "hair": {
+            "style": "Short Straight",
+            "primary_color": "Burgundy"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "color": "Gray"
+          },
+          "seed": 657553740
+        },
+        "010": {
+          "person": {
+            "age": 22,
+            "body_shape": "Athletic",
+            "extra": "deep amethyst purple skin"
+          },
+          "hair": {
+            "style": "Long Straight",
+            "primary_color": "Burgundy"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "color": "Gray"
+          },
+          "seed": 2983521634
+        },
+        "011": {
+          "person": {
+            "age": 21,
+            "body_shape": "Athletic",
+            "extra": "dark royal violet skin"
+          },
+          "hair": {
+            "style": "Long Straight",
+            "primary_color": "Black"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Gray"
+          }
+        },
+        "012": {
+          "person": {
+            "age": 18,
+            "body_shape": "Slim",
+            "extra": "deep amethyst purple skin"
+          },
+          "hair": {
+            "style": "Straight",
+            "primary_color": "Amethyst"
+          },
+          "eyes": {
+            "shape": "Monolid",
+            "color": "Gray"
+          }
+        },
+        "013": {
+          "person": {
+            "age": 25,
+            "body_shape": "Athletic",
+            "extra": "dark royal violet skin"
+          },
+          "hair": {
+            "style": "Long Straight",
+            "primary_color": "Black"
+          },
+          "eyes": {
+            "shape": "Hooded",
+            "color": "Blue"
+          }
+        },
+        "014": {
+          "person": {
+            "age": 19,
+            "body_shape": "Athletic",
+            "extra": "pale lilac skin"
+          },
+          "hair": {
+            "style": "Straight",
+            "primary_color": "Platinum"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "color": "Gray"
+          },
+          "seed": 2017167687
+        },
+        "015": {
+          "person": {
+            "age": 25,
+            "body_shape": "Athletic",
+            "extra": "dark royal violet skin"
+          },
+          "hair": {
+            "style": "Long Straight",
+            "primary_color": "Charcoal"
+          },
+          "eyes": {
+            "shape": "Hooded",
+            "color": "Gray"
+          }
+        }
+      },
+      "referenceImage": [
+        "assets/portraits/ssm_vargrosianos/reference_male.png"
+      ]
+    },
+    "female": {
+      "person": {
+        "gender": "Female"
+      },
+      "variantes": {
+        "001": {
+          "person": {
+            "age": 19,
+            "body_shape": "Athletic",
+            "extra": "dark royal violet skin"
+          },
+          "hair": {
+            "style": "Long Straight",
+            "primary_color": "Burgundy"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "color": "Blue"
+          },
+          "seed": 3759440862
+        },
+        "002": {
+          "person": {
+            "age": 21,
+            "body_shape": "Athletic",
+            "extra": "deep amethyst purple skin"
+          },
+          "hair": {
+            "style": "Long Straight",
+            "primary_color": "Black"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Blue"
+          }
+        },
+        "003": {
+          "person": {
+            "age": 20,
+            "body_shape": "Athletic",
+            "extra": "dark royal violet skin"
+          },
+          "hair": {
+            "style": "Straight",
+            "primary_color": "Black"
+          },
+          "eyes": {
+            "shape": "Downturned",
+            "color": "Gray"
+          }
+        },
+        "004": {
+          "person": {
+            "age": 24,
+            "body_shape": "Athletic",
+            "extra": "pale lilac skin"
+          },
+          "hair": {
+            "style": "Short Straight",
+            "primary_color": "Silver"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Gray"
+          }
+        },
+        "005": {
+          "person": {
+            "age": 23,
+            "body_shape": "Slim",
+            "extra": "deep amethyst purple skin"
+          },
+          "hair": {
+            "style": "Straight",
+            "primary_color": "Amethyst"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "color": "Blue"
+          }
+        },
+        "006": {
+          "person": {
+            "age": 25,
+            "body_shape": "Slim",
+            "extra": "dark royal violet skin"
+          },
+          "hair": {
+            "style": "Short Straight",
+            "primary_color": "Burgundy"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "color": "Gray"
+          }
+        },
+        "007": {
+          "person": {
+            "age": 22,
+            "body_shape": "Athletic",
+            "extra": "dark royal violet skin"
+          },
+          "hair": {
+            "style": "Short Straight",
+            "primary_color": "Charcoal"
+          },
+          "eyes": {
+            "shape": "Hooded",
+            "color": "Gray"
+          }
+        },
+        "008": {
+          "person": {
+            "age": 25,
+            "body_shape": "Slim",
+            "extra": "dark royal violet skin"
+          },
+          "hair": {
+            "style": "Short Straight",
+            "primary_color": "Charcoal"
+          },
+          "eyes": {
+            "shape": "Monolid",
+            "color": "Blue"
+          }
+        },
+        "009": {
+          "person": {
+            "age": 21,
+            "body_shape": "Slim",
+            "extra": "pale lilac skin"
+          },
+          "hair": {
+            "style": "Straight",
+            "primary_color": "Lavender"
+          },
+          "eyes": {
+            "shape": "Upturned",
+            "color": "Blue"
+          },
+          "seed": 1715030322
+        },
+        "010": {
+          "person": {
+            "age": 23,
+            "body_shape": "Slim",
+            "extra": "deep amethyst purple skin"
+          },
+          "hair": {
+            "style": "Straight",
+            "primary_color": "Black"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "color": "Gray"
+          }
+        },
+        "011": {
+          "person": {
+            "age": 22,
+            "body_shape": "Slim",
+            "extra": "deep amethyst purple skin"
+          },
+          "hair": {
+            "style": "Straight",
+            "primary_color": "Violet"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "color": "Gray"
+          }
+        },
+        "012": {
+          "person": {
+            "age": 19,
+            "body_shape": "Slim",
+            "extra": "deep amethyst purple skin"
+          },
+          "hair": {
+            "style": "Short Straight",
+            "primary_color": "Amethyst"
+          },
+          "eyes": {
+            "shape": "Monolid",
+            "color": "Gray"
+          },
+          "seed": 564434401
+        },
+        "013": {
+          "person": {
+            "age": 21,
+            "body_shape": "Athletic",
+            "extra": "dark royal violet skin"
+          },
+          "hair": {
+            "style": "Long Straight",
+            "primary_color": "Black"
+          },
+          "eyes": {
+            "shape": "Almond",
+            "color": "Blue"
+          }
+        },
+        "014": {
+          "person": {
+            "age": 21,
+            "body_shape": "Slim",
+            "extra": "deep amethyst purple skin"
+          },
+          "hair": {
+            "style": "Undercut",
+            "primary_color": "Violet"
+          },
+          "eyes": {
+            "shape": "Oval",
+            "color": "Blue"
+          },
+          "seed": 576392669
+        },
+        "015": {
+          "person": {
+            "age": 19,
+            "body_shape": "Athletic",
+            "extra": "pale lilac skin"
+          },
+          "hair": {
+            "style": "Long Straight",
+            "primary_color": "Lavender"
+          },
+          "eyes": {
+            "shape": "Monolid",
+            "color": "Gray"
+          },
+          "seed": 2829029282
+        }
+      },
+      "referenceImage": [
+        "assets/portraits/ssm_vargrosianos/reference_female.png"
+      ]
+    }
   }
 }

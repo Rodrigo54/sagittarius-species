@@ -15,11 +15,6 @@ export function comoBloco(valor: ValorClausewitz | undefined): BlocoClausewitz |
   return valor;
 }
 
-export interface VanillaKeys {
-  army: string[];
-  shipSize: string[];
-  planetClass: string[];
-}
 
 /** A entrada de espécie-flavor também é definida pelo schema — reexportada
  * aqui pra que os módulos deste pipeline continuem importando de um lugar só. */

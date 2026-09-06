@@ -27,6 +27,7 @@ ssm_humanoids = {
     "ssm_elves"
     "ssm_high_elves"
     "ssm_knight"
+    "ssm_onu_humans"
     "ssm_vargrosianos"
   }
   conditional_portraits = {
@@ -100,13 +101,6 @@ ssm_machine = {
     "ssm_green_order"
     "ssm_new_order"
     "ssm_timbot"
-  }
-}
-
-ssm_mammalians = {
-  species_class = MAM
-  portraits = {
-    "ssm_gamba"
   }
 }
 

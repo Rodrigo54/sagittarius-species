@@ -26,8 +26,9 @@ import { existsSync } from 'node:fs';
 import { copyFile, mkdir, readFile, rm } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { PASTA_ASSETS, PASTA_MOD, PASTA_RAIZ, converter } from '../converter';
-import { carregarEspecie, listarPastasEspecies } from '../generate-portraits/discovery';
+import { converter } from '../converter';
+import { PASTA_ASSETS, PASTA_MOD, PASTA_RAIZ } from '../shared/paths';
+import { carregarEspecie, listarPastasEspecies } from '../shared/species';
 import { rigDe } from '../generate-portraits/types';
 import type { Contexto } from '../measure-framing/gui-layout';
 import { pad } from '../utils';
@@ -108,12 +109,7 @@ async function main() {
   let instalados = 0;
   for (const info of alvos) {
     const pastaEspecie = join(PASTA_PORTRAITS_MOD, info.slug);
-    const grupos = info.config.gendered
-      ? [
-          { sub: 'male', n: info.arquivosMale.length },
-          { sub: 'female', n: info.arquivosFemale.length },
-        ]
-      : [{ sub: '', n: info.arquivosFlat.length }];
+    const grupos = Object.entries(info.arquivos).map(([sub, arquivos]) => ({ sub, n: arquivos.length }));
 
     for (const grupo of grupos) {
       for (let i = 1; i <= grupo.n; i++) {

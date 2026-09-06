@@ -1,8 +1,8 @@
 import { Argument, Command, InvalidArgumentError, Option } from 'commander';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { PASTA_ASSETS, PASTA_RAIZ } from '../converter';
-import { lerConfig } from '../generate-portraits/discovery';
+import { PASTA_ASSETS, PASTA_RAIZ } from '../shared/paths';
+import { lerConfig } from '../shared/species';
 import { aguardarConclusao, baixarImagem, enfileirar, enviarImagemDeReferencia } from './comfyui-client';
 import { mesclarCampos } from './merge';
 import type { GeneroAlvo, GeracaoArtModelo } from '../portrait-schema';
@@ -32,7 +32,7 @@ const CAMINHOS_WORKFLOW: Record<'base' | 'distilled', string> = {
   distilled: join(PASTA_RAIZ, 'scripts/comfyui/ssm_species_portrait_workflow_distilled.json'),
 };
 
-const GENEROS_VALIDOS: readonly GeneroAlvo[] = ['male', 'female', 'flat'];
+const GENEROS_VALIDOS: readonly GeneroAlvo[] = ['male', 'female', 'genderless'];
 
 interface Argumentos {
   slug: string;
@@ -221,7 +221,7 @@ async function main(): Promise<void> {
   // Validação cruzada portrait.json × base.json, sobre TODAS as variantes de
   // todos os gêneros — mesmo quando esta invocação vai gerar só uma (`-n`).
   // Não custa GPU e evita descobrir na variante 017 que o lote está quebrado.
-  const conferidas = validarEspecie(config, slug, BASE_ART);
+  const conferidas = await validarEspecie(config, slug, BASE_ART);
   console.log(`Validado: ${conferidas} variante(s) de ${slug} (todos os gêneros declarados).`);
 
   const bloco = config.geracaoArt[genero];

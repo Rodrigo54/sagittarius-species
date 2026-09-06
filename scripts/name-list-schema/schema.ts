@@ -1,9 +1,5 @@
 import { z } from 'zod';
-// Vocabulário do JOGO, não do pipeline de retratos: a casa dele hoje é
-// `portrait-schema/vocabulario.ts`, que é quem valida species_class no
-// `portrait.json`. Reusar aqui evita duas listas do mesmo conjunto saindo de
-// sincronia quando a Paradox lançar um Species Pack novo.
-import { SPECIES_CLASSES_VALIDAS } from '../portrait-schema';
+import { SPECIES_CLASSES_VALIDAS } from '../shared/stellaris';
 
 /** Fonte de verdade do formato de `assets/name_lists/<cultura>.json` — schema
  * `zod`, com tipos TS inferidos no fim do arquivo. Mesmo desenho de

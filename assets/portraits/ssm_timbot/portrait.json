@@ -1,7 +1,7 @@
 {
   "name": "timbot",
-  "gendered": false,
   "rig": "ssm_shared",
+  "modo": "altura",
   "species_classes": [
     "MACHINE"
   ],
@@ -11,6 +11,339 @@
     "cybernetics"
   ],
   "counts": {
-    "flat": 25
+    "genderless": 25
+  },
+  "geracaoArt": {
+    "base": {
+      "species": {
+        "archetype": "Robot",
+        "template": "<species.archetype>, cute humanoid mascot companion robot, injection-molded plastic construction, soft matte plastic shell with a light satin sheen, rounded friendly proportions, oversized head on a slim articulated body",
+        "extra": "fully mechanical machine, smooth hard faceplate instead of a human face, molded plastic surfaces throughout, visible panel seams and parting lines, matte plastic finish, no bare metal, no chrome, smooth uninterrupted head silhouette, nothing protruding from the top of the head, no antennae, no horns"
+      },
+      "person": {
+        "extra": "(the head shell is molded in solid <torso.primary_color> plastic, the exact same color as the body:1.2)"
+      },
+      "eyes": {
+        "template": "(large glowing <eyes.primary_color> LED eyes lit on a dark glossy digital display face:1.3), bright emissive digital eye graphics drawn in light on the face screen, flat screen faceplate, thin simple glowing mouth line lit below the eyes"
+      },
+      "torso": {
+        "state": "FullyCovered",
+        "template": "sealed robotic chassis of (matte molded plastic in bold saturated <torso.primary_color>:1.4), smooth curved plastic shell panels over chest and abdomen with visible seam lines, glowing <eyes.primary_color> light strips and small indicator lights, dark gray articulated shoulder and elbow joints, ribbed accordion bellows at the neck and waist, arms and body molded in that same solid plastic color"
+      }
+    },
+    "modelo": {
+      "variant": "distilled",
+      "steps": 4,
+      "cfg": 1,
+      "aspectRatio": "2:3"
+    },
+    "genderless": {
+      "referenceImage": [
+        "assets/portraits/ssm_timbot/reference/genderless_c.png"
+      ],
+      "variantes": {
+        "001": {
+          "person": {
+            "extra": "perfectly spherical smooth head with a wide faceplate and no protrusions"
+          },
+          "eyes": {
+            "primary_color": "Cyan",
+            "extra": "two stacked LED dots per eye, one large and one small"
+          },
+          "torso": {
+            "primary_color": "White"
+          }
+        },
+        "002": {
+          "person": {
+            "extra": "cubic head with softly rounded edges and a recessed visor slot"
+          },
+          "eyes": {
+            "primary_color": "Amber",
+            "extra": "two thin horizontal LED bars for eyes, a single bright dot lit in each"
+          },
+          "torso": {
+            "primary_color": "Orange"
+          }
+        },
+        "003": {
+          "person": {
+            "extra": "rounded dome head with a low central crest ridge running from forehead to nape"
+          },
+          "eyes": {
+            "primary_color": "Azure",
+            "extra": "two stacked LED dots per eye, one large and one small"
+          },
+          "torso": {
+            "primary_color": "Navy"
+          }
+        },
+        "004": {
+          "person": {
+            "extra": "tall elongated dome head with a narrow faceplate"
+          },
+          "eyes": {
+            "primary_color": "Gold",
+            "extra": "one large glowing LED ring per eye with a bright lit core"
+          },
+          "torso": {
+            "primary_color": "Maroon"
+          }
+        },
+        "005": {
+          "person": {
+            "extra": "boxy faceted head with chamfered corners and a flat rectangular faceplate"
+          },
+          "eyes": {
+            "primary_color": "Lime",
+            "extra": "blocky pixel-art LED matrix eyes, square lit pixels, low-resolution dot matrix"
+          },
+          "torso": {
+            "primary_color": "Emerald"
+          }
+        },
+        "006": {
+          "person": {
+            "extra": "rounded dome head with a low central crest ridge running from forehead to nape"
+          },
+          "eyes": {
+            "primary_color": "Cyan",
+            "extra": "two thin horizontal LED bars for eyes, a single bright dot lit in each"
+          },
+          "torso": {
+            "primary_color": "Magenta"
+          }
+        },
+        "007": {
+          "person": {
+            "extra": "perfectly spherical smooth head with a wide faceplate and no protrusions"
+          },
+          "eyes": {
+            "primary_color": "Azure",
+            "extra": "concentric LED rings per eye, digital aperture graphic drawn in light"
+          },
+          "torso": {
+            "primary_color": "Cyan"
+          }
+        },
+        "008": {
+          "person": {
+            "extra": "rounded dome head with large circular ear discs on both sides"
+          },
+          "eyes": {
+            "primary_color": "Orange",
+            "extra": "one large glowing LED ring per eye with a bright lit core"
+          },
+          "torso": {
+            "primary_color": "Yellow"
+          }
+        },
+        "009": {
+          "person": {
+            "extra": "boxy faceted head with chamfered corners and a flat rectangular faceplate"
+          },
+          "eyes": {
+            "primary_color": "Magenta",
+            "extra": "concentric LED rings per eye, digital aperture graphic drawn in light"
+          },
+          "torso": {
+            "primary_color": "Violet"
+          }
+        },
+        "010": {
+          "person": {
+            "extra": "tall elongated dome head with a narrow faceplate"
+          },
+          "eyes": {
+            "primary_color": "Gold",
+            "extra": "two thin horizontal LED bars for eyes, a single bright dot lit in each"
+          },
+          "torso": {
+            "primary_color": "Green"
+          }
+        },
+        "011": {
+          "person": {
+            "extra": "smooth rounded dome helmet head with a dark wraparound visor band across the eyes"
+          },
+          "eyes": {
+            "primary_color": "Magenta",
+            "extra": "blocky pixel-art LED matrix eyes, square lit pixels, low-resolution dot matrix"
+          },
+          "torso": {
+            "primary_color": "Rose"
+          }
+        },
+        "012": {
+          "person": {
+            "extra": "cubic head with softly rounded edges and a recessed visor slot"
+          },
+          "eyes": {
+            "primary_color": "Cyan",
+            "extra": "one large glowing LED ring per eye with a bright lit core"
+          },
+          "torso": {
+            "primary_color": "Blue"
+          }
+        },
+        "013": {
+          "person": {
+            "extra": "smooth rounded dome helmet head with a dark wraparound visor band across the eyes"
+          },
+          "eyes": {
+            "primary_color": "Emerald",
+            "extra": "half-moon crescent LED arcs, curved happy digital eyes"
+          },
+          "torso": {
+            "primary_color": "Lime"
+          }
+        },
+        "014": {
+          "person": {
+            "extra": "wide horizontally stretched oval head with a broad faceplate"
+          },
+          "eyes": {
+            "primary_color": "Sky Blue",
+            "extra": "half-moon crescent LED arcs, curved happy digital eyes"
+          },
+          "torso": {
+            "primary_color": "Indigo"
+          }
+        },
+        "015": {
+          "person": {
+            "extra": "wide horizontally stretched oval head with a broad faceplate"
+          },
+          "eyes": {
+            "primary_color": "Yellow",
+            "extra": "soft evenly diffused LED glow per eye, blurred emissive oval, no pupil drawn"
+          },
+          "torso": {
+            "primary_color": "Orange"
+          }
+        },
+        "016": {
+          "person": {
+            "extra": "smooth rounded dome helmet head with a dark wraparound visor band across the eyes"
+          },
+          "eyes": {
+            "primary_color": "Amber",
+            "extra": "narrow vertical LED slits, tall bright glowing bars"
+          },
+          "torso": {
+            "primary_color": "Teal"
+          }
+        },
+        "017": {
+          "person": {
+            "extra": "smooth rounded dome helmet head with a dark wraparound visor band across the eyes"
+          },
+          "eyes": {
+            "primary_color": "Gold",
+            "extra": "one large glowing LED ring per eye with a bright lit core"
+          },
+          "torso": {
+            "primary_color": "Red"
+          }
+        },
+        "018": {
+          "person": {
+            "extra": "wide horizontally stretched oval head with a broad faceplate"
+          },
+          "eyes": {
+            "primary_color": "Amber",
+            "extra": "blocky pixel-art LED matrix eyes, square lit pixels, low-resolution dot matrix"
+          },
+          "torso": {
+            "primary_color": "Charcoal"
+          }
+        },
+        "019": {
+          "person": {
+            "extra": "cubic head with softly rounded edges and a recessed visor slot"
+          },
+          "eyes": {
+            "primary_color": "Lime",
+            "extra": "narrow vertical LED slits, tall bright glowing bars"
+          },
+          "torso": {
+            "primary_color": "Turquoise"
+          },
+          "seed": 1353962758
+        },
+        "020": {
+          "person": {
+            "extra": "perfectly spherical smooth head with a wide faceplate and no protrusions"
+          },
+          "eyes": {
+            "primary_color": "Amber",
+            "extra": "soft evenly diffused LED glow per eye, blurred emissive oval, no pupil drawn"
+          },
+          "torso": {
+            "primary_color": "Red"
+          }
+        },
+        "021": {
+          "person": {
+            "extra": "rounded dome head with a low central crest ridge running from forehead to nape"
+          },
+          "eyes": {
+            "primary_color": "Cyan",
+            "extra": "concentric LED rings per eye, digital aperture graphic drawn in light"
+          },
+          "torso": {
+            "primary_color": "Green"
+          }
+        },
+        "022": {
+          "person": {
+            "extra": "boxy faceted head with chamfered corners and a flat rectangular faceplate"
+          },
+          "eyes": {
+            "primary_color": "Lime",
+            "extra": "narrow vertical LED slits, tall bright glowing bars"
+          },
+          "torso": {
+            "primary_color": "Purple"
+          }
+        },
+        "023": {
+          "person": {
+            "extra": "rounded dome head with large circular ear discs on both sides"
+          },
+          "eyes": {
+            "primary_color": "Emerald",
+            "extra": "two stacked LED dots per eye, one large and one small"
+          },
+          "torso": {
+            "primary_color": "Yellow"
+          }
+        },
+        "024": {
+          "person": {
+            "extra": "tall elongated dome head with a narrow faceplate"
+          },
+          "eyes": {
+            "primary_color": "Amber",
+            "extra": "half-moon crescent LED arcs, curved happy digital eyes"
+          },
+          "torso": {
+            "primary_color": "Blue"
+          }
+        },
+        "025": {
+          "person": {
+            "extra": "rounded dome head with large circular ear discs on both sides"
+          },
+          "eyes": {
+            "primary_color": "Gold",
+            "extra": "soft evenly diffused LED glow per eye, blurred emissive oval, no pupil drawn"
+          },
+          "torso": {
+            "primary_color": "Coral"
+          }
+        }
+      }
+    }
   }
 }

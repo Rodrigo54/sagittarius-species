@@ -1,4 +1,4 @@
-import { CATEGORIAS_VALIDAS, type CategoriaId } from '../portrait-schema';
+import { CATEGORIAS_VALIDAS, type CategoriaId } from '../shared/stellaris';
 import type { EntradaDeSet, LinhaTrigger, SetDerivado } from './agrupamento';
 import { CATEGORIA_GUARDA_CHUVA, nameDaCategoria } from './vocabulario';
 

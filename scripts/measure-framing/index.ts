@@ -1,3 +1,5 @@
+import { Command } from 'commander';
+import { caminhoStellaris } from '../shared/paths';
 /**
  * Extrai dos `.gui` do Stellaris a janela visível do retrato em cada contexto
  * de UI, e grava a tabela em `contextos.json` para as etapas de medição.
@@ -29,7 +31,8 @@ const __DIRNAME = dirname(fileURLToPath(import.meta.url));
 
 // Caminho local da instalação do Stellaris. Ajuste se sua instalação Steam
 // estiver em outra unidade/pasta (mesma convenção de extract-vanilla-keys.ts).
-const STELLARIS_PATH = process.argv[2] ?? 'D:/SteamLibrary/steamapps/common/Stellaris';
+const programa = new Command().name('bun scripts/measure-framing/index.ts').argument('[instalacao]', 'Pasta do Stellaris; padrão: STELLARIS_PATH do .env.').parse();
+const STELLARIS_PATH = caminhoStellaris(programa.args[0]);
 
 const DESTINO = join(__DIRNAME, 'contextos.json');
 

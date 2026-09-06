@@ -2,12 +2,7 @@ import type { PortraitConfig, RigId } from '../portrait-schema';
 
 export type { PortraitConfig, RigId };
 
-/** `sl_shared` é o rig original do Stellar Legion Mod (UV desperdiça metade
- * do canvas — ver `docs/rig.md`); `ssm_shared` é o fork com a UV
- * corrigida e um único plano, usado por 17 das 18 espécies. O *valor* aceito
- * (`RigId`) vem de `portrait-schema` — fonte de verdade única de "quais
- * strings são um rig válido"; o que cada valor *significa* em termos de
- * canvas/geometria é definido aqui embaixo, em `RIGS`. */
+/** Contratos geométricos dos rigs de retrato compartilhados. */
 
 /** `largura` (padrão): escala a arte pra largura do guia, topo no topo do
  * guia — regra padrão pra composições "busto alto e estreito". O excesso de
@@ -66,9 +61,7 @@ export interface RigInfo {
 export const RIG_PADRAO: RigId = 'sl_shared';
 
 export const RIGS: Record<RigId, RigInfo> = {
-  /** Legado congelado: a única espécie que resta aqui é `ssm_mermaids`, cujo
-   * enquadramento é a composição original, herdada — não vem de guia nenhum.
-   * Sem `guia`, o pipeline a trata pelo contrato antigo e não a recompõe. */
+  /** Arte já enquadrada, sem guia para recomposição. */
   sl_shared: {
     entity: 'sl_humanoid_01_entity',
     canvas: { largura: 825, altura: 1650 },
@@ -105,17 +98,6 @@ export const RIGS: Record<RigId, RigInfo> = {
     guia: { largura: 600 / 980, topo: (339 - 195) / 781, centroX: 0.5 },
   },
 };
-
-export interface SpeciesInfo {
-  /** Nome da pasta, ex.: "ssm_astral" */
-  slug: string;
-  /** Caminho completo até assets/portraits/ssm_<especie> */
-  pastaAssets: string;
-  config: PortraitConfig;
-  arquivosMale: string[];
-  arquivosFemale: string[];
-  arquivosFlat: string[];
-}
 
 export function rigDe(config: PortraitConfig): RigInfo {
   return RIGS[config.rig ?? RIG_PADRAO];

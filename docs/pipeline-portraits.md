@@ -20,14 +20,14 @@ O sistema de espécies/retratos da Paradox é uma cadeia de arquivos que se refe
    império: `sagittarius`, `humanoids`, `machines`) para os `portrait_sets` que ela exibe. **Gerado** pelo mesmo
    pipeline.
 3. **`gfx/portraits/portraits/ssm_<species>_portrait.txt`** (um arquivo por espécie) — define as entidades de
-   retrato (macho/fêmea, ou uma única entidade "flat" pras espécies sem separação de gênero), referenciando
+   retrato (macho/fêmea, ou uma única entidade pras espécies sem gênero), referenciando
    texturas em `gfx/models/portraits/ssm_<species>/...`, além das regras de `portrait_groups` que definem qual
    retrato aparece em qual gênero/contexto. **Gerado automaticamente** por `scripts/generate-portraits/` a
    partir do `portrait.json` e dos PNGs de `assets/portraits/ssm_<species>/` — não edite esse `.txt`
    manualmente, edite o `portrait.json` e/ou os PNGs de origem e rode `bun run portrait` de novo.
-4. **`gfx/models/portraits/ssm_<species>/{male,female}/NNN.dds`** (espécies `gendered: true`) ou
-   **`gfx/models/portraits/ssm_<species>/NNN.dds`** (espécies "flat", `gendered: false`) — as texturas
-   convertidas de fato (veja "Como o gerador funciona" abaixo).
+4. **`gfx/models/portraits/ssm_<species>/<gênero>/NNN.dds`** — as texturas convertidas de fato, sempre sob a
+   pasta do gênero a que pertencem: `male/` e `female/` numa espécie com gênero, `genderless/` numa espécie sem
+   (veja "Como o gerador funciona" abaixo).
 
 Todos os identificadores dentro do mod, **incluindo as pastas de arte-fonte em `assets/portraits/`**, usam o
 prefixo `ssm_` (Sagittarius Species Mod) para evitar colisão com outros mods do Stellaris — o prefixo antigo
@@ -41,20 +41,22 @@ de prefixo que existia antes entre arte-fonte e mod publicado.
 `assets/portraits/ssm_<espécie>/`, toda vez que roda:
 
 1. Cada pasta `assets/portraits/ssm_<espécie>/` tem um **`portrait.json` obrigatório**:
-   `{ "name": "<espécie sem prefixo>", "gendered": boolean, "rig"?: "sl_shared" | "ssm_shared", "modo"?: "largura"
+   `{ "name": "<espécie sem prefixo>", "rig"?: "sl_shared" | "ssm_shared", "modo"?: "largura"
    | "altura", "ancora"?: "conteudo" | "cabeca", "species_classes": [...], "categories": [...],
-   "counts": { "male"?, "female"?, "flat"? } }`. `species_classes`/`categories` são a filiação da espécie — o que
+   "counts": { "male", "female" } | { "genderless" } }`. `species_classes`/`categories` são a filiação da espécie — o que
    ela é no jogo e em que abas aparece; quem consome é o `generate-taxonomy` (veja
    `docs/pipeline-taxonomy.md`). Espécies
-   `gendered: true` têm subpastas `male/`/`female/`; `gendered: false` são "flat" (PNGs `NNN.png` direto na raiz
-   da pasta da espécie, ex.: `ssm_cyborg`, `ssm_new_order`). O arquivo é a fonte de verdade declarada — não é
-   inferido a partir da contagem real de arquivos. `rig` omitido = `"sl_shared"`; `modo` omitido = `"largura"` e
+   **`counts` é a fonte única dos gêneros da espécie**: as chaves declaradas dizem se ela tem gênero
+   (`male` + `female`) ou não (`genderless`), e são exatamente os nomes das subpastas onde os PNGs `NNN.png`
+   vivem — `assets/portraits/ssm_<espécie>/<gênero>/`. Não há campo booleano separado dizendo isso, e as duas
+   formas de `counts` são mutuamente exclusivas (nunca as duas juntas, nunca um gênero sozinho). O arquivo é a
+   fonte de verdade declarada — não é inferido a partir da contagem real de arquivos. `rig` omitido = `"sl_shared"`; `modo` omitido = `"largura"` e
    `ancora` omitida = `"conteudo"` (as duas só fazem sentido em rig com guia, veja abaixo).
 2. **Dois contratos de arte, um por rig** (`RIGS` em `scripts/generate-portraits/types.ts`):
    - **`ssm_shared` — master + enquadramento derivado.** `assets/` guarda a arte **nativa**, em qualquer
      resolução, trimada no bounding box de conteúdo — não existe canvas/template fixo pra pintar em cima, o
      enquadramento é derivado, não desenhado. O enquadramento (trim → resize → composição no canvas do rig)
-     roda a cada `bun run portrait`, em `framing.ts`, escrevendo em `.portraits-framed/` (fora do git — é o
+     roda a cada `bun run portrait`, em `framing.ts`, escrevendo em `.portrait-staging/png/` (fora do git — é o
      enquadramento final em PNG, conferível a olho sem abrir um DDS). O guia é expresso em **fração do canvas**,
      o que torna o canvas do rig uma constante trocável sem recalibrar nada. `modo` escolhe entre escalar pela
      largura do guia (padrão) ou pela altura mínima (`altura`) — veja "Escolher o `modo`" abaixo. `ancora`
@@ -71,20 +73,19 @@ de prefixo que existia antes entre arte-fonte e mod publicado.
    conforme o contrato do rig — ou que o PNG tem o canvas exato (legado), ou que o master tem canal alfa e a
    geometria calculada cabe no canvas (`ssm_shared`). Qualquer divergência é erro — nada é escrito nem apagado
    se houver um erro em qualquer espécie.
-4. Só depois de validado tudo: para cada espécie, qualquer `.dds` já existente em
-   `mod/sagittarius-species/gfx/models/portraits/ssm_<espécie>/` que não corresponda a um PNG de origem é
-   **apagado** (limpeza total, sem exceção — histórico: essa decisão já removeu deliberadamente texturas órfãs
-   sem PNG de origem que estavam publicadas, como `ssm_cyborg/013.dds`). Depois disso, a arte é enquadrada e
-   convertida via `converter.ts`, e o `ssm_<espécie>_portrait.txt` inteiro é regenerado a partir do zero. Essa
-   limpeza é só de arquivo dentro da pasta de uma espécie que continua existindo — o pipeline **não** limpa
-   pastas de espécie inteiras que ficaram órfãs: se uma espécie for removida de `assets/portraits/`, a pasta
-   dela em `mod/.../gfx/models/portraits/` e o `ssm_<espécie>_portrait.txt` correspondente precisam ser
-   apagados à mão.
-5. O template do `.txt` gerado é 100% derivado da forma da pasta (`gendered` vs. flat) e da contagem de
+4. Depois de validar, enquadra os PNGs em `.portrait-staging/png/`, converte os DDS e escreve os scripts
+   de retrato e taxonomia em `.portrait-staging/mod/`. O lote confere presença, tamanho e cabeçalho DDS antes
+   da primeira cópia para o mod. A promoção é automática e usa somente a lista de saídas desta execução;
+   arquivos antigos do staging não são promovidos. Uma falha de preparação preserva o mod. Uma falha durante
+   a cópia final pode deixar atualização parcial; o Git é o mecanismo de recuperação, sem rollback automático.
+   Depois da promoção, remove DDS numerados excedentes dos gêneros declarados. Sem filtro de espécie, também
+   remove DDS numerados de espécies/gêneros excluídos e scripts `ssm_*_portrait.txt` sem fonte. Rigs,
+   arquivos manuais fora desses padrões e diretórios são preservados. Com filtro, não há limpeza global.
+5. O template do `.txt` gerado é 100% derivado dos gêneros declarados em `counts` e da contagem de
    arquivos — `clothes_selector`, `attachment_selector` e `custom_attachment_label` são sempre os mesmos valores
    constantes em toda espécie hoje; `entity` é `sl_humanoid_01_entity` ou `ssm_humanoid_01_entity` conforme o
    `rig` do `portrait.json` (`RIGS` em `scripts/generate-portraits/types.ts`); `greeting_sound` varia só por
-   gênero (`human_male_greetings_01` / `human_female_greetings_01`, sempre macho pras espécies flat); cada
+   gênero (`human_male_greetings_01` / `human_female_greetings_01`, sempre macho pras espécies sem gênero); cada
    espécie tem sempre um único grupo de retrato por gênero (sufixo `_01`); o bloco `portrait_groups` segue o
    boilerplate padrão (`game_setup`, `species`, `pop`, `leader`, `ruler`) idêntico ao que já existia manualmente.
 
@@ -314,7 +315,7 @@ pelo pipeline hoje (veja `scripts/generate-portraits/`).
 ## `greeting_sound`
 
 Hoje, **toda** espécie deste mod usa sons genéricos humanos
-(`human_male_greetings_01`/`human_female_greetings_01` — sempre macho pras espécies "flat"/sem gênero), mesmo
+(`human_male_greetings_01`/`human_female_greetings_01` — sempre macho pras espécies sem gênero), mesmo
 pra espécies com tema bem distante de humano (avianos, moluscos, necromantes). Isso é uma simplificação do
 pipeline (`scripts/generate-portraits/`), não uma limitação do jogo — o vanilla já traz coleções temáticas
 prontas em `\sound`, caso se queira diferenciar por espécie no futuro:

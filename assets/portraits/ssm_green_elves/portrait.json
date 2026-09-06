@@ -1,6 +1,5 @@
 {
   "name": "green_elves",
-  "gendered": true,
   "rig": "ssm_shared",
   "ancora": "cabeca",
   "species_classes": [

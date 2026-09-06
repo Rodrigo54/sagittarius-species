@@ -12,8 +12,8 @@ Clausewitz script.
 ## O que é este projeto
 
 Sagittarius Species é um mod para Stellaris (Paradox Interactive) que adiciona retratos de espécies gerados por IA
-(18 espécies: elfos, moluscos, avianos, ciborgues, necromantes, etc.). Este repositório é um pipeline de
-conteúdo/assets, não uma aplicação — não existe um passo de build/test/lint no sentido tradicional. As duas coisas
+(19 espécies: elfos, moluscos, avianos, ciborgues, necromantes, etc.). Este repositório é um pipeline de
+conteúdo/assets, não uma aplicação — os comandos de verificação cobrem tipos, testes de lógica e validação das fontes, sem executar o jogo. As duas coisas
 que existem são:
 
 1. **`mod/sagittarius-species/`** — o mod em si, no formato de script Clausewitz da Paradox (`.txt`, `.yml`, `.gfx`,
@@ -50,13 +50,15 @@ O runtime é o **Bun** (veja `bun.lockb`) — rode os scripts com `bun scripts/x
 
 ```bash
 bun run setup       # bun scripts/download-bin.ts — baixa os binários auxiliares em bin/ (veja seção abaixo)
+bun run hooks       # bun scripts/install-git-hooks.ts — copia scripts/git-hooks/ para .git/hooks/ (roda sozinho no `bun install`, via `prepare`)
 bun run converter   # roda a conversão de portraits + rooms (bun run portrait && bun run rooms)
 bun run portrait     # bun scripts/generate-portraits/index.ts — sincroniza assets/portraits/ com mod/ (DDS + .txt), direto no mod/; aceita um slug opcional (ex.: `bun run portrait ssm_elves`) pra processar uma espécie só. Sempre regenera também o registro (portrait_sets/portrait_categories), do mod inteiro, mesmo sob filtro
 bun run taxonomy     # bun scripts/generate-taxonomy/index.ts — regenera só o registro em common/ (portrait_sets + portrait_categories) a partir da filiação declarada nos portrait.json (veja seção abaixo)
 bun run shared-rig   # bun scripts/generate-shared-rig/index.ts — deriva gfx/.../ssm_shared/ a partir de sl_shared/ (veja seção "Rig compartilhado")
 bun run rooms         # bun scripts/generate-rooms/index.ts — sincroniza assets/city_sets/ com mod/ (DDS + .txt), direto no mod/
 bun run names          # bun scripts/generate-names/index.ts — gera name_lists + species_names (veja seção abaixo)
-bun run art   # bun scripts/generate-art/index.ts <slug> <male|female|flat> [-n NNN,...] [-s [N]] [-p] [-e] — gera retratos via IA no ComfyUI local; `-s` sempre grava a seed no portrait.json (valor fixa, sem valor sorteia, `default` volta pra determinística e apaga a chave) (veja seção abaixo)
+bun run art   # bun scripts/generate-art/index.ts <slug> <male|female|genderless> [-n NNN,...] [-s [N]] [-p] [-e] — gera retratos via IA no ComfyUI local; `-s` sempre grava a seed no portrait.json (valor fixa, sem valor sorteia, `default` volta pra determinística e apaga a chave) (veja seção abaixo)
+bun run promo          # bun scripts/generate-promo/index.ts [slug] — gera assets/promo/ssm_<espécie>.png a partir de species-promo.json; aceita um slug opcional pra processar uma espécie só (veja seção abaixo)
 bun run copy           # pwsh scripts/copy.ps1 — sincroniza o mod na pasta local de mods do Stellaris (apaga e recopia, reportando a variação de tamanho)
 bun run publish-workshop -- [-m|--metadata-only]   # bun scripts/publish-workshop/index.ts — publica no Steam Workshop via steamcmd (veja seção "Publicação no Steam Workshop")
 ```
@@ -73,7 +75,7 @@ bun run publish-workshop -- [-m|--metadata-only]   # bun scripts/publish-worksho
   de toda arte futura — veja "Enquadramento" em `docs/rig.md`:
   - `scripts/measure-framing/index.ts` — deriva dos `.gui` do Stellaris a janela visível do retrato em cada
     contexto de UI (122 contextos), gravando `contextos.json`. **Se revalida sozinho** a cada patch da Paradox:
-    é só rodar de novo. O caminho da instalação do jogo está hardcoded no topo (aceita override por argumento).
+    é só rodar de novo. A instalação vem de `STELLARIS_PATH` no `.env` (aceita override por argumento).
   - `scripts/measure-framing/medir-prints.ts` — lê screenshots com a arte de calibração instalada e mede a
     relação entre coordenadas do sprite e do canvas. É a única etapa que exige o jogo aberto; o resultado está
     congelado em `ancora.json`.
@@ -98,13 +100,13 @@ independente do tamanho: o código mora em `scripts/generate-<algo>/` (uma pasta
 responsabilidade quando cresce — veja `generate-names/` e `generate-portraits/` como referência; um pipeline
 pequeno, como `generate-rooms/`, ainda ganha a pasta inteira mesmo cabendo em poucos arquivos curtos, por
 consistência), e o `index.ts` dessa pasta **é** o ponto de entrada executável: define um `async function main()`
-com toda a orquestração (listar → validar tudo antes de escrever/apagar qualquer coisa → limpar órfãos →
-converter/gerar → escrever) e chama `main()` na última linha do arquivo. **Não existe wrapper `processX.ts`** em
+com toda a orquestração (listar → validar tudo antes de escrever/apagar qualquer coisa →
+preparar/converter → escrever ou promover → limpar órfãos) e chama `main()` na última linha do arquivo. **Não existe wrapper `processX.ts`** em
 `scripts/` só para chamar a pasta — isso já foi tentado (`processPortraits.ts`, `processRooms.ts`) e removido por
 ser indireção sem propósito. O `package.json` aponta direto pro entry point: `"portrait": "bun
 scripts/generate-portraits/index.ts"`. Ao criar um pipeline novo, siga esse mesmo formato desde o início.
 
-O que vale para mais de um pipeline mora em `scripts/utils.ts` — hoje a numeração zero-padded a 3 dígitos
+Caminhos, catálogo de espécies, vocabulário do jogo e operações de arquivos compartilhados moram em `scripts/shared/` (ver `docs/estrutura-scripts.md`). Helpers de numeração e listagem moram em `scripts/utils.ts` — hoje a numeração zero-padded a 3 dígitos
 (`pad`, `nomesNumerados`) e a ordenação numérica de arquivos (`ordenarNumericamente`), que portraits e rooms
 compartilham. Helper usado por um pipeline só continua dentro da pasta dele.
 
@@ -122,25 +124,22 @@ primeiro uso). Detalhes completos (layout de `download-bin.ts`, por que o ImageM
 
 ## Pipeline de conversão de texturas
 
-`scripts/converter.ts` (requer Windows — `texconv` é baseado em DirectX) converte PNG em DDS, escrevendo
-**direto dentro de `mod/sagittarius-species/gfx/...`**, sem pasta `output/` intermediária. Dois pipelines o
-usam, ambos no formato validar → limpar órfãos → converter → escrever `.txt`: `bun run rooms`
-(`assets/city_sets/` → `mod/`, `BC1_UNORM`) e `bun run portrait` (`assets/portraits/` → `mod/`, `BC3_UNORM`).
-Só variantes lineares/UNORM são usadas, nunca sRGB (o Stellaris não suporta). Detalhes completos (formatos DDS
-aceitos, pipeline de rooms, `converter.ts`): `docs/pipeline-texturas.md`.
+`scripts/converter.ts` converte PNG em DDS via texconv no destino informado pelo pipeline.
+Rooms escreve no mod em BC1_UNORM; portraits prepara em `.portrait-staging/mod/` em BC3_UNORM e promove
+após conferir o lote. A limpeza de órfãos ocorre depois da escrita bem-sucedida. Consulte
+`docs/pipeline-texturas.md` ao mudar formatos, conversão ou o pipeline de rooms.
 
 ## Pipeline de portraits
 
-`scripts/generate-portraits/` (comando `bun run portrait`) mantém `assets/portraits/ssm_<espécie>/` e `mod/`
-sempre em sincronia: cada espécie declara sua forma num `portrait.json` obrigatório (`name`, `gendered`, `rig`,
-`counts`, `modo`/`ancora`), tudo é validado antes de qualquer escrita/remoção, `.dds` órfãos são apagados, e o
-`ssm_<espécie>_portrait.txt` inteiro é regenerado do zero a cada execução. Dois contratos de arte, um por rig:
-`ssm_shared` guarda **master nativo** com enquadramento **derivado** a cada execução (trim → resize →
-composição no canvas do rig, guia expresso em fração do canvas — `modo`/`ancora` ajustam esse enquadramento por
-espécie); `sl_shared` (legado, **sem nenhuma espécie hoje**) usa PNG já enquadrado byte a byte, exigindo o
-canvas exato do rig. Cadeia completa de arquivos que conecta um retrato de espécie
-(`portrait_categories` → `portrait_sets` → `portrait.txt` → `.dds`) e a mecânica vanilla por trás
-(`portrait_groups`, cumprimentos/insultos, `greeting_sound`): `docs/pipeline-portraits.md`.
+`bun run portrait [especie]` valida fontes e taxonomia, prepara PNGs em `.portrait-staging/png/` e DDS/scripts
+em `.portrait-staging/mod/`, confere o lote e promove automaticamente para `mod/`. A taxonomia sempre abrange
+todas as espécies. O estágio de preparação preserva o mod; a cópia final pode falhar parcialmente, com recuperação
+pelo Git. O staging fica ignorado pelo Git.
+
+A execução filtrada limpa somente excedentes dos gêneros declarados da espécie selecionada. A execução completa
+também remove saídas de espécies e gêneros excluídos. Rigs e arquivos fora dos padrões gerados são preservados.
+`shared/species.ts` lê o catálogo e valida cada `portrait.json`; `generate-portraits` cuida do enquadramento.
+Consulte `docs/pipeline-portraits.md` para contratos dos rigs, composição, promoção e limpeza.
 
 ## Pipeline de taxonomia (registro em `common/`)
 
@@ -166,7 +165,7 @@ continua versionado por dois motivos: é a **fonte de derivação** do `ssm_shar
 mesh dele) e é a única cópia restante desse mesh/animação, já que o mod de origem não existe mais.
 **`ssm_shared/`** é o fork **derivado** (`bun run shared-rig`, sempre regenerado do zero a partir de
 `sl_shared/`, nunca editado à mão) com o mesh reduzido a um único plano (`pPlaneShape4`), UV remapeada pro
-canvas inteiro e recortado no topo — canvas **980×780** (isotrópico), usado por **todas as 18 espécies** e
+canvas inteiro e recortado no topo — canvas **980×780** (isotrópico), usado por **todas as 19 espécies** e
 ponto de partida pra espécies novas.
 Trocar o rig de uma espécie é só editar `rig` no `portrait.json` e rodar `bun run portrait`, sem passo de
 migração.
@@ -208,6 +207,13 @@ Peças completas do pipeline (schema, `base.json`, `prompt-builder.ts`, template
 precedência de seed), setup do ComfyUI local (modelos instalados, pastas, gotchas) e a receita pra instalar um
 modelo novo: `docs/pipeline-generate-art.md`.
 
+## Pipeline de imagens promocionais (`bun run promo`)
+
+`scripts/generate-promo/` compõe imagens JPEG 1920×1080 em `assets/promo/`, usando retratos e fundos existentes.
+Playwright/Edge renderiza HTML/CSS; ImageMagick mede os recortes. `assets/promo/species-promo.json` declara nome,
+lore, três variantes explícitas e overrides de fundo/escalas. `generate-promo/paths.ts` reúne caminhos desse pipeline.
+Consulte `docs/pipeline-promo.md` ao alterar composição, fontes, grade, seleção de arte ou formato de saída.
+
 ## Pipeline de listas de nomes / localização / species_names
 
 `scripts/generate-names/` (comando `bun run names`) vai de uma única fonte JSON (`assets/name_lists/*.json`)
@@ -218,12 +224,26 @@ independente dentro da classe). A forma do JSON de origem é validada por um sch
 (`scripts/name-list-schema/`, mesmo desenho do `portrait-schema/`). **Regra de localização do projeto: literal
 por padrão** — strings normais não têm prefixo; o prefixo
 `l10n|` é reservado só pra `sequential_name` (requisito funcional do jogo desde o patch 3.6). Português do
-Brasil (`braz_por`) é o idioma "fonte da verdade" deste repositório — só a passada desse locale regenera o
-`.txt` de script. Validação (erro, não warning) trava a geração se `ship_names`/`army_names`/`planet_names`
+Brasil (`braz_por`) é o idioma "fonte da verdade" deste repositório — o snapshot exige esse locale; o `.txt` é composto uma única vez, independentemente do loop de idiomas. Validação (erro, não warning) trava a geração se `ship_names`/`army_names`/`planet_names`
 usarem uma chave que não existe no vanilla (`scripts/vanilla-keys.json`).
 
 Detalhes completos (estrutura dos JSONs, saída de localização, `species_names`) e a skill pra gerar uma cultura
 nova via entrevista temática (`/gerar-name-list`): `docs/pipeline-nomes.md`.
+
+Os idiomas são extraídos da instalação por `bun run extract-vanilla` e persistidos em
+`scripts/vanilla-keys.json`. A instalação vem de `STELLARIS_PATH` no `.env`; `names` usa somente o snapshot.
+Tokens são identificados pelo caminho da propriedade e strings de localização recebem escaping.
+Após gerar todas as saídas, `names` remove os arquivos gerados de culturas excluídas.
+
+## Verificação dos scripts e fontes
+
+- `bun run check`: tipos sem emissão.
+- `bun test` / `bun run test`: testes de lógica e arquivos temporários.
+- `bun run check:schemas`: confere JSON Schemas derivados sem reescrevê-los.
+- `bun run validate [especie]`: valida dados, referências e requisitos de imagens sem geração, navegador ou GPU.
+  O filtro restringe retratos/arte/promoção; taxonomia e consistência dos schemas continuam globais.
+
+Consulte `docs/estrutura-scripts.md` ao criar módulos compartilhados ou mudar esses comandos.
 
 ## Ferramental de script Paradox
 
@@ -235,6 +255,23 @@ manualmente). `.editorconfig`: `.yml` é `utf-8-bom`, 80 colunas; `.txt`/`.gfx`/
 de 2 espaços. Rationale completo da configuração do workspace (por que multi-root, onde fica o cache de regras,
 por que as configs ficam no `.code-workspace`): `docs/cwtools.md`.
 
+## Convenção de commits
+
+Mensagem de commit segue Conventional Commits **com emoji obrigatório por tipo** (`✨ feat(escopo): assunto`,
+`🐛 fix: ...`, `🛠️ chore: ...`), validada pelo hook `commit-msg` que chama o `commitlint`. A tabela `TYPE_EMOJI`
+no topo de `commitlint.config.js` é a fonte da verdade dos tipos aceitos e do emoji de cada um; a regra
+`type-emoji`, definida no mesmo arquivo, é própria (nenhum preset pronto exige emoji **e** tipo).
+
+**Nenhum commit deste repositório leva trailer `Co-Authored-By:` de Claude/Anthropic** — não escreva essa linha
+ao commitar; a regra `no-ia-coauthor` reprova a mensagem se ela aparecer. Coautoria de pessoas continua valendo.
+
+O hook fica
+versionado em `scripts/git-hooks/` e é instalado por cópia (`bun run hooks`, também rodado pelo `prepare` do
+`bun install`) em vez de `core.hooksPath`, porque `.git/hooks/` também guarda os hooks do git-lfs.
+
+Tabela completa de tipos/emojis, regras validadas e como testar uma mensagem sem commitar:
+`docs/convencao-de-commits.md`; o porquê: `docs/history/2026-08-17-commitlint.md`.
+
 ## Metadados de release
 
 A versão é rastreada de forma independente em dois lugares e precisa ser mantida em sincronia manualmente ao
@@ -245,18 +282,38 @@ depois do próximo push. O texto da listagem no Steam Workshop fica em `steam-wo
 `steam-workshop/change-notes.md`; o `remote_file_id` do `descriptor.mod` é o ID do item no Steam Workshop usado
 para publicação.
 
+## Fluxo de release
+
+Sem PR/aprovação no GitHub — este repositório é um pipeline de conteúdo de um mod solo, não um projeto com
+revisão de time, então cortar uma release é sempre um merge local direto `develop` → `main`:
+
+1. Bump de versão na `develop`, **sem commitar**: `package.json` (`version`), `descriptor.mod` (`version`) e uma
+   nova seção `## <versão>` no topo de `steam-workshop/change-notes.md` (sem timestamp — quem grava o timestamp é
+   o próprio `bun run publish-workshop` na hora do publish, ver seção abaixo).
+2. Rodar `bun run publish-workshop -- [--auto-approve]` a partir desse estado (ainda não commitado) — o publish
+   lê os arquivos do disco, não do git, então a versão/changenote publicados já saem corretos.
+3. Só depois do publish confirmado, commitar o bump na `develop` (mensagem no padrão `🛠️ chore: prepara release
+   <versão> (bump de versão + changelog)`).
+4. `git merge --no-ff develop` em `main`, tag `v<versão>` na `main`, push de `main`, `develop` e da tag.
+
+Publicar antes de commitar evita registrar uma versão que não chegou a subir de verdade (steamcmd falha antes,
+Steam Guard cancelado, etc.); só o passo 3 grava o bump no histórico do repositório.
+
 ## Publicação no Steam Workshop
 
-`scripts/publish-workshop/` (comando `bun run publish-workshop -- [-m|--metadata-only]`) publica o mod no Steam
-Workshop via `steamcmd`. `title` (campo `name` do `descriptor.mod`) e `description`
+`scripts/publish-workshop/` (comando `bun run publish-workshop -- [-m|--metadata-only] [--auto-approve]`) publica
+o mod no Steam Workshop via `steamcmd`. `title` (campo `name` do `descriptor.mod`) e `description`
 (`steam-workshop/description.md` inteiro) são **sempre** enviados, em qualquer modo — todo publish mantém a
 descrição da Steam em sincronia com o arquivo, não só um modo dedicado. Dois modos:
 
 - **Normal** (padrão): além de title/description, extrai a seção mais no topo de
   `steam-workshop/change-notes.md` (formato `## <versão>`, sempre a mais recente por convenção — novas entradas
   sempre entram no topo) como changenote da build, e publica o conteúdo do mod.
-- **`-m` / `--metadata-only`**: só title/description, sem publicar conteúdo novo nem exigir changenote — atalho pra
-  quando só a descrição mudou.
+- **`-m` / `--metadata-only`**: title/description/thumbnail, sem contentfolder, changenote ou cópia local.
+
+`--auto-approve` pula a confirmação ("digite sim") descrita abaixo e segue direto pro publish — o resumo
+continua sendo impresso antes, e login/senha/Steam Guard continuam sempre interativos (isso não tem como
+automatizar, é a própria Steam pedindo).
 
 Ambos os arquivos `.md` em `steam-workshop/` são Markdown de verdade (não BBCode) — `md-to-bbcode.ts`
 (`marked` + renderer próprio) converte pro dialeto BBCode da Steam em tempo de publish. O header de cada seção
@@ -264,8 +321,8 @@ de `change-notes.md` ganha automaticamente um timestamp local (`— YYYY-MM-DD H
 metadado só pra correlacionar com o histórico da própria Steam, nunca enviado no texto do changenote (a Steam já
 carimba isso sozinha, e o changenote de uma build já publicada não pode ser editado depois via `steamcmd`).
 
-Antes de chamar o `steamcmd`, o script sempre roda `bun run copy` (sincroniza o mod local de teste) e pede
-confirmação explícita, mostrando o texto final (já convertido) que vai ser publicado. Login usa
+Antes de chamar o `steamcmd`, o script pede confirmação explícita, mostrando o conteúdo da atualização.
+Somente o modo normal executa `bun run copy`, depois da confirmação. Login usa
 `STEAM_USERNAME` (`.env` local, veja `.env.example`) — senha e Steam Guard são sempre interativos, nunca
 persistidos; a sessão fica cacheada pelo próprio `steamcmd` em `bin/steamcmd/`. Windows-only, como o resto do
 pipeline.

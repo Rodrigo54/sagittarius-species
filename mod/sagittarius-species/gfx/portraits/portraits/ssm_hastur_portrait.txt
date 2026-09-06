@@ -6,14 +6,14 @@ portraits = {
     greeting_sound = "human_male_greetings_01"
     custom_attachment_label = "HAIR_STYLE"
     character_textures = {
-      "gfx/models/portraits/ssm_hastur/001.dds"
-      "gfx/models/portraits/ssm_hastur/002.dds"
-      "gfx/models/portraits/ssm_hastur/003.dds"
-      "gfx/models/portraits/ssm_hastur/004.dds"
-      "gfx/models/portraits/ssm_hastur/005.dds"
-      "gfx/models/portraits/ssm_hastur/006.dds"
-      "gfx/models/portraits/ssm_hastur/007.dds"
-      "gfx/models/portraits/ssm_hastur/008.dds"
+      "gfx/models/portraits/ssm_hastur/genderless/001.dds"
+      "gfx/models/portraits/ssm_hastur/genderless/002.dds"
+      "gfx/models/portraits/ssm_hastur/genderless/003.dds"
+      "gfx/models/portraits/ssm_hastur/genderless/004.dds"
+      "gfx/models/portraits/ssm_hastur/genderless/005.dds"
+      "gfx/models/portraits/ssm_hastur/genderless/006.dds"
+      "gfx/models/portraits/ssm_hastur/genderless/007.dds"
+      "gfx/models/portraits/ssm_hastur/genderless/008.dds"
     }
   }
 }

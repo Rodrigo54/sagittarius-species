@@ -1,0 +1,8 @@
+#!/bin/sh
+# Valida a mensagem de commit contra as regras de commitlint.config.js
+# (conventional commits com emoji obrigatório por tipo).
+#
+# Instalado em .git/hooks/ por `bun run hooks` (scripts/install-git-hooks.ts).
+# --no-install: falha na hora se o commitlint não estiver em node_modules, em
+# vez de baixar da rede no meio de um commit.
+exec bunx --no-install commitlint --edit "$1"
