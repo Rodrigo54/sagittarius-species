@@ -1,8 +1,8 @@
 # Publicação no Steam Workshop
 
-`scripts/publish-workshop/` (comando `bun run publish-workshop -- [--metadata-only]`) publica o mod no Steam
-Workshop via `steamcmd`. Este documento detalha as peças; o resumo de alto nível está no `CLAUDE.md`, seção
-"Publicação no Steam Workshop".
+`scripts/publish-workshop/` (comando `bun run publish-workshop -- [--metadata-only] [--auto-approve]`) publica o
+mod no Steam Workshop via `steamcmd`. Este documento detalha as peças; o resumo de alto nível está no
+`CLAUDE.md`, seções "Fluxo de release" e "Publicação no Steam Workshop".
 
 ## Por que `steamcmd`
 
@@ -119,7 +119,7 @@ git, sobrescrito a cada publish).
 1. valida plataforma (Windows), steamcmd instalado, STEAM_USERNAME setada
 2. lê descriptor.mod (name/version/remote_file_id)
 3. monta o conteúdo (changenote de change-notes.md, ou title+description de description.md)
-4. imprime resumo + pede confirmação ("digite sim")
+4. imprime resumo + pede confirmação ("digite sim"), a menos que `--auto-approve` tenha sido passada
 5. se confirmado:
    a. bun run copy somente no modo normal (sincroniza o mod local de teste)
    b. grava timestamp em change-notes.md (só no modo normal, só se ainda não tinha)
@@ -156,7 +156,9 @@ Todo o caminho até a confirmação (validações, parsing do `descriptor.mod`, 
 `change-notes.md`, conversão MD→BBCode, montagem do resumo) roda com qualquer `STEAM_USERNAME` (mesmo
 inválido) e responder "não" no prompt cancela sem tocar em `change-notes.md`, sem rodar `bun run copy` e sem
 chamar `steamcmd`. É assim que dá pra validar mudanças no script sem risco de publicar algo sem querer — só
-confirmar "sim" de fato dispara login real + `bun run copy` + publish.
+confirmar "sim" (ou passar `--auto-approve`) de fato dispara login real + `bun run copy` + publish. Por isso
+`--auto-approve` nunca deve ser o padrão pra testar o script — só pra quando o resumo já foi conferido e o
+publish é mesmo pra valer.
 
 ## Fora de escopo (de propósito)
 
@@ -169,5 +171,3 @@ confirmar "sim" de fato dispara login real + `bun run copy` + publish.
   sem chave de idioma. Faria falta uma aplicação compilada contra o Steamworks SDK — fora de escopo aqui.
 - **Sync automático de versão** entre `package.json`/`descriptor.mod`/`README.md` — continua manual (ver
   "Metadados de release" no `CLAUDE.md`).
-- **Integração com o fluxo GitFlow/release** (`job-github-release`) — o publish no Workshop não é disparado
-  automaticamente por nenhum merge/tag; é sempre um comando manual, separado.

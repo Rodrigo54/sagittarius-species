@@ -82,9 +82,14 @@ async function main() {
       '-m, --metadata-only',
       'Atualiza título, descrição e thumbnail, sem conteúdo, changenote ou cópia local.'
     )
+    .option(
+      '--auto-approve',
+      'Pula a confirmação ("digite sim") e prossegue direto. Login/Steam Guard continuam interativos.'
+    )
     .parse()
-    .opts<{ metadataOnly?: boolean }>();
+    .opts<{ metadataOnly?: boolean; autoApprove?: boolean }>();
   const modoMetadataOnly = opcoes.metadataOnly ?? false;
+  const autoApprove = opcoes.autoApprove ?? false;
 
   if (!existsSync(CAMINHO_STEAMCMD)) {
     throw new Error(`steamcmd não encontrado em ${CAMINHO_STEAMCMD}. Rode "bun run setup" primeiro.`);
@@ -155,7 +160,7 @@ async function main() {
   if (!modoMetadataOnly) console.log('Antes de publicar, este comando também roda "bun run copy" pra sincronizar o mod local de teste.');
   console.log('');
 
-  const confirmado = await confirmar('Prosseguir?');
+  const confirmado = autoApprove || (await confirmar('Prosseguir?'));
   if (!confirmado) {
     console.log('Cancelado — nada foi publicado, change-notes.md não foi alterado.');
     return;

@@ -7,6 +7,11 @@ For the steam workshop change notes I recommended to use major mod version incre
 > publish time if it isn't there yet (that stamp is local bookkeeping only — it never gets sent
 > to Steam, which already timestamps updates on its own).
 
+## 1.14.0 — 2026-09-05 21:22
+
+* Updated the mod's Workshop thumbnail.
+* Added new promotional artwork for every species to the Workshop gallery.
+
 ## 1.13.0 — 2026-09-03 18:41
 
 * **New species: ONU Humans** — 50 portraits (25 male, 25 female) in white/blue/gold armor, rescued from the mod's own history: this is the original Default Humans art from before the July 2026 rework, given a species slot of its own instead of staying lost in git history. That brings the pack to 19 species.

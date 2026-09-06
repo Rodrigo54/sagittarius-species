@@ -282,10 +282,27 @@ depois do próximo push. O texto da listagem no Steam Workshop fica em `steam-wo
 `steam-workshop/change-notes.md`; o `remote_file_id` do `descriptor.mod` é o ID do item no Steam Workshop usado
 para publicação.
 
+## Fluxo de release
+
+Sem PR/aprovação no GitHub — este repositório é um pipeline de conteúdo de um mod solo, não um projeto com
+revisão de time, então cortar uma release é sempre um merge local direto `develop` → `main`:
+
+1. Bump de versão na `develop`, **sem commitar**: `package.json` (`version`), `descriptor.mod` (`version`) e uma
+   nova seção `## <versão>` no topo de `steam-workshop/change-notes.md` (sem timestamp — quem grava o timestamp é
+   o próprio `bun run publish-workshop` na hora do publish, ver seção abaixo).
+2. Rodar `bun run publish-workshop -- [--auto-approve]` a partir desse estado (ainda não commitado) — o publish
+   lê os arquivos do disco, não do git, então a versão/changenote publicados já saem corretos.
+3. Só depois do publish confirmado, commitar o bump na `develop` (mensagem no padrão `🛠️ chore: prepara release
+   <versão> (bump de versão + changelog)`).
+4. `git merge --no-ff develop` em `main`, tag `v<versão>` na `main`, push de `main`, `develop` e da tag.
+
+Publicar antes de commitar evita registrar uma versão que não chegou a subir de verdade (steamcmd falha antes,
+Steam Guard cancelado, etc.); só o passo 3 grava o bump no histórico do repositório.
+
 ## Publicação no Steam Workshop
 
-`scripts/publish-workshop/` (comando `bun run publish-workshop -- [-m|--metadata-only]`) publica o mod no Steam
-Workshop via `steamcmd`. `title` (campo `name` do `descriptor.mod`) e `description`
+`scripts/publish-workshop/` (comando `bun run publish-workshop -- [-m|--metadata-only] [--auto-approve]`) publica
+o mod no Steam Workshop via `steamcmd`. `title` (campo `name` do `descriptor.mod`) e `description`
 (`steam-workshop/description.md` inteiro) são **sempre** enviados, em qualquer modo — todo publish mantém a
 descrição da Steam em sincronia com o arquivo, não só um modo dedicado. Dois modos:
 
@@ -293,6 +310,10 @@ descrição da Steam em sincronia com o arquivo, não só um modo dedicado. Dois
   `steam-workshop/change-notes.md` (formato `## <versão>`, sempre a mais recente por convenção — novas entradas
   sempre entram no topo) como changenote da build, e publica o conteúdo do mod.
 - **`-m` / `--metadata-only`**: title/description/thumbnail, sem contentfolder, changenote ou cópia local.
+
+`--auto-approve` pula a confirmação ("digite sim") descrita abaixo e segue direto pro publish — o resumo
+continua sendo impresso antes, e login/senha/Steam Guard continuam sempre interativos (isso não tem como
+automatizar, é a própria Steam pedindo).
 
 Ambos os arquivos `.md` em `steam-workshop/` são Markdown de verdade (não BBCode) — `md-to-bbcode.ts`
 (`marked` + renderer próprio) converte pro dialeto BBCode da Steam em tempo de publish. O header de cada seção
