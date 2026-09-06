@@ -71,6 +71,19 @@ export const GATE_DA_CLASSE: Partial<Record<SpeciesClassId, string>> = {
   INF: 'has_infernals',
 };
 
+/** Nome do set derivado da classe `ROBOT` — a que o Stellaris usa só pra
+ * espécie sintética resultante da Ascensão Sintética e pra robôs construídos
+ * (`playable = { has_global_flag = game_started }` no vanilla: nunca aparece
+ * na criação de império, só depois que a partida já começou).
+ *
+ * `ROBOT` não é uma `SpeciesClassId` declarável: nenhuma espécie a escreve no
+ * `portrait.json`. `derivarSets` (`agrupamento.ts`) a deriva sozinha pra toda
+ * espécie que declarar `MACHINE` — ver rationale lá. O vanilla também não tem
+ * `portrait_category` nenhuma apontando pra `ROBOT` (seu próprio set `robots`
+ * em `00_portrait_sets.txt` não aparece em nenhuma aba), então `ssm_robots`
+ * só entra em `ssm_portrait_sets.txt`, nunca em `ssm_portrait_categories.txt`. */
+export const SET_ROBOT_DERIVADO = 'ssm_robots';
+
 /** Rótulo (`name`) das categorias temáticas — as que não espelham classe
  * nenhuma. O `name` das espelhadas é a própria classe, derivado de
  * `CATEGORIA_DA_CLASSE`; ver `nameDaCategoria`. */

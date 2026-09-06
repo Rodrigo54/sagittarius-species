@@ -156,3 +156,13 @@ ssm_reptilians = {
     }
   }
 }
+
+ssm_robots = {
+  species_class = ROBOT
+  portraits = {
+    "ssm_cyborg"
+    "ssm_green_order"
+    "ssm_new_order"
+    "ssm_timbot"
+  }
+}

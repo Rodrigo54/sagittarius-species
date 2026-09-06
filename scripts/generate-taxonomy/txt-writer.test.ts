@@ -118,6 +118,20 @@ describe('portrait_sets — eixos independentes no fallback', () => {
   });
 });
 
+describe('portrait_sets — ROBOT derivado de MACHINE', () => {
+  test('ssm_robots sai incondicional, igual a qualquer set sem gate', () => {
+    const { portraitSets } = gerar([especie('ssm_timbot', ['MACHINE'], ['machines'])]);
+    expect(portraitSets).toContain(
+      `ssm_robots = {
+  species_class = ROBOT
+  portraits = {
+    "ssm_timbot"
+  }
+}`
+    );
+  });
+});
+
 describe('portrait_categories', () => {
   test('a guarda-chuva do mod vem primeiro e recebe os sets sempre disponíveis, sem ninguém declará-la', () => {
     const { portraitCategories } = gerar([
@@ -178,5 +192,13 @@ describe('portrait_categories', () => {
   test('o name de uma categoria espelhada é a própria species_class', () => {
     const { portraitCategories } = gerar([especie('ssm_drakelings', ['REP'], ['reptilians'])]);
     expect(portraitCategories).toContain(`reptilians = {\n  name = REP`);
+  });
+
+  test('ssm_robots não aparece em categoria nenhuma, nem na guarda-chuva', () => {
+    // ROBOT não tem aba no vanilla (é a classe da Ascensão Sintética, que só
+    // existe depois que a partida já começou) — não há tab pra deduplicar,
+    // então o set derivado fica de fora de ssm_portrait_categories.txt inteiro
+    const { portraitCategories } = gerar([especie('ssm_timbot', ['MACHINE'], ['machines'])]);
+    expect(portraitCategories).not.toContain('ssm_robots');
   });
 });
