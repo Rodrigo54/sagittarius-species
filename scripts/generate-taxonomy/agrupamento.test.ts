@@ -110,7 +110,9 @@ describe('agrupamento por (species_class × categorias)', () => {
     const { sets } = derivarSets([
       especie('ssm_cyborg', ['MACHINE'], ['machines', 'synthetics', 'cybernetics']),
     ]);
-    expect(sets.map((s) => s.nome)).toEqual(['ssm_machine']);
+    // ssm_robots também sai — toda espécie MACHINE entra lá também, ver
+    // describe('derivação de ROBOT a partir de MACHINE')
+    expect(sets.map((s) => s.nome)).toEqual(['ssm_machine', 'ssm_robots']);
   });
 
   test('o set de uma classe não herda a categoria espelhada da outra classe da espécie', () => {
@@ -205,6 +207,36 @@ describe('categoria guarda-chuva', () => {
       especie('ssm_nereidas', ['AQUATIC'], ['aquatics']),
     ]);
     expect(set(sets, 'ssm_aquatics').naGuardaChuva).toBe(true);
+  });
+});
+
+describe('derivação de ROBOT a partir de MACHINE', () => {
+  // ROBOT é a species_class que o Stellaris atribui à espécie sintética da
+  // Ascensão Sintética — nunca aparece na criação de império, só depois que a
+  // partida já começou. Nenhuma espécie a declara: toda espécie MACHINE entra
+  // automaticamente em ssm_robots também, pra ficar disponível quando alguém
+  // ascender a sintético.
+  test('espécie MACHINE também entra em ssm_robots, incondicional', () => {
+    const { sets } = derivarSets([especie('ssm_timbot', ['MACHINE'], ['machines'])]);
+    expect(set(sets, 'ssm_robots')).toEqual({
+      species_class: 'ROBOT',
+      categorias: [],
+      naGuardaChuva: false,
+      entradas: [{ slug: 'ssm_timbot', randomizable: [], condicoes: [] }],
+    });
+  });
+
+  test('espécie sem MACHINE não gera ssm_robots nenhum', () => {
+    const { sets } = derivarSets([especie('ssm_elves', ['HUM'], ['humanoids'])]);
+    expect(sets.some((s) => s.nome === 'ssm_robots')).toBe(false);
+  });
+
+  test('várias espécies MACHINE compartilham o mesmo ssm_robots, ordenadas por slug', () => {
+    const { sets } = derivarSets([
+      especie('ssm_timbot', ['MACHINE'], ['machines']),
+      especie('ssm_cyborg', ['MACHINE'], ['machines', 'cybernetics']),
+    ]);
+    expect(set(sets, 'ssm_robots').entradas.map((e) => e.slug)).toEqual(['ssm_cyborg', 'ssm_timbot']);
   });
 });
 

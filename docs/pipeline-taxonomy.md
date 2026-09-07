@@ -174,6 +174,24 @@ Você escolhe a classe **pela aba por onde entra**: a aba Aquatic dá a sereia a
 humanoide — uma espécie `HUM` de verdade, com traços, clima e flavor humanoides. A aba do mod sempre oferece a
 versão que funciona para qualquer jogador.
 
+## A classe `ROBOT`: retrato pós-Ascensão Sintética
+
+O jogo tem uma segunda species_class de robô, além de `MACHINE`: **`ROBOT`**. É a classe que a Ascensão Sintética
+(e a montagem de robôs) atribui à espécie resultante — nunca aparece na criação de império (`playable = {
+has_global_flag = game_started }` no vanilla), só na tela de Personalizar Espécie que se abre **depois** que a
+partida já começou. `MACHINE` e `ROBOT` têm pools de retrato totalmente separados: um retrato registrado só em
+`MACHINE` funciona normalmente pra criar um império mecânico do zero, mas nunca aparece pra quem ascende a
+sintético num império orgânico — são duas listas diferentes, não uma questão de aba ou de DLC.
+
+Nenhuma espécie declara `ROBOT` no `portrait.json` — não é uma `species_classes` válida (`SPECIES_CLASSES_VALIDAS`
+em `scripts/shared/stellaris.ts` não a lista). O gerador deriva sozinho: **toda espécie que declarar `MACHINE`
+entra automaticamente também num set `ssm_robots` (`species_class = ROBOT`), incondicional**, pra que qualquer
+retrato mecânico do mod fique disponível também na Ascensão Sintética. `ssm_robots` não tem categoria nenhuma e
+fica fora da guarda-chuva: o vanilla também não tem nenhuma `portrait_category` apontando pra `ROBOT` (o próprio
+set `robots` do jogo-base não aparece em nenhuma aba), porque a tela que usa essa classe não tem abas — é uma
+lista só. Detalhes da derivação: `derivarSets` em `scripts/generate-taxonomy/agrupamento.ts`; o porquê completo,
+incluindo como isso foi descoberto: `docs/history/2026-09-06-ascensao-sintetica-classe-robot.md`.
+
 ## Formato do arquivo gerado
 
 - **Um bloco `conditional_portraits` por espécie**, nunca agrupando espécies de condição igual. O arquivo fica

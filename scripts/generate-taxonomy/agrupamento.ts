@@ -1,5 +1,10 @@
 import { CATEGORIA_DA_CLASSE, CATEGORIAS_TEMATICAS, type CategoriaId, type SpeciesClassId } from '../shared/stellaris';
-import { GATE_DA_CLASSE, SET_DA_CLASSE } from './vocabulario';
+import { GATE_DA_CLASSE, SET_DA_CLASSE, SET_ROBOT_DERIVADO } from './vocabulario';
+
+/** `ROBOT` nunca é declarada num `portrait.json` (ver `SET_ROBOT_DERIVADO`),
+ * então só existe como `species_class` de um `SetDerivado` — nunca dentro de
+ * `Filiacao.species_classes`, que continua fechado em `SpeciesClassId`. */
+type SpeciesClassDoSet = SpeciesClassId | 'ROBOT';
 
 /** A filiação declarada por uma espécie, já lida do `portrait.json`. */
 export interface Filiacao {
@@ -28,7 +33,7 @@ export interface EntradaDeSet {
 
 export interface SetDerivado {
   nome: string;
-  species_class: SpeciesClassId;
+  species_class: SpeciesClassDoSet;
   /** Categorias em que este set aparece, sem a guarda-chuva. */
   categorias: CategoriaId[];
   /** Se este set entra na categoria guarda-chuva do mod.
@@ -101,8 +106,13 @@ function condicaoDeEditor(classes: SpeciesClassId[], indice: number, principal: 
 
 /** Nome do set: o nome canônico da classe, mais as categorias temáticas quando
  * a classe tem mais de um agrupamento principal. Uma classe com um grupo só
- * mantém o nome curto (`ssm_machine`), mesmo que o grupo tenha temáticas. */
-function nomeDoSet(classe: SpeciesClassId, categorias: CategoriaId[], classeTemVariosGrupos: boolean): string {
+ * mantém o nome curto (`ssm_machine`), mesmo que o grupo tenha temáticas.
+ *
+ * `ROBOT` não tem agrupamento temático — é sempre um grupo só, sem categoria
+ * nenhuma (ver `derivarSets`) — então resolve direto pro nome fixo. */
+function nomeDoSet(classe: SpeciesClassDoSet, categorias: CategoriaId[], classeTemVariosGrupos: boolean): string {
+  if (classe === 'ROBOT') return SET_ROBOT_DERIVADO;
+
   const base = SET_DA_CLASSE[classe];
   if (!classeTemVariosGrupos) return base;
 
@@ -169,6 +179,25 @@ export function derivarSets(especies: Filiacao[]): { sets: SetDerivado[]; erros:
       grupo.naGuardaChuva ||= ehUltima;
       grupos.set(chave, grupo);
     });
+
+    // `ROBOT` é a species_class que o Stellaris atribui à espécie sintética
+    // resultante da Ascensão Sintética (e a robôs construídos) — nunca
+    // aparece na criação de império, só depois que a partida já começou (ver
+    // `SET_ROBOT_DERIVADO`). Nenhuma espécie a declara: toda espécie `MACHINE`
+    // entra automaticamente aqui também, incondicional e sem categoria — o
+    // vanilla não tem aba nenhuma pra `ROBOT`, então não há guarda-chuva nem
+    // `portrait_categories` pra atualizar.
+    if (especie.species_classes.includes('MACHINE')) {
+      const grupoRobot = grupos.get('ROBOT|') ?? {
+        nome: '',
+        species_class: 'ROBOT',
+        categorias: [],
+        naGuardaChuva: false,
+        entradas: [],
+      };
+      grupoRobot.entradas.push({ slug: especie.slug, randomizable: [], playable: [] });
+      grupos.set('ROBOT|', grupoRobot);
+    }
   }
 
   const porClasse = Map.groupBy([...grupos.values()], (grupo) => grupo.species_class);

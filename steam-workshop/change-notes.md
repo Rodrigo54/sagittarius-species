@@ -7,6 +7,10 @@ For the steam workshop change notes I recommended to use major mod version incre
 > publish time if it isn't there yet (that stamp is local bookkeeping only — it never gets sent
 > to Steam, which already timestamps updates on its own).
 
+## 1.15.0 — 2026-09-06 23:07
+
+* Fixed mechanical species portraits (Timbot, Cyborg, Green Order, New Order) not being offered as options after Synthetic Ascension.
+
 ## 1.14.0 — 2026-09-05 21:22
 
 * Updated the mod's Workshop thumbnail.
